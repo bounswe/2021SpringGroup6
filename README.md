@@ -6,12 +6,12 @@
 ## Team Members
 * [BERK ATIL (COMMUNICATOR)](https://github.com/bounswe/2021SpringGroup6/wiki/Berk-At%C4%B1l)
 * [ELİF SEMA BALCIOĞLU](https://github.com/bounswe/2021SpringGroup6/wiki/Elif-Sema-Balc%C4%B1o%C4%9Flu)
-* [İBRAHİM MELİH AKTAŞ]
-* [ÖMER FARUK SÜVE]
-* [DENİZ ARDA BUDAK]
-* [EKREM YUSUF EKMEKCİ]
+* [İBRAHİM MELİH AKTAŞ](https://github.com/bounswe/2021SpringGroup6/wiki/%C4%B0brahim-Melih-Akta%C5%9F)
+* [ÖMER FARUK SÜVE](https://github.com/bounswe/2021SpringGroup6/wiki/%C3%96mer-Faruk-S%C3%BCve)
+* [DENİZ ARDA BUDAK](https://github.com/bounswe/2021SpringGroup6/wiki/Deniz-Arda-Budak)
+* [EKREM YUSUF EKMEKCİ](https://github.com/bounswe/2021SpringGroup6/wiki/Ekrem-Yusuf-Ekmekci)
 * [MUSA NURİ İHTİYAR]
-* [CAN ATAKAN UĞUR]
+* [CAN ATAKAN UĞUR](https://github.com/bounswe/2021SpringGroup6/wiki/Can-Atakan-U%C4%9Fur)
 
 ## Photo from our first meeting
-\****************************************************************
+![Screenshot from 2021-03-29 21-39-34](https://user-images.githubusercontent.com/29127873/112883724-5302e880-90d7-11eb-9e55-f07c3cad75a5.png)
