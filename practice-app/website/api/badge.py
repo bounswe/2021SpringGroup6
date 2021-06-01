@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, flash
 import requests
 from ..models import Badge
 from .. import db
+from sqlalchemy import exc
 
 badges = Blueprint('badges',__name__)
 
@@ -19,7 +20,11 @@ def add_badge():
     badge_point = get_badge_point()
     badge_symbol = result['URL']
     badge = Badge(name=badge_name, symbol=badge_symbol, point=badge_point)
-    db.session.add(badge)
-    db.session.commit()
+    try:
+        db.session.add(badge)
+        db.session.commit()
+    except exc.SQLAlchemyError as e:
+        flash(str(e.__dict__['orig']), error='error'), 400
+        
     flash('Badge is added successfully!.', category='success')
     return render_template('badge.html'), 201
