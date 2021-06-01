@@ -8,3 +8,7 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
+@views.route('/badge')
+def badge():
+    return render_template('badge.html')
+

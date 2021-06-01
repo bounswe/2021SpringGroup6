@@ -6,3 +6,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+
+class Badge(db.Model):
+    badgeID = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    symbol = db.Column(db.String(200))
+    point = db.Column(db.Integer)
