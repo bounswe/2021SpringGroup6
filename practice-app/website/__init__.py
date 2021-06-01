@@ -11,14 +11,17 @@ def create_app():
     app.config['SECRET_KEY'] = 'cmpe'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
-
+    
+    app.register_blueprint(views, url_prefix='/')
 
     from .views import views
-    from .auth import auth
+    from .api.auth import auth
+    from .api.event import events
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
-
+    app.register_blueprint(events, url_prefix='/api/v1.0/events/')
+    
     from .models import User
 
     create_database(app)
