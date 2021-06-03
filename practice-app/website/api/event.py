@@ -14,19 +14,21 @@ def getCoordinates(address):
     r = requests.get(uri, params=parameters)
     
     result = r.json()
+    print(result)
 
     if r.status_code == 200:
-        formatted_address = result['results'][0]['formatted_address']
-        longitude = result['results'][0]['geometry']['location']['lng']
-        latitude = result['results'][0]['geometry']['location']['lat']
-        return formatted_address, longitude, latitude, "OK"
+        if result['status'] == "OK":
+            formatted_address = result['results'][0]['formatted_address']
+            longitude = result['results'][0]['geometry']['location']['lng']
+            latitude = result['results'][0]['geometry']['location']['lat']
+            return formatted_address, longitude, latitude, "OK"
+        
+    if result['status'] == "ZERO_RESULTS" or result['status'] == "INVALID_REQUEST": 
+        return "",0,0,"Address Not Valid"
+    elif result['status'] == "OVER_DAILY_LIMIT" or result['status'] == "OVER_QUERY_LIMIT" or result['status'] == "REQUEST_DENIED" or result['status'] == "UNKNOWN_ERROR": 
+        return "",0,0,"Try Later"
     else:
-        if result['status'] == "ZERO_RESULTS" or result['status'] == "INVALID_REQUEST": 
-            return "",0,0,"Address Not Valid"
-        elif result['status'] == "OVER_DAILY_LIMIT" or result['status'] == "OVER_QUERY_LIMIT" or result['status'] == "REQUEST_DENIED" or result['status'] == "UNKNOWN_ERROR": 
-            return "",0,0,"Try Later"
-        else:
-            return "",0,0,"Try Later"
+        return "",0,0,"Try Later"
 
     
 
@@ -62,5 +64,6 @@ def event():
 
         db.session.add(new_event)
         db.session.commit()
-
+        # TODO check database errors
+        
         return jsonify(new_event.serialize()), 201
