@@ -2,6 +2,7 @@ from flask import Blueprint, request,  url_for, jsonify, make_response, abort, f
 from ..models import Event
 from .. import db
 import requests
+
 events = Blueprint('events', __name__)
 
 API_KEY = '<api key>'
@@ -64,6 +65,6 @@ def event():
 
         db.session.add(new_event)
         db.session.commit()
-        # TODO check database errors
+        # TODO check database errors - foreign key error
         
         return jsonify(new_event.serialize()), 201
