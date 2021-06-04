@@ -2,10 +2,11 @@ from flask import Blueprint, request,  url_for, jsonify, make_response, abort, f
 from ..models import Event
 from .. import db
 import requests
-
+from flasgger.utils import swag_from
+from sqlalchemy import exc
 events = Blueprint('events', __name__)
 
-API_KEY = '<api key>'
+API_KEY = 'AIzaSyAYLS6StHO0P82ZTJWPZnhyMmADSfno_uM'
 
 
 def getCoordinates(address):
@@ -35,6 +36,7 @@ def getCoordinates(address):
 
 
 @events.route('/', methods = ['GET','POST'])
+@swag_from('doc/events_POST.yml', methods=['POST'])
 def event():
     if request.method == 'GET':
         eventList = Event.query.all()
@@ -42,16 +44,16 @@ def event():
 
     if request.method == 'POST':
         if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json:
-            abort(400, description="Parameters not correct")
+            return "Parameters not correct", 400
         
         formatted_address, longitude, latitude, error = getCoordinates(request.json['location'])
 
         if error != "OK":
             if error != "Try Later":
-                abort(400, description = error)
+                return error, 400
             else:
                 # TODO: If api not responding or full quota add without address fields
-                abort(503, description = "Try Later" )
+                return "Try Later", 403
 
         new_event = Event(
             name = request.json['name'],
@@ -63,8 +65,15 @@ def event():
             creator_user = request.json['creator_user']
         )
 
-        db.session.add(new_event)
-        db.session.commit()
-        # TODO check database errors - foreign key error
+        
+        try:
+            db.session.add(new_event)
+            db.session.commit()
+        except exc.NoReferenceError as e:
+            db.session.rollback()
+            return "User Not Registered", 400
+        except exc.SQLAlchemyError as e:
+            db.session.rollback()
+            return "Try Later", 403
         
         return jsonify(new_event.serialize()), 201
