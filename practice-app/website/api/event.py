@@ -43,7 +43,7 @@ def event():
         return jsonify([event_item.serialize() for event_item in eventList]), 201
 
     if request.method == 'POST':
-        if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json:
+        if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json or not 'sport' in request.json:
             return "Parameters not correct", 400
         
         formatted_address, longitude, latitude, error = getCoordinates(request.json['location'])
@@ -62,7 +62,8 @@ def event():
             entered_address = request.json['location'],
             longitude = longitude,
             latitude = latitude,
-            creator_user = request.json['creator_user']
+            creator_user = request.json['creator_user'],
+            sport = request.json['sport']
         )
 
         

@@ -15,7 +15,8 @@ class Event(db.Model):
     entered_address = db.Column(db.Text)
     longitude = db.Column(db.Float())
     latitude = db.Column(db.Float())
-    creator_user = db.Column(db.String(), db.ForeignKey('user.id'))
+    creator_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sport = db.Column(db.Integer)
 
     def serialize(self):
        """Return object data in JSON serializable format"""
@@ -27,5 +28,6 @@ class Event(db.Model):
            'entered_address'        : self.entered_address,
            'longitude'              : self.longitude,
            'latitude'               : self.latitude,
-           'creator_user'           : self.creator_user
+           'creator_user'           : self.creator_user,
+           'sport'                  : self.sport
        }
