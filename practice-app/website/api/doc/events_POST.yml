@@ -1,0 +1,78 @@
+Endpoint to create a new event
+---
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+        - date
+        - location
+        - creator_user
+      properties:
+        name:
+          type: string
+          description: Name of the event, title.
+          example: Football Match at Trabzon
+        date:
+          type: string
+          description: Date of the event. Format is "DD-MM-YYYYTHH:MM"
+          example: 2021-06-25T11:56
+        location:
+          type: string
+          description: Address of the event, given using basic English.
+          example: Trabzon Akyazı Stadium
+        creator_user:
+          type: integer
+          description: Id of the user creating the event. Id must be registered to a user.
+          example: 12434
+responses:
+  200:
+    description: Event created and added to database.
+    schema:
+      type: object
+      required:
+        - name
+        - date
+        - location
+        - creator_user
+      properties:
+        name:
+          type: string
+          description: Name of the event, title.
+          example: Football Match at Trabzon
+        date:
+          type: string
+          description: Date of the event. Format is "DD-MM-YYYYTHH:MM"
+          example: 2021-06-25T11:56
+        entered_address:
+          type: string
+          description: Address of the event, given using basic English.
+          example: Trabzon Akyazı Stadium
+        formatted_address:
+          type: string
+          description: Address of the event, taken using Google Maps API.
+          example: Akyazı, 61195 Ortahisar/Trabzon, Turkey
+        id:
+          type: integer
+          description: Id of the event
+          example: 2
+        latitude:
+          type: number
+          description: Latitude of the address.
+          example: 40.9988505
+        longitude:
+          type: number
+          description: Longitude of the address.
+          example: 39.6464687
+        creator_user:
+          type: integer
+          description: Id of the user creating the event. Id must be registered to a user.
+          example: 12434
+  400:
+    description: Body parameters are not correct.
+
+  403:
+    description: There is an error, try later.
