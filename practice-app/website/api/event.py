@@ -6,7 +6,7 @@ from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
 
-API_KEY = 'AIzaSyAYLS6StHO0P82ZTJWPZnhyMmADSfno_uM'
+API_KEY = '<api key>'
 
 
 def getCoordinates(address):
