@@ -27,3 +27,24 @@ def add_badge():
         return str(e.__dict__['orig']), 400
         
     return jsonify(badge.serialize()), 201
+
+@badges.route('show_badge/',methods = ['GET','POST'])
+def show_badge():
+    if request.method == 'POST':
+        badges = Badge.query.all()
+        for i in badges:
+            print(type(i), type(badges))
+        url = 'https://thatcopy.pw/catapi/rest/'
+        dog_photos = [requests.get(url).json()['url'] for _ in badges] 
+        control = True
+        result = {"badges":badges, "dog_photos":dog_photos, "control":control}
+        #return render_template("index.html", badges=zip(badges,dog_photos), control=control)
+        return jsonify(result), 201
+        
+    else:
+        print("helo")
+        badges = Badge.query.all()
+        control = False
+        result = {"control":control}
+        #return render_template("index.html", control=control)
+        return jsonify(result),201
