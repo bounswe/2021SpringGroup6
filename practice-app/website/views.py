@@ -49,7 +49,7 @@ def show_badge():
         for badge in json_response['badges']:
             badges.append(Badge(badgeID=badge['badgeID'], name=badge['name'], point=badge['point']))
             
-        return render_template("show_badges.html", badges=zip(badges,json_response['dog_photos']), control=json_response['control'], user= current_user)
+        return render_template("show_badges.html", badges=list(zip(badges,json_response['dog_photos'])), control=json_response['control'], user= current_user)
     
     return render_template("show_badges.html", user= current_user)
 
