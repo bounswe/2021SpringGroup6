@@ -21,3 +21,28 @@ class Badge(db.Model):
             'symbol'                 : self.symbol,
             'point'                  : self.point
         }
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
+    date = db.Column(db.Text)
+    formatted_address = db.Column(db.Text)
+    entered_address = db.Column(db.Text)
+    longitude = db.Column(db.Float())
+    latitude = db.Column(db.Float())
+    creator_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sport = db.Column(db.Integer)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'name'                   : self.name,
+           'date'                   : self.date,
+           'formatted_address'      : self.formatted_address,
+           'entered_address'        : self.entered_address,
+           'longitude'              : self.longitude,
+           'latitude'               : self.latitude,
+           'creator_user'           : self.creator_user,
+           'sport'                  : self.sport
+       }

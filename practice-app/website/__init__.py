@@ -26,8 +26,9 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(events, url_prefix='/api/v1.0/events/')
     app.register_blueprint(badges, url_prefix='/api/v1.0/badges/')
-    from .models import User
-   
+    
+    from .models import User, Event
+
     create_database(app)
 
     login_manager = LoginManager()
