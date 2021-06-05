@@ -12,3 +12,12 @@ class Badge(db.Model):
     name = db.Column(db.String(50), unique=True)
     symbol = db.Column(db.String(200))
     point = db.Column(db.Integer)
+
+    def serialize(self):
+        """Return object data in JSON serializable format"""
+        return {
+            'badgeID'                : self.badgeID,
+            'name'                   : self.name,
+            'symbol'                 : self.symbol,
+            'point'                  : self.point
+        }

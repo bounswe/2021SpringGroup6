@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash
+from flask import Blueprint, request, render_template, flash,jsonify
 import requests
 from ..models import Badge
 from .. import db
@@ -15,16 +15,15 @@ def get_badge_point():
 
 @badges.route('/',methods = ['POST'])
 def add_badge():
-    result = request.form
-    badge_name = result['Name']
+    result = request.json
+    badge_name = result['name']
     badge_point = get_badge_point()
-    badge_symbol = result['URL']
+    badge_symbol = result['symbol']
     badge = Badge(name=badge_name, symbol=badge_symbol, point=badge_point)
     try:
         db.session.add(badge)
         db.session.commit()
     except exc.SQLAlchemyError as e:
-        flash(str(e.__dict__['orig']), error='error'), 400
+        return str(e.__dict__['orig']), 400
         
-    flash('Badge is added successfully!.', category='success')
-    return render_template('badge.html'), 201
+    return jsonify(badge.serialize()), 201
