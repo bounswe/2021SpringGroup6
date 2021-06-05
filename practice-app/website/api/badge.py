@@ -3,7 +3,6 @@ import requests
 from ..models import Badge
 from .. import db
 from sqlalchemy import exc
-from flasgger.utils import swag_from
 
 badges = Blueprint('badges',__name__)
 
@@ -15,7 +14,6 @@ def get_badge_point():
     return str(response.json()['rate']).split('.')[1][3]
 
 @badges.route('/',methods = ['POST'])
-@swag_from('doc/badges_POST.yml', methods=['POST'])
 def add_badge():
     result = request.json
     badge_name = result['name']
@@ -26,12 +24,8 @@ def add_badge():
         db.session.add(badge)
         db.session.commit()
     except exc.SQLAlchemyError as e:
-        db.session.rollback()
-        return "Try Later", 403
+        return str(e.__dict__['orig']), 400
         
-<<<<<<< Updated upstream
-    return jsonify(badge.serialize()), 201
-=======
     return jsonify(badge.serialize()), 201
 
 @badges.route('show_badge/',methods = ['GET','POST'])
@@ -55,4 +49,3 @@ def show_badge():
         result = {"control":control}
         #return render_template("index.html", control=control)
         return jsonify(result),201
->>>>>>> Stashed changes

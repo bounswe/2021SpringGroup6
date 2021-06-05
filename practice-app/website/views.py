@@ -1,12 +1,7 @@
-from flask import Blueprint, render_template, jsonify, request, flash, redirect, url_for
+from flask import Blueprint, render_template,request,flash
 from flask_login import login_required, current_user
-<<<<<<< Updated upstream
-import requests
-import json
-=======
 import requests, json
 from .models import Badge
->>>>>>> Stashed changes
 
 views = Blueprint('views', __name__)
 
@@ -37,48 +32,13 @@ def badge():
     
     return render_template("badge.html", user= current_user)
 
-def get_sport_names():
-    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
 
-    r = requests.get(uri)
-    
-    result = r.json()
+@views.route('show_badge/', methods=['POST','GET'])
+def show_badge():
+    if request.method == "POST":
 
-    sports={}
-
-    for sport in result['sports']:
-        sports[sport['idSport']] = sport['strSport']
-    return sports
-
-
-@views.route('create_event/', methods=['POST','GET'])
-@login_required
-def create_event():
-    sports = get_sport_names()
-    if request.method == 'POST':
-        event = {
-            "name" : request.form.get('name'),
-            "date" : request.form.get('date'),
-            "location" : request.form.get('location'),
-            "sport" : request.form.get('sport'),
-            "creator_user" : current_user.id
-        }
-
-        req = "http://127.0.0.1:5000/api/v1.0/events"
+        req = "http://localhost:5000/api/v1.0/badges/show_badge/"
         headers = {'Content-type': 'application/json'}
-<<<<<<< Updated upstream
-        response = requests.post(req, data=json.dumps(event), headers=headers)
-        result = response.content
-
-        if response.status_code == 201:
-            flash('Event Created', category='success')
-            # TODO: When event page implemented, redirect to it.
-            return redirect(url_for('views.home'))
-        elif response.status_code == 400 :
-            flash('Check Information Entered', category='error')
-        else:
-            flash('Error Occured, Try Again Later', category='error')
-=======
         response = requests.post(req, headers=headers)
         json_response = response.json()
         
@@ -90,7 +50,8 @@ def create_event():
             badges.append(Badge(badgeID=badge['badgeID'], name=badge['name'], point=badge['point']))
             
         return render_template("show_badges.html", badges=zip(badges,json_response['dog_photos']), control=json_response['control'], user= current_user)
->>>>>>> Stashed changes
     
-    return render_template("create_event.html", user= current_user, sports=sports)
+    return render_template("show_badges.html", user= current_user)
+
+
 
