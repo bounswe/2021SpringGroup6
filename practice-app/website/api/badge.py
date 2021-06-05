@@ -29,4 +29,30 @@ def add_badge():
         db.session.rollback()
         return "Try Later", 403
         
+<<<<<<< Updated upstream
     return jsonify(badge.serialize()), 201
+=======
+    return jsonify(badge.serialize()), 201
+
+@badges.route('show_badge/',methods = ['GET','POST'])
+def show_badge():
+    if request.method == 'POST':
+        badges = Badge.query.all()
+        badges_serialized = []
+        for badge in badges:
+            badges_serialized.append(badge.serialize())
+        url = 'https://thatcopy.pw/catapi/rest/'
+        dog_photos = [requests.get(url).json()['url'] for _ in badges] 
+        control = True
+        result = {"badges":badges_serialized, "dog_photos":dog_photos, "control":control}
+        #return render_template("index.html", badges=zip(badges,dog_photos), control=control)
+        return jsonify(result), 201
+        
+    else:
+        print("helo")
+        badges = Badge.query.all()
+        control = False
+        result = {"control":control}
+        #return render_template("index.html", control=control)
+        return jsonify(result),201
+>>>>>>> Stashed changes

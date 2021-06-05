@@ -1,7 +1,12 @@
 from flask import Blueprint, render_template, jsonify, request, flash, redirect, url_for
 from flask_login import login_required, current_user
+<<<<<<< Updated upstream
 import requests
 import json
+=======
+import requests, json
+from .models import Badge
+>>>>>>> Stashed changes
 
 views = Blueprint('views', __name__)
 
@@ -61,6 +66,7 @@ def create_event():
 
         req = "http://127.0.0.1:5000/api/v1.0/events"
         headers = {'Content-type': 'application/json'}
+<<<<<<< Updated upstream
         response = requests.post(req, data=json.dumps(event), headers=headers)
         result = response.content
 
@@ -72,6 +78,19 @@ def create_event():
             flash('Check Information Entered', category='error')
         else:
             flash('Error Occured, Try Again Later', category='error')
+=======
+        response = requests.post(req, headers=headers)
+        json_response = response.json()
+        
+        if response.status_code != 201:
+            flash('Error Occured, Try Again Later', category='error')
+
+        badges = []
+        for badge in json_response['badges']:
+            badges.append(Badge(badgeID=badge['badgeID'], name=badge['name'], point=badge['point']))
+            
+        return render_template("show_badges.html", badges=zip(badges,json_response['dog_photos']), control=json_response['control'], user= current_user)
+>>>>>>> Stashed changes
     
     return render_template("create_event.html", user= current_user, sports=sports)
 
