@@ -11,6 +11,7 @@ parameters:
         - date
         - location
         - creator_user
+        - sport
       properties:
         name:
           type: string
