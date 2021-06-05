@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, flash, redirect,
 from flask_login import login_required, current_user
 import requests
 import json
+from .models import Badge
 
 views = Blueprint('views', __name__)
 
