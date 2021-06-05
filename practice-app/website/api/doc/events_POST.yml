@@ -28,8 +28,12 @@ parameters:
           type: integer
           description: Id of the user creating the event. Id must be registered to a user.
           example: 12434
+        sport:
+          type: integer
+          description: Id of the sport.
+          example: 103
 responses:
-  200:
+  201:
     description: Event created and added to database.
     schema:
       type: object
@@ -38,6 +42,7 @@ responses:
         - date
         - location
         - creator_user
+        - sport
       properties:
         name:
           type: string
@@ -71,6 +76,10 @@ responses:
           type: integer
           description: Id of the user creating the event. Id must be registered to a user.
           example: 12434
+        sport:
+          type: integer
+          description: Id of the sport.
+          example: 103
   400:
     description: Body parameters are not correct.
 
