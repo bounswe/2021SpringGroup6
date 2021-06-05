@@ -1,4 +1,4 @@
-from flask import Blueprint, request,  url_for, jsonify, make_response, abort, flash
+from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
 from ..models import Event
 from .. import db
 import requests
@@ -6,7 +6,7 @@ from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
 
-API_KEY = '<api key>'
+API_KEY = "AIzaSyB918Ru6ZsU1P3OPc-IaE_lRLgjNM1Suyk"
 
 
 def getCoordinates(address):
@@ -39,8 +39,45 @@ def getCoordinates(address):
 @swag_from('doc/events_POST.yml', methods=['POST'])
 def event():
     if request.method == 'GET':
-        eventList = Event.query.all()
-        return jsonify([event_item.serialize() for event_item in eventList]), 201
+        query_parameters = request.args
+        name = query_parameters.get('name')
+        sport = query_parameters.get('sport')
+        date_from = query_parameters.get('date_from')
+        date_to = query_parameters.get('date_to')
+
+        #eventList = Event.query.all()
+
+        query = 'SELECT * FROM Event WHERE'
+        flag = False
+        
+        if name:
+            query += (' name LIKE \'%' + name + '%\' AND')
+            flag = True
+        if sport:
+            query += (' sport = ' + str(sport) + ' AND')
+            flag = True
+        if date_from:
+            query += (' date >= \'' + date_from + '\' AND')
+            flag = True
+        if date_to:
+            query += (' date <= \'' + date_to + '\' AND')
+            flag = True
+
+        if flag:
+            query = query[:-4] + ';'
+        else:
+            query = query[:-6] + ';'
+
+        eventList = db.engine.execute(query)
+        eventList = json.dumps([dict(event_item) for event_item in eventList])
+        temp = json.loads(eventList)
+        multi = requests.get('https://randomuser.me/api/?inc=name&results=' + str(len(temp))).json()['results']
+                
+        for index, item in enumerate(temp):
+            name = multi[index]['name']
+            item['creator_name'] = name['first'] + ' ' + name['last']
+        return jsonify(temp)
+        
 
     if request.method == 'POST':
         if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json or not 'sport' in request.json:
