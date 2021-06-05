@@ -32,23 +32,3 @@ def badge():
     return render_template("badge.html", user= current_user)
 
 
-@views.route('show_badge/', methods=['POST','GET'])
-def show_badge():
-    if request.method == "POST":
-
-        req = "http://localhost:5000/api/v1.0/badges/show_badge/"
-        headers = {'Content-type': 'application/json'}
-        response = requests.post(req, data=json.dumps(badge), headers=headers)
-        result = response.content
-
-        if response.status_code == 201:
-            flash('Badge Added', category='success')
-        else:
-            flash('Error Occured, Try Again Later', category='error')
-
-        return render_template("show_badges.html", user= current_user)
-    
-    return render_template("show_badges.html", user= current_user)
-
-
-
