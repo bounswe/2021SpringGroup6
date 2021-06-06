@@ -9,7 +9,7 @@ class TestAuthAPI(unittest.TestCase):
 
     def test_user_POST(self):
 
-        # Equipment named Ball
+        # User named Omer
         User ={
             'name': 'Omer'
         }
