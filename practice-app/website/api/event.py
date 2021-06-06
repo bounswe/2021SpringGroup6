@@ -78,3 +78,58 @@ def event():
             return "Try Later", 403
         
         return jsonify(new_event.serialize()), 201
+
+
+
+
+
+# When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
+# Corresponding event must exist and have a sport type in db.
+@events.route('<event_id>/discussions', methods=['GET', 'POST'])
+@swag_from('doc/discussionForEvent_GET.yml', methods=['GET'])
+def discussionForEvent(event_id):
+
+    if request.method == 'GET':
+
+        if int(event_id) <=-1:
+            return "Wrong path parameters", 401
+        try:
+            eventList = Event.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+        eventList = Event.query.all()
+
+
+        # Finds the event with the given id and its sport type
+        for i in range(len(eventList)):
+            if eventList[i].serialize()["id"] == int(event_id):
+                sportName = eventList[i].serialize()["sport"]
+
+        description = 'No definition found for ' + sportName
+
+        # Find the corresponding definition for the sport type
+        response = requests.get(
+            'https://sports.api.decathlon.com/sports/' + sportName.lower())  # API to use
+        if response.status_code >= 200 and response.status_code < 300:
+            json_data = json.loads(response.text)
+            description = json_data['data']['attributes']['description']
+            if description == None:
+                description = 'No definition found for ' + sportName
+
+        try:
+            discussionPostList = DiscussionPost.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+
+        discussionPostList = DiscussionPost.query.all()
+        # Get the discussion from the database for the given event
+        text = 'No discussion found'
+
+        for i in range(len(discussionPostList)):
+            if discussionPostList[i].serialize()["id"] == int(event_id):
+                text = discussionPostList[i].serialize()["text"]
+
+        result = {"id": event_id, "description": description, "text": text}
+        return jsonify(result), 201
+
+    
