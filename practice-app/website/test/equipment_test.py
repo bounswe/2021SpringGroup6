@@ -1,22 +1,27 @@
 import unittest
-import requests
-from ...main import app
-from ..api import equipment
+import requests, json
 
 class TestEquipmentAPI(unittest.TestCase):
+
     def setUp(self):
-        app.testing = True
-        self.app = app.test_client()
+        self.req = "http://127.0.0.1:5000/api/v1.0/equipments"
+        self.headers = {'Content-type': 'application/json'}
 
-    def test_equipments_POST(self):
-        response = self.app.post('/api/v1.0/equipments', json={
+    def test_equipment_POST(self):
+
+        # Equipment named Ball
+        Equipment ={
+            'name': 'Ball'
+        }
+        response = requests.post(self.req, data=json.dumps(Equipment), headers=self.headers)
+        self.assertEqual(response.status_code, 201)
+
+    def test_equipment_POST_empty_name(self):
+
+        # Name field is missing
+        Equipment ={
             'name': ''
-        })
-        json_data = response.get_json()
-        self.assertEqual(json_data.status, '200 OK')
-        
+        }
 
-
-
-
-
+        response = requests.post(self.req, data=json.dumps(Equipment), headers=self.headers)
+        self.assertEqual(response.status_code, 201)

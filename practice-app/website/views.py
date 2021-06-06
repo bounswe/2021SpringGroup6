@@ -10,68 +10,30 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
-@views.route('badge/', methods=['POST','GET'])
-def badge():
-    if request.method == "POST":
-        badge = {
-            "name" : request.form.get("name"),
-            "symbol": request.form.get("symbol")
-        }
 
-        req = "http://localhost:5000/api/v1.0/badges"
-        headers = {'Content-type': 'application/json'}
-        response = requests.post(req, data=json.dumps(badge), headers=headers)
-        result = response.content
-
-        if response.status_code == 201:
-            flash('Badge Added', category='success')
-        else:
-            flash('Error Occured, Try Again Later', category='error')
-
-        return render_template("home.html", user= current_user)
-    
-    return render_template("badge.html", user= current_user)
-
-def get_sport_names():
-    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
-
-    r = requests.get(uri)
-    
-    result = r.json()
-
-    sports={}
-
-    for sport in result['sports']:
-        sports[sport['idSport']] = sport['strSport']
-    return sports
-
-
-@views.route('create_event/', methods=['POST','GET'])
+@views.route('create_equipment/', methods=['POST','GET'])
 @login_required
-def create_event():
-    sports = get_sport_names()
+def create_equipment():
     if request.method == 'POST':
-        event = {
-            "name" : request.form.get('name'),
-            "date" : request.form.get('date'),
-            "location" : request.form.get('location'),
-            "sport" : request.form.get('sport'),
-            "creator_user" : current_user.id
+        equipment = {
+            "name" : request.form.get("name")
         }
 
-        req = "http://127.0.0.1:5000/api/v1.0/events"
+        req = "http://127.0.0.1:5000/api/v1.0/equipments/"
         headers = {'Content-type': 'application/json'}
-        response = requests.post(req, data=json.dumps(event), headers=headers)
+        response = requests.post(req, data=json.dumps(equipment), headers=headers)
         result = response.content
 
+        # print(response.status_code, "************") Error Code: 500
+
         if response.status_code == 201:
-            flash('Event Created', category='success')
-            # TODO: When event page implemented, redirect to it.
+            flash('Equipment Created', category='success')
             return redirect(url_for('views.home'))
         elif response.status_code == 400 :
             flash('Check Information Entered', category='error')
+        elif response.status_code == 409 :
+            flash('Equipment Already Exists!', category='error')
         else:
             flash('Error Occured, Try Again Later', category='error')
     
-    return render_template("create_event.html", user= current_user, sports=sports)
-
+    return render_template("equipments.html", user=current_user)
