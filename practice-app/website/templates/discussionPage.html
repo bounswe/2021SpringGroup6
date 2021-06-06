@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Comments are like the following for event {{event_id}}</h1>
+        <p>{{definition}}</p>
+        {% for line in text %}
+            <p>{{line}}</p>
+        {% endfor %}
+        <a href="/events/{{event_id}}/discussionPost">Add comment</a>
+        <br>
+        <br> 
+    </body>
+</html>
