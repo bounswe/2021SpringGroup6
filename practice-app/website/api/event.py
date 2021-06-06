@@ -1,5 +1,5 @@
 from flask import Blueprint, request,  url_for, jsonify, make_response, abort, flash
-from ..models import Event
+from ..models import Event, Sports
 from .. import db
 import requests
 from flasgger.utils import swag_from
@@ -100,10 +100,25 @@ def discussionForEvent(event_id):
         eventList = Event.query.all()
 
 
+        sportName = ''
+
+
         # Finds the event with the given id and its sport type
         for i in range(len(eventList)):
             if eventList[i].serialize()["id"] == int(event_id):
                 sportName = eventList[i].serialize()["sport"]
+
+        
+        sportList = Sports.query.all()
+
+        for i in range(len(sportList)):
+            if sportList[i].serialize()["id"] == int(sportName):
+                sportName = sportList[i].serialize()["sport"]
+
+  
+
+
+
 
         description = 'No definition found for ' + sportName
 
