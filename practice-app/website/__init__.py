@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from flasgger import Swagger
+import requests
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -41,7 +43,35 @@ def create_app():
 
     return app
 
+def get_sport_names():
+    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
+
+    r = requests.get(uri)
+    
+    result = r.json()
+
+    sports={}
+
+    for sport in result['sports']:
+        sports[sport['idSport']] = sport['strSport']
+    return sports
+
 def create_database(app):
     if not path.exists('../website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+        sports = get_sport_names()
+        from .models import Sport
+        with app.app_context():
+            for sport in sports.keys():
+                new_sport = Sport(
+                    id = sport,
+                    sport =  sports[sport]
+                )
+                try:
+                    db.session.add(new_sport)
+                    db.session.commit()
+                except:
+                    #Already exists
+                    pass
+

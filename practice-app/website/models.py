@@ -46,3 +46,7 @@ class Event(db.Model):
            'creator_user'           : self.creator_user,
            'sport'                  : self.sport
        }
+
+class Sport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sport = db.Column(db.Text)

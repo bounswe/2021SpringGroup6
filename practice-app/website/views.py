@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, flash, redirect,
 from flask_login import login_required, current_user
 import requests
 import json
+from .models import Sport
 
 views = Blueprint('views', __name__)
 
@@ -33,16 +34,12 @@ def badge():
     return render_template("badge.html", user= current_user)
 
 def get_sport_names():
-    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
-
-    r = requests.get(uri)
-    
-    result = r.json()
+    result = Sport.query.all()
 
     sports={}
 
-    for sport in result['sports']:
-        sports[sport['idSport']] = sport['strSport']
+    for sport in result:
+        sports[sport.id] = sport.sport
     return sports
 
 
