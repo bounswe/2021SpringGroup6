@@ -75,3 +75,29 @@ def create_event():
     
     return render_template("create_event.html", user= current_user, sports=sports)
 
+
+
+
+
+# Shows the discussion page for the event with id event_id. 
+# It also shows the description of the sport type of the event 
+# using an external API 
+@views.route('/events/<event_id>/discussions', methods=["GET"])
+@login_required
+def discussionPage(event_id):
+    
+    BASE = 'http://127.0.0.1:5000/'  #  should be changed
+    response = requests.get(BASE + '/api/v1.0/events/' + event_id + '/discussions')
+
+    if response.status_code == 201:
+        description = response.json()["description"]
+        text = response.json()["text"]
+        return render_template("discussionPage.html", event_id=event_id, definition = description, text = text.split('#')) 
+    else:
+        flash('Something went wrong', category='error')
+
+
+
+
+
+
