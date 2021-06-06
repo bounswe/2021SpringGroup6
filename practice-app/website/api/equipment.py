@@ -28,16 +28,11 @@ def post_equipment():
     tempEquipment = Equipment.query.filter_by(name=equipment_name).first()
     if tempEquipment:
         return 'Equipment already exists!', 409
-        # flash('Equipment already exists!.', category='error')
     else:
         new_equipment = Equipment(name=equipment_name, price=price)
         try:
             db.session.add(new_equipment)
             db.session.commit()
-            # flash('Successfull', category='success')
-        except exc.NoReferenceError as e:
-            db.session.rollback()
-            return "User Not Registered", 400
         except exc.SQLAlchemyError as e:
             db.session.rollback()
             return "Try Later", 403
