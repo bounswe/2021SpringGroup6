@@ -1,5 +1,5 @@
 from flask import Blueprint, request,  url_for, jsonify, make_response, abort, flash
-from ..models import Event
+from ..models import Event, User
 from .. import db
 import requests
 from flasgger.utils import swag_from
@@ -66,13 +66,14 @@ def event():
             sport = request.json['sport']
         )
 
+        user = User.query.get(request.json['creator_user'])
+        if not user:
+            return "User Not Registered 5", 400
+
         
         try:
             db.session.add(new_event)
             db.session.commit()
-        except exc.NoReferenceError as e:
-            db.session.rollback()
-            return "User Not Registered", 400
         except exc.SQLAlchemyError as e:
             db.session.rollback()
             return "Try Later", 403
