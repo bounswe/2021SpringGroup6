@@ -9,5 +9,13 @@ class User(db.Model, UserMixin):
 
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    equipmentName = db.Column(db.String(150), unique=True)
+    name = db.Column(db.String(150), unique=True)
     price = db.Column(db.String(150))
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'name'                   : self.name,
+           'price'                  : self.price,
+       }
