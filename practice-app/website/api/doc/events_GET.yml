@@ -1,0 +1,58 @@
+swagger: "2.0"
+info:
+  description: "Endpoint to display events. Supports basic filtering"
+  version: "1.0.0"
+  title: 'Amateur Sports Api'
+basePath: "api/v1.0/events"
+paths:
+  /:
+    get:
+      summary: "Find all events"
+      description: "Basic filtering can be done. Which are name, sport name, and date."
+      parameters:
+        name: "Header of the event"
+        type: string
+        description: "Filters by event name. Diplays if the event name includes the string"
+        example: "street ball"        
+      responses:
+        200:
+          description: "Events are fetched from database."
+          schema:
+            type: array
+            properties:
+              name:
+                type: string
+                description: Name of the event, title.
+                example: Football Match at Trabzon
+              date:
+                type: string
+                description: Date of the event. Format is "YYYY-MM-DDTHH:MM"
+                example: 2021-06-25T11:56
+              entered_address:
+                type: string
+                description: Address of the event, given using basic English.
+                example: Trabzon Akyazı Stadium
+              formatted_address:
+                type: string
+                description: Address of the event, taken using Google Maps API.
+                example: Akyazı, 61195 Ortahisar/Trabzon, Turkey
+              id:
+                type: integer
+                description: Id of the event
+                example: 2
+              latitude:
+                type: number
+                description: Latitude of the address.
+                example: 40.9988505
+              longitude:
+                type: number
+                description: Longitude of the address.
+                example: 39.6464687
+              creator_user:
+                type: integer
+                description: Id of the user creating the event. Id must be registered to a user.
+                example: 12434
+        400:
+          description: "Properties can not be fetched from database"
+        403:
+          description: "There is an error, try later."
