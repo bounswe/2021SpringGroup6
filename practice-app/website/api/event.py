@@ -2,11 +2,21 @@ from flask import Blueprint, request,  url_for, jsonify, make_response, abort, f
 from ..models import Event
 from .. import db
 import requests
+from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
 
-API_KEY = '<api key>'
+API_KEY = 'AIzaSyB918Ru6ZsU1P3OPc-IaE_lRLgjNM1Suyk'
+my_api_key = "a5932c0475bbf0f2a7e810cc2e8c83a6"
+
+def get_weather(latitude, longitude):
+    parameters = {'lat': latitude, 'lon' : longitude, 'appid': my_api_key }
+    uri = 'https://api.openweathermap.org/data/2.5/weather'
+    r = requests.get(uri, params=parameters)
+    r = r.json()
+    return r["weather"][0]["description"], r["weather"][0]["icon"]
+
 
 
 def getCoordinates(address):
@@ -78,3 +88,19 @@ def event():
             return "Try Later", 403
         
         return jsonify(new_event.serialize()), 201
+
+
+@events.route('/<event_id>/', methods = ['GET'])
+@swag_from('doc/event_GET.yml', methods=['GET'])
+def get_event_by_id(event_id):
+    if request.method == 'GET':
+        event = Event.query.get(event_id)      
+        event_with_weather = event.serialize()
+        event_with_weather["hour"] =  event_with_weather["date"][11:]
+        event_with_weather["date"] = event_with_weather["date"][:10]     
+        weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
+        event_with_weather["weather"] = weather
+        event_with_weather["weather_icon"] = weather_icon
+        sport_names = get_sport_names()       
+        event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
+        return jsonify(event_with_weather), 200
