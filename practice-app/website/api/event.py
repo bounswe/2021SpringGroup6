@@ -37,6 +37,7 @@ def getCoordinates(address):
 
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
+@swag_from('doc/events_GET.yml', methods=['GET'])
 def event():
     # handles get request
     if request.method == 'GET':
