@@ -72,3 +72,19 @@ def create_event():
     
     return render_template("create_event.html", user= current_user, sports=sports)
 
+@views.route('sports/', methods=['POST','GET'])
+def sports_page():
+    if request.method == 'POST':
+        keyword = request.form.get('keyword')
+
+        req = "http://127.0.0.1:5000/api/v1.0/sports?keyword=" + keyword
+        headers = {'Content-type': 'application/json'}
+        response = requests.get(req, headers=headers)
+        items = response.json()['sports']
+
+        if response.status_code == 200:
+            return render_template("sports.html", user= current_user, items=items)
+        else:
+            flash('Some Error Occured', category='error')
+    
+    return render_template("sports.html", user= current_user, items=[])
