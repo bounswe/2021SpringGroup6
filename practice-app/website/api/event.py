@@ -5,18 +5,19 @@ import requests
 from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
+import re
 
 API_KEY = '<api key>'
 
 
 def getCoordinates(address):
+
     parameters = {'key': API_KEY , 'address': address}
     uri = 'https://maps.googleapis.com/maps/api/geocode/json'
 
     r = requests.get(uri, params=parameters)
     
     result = r.json()
-    print(result)
 
     if r.status_code == 200:
         if result['status'] == "OK":
@@ -57,7 +58,7 @@ def event():
 
         new_event = Event(
             name = request.json['name'],
-            date = request.json['date'] if 'date' in request.json else None,
+            date = request.json['date'],
             formatted_address = formatted_address,
             entered_address = request.json['location'],
             longitude = longitude,
@@ -70,6 +71,13 @@ def event():
         if not user:
             return "User Not Registered 5", 400
 
+        # Data type
+        if int(new_event.sport) < 102 or int(new_event.sport) > 120:
+            return "Sport Id Is Not Correct", 400
+
+        date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[1-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
+        if not re.match(date_regex, new_event.date):
+            return "Date Format Not Correct", 400
         
         try:
             db.session.add(new_event)
