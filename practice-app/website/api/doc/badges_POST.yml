@@ -19,7 +19,7 @@ parameters:
           description: It is a URL for the symbol picture of the badge.
           example: https://www.wikihow.com/images_en/thumb/d/db/Get-the-URL-for-Pictures-Step-2-Version-6.jpg/v4-460px-Get-the-URL-for-Pictures-Step-2-Version-6.jpg.webp
 responses:
-  200:
+  201:
     description: Badge is created and added into the database
     schema:
       type: object
