@@ -95,7 +95,7 @@ def event():
         
 
     if request.method == 'POST':
-        if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json or not 'sport' in request.json:
+        if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json or not 'sport' in request.json or not 'date' in request.json:
             return "Parameters not correct", 400
         
         formatted_address, longitude, latitude, error = getCoordinates(request.json['location'])
