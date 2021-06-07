@@ -1,4 +1,4 @@
-from flask import Blueprint, request,  url_for, jsonify, make_response, abort, flash
+from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
 from ..models import Event
 from .. import db
 import requests
@@ -6,6 +6,7 @@ from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
+
 
 API_KEY = '<api_key_coordinates>'
 API_KEY2 = '<api_key_weather>'
@@ -16,7 +17,6 @@ def get_weather(latitude, longitude):
     r = requests.get(uri, params=parameters)
     r = r.json()
     return r["weather"][0]["description"], r["weather"][0]["icon"]
-
 
 
 def getCoordinates(address):
@@ -47,10 +47,62 @@ def getCoordinates(address):
 
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
+@swag_from('doc/events_GET.yml', methods=['GET'])
 def event():
+    # handles get request
     if request.method == 'GET':
-        eventList = Event.query.all()
-        return jsonify([event_item.serialize() for event_item in eventList]), 201
+        # fethes body parameters
+        query_parameters = request.args
+        name = query_parameters.get('name')
+        sport = query_parameters.get('sport')
+        date_from = query_parameters.get('date_from')
+        date_to = query_parameters.get('date_to')
+
+        # sets up querys
+        query = 'SELECT * FROM Event WHERE'
+        flag = False
+        
+        # adds filter for name
+        if name:
+            query += (' name LIKE \'%' + name + '%\' AND')
+            flag = True
+        # adds filter for sport name
+        if sport:
+            query += (' sport = ' + str(sport) + ' AND')
+            flag = True
+        # adds filter for initial date
+        if date_from:
+            query += (' date >= \'' + date_from + '\' AND')
+            flag = True
+        # adds filter for final date
+        if date_to:
+            query += (' date <= \'' + date_to + '\' AND')
+            flag = True
+
+        # checks if there is any filter added
+        if flag:
+            query = query[:-4] + ';'
+        else:
+            query = query[:-6] + ';'
+
+        # executes query and converts to json format
+        eventList = db.engine.execute(query)
+        eventList = json.dumps([dict(event_item) for event_item in eventList])
+
+        # temporary parameter for adding additional info into result
+        temp = json.loads(eventList)
+
+        # external api for assigning random names for event creators
+        multi = requests.get('https://randomuser.me/api/?inc=name&results=' + str(len(temp))).json()['results']
+        
+        # adds external info into the result
+        for index, item in enumerate(temp):
+            name = multi[index]['name']
+            item['creator_name'] = name['first'] + ' ' + name['last']
+        
+        # returns the result in json format
+        return jsonify(temp)
+        
 
     if request.method == 'POST':
         if not request.json or not 'name' in request.json or not 'creator_user'  in request.json or not 'location' in request.json or not 'sport' in request.json or not 'date' in request.json:
