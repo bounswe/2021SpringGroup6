@@ -33,7 +33,7 @@ def get_sport_by_keyword(sports, keyword):
 
 """
 @sports.route('/', methods = ['GET'])
-@swag_from('doc/events_POST.yml', methods=['GET'])
+@swag_from('doc/sport_GET.yml', methods=['GET'])
 def sport():
     try:
         # Get all sports.
