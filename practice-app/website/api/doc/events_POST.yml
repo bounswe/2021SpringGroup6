@@ -1,4 +1,4 @@
-Endpoint to get the event with the corresponding ID
+Endpoint to create a new event
 ---
 parameters:
   - name: body

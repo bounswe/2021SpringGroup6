@@ -7,8 +7,8 @@ from flasgger.utils import swag_from
 from sqlalchemy import exc
 events = Blueprint('events', __name__)
 
-API_KEY = 'AIzaSyB918Ru6ZsU1P3OPc-IaE_lRLgjNM1Suyk'
-my_api_key = "a5932c0475bbf0f2a7e810cc2e8c83a6"
+API_KEY = '<api_key_coordinates>'
+API_KEY2 = '<api_key_weather>'
 
 def get_weather(latitude, longitude):
     parameters = {'lat': latitude, 'lon' : longitude, 'appid': my_api_key }
