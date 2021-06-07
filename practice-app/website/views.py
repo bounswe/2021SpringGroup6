@@ -10,6 +10,27 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
+@views.route('badge/', methods=['POST','GET'])
+def badge():
+    if request.method == "POST":
+        badge = {
+            "name" : request.form.get("name"),
+            "symbol": request.form.get("symbol")
+        }
+
+        req = "http://localhost:5000/api/v1.0/badges"
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(req, data=json.dumps(badge), headers=headers)
+        result = response.content
+
+        if response.status_code == 201:
+            flash('Badge Added', category='success')
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+
+        return render_template("home.html", user= current_user)
+    
+    return render_template("badge.html", user= current_user)
 
 def get_sport_names():
     uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
@@ -23,7 +44,6 @@ def get_sport_names():
     for sport in result['sports']:
         sports[sport['idSport']] = sport['strSport']
     return sports
-
 
 
 @views.route('create_event/', methods=['POST','GET'])
@@ -54,7 +74,7 @@ def create_event():
             flash('Error Occured, Try Again Later', category='error')
     
     return render_template("create_event.html", user= current_user, sports=sports)
-
+  
 @views.route('event/<event_id>', methods=['GET'])
 def view_event(event_id):
     if request.method == 'GET':
@@ -65,3 +85,4 @@ def view_event(event_id):
         icon = event["weather_icon"]
         weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
         return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)
+
