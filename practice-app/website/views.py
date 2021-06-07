@@ -19,10 +19,15 @@ def create_equipment():
             "name" : request.form.get("name")
         }
 
+        # initialize request url and headers
         req = "http://127.0.0.1:5000/api/v1.0/equipments/"
         headers = {'Content-type': 'application/json'}
+        
+        # returns response of the request from the api
         response = requests.post(req, data=json.dumps(equipment), headers=headers)
 
+        # handling the errors.
+        # defining appropriate error codes.
         if response.status_code == 201:
             flash('Equipment Created', category='success')
             return redirect(url_for('views.home'))
