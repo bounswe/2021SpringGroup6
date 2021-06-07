@@ -2,91 +2,116 @@ import unittest
 import requests, json
 
 
-class TestEventAPI(unittest.TestCase):
+# Checks the number of messages sent in the discussion
+def hasMoreThan2Messages(messages):
+    return len(messages) > 2
 
-    def setUp(self):
-        self.req = "http://127.0.0.1:5000/api/v1.0/events"
-        self.headers = {'Content-type': 'application/json'}
+class hasMoreThan2MessagesTest(unittest.TestCase):
 
-    def test_events_POST_no_user(self):
+    def test_1(self):
+        # For no discussion case
+        messages = []
+        result = hasMoreThan2Messages(messages)
+        self.assertEqual(result, False)
 
-        # No user with id -1
-        event ={
-            'name': 'Footbal Match', 
-            'date': '11.05.2021T12:30',
-            'location': 'Trabzon',
-            'creator_user': '-1',
-            'sport': '103'
-        }
-        response = requests.post(self.req, data=json.dumps(event), headers=self.headers)
-        self.assertEqual(response.status_code, 400)
-
-    def test_events_POST_no_without_required(self):
-
-        # Date field is missing
-        event ={
-            'name': 'Footbal Match', 
-            'location': 'Trabzon',
-            'creator_user': '1',
-            'sport': '103'
-        }
-        response = requests.post(self.req, data=json.dumps(event), headers=self.headers)
-        self.assertEqual(response.status_code, 400)
+    def test_2(self):
+        # For 2 messages
+        messages = ['Hello how are you?', 'Fine thanks, and you?']
+        result = hasMoreThan2Messages(messages)
+        self.assertEqual(result, False)
     
-    def test_events_POST_invalid_address(self):
-
-        # Address is not correct
-        event ={
-            'name': 'Footbal Match', 
-            'date': '11.05.2021T12:30',
-            'location': 'aswegaerhqerhjerfasdv<',
-            'creator_user': '1',
-            'sport': '103'
-        }
-        response = requests.post(self.req, data=json.dumps(event), headers=self.headers)
-        self.assertEqual(response.status_code, 400)
-
-    def test_events_POST_invalid_sport_id(self):
-
-        # Sport ids between 102-120
-        event ={
-            'name': 'Footbal Match', 
-            'date': '11.05.2021T12:30',
-            'location': 'd',
-            'creator_user': '-1',
-            'sport': '103'
-        }
-        response = requests.post(self.req, data=json.dumps(event), headers=self.headers)
-        self.assertEqual(response.status_code, 400)
-
-    def test_events_POST_invalid_date_format(self):
-
-        # Date format: YYYY-MM-DDTHH.MM
-        event ={
-            'name': 'Footbal Match', 
-            'date': '11.05.2021',
-            'location': 'd',
-            'creator_user': '-1',
-            'sport': '103'
-        }
-        response = requests.post(self.req, data=json.dumps(event), headers=self.headers)
-        self.assertEqual(response.status_code, 400)
+    def test_3(self):
+        # For 3 messages
+        messages = ['Hello how are you?', 'Fine thanks, and you?', 'Good']
+        result = hasMoreThan2Messages(messages)
+        self.assertEqual(result, True)
 
 
+# Checks if at least one of the people is mentioned in the
+# discussion or not
+def hasReferenceToName(messages, namesOfPeople):
+    for i in range(len(messages)):
+        for j in range(len(namesOfPeople)):
+            if namesOfPeople[j].lower() in messages[i].lower():
+                return True
+    return False
 
 
-class TestDiscussionForEvent(unittest.TestCase):
+class hasReferenceToNameTest(unittest.TestCase):
+
+    def test_1(self):
+        # For not mentioned case
+        messages = ['How are you today?', 'I am very happy']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = hasReferenceToName(messages, namesOfPeople)
+        self.assertEqual(result, False)
+
+    def test_2(self):
+        # For mentioned with the first letter as capital case
+        messages = ['Hello how are you Ayse?', 'Fine thanks, and you?', 'Thanks I am fine', 'Good']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = hasReferenceToName(messages, namesOfPeople)
+        self.assertEqual(result, True)
+    
+    def test_3(self):
+        # For mentioned with the all letters as capital case
+        messages = ['Hello how are you OSMAN?', 'Fine thanks, and you?']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = hasReferenceToName(messages, namesOfPeople)
+        self.assertEqual(result, True)
+    
+    def test_4(self):
+        # For mentioned without any capital letter case
+        messages = ['Hello how are you?', 'Fine thanks, and you frank?', 'Thanks I am fine', 'Good']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman', 'Frank']
+
+        result = hasReferenceToName(messages, namesOfPeople)
+        self.assertEqual(result, True)
 
 
-    def test_GET_1(self):
-        # For nonexisting event
-        response = requests.get('http://127.0.0.1:5000/api/v1.0/events/1115/discussions')
-        self.assertEqual(response.status_code, 500)
+# If an event has more than 3 messages in discussions
+# or a person is referenced by name in one of the messages,
+# the event is special. The function isn't case sensitive.
+def areDiscussionsForEventSpecial(messages, namesOfPeople):
+    return hasMoreThan2Messages(messages) or hasReferenceToName(messages, namesOfPeople)
 
 
-    def test_GET_2(self):
-        # For an existing event
-        response = requests.get('http://127.0.0.1:5000/api/v1.0/events/1/discussions')
-        self.assertEqual(response.status_code, 201)
+class areDiscussionsForEventSpecialTest(unittest.TestCase):
+
+    def test_1(self):
+        # For no discussion case
+        messages = []
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = areDiscussionsForEventSpecial(messages, namesOfPeople)
+        self.assertEqual(result, False)
+
+    def test_2(self):
+        # For more than 2 discussions without referencing
+        messages = ['Hello how are you?', 'Fine thanks, and you?', 'Thanks I am fine', 'Good']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = areDiscussionsForEventSpecial(messages, namesOfPeople)
+        self.assertEqual(result, True)
+   
+    def test_3(self):
+        # For less than 3 discussions, but with referencing
+        messages = ['Hello how are you OSMAN?', 'Fine thanks, and you?']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = areDiscussionsForEventSpecial(messages, namesOfPeople)
+        self.assertEqual(result, True)
+    
+    def test_4(self):
+        # For no discussion case
+        messages = ['Hello how are you Ahmet?', 'Fine thanks, and you?', 'Thanks I am fine', 'Good']
+        namesOfPeople = ['Ayse', 'Ahmet', 'Hasan', 'Osman']
+
+        result = areDiscussionsForEventSpecial(messages, namesOfPeople)
+        self.assertEqual(result, True)
 
 
+   
