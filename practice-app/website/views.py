@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, flash, redirect,
 from flask_login import login_required, current_user
 import requests
 import json
+from .models import Sport
 
 views = Blueprint('views', __name__)
 
@@ -42,18 +43,23 @@ def get_sport_names():
         sports[sport.id] = sport.sport
     return sports
 
+"""
+    List all sport id-name pairs with a name filter
+"""
 @views.route('sports/', methods=['POST','GET'])
 def sports_page():
     if request.method == 'POST':
         keyword = request.form.get('keyword')
-
+        # Call sports API to get filtered sports.
         req = "http://127.0.0.1:5000/api/v1.0/sports?keyword=" + keyword
         headers = {'Content-type': 'application/json'}
         response = requests.get(req, headers=headers)
         items = response.json()['sports']
 
+        # No error occured, list sports
         if response.status_code == 200:
             return render_template("sports.html", user= current_user, items=items)
+        # Error occured, error message
         else:
             flash('Some Error Occured', category='error')
     
