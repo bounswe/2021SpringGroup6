@@ -71,7 +71,7 @@ def check_event_sport(new_event):
 """
 def check_event_date(new_event):
     # Date format YYYY-MM-DDTHH:MM
-    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[1-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
+    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
     if not re.match(date_regex, new_event.date):
         return False
     return True
