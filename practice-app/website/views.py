@@ -22,9 +22,6 @@ def create_equipment():
         req = "http://127.0.0.1:5000/api/v1.0/equipments/"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(equipment), headers=headers)
-        result = response.content
-
-        # print(response.status_code, "************") Error Code: 500
 
         if response.status_code == 201:
             flash('Equipment Created', category='success')
