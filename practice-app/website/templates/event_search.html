@@ -1,0 +1,80 @@
+{% extends 'base.html' %} 
+{% block title %} Latest Events {% endblock %} 
+{% block content %}
+<div class="" style="height: 100%">
+    <h3 align="center">Latest Events</h3>
+    <div class="col-sm">
+        <form method="POST">
+            <div class="form-group">
+                <label for="name">Event Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  placeholder="Enter Event Name"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="sport">Related Sport</label>
+                <select class="selectpicker" name="sport" data-live-search="true">
+                    <option value="">Select A Sport</option>
+                    {%for sport_id in sports.keys()%}
+                    <option value="{{ sport_id }}" data-tokens="{{sport_id}}">
+                        {{sports[sport_id]}}
+                    </option>
+                    {%endfor%}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="date_from">Date From</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="date_from"
+                  name="date_from"
+                  placeholder="Enter date"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="date_to">Date To</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="date_to"
+                  name="date_to"
+                  placeholder="Enter date"
+                />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {%for event in events%}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{event.name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Sport: {{sports['' ~ event.sport]}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Location: 
+                        {% if event.formatted_address.split('-') | length > 1 %}
+                            {{event.formatted_address.split('-')[-3]}}
+                        {% else %}
+                            {{event.formatted_address.split(',')[-3]}}
+                        {% endif %}
+                    </h6>
+                    <p class="card-text">Date: {{event.date.split('T')[0]}} {{event.date.split('T')[1]}}</p>
+                    <p class="card-text">Creator: {{event.creator_name}}</p>
+                    <a href="{{'./%s'%event.id }}" class="card-link">Event Page</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        {%endfor%}
+    </div>
+</div>
+{% endblock %}

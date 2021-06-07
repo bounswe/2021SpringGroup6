@@ -1,0 +1,89 @@
+Endpoint to get the event with the corresponding ID
+---
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - id
+        
+      properties:
+        name:
+          type: integer
+          description: ID of the event.
+          example: 56
+      
+responses:
+  200:
+    description: Event with the corresponding ID is fetched.
+    schema:
+      type: object
+      required:
+        - id
+        - name
+        - date
+        - formatted_address
+        - entered_address
+        - longitude
+        - latitude
+        - creator_user
+        - sport
+        - hour
+        - weather
+        - weather_icon
+      properties:
+        id:
+          type: integer
+          description: ID of the event.
+          example: 56
+       
+        name:
+          type: string
+          description: Name of the event, title.
+          example: Basketball game in Kadikoy
+        date:
+          type: string
+          description: Date of the event. Format is "DD-MM-YYYYTHH:MM"
+          example: 2021-07-28T16:12
+        entered_address:
+          type: string
+          description: Address of the event, given using basic English.
+          example: Fenerbahce Sukru Saracoglu Stadium
+        formatted_address:
+          type: string
+          description: Address of the event, taken using Google Maps API.
+          example: Artvin, Artvin Merkez/Artvin, Turkey
+        
+        latitude:
+          type: number
+          description: Latitude of the address.
+          example: 24.7578574
+        longitude:
+          type: number
+          description: Longitude of the address.
+          example: 52.975874
+        creator_user:
+          type: string
+          description: ID of the user creating the event. ID must be registered to a user.
+          example: 16887
+        sport:
+          type: string
+          description: Name of the sport.
+          example: Soccer
+        hour:
+          type: string
+          description: The hour at which the event will take place.
+          example: 09:30
+        weather:
+          type: string
+          description: The description of the weather, taken using OpenWeatherMap API.
+          example: scattered clouds
+        weather_icon:
+          type: string
+          description: The weather icon id, taken using OpenWeatherMap API.
+          example: 03d
+  
+
+ 
