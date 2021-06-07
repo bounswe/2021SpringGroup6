@@ -14,13 +14,39 @@ def get_sport_by_keyword(sports, keyword):
     
     return result
 
+"""
+    Used to get sports filtered by a keyword.
+    Endpoint description:
+        ./api/v.10/sports?keyword=sp
+        'GET':
+            Response Example : {
+                                    "sports": [
+                                        {
+                                            "id": 103,
+                                            "sport": "Motorsport"
+                                        }
+                                    ]
+                                }
+            Status Codes:
+                200: "Result returned with no error"
+                503: "Service unavailable"
 
+"""
 @sports.route('/', methods = ['GET'])
 @swag_from('doc/events_POST.yml', methods=['GET'])
 def sport():
-    sports = Sport.query.all()
-    keyword = request.args.get('keyword') if 'keyword' in request.args else ""
+    try:
+        # Get all sports.
+        sports = Sport.query.all()
 
-    result = get_sport_by_keyword(sports, keyword)
+        # Get keyword parameter.
+        keyword = request.args.get('keyword') if 'keyword' in request.args else ""
 
-    return jsonify({"sports":[s.serialize() for s in result]}), 200
+        # Filter by keyword.
+        result = get_sport_by_keyword(sports, keyword)
+
+        # Return filtered result. 
+        return jsonify({"sports":[s.serialize() for s in result]}), 200
+    except:
+        # Some error occured.
+        return jsonify({"error":"Service unavailable"}), 403
