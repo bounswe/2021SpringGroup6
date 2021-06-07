@@ -50,3 +50,10 @@ class Event(db.Model):
 class Sport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'sport'                  : self.sport
+       }
