@@ -8,6 +8,10 @@ from flasgger.utils import swag_from
 badges = Blueprint('badges',__name__)
 
 def get_badge_point():
+    """
+    This is a function to assign a point to the badge.
+    It uses a Bitcoin Price API and get a number from that price.
+    """
     url = 'https://rest.coinapi.io/v1/exchangerate/BTC/USD'
     headers = {'X-CoinAPI-Key' : '206D8179-A9A3-4C59-860B-84C1E511EB55'}
     response = requests.get(url, headers=headers)
@@ -15,8 +19,14 @@ def get_badge_point():
     return str(response.json()['rate']).split('.')[1][3]
 
 @badges.route('/',methods = ['POST'])
-@swag_from('doc/badges_POST.yml', methods=['POST'])
+@swag_from('doc/badges_POST.yml')
 def add_badge():
+    """
+    This is an only POST endpoint for adding a badge.
+    In order to add a badge "name" and "symbol" which is a URL for a symbol are needed.
+    If the badge is added successfully, it returns 201 response code.
+    If there is a problem during the addition of the badge, it returns 403 response code.
+    """
     result = request.json
     badge_name = result['name']
     badge_point = get_badge_point()

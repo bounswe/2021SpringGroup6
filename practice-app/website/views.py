@@ -11,6 +11,11 @@ def home():
 
 @views.route('badge/', methods=['POST','GET'])
 def badge():
+    """
+    This prepares the front-end side of the badge addition functionality.
+    It can be used as a POST and GET. When it is used as a GET, badge addition page is shown to provide related fields for it.
+    When it is used as a POST, the provided fields for a badge is posted and badge post endpoint is requested.
+    """
     if request.method == "POST":
         badge = {
             "name" : request.form.get("name"),
@@ -20,7 +25,6 @@ def badge():
         req = "http://localhost:5000/api/v1.0/badges"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(badge), headers=headers)
-        result = response.content
 
         if response.status_code == 201:
             flash('Badge Added', category='success')
