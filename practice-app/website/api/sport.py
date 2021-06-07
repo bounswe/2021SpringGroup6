@@ -6,6 +6,14 @@ from sqlalchemy import exc
 
 sports = Blueprint('sports', __name__)
 
+"""
+    Filters the given sports list by name using the keyword.
+    paramaters:
+        sports: "list of Sports" 
+        keyword: "keyword to be included in the sport name"
+    returns:
+        a list of Sport objects which contain the keyword in its name.
+"""
 def get_sport_by_keyword(sports, keyword):
     result = []
     for sport in sports:

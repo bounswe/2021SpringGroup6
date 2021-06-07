@@ -58,12 +58,17 @@ def get_sport_names():
         sports[sport['idSport']] = sport['strSport']
     return sports
 
+"""
+    If database does not exist, create a database. Also sport table is filled
+"""
 def create_database(app):
     if not path.exists('../website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+        # Get sports
         sports = get_sport_names()
         from .models import Sport
+        # Add sports to database
         with app.app_context():
             for sport in sports.keys():
                 new_sport = Sport(
