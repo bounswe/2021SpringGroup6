@@ -3,7 +3,7 @@ from ..api.sport import get_sport_by_keyword
 from ..models import Sport
 
 
-class TestEventAPI(unittest.TestCase):
+class TestSportAPI(unittest.TestCase):
 
     def setUp(self):
         # mock data
