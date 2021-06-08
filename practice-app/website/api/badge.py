@@ -1,16 +1,17 @@
-from flask import Blueprint, request, render_template, flash,jsonify
+from flask import Blueprint, request, jsonify
 import requests
 from ..models import Badge
 from .. import db
 from sqlalchemy import exc
 from flasgger.utils import swag_from
+from sqlalchemy import select
 
 badges = Blueprint('badges',__name__)
 
 def extract_point(price):
     return str(price).split('.')[1][3]
 
-def get_badge_point():
+def create_badge_point():
     """
     This is a function to assign a point to the badge.
     It uses a Bitcoin Price API and get a number from that price.
@@ -29,22 +30,43 @@ def prepare_badge(data):
     return badge
 
 @badges.route('/',methods = ['POST'])
-@swag_from('doc/badges_POST.yml')
+@swag_from('doc/badges_POST.yml', methods = ['POST'])
 def add_badge():
     """
     This is an only POST endpoint for adding a badge.
     In order to add a badge "name" and "symbol" which is a URL for a symbol are needed.
     If the badge is added successfully, it returns 201 response code.
-    If there is a problem during the addition of the badge, it returns 403 response code.
+    If there is a problem during the addition of the badge, it returns 503 response code.
     """
 
     badge = prepare_badge(request.json)
-    badge.badge_point = get_badge_point()
+    badge.point = create_badge_point()
     try:
         db.session.add(badge)
         db.session.commit()
     except exc.SQLAlchemyError as e:
         db.session.rollback()
-        return "Try Later", 403
+        return "Try Later", 503
         
     return jsonify(badge.serialize()), 201
+
+@badges.route('/point/',methods = ['GET'])
+@swag_from('doc/badges_point_get.yml', methods = ['GET'])
+def get_badge_point():
+    """
+    This is an only GET endpoint for getting the point of a badge by name.
+    Badge name should be provided.
+    If the badge point is fetched successfully, it returns 201 response code
+    If there is no badge with the given name it returns 400 response code.
+    If there is a problem during the fetch, it returns 503 response code.
+    """
+    badge_name = request.args.get('name')
+    try:
+        badge = db.session.query(Badge.point).filter(Badge.name==badge_name).first()
+    except exc.SQLAlchemyError as e:
+        db.session.rollback()
+        return "Error Occured, Try Again Later", 503
+    
+    if badge is None:
+        return "No badge with this Name", 400   
+    return {'name': badge_name, 'point':badge[0]}, 200
