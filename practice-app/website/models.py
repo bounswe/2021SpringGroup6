@@ -7,6 +7,30 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
 
+@views.route('create_equipment/', methods=['POST','GET'])
+@login_required
+def create_equipment():
+    if request.method == 'POST':
+        equipment = {
+            "name" : request.form.get("name")
+        }
+
+        req = "http://127.0.0.1:5000/api/v1.0/equipments/"
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(req, data=json.dumps(equipment), headers=headers)
+
+        if response.status_code == 201:
+            flash('Equipment Created', category='success')
+            return redirect(url_for('views.home'))
+        elif response.status_code == 400 :
+            flash('Check Information Entered', category='error')
+        elif response.status_code == 409 :
+            flash('Equipment Already Exists!', category='error')
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+    
+    return render_template("equipments.html", user=current_user)
+    
 class Badge(db.Model):
     badgeID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
