@@ -55,10 +55,14 @@ def getCoordinates(address):
         True if valid False otherwise
 """
 def check_event_sport(new_event):
-    # sport Ids between 102-120
-    if int(new_event.sport) < 102 or int(new_event.sport) > 120:
+    try:
+        # sport Ids between 102-120
+        if int(new_event.sport) < 102 or int(new_event.sport) > 120:
+            return False
+        return True
+    except:
+        # sport string cannot be changed to integer
         return False
-    return True
 
 """
     Check the format of the date field of event
