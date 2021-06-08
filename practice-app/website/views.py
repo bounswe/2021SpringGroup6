@@ -151,7 +151,7 @@ def create_event():
         }
 
         # Make request to back-end API
-        req = request.url_root + "/api/v1.0/events"
+        req = "http://127.0.0.1:5000/api/v1.0/events"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(event), headers=headers)
         event = response.json()
