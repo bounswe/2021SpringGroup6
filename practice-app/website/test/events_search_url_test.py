@@ -1,7 +1,7 @@
 import unittest
 from ..views import url_handler_events
 
-class TestEventAPI(unittest.TestCase):
+class TestEventURLAPI(unittest.TestCase):
 
     def setUp(self):
         self.base = "http://127.0.0.1:5000/api/v1.0/events"

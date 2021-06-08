@@ -1,7 +1,7 @@
 import unittest
 from ..api.event import query_handler_events
 
-class TestEventAPI(unittest.TestCase):
+class TestEventQueryAPI(unittest.TestCase):
 
     # test for no filter
     def test_no_filter(self):

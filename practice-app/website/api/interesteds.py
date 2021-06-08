@@ -28,9 +28,9 @@ def declare_interest(event_id):
         db.session.commit()
     except exc.NoReferenceError as e:
         db.session.rollback()
-        return "User Not Registered", 400
+        return "Bad request", 400
     except exc.SQLAlchemyError as e:
         db.session.rollback()
-        return "Try Later", 403
+        return "Server problem", 503
     
     return interested.serialize(), 201
