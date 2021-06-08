@@ -56,3 +56,44 @@ def create_event():
     return render_template("create_event.html", user= current_user, sports=sports)
 
 
+
+@views.route('/events/<event_id>/discussions', methods=["GET"])
+@login_required
+def discussionPage(event_id):
+    
+    BASE = 'http://127.0.0.1:5000/'  #  should be changed
+    response = requests.get(BASE + '/api/v1.0/events/' + event_id + '/discussions')
+    description = response.json()["description"]
+    text = response.json()["text"]
+    return render_template("discussionPage.html", event_id=event_id, definition = description, text = text.split('#')) 
+
+
+@views.route('/events/<event_id>/discussionPost', methods=["GET", "POST"])
+@login_required
+def discussionPost(event_id):
+    
+    if request.method == 'GET':
+        return render_template("discussionPost.html", event_id=event_id)
+    else:
+        message = {"text" : request.form.get('comment')}
+
+        BASE = 'http://127.0.0.1:5000/'  #  should be changed
+        
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(BASE + '/api/v1.0/events/' + event_id + '/discussions', data=json.dumps(message), headers=headers)
+       
+        if response.status_code == 201:
+            flash('Comment Posted', category='success')
+            return redirect(url_for('views.discussionPage', event_id=event_id))
+        elif response.status_code == 400 :
+            flash('Text cannot be empty', category='error')
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+
+        return redirect(url_for('views.discussionPost', event_id=event_id))
+
+        
+
+    
+
+

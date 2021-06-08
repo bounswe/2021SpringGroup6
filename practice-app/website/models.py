@@ -31,3 +31,19 @@ class Event(db.Model):
            'creator_user'           : self.creator_user,
            'sport'                  : self.sport
        }
+
+
+
+class DiscussionPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'text'                   : self.text
+       }
+
+
+
