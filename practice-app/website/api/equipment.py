@@ -10,6 +10,7 @@ from flasgger.utils import swag_from
 equipments = Blueprint('equipments', __name__)
 
 # returns the arbitrary price for equipment using an API
+# due to not having a price api, selection random number as index 0
 def get_price():
     url = 'https://api.blockchain.com/v3/exchange/tickers'
     response = requests.get(url)
