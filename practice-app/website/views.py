@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, jsonify, request, flash, redirect,
 from flask_login import login_required, current_user
 import requests
 import json
+from .models import Sport, Badge
+
 
 views = Blueprint('views', __name__)
 
@@ -12,6 +14,7 @@ def home():
 
 @views.route('badge/', methods=['POST','GET'])
 def badge():
+
     """
     This prepares the front-end side of the badge addition functionality.
     It can be used as a POST and GET. When it is used as a GET, badge addition page is shown to provide related fields for it.
@@ -26,6 +29,8 @@ def badge():
         req = "http://localhost:5000/api/v1.0/badges"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(badge), headers=headers)
+        result = response.content
+
 
         if response.status_code == 201:
             flash('Badge Added', category='success')
@@ -35,6 +40,35 @@ def badge():
         return render_template("home.html", user= current_user)
     
     return render_template("badge.html", user= current_user)
+
+  
+  
+@views.route('show_badge/', methods=['POST','GET'])
+def show_badge():
+    """ This function takes a json from the show_badge API. That json contains
+    a boolean variable control, cat photos and other informations of badges from the
+    database. API also returns a status code and if the status code is not 200, it means
+    there is a problem.
+    """
+    if request.method == "POST":
+
+        req = "http://localhost:5000/api/v1.0/badges/show_badge/"
+        headers = {'Content-type': 'application/json'}
+        response = requests.get(req, headers=headers)
+        json_response = response.json()
+        
+        if response.status_code != 200:
+            flash('Error Occured, Try Again Later', category='error')
+
+        badges = []
+        for badge in json_response['badges']:
+            badges.append(Badge(badgeID=badge['badgeID'], name=badge['name'], point=badge['point']))
+            
+        return render_template("show_badges.html", badges=list(zip(badges,json_response['dog_photos'])), control=json_response['control'], user= current_user)
+    
+    return render_template("show_badges.html", user= current_user)
+
+
 
 @views.route('point_badge/', methods=['POST','GET'])
 def point_badge():
@@ -57,6 +91,7 @@ def point_badge():
         return render_template("show_badge_point.html", user=current_user, badge=response.json())
     
     return render_template("point_badge.html", user=current_user)
+
 
 """
     Get sport id-name pairs.
@@ -99,6 +134,7 @@ def sports_page():
     Front-end to create event.
     
 """
+
 @views.route('create_event/', methods=['POST','GET'])
 @login_required
 def create_event():
@@ -177,6 +213,7 @@ def event_search():
         flash('Check Information Entered', category='error')
     else:
         flash('Error Occured, Try Again Later', category='error')
+
   
 @views.route('event/<event_id>', methods=['GET'])
 def view_event(event_id):
@@ -188,7 +225,7 @@ def view_event(event_id):
         icon = event["weather_icon"]
         weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
         return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)
-      
+
 
 # Shows the discussion page for the event with id event_id. 
 # It also shows the description of the sport type of the event 
@@ -205,4 +242,6 @@ def discussionPage(event_id):
         text = response.json()["text"]
         return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
     else:
+
         return f"<h1>Error<h1>"
+
