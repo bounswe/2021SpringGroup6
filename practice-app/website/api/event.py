@@ -212,7 +212,7 @@ def event():
         # Check if creator_user is valid and there is a user registered with that id.
         user = User.query.get(request.json['creator_user'])
         if not user:
-            return "User Not Registered 5", 400
+            return jsonify({"error":"User Not Registered"}), 400
 
         # Check sport id.
         if not check_event_sport(new_event):
