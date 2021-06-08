@@ -19,8 +19,8 @@ parameters:
           description: It is a URL for the symbol picture of the badge.
           example: https://www.wikihow.com/images_en/thumb/d/db/Get-the-URL-for-Pictures-Step-2-Version-6.jpg/v4-460px-Get-the-URL-for-Pictures-Step-2-Version-6.jpg.webp
 responses:
-  201:
-    description: Badge is created and added into the database
+  200:
+    description: Badges are taken from the database.
     schema:
       type: object
       required:
@@ -43,6 +43,6 @@ responses:
           type: integer
           description: Point of the badge
           example: 2
-
-  503:
-    description: "Error Occured, Try Again Later"
+          
+  403:
+    description: There is an error, try later.

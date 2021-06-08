@@ -4,4 +4,4 @@ app = create_app()
 
 if __name__ == '__main__':
     #app.run(debug=True) #to run on debug mode
-    app.run()
+    app.run(host='0.0.0.0')

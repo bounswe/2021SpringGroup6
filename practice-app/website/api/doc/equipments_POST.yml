@@ -1,0 +1,43 @@
+Endpoint to create a new equipment
+---
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the equipment.
+          example: Ball
+responses:
+  201:
+    description: Equipment created and added to database.
+    schema:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the equipment.
+          example: Ball
+        price:
+          type: string
+          description: Price of the equipment.
+          example: 10.0
+        id:
+          type: integer
+          description: Id of the equipment
+          example: 3
+  400:
+    description: Body parameters are not correct.
+
+  403:
+    description: There is an error, try later.
+
+  409:
+    description: Equipment already exists.

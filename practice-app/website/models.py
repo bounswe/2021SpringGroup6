@@ -7,6 +7,19 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
 
+class Equipment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), unique=True)
+    price = db.Column(db.String(150))
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'name'                   : self.name,
+           'price'                  : self.price,
+       }
+    
 class Badge(db.Model):
     badgeID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
@@ -46,3 +59,34 @@ class Event(db.Model):
            'creator_user'           : self.creator_user,
            'sport'                  : self.sport
        }
+
+
+
+
+
+# Corresponds to a discussion page for an event
+class DiscussionPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'text'                   : self.text
+       }
+
+
+
+
+class Sport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sport = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'sport'                   : self.sport
+       }
+
