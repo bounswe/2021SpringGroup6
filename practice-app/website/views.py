@@ -150,6 +150,7 @@ def view_event(event_id):
 
 
 
+
 # Shows the discussion page for the event with id event_id. 
 # It also shows the description of the sport type of the event 
 # using an external API 
@@ -166,4 +167,5 @@ def discussionPage(event_id):
         return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
     else:
         return f"<h1>Error<h1>"
+
 
