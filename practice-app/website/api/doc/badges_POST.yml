@@ -27,7 +27,7 @@ responses:
         - name
         - symbol
       properties:
-       name:
+        name:
           type: string
           description: Name of the badge.
           example: Man of the match
@@ -43,6 +43,6 @@ responses:
           type: integer
           description: Point of the badge
           example: 2
-          
+
   503:
     description: "Error Occured, Try Again Later"
