@@ -149,7 +149,7 @@ def discussionPage(event_id):
     if response.status_code == 201:
         description = response.json()["description"]
         text = response.json()["text"]
-        return render_template("discussionPage.html", event_id=event_id, definition = description, text = text.split('#')) 
+        return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
     else:
         flash('Something went wrong', category='error')
 
