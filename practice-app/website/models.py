@@ -7,6 +7,19 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
 
+class Equipment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), unique=True)
+    price = db.Column(db.String(150))
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'name'                   : self.name,
+           'price'                  : self.price,
+       }
+    
 class Badge(db.Model):
     badgeID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
