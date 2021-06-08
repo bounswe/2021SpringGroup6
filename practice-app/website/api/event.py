@@ -80,6 +80,37 @@ def check_weather_icon(weather_icon_id):
         return False
     return True
 
+"""
+    Check the validity of the sport field of event
+    parameters:
+        new_event: Event 
+    return:
+        True if valid False otherwise
+"""
+def check_event_sport(new_event):
+    try:
+        # sport Ids between 102-120
+        if int(new_event.sport) < 102 or int(new_event.sport) > 120:
+            return False
+        return True
+    except:
+        # sport string cannot be changed to integer
+        return False
+
+"""
+    Check the format of the date field of event
+    Format should match YYYY-MM-DDTHH:MM
+    parameters:
+        new_event: Event 
+    return:
+        True if valid False otherwise
+"""
+def check_event_date(new_event):
+    # Date format YYYY-MM-DDTHH:MM
+    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
+    if not re.match(date_regex, new_event.date):
+        return False
+    return True
 
 
 @events.route('/', methods = ['GET','POST'])
