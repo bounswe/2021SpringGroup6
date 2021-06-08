@@ -1,7 +1,7 @@
 
 from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
 
-from ..models import Event, DiscussionPost, Sports, User
+from ..models import Event, DiscussionPost, Sport, User
 from re import template
 
 from .. import db
@@ -19,7 +19,7 @@ API_KEY = '<api_key_coordinates>'
 API_KEY2 = '<api_key_weather>'
 
 def get_weather(latitude, longitude):
-    parameters = {'lat': latitude, 'lon' : longitude, 'appid': my_api_key }
+    parameters = {'lat': latitude, 'lon' : longitude, 'appid': API_KEY2 }
     uri = 'https://api.openweathermap.org/data/2.5/weather'
     r = requests.get(uri, params=parameters)
     r = r.json()
@@ -91,7 +91,7 @@ def check_event_sport(new_event):
 """
 def check_event_date(new_event):
     # Date format YYYY-MM-DDTHH:MM
-    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
+    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])$"
     if not re.match(date_regex, new_event.date):
         return False
     return True
@@ -247,13 +247,15 @@ def get_event_by_id(event_id):
     if request.method == 'GET':
         event = Event.query.get(event_id)      
         event_with_weather = event.serialize()
+        event_with_weather['event_id'] = event_id
         event_with_weather["hour"] =  event_with_weather["date"][11:]
         event_with_weather["date"] = event_with_weather["date"][:10]     
         weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
         event_with_weather["weather"] = weather
         event_with_weather["weather_icon"] = weather_icon
-        sport_names = get_sport_names()       
-        event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
+        sport_names = get_sport_names()  
+        print(sport_names)     
+        event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
         return jsonify(event_with_weather), 200
 
 # When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
@@ -284,11 +286,12 @@ def discussionForEvent(event_id):
 
         # ############# New
 
-        sportList = Sports.query.all()
+        sportList = Sport.query.all()
 
         for i in range(len(sportList)):
             if sportList[i].serialize()["id"] == int(sportName):
                 sportName = sportList[i].serialize()["sport"]
+                break
 
   
         ############# New
