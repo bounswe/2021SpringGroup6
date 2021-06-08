@@ -1,14 +1,19 @@
+
 from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
-from ..models import Event, User
+
+from ..models import Event, DiscussionPost, Sports, User
+from re import template
 
 from .. import db
+import json
+import sqlite3
 import requests
 from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
+from sqlalchemy.sql.elements import Null
 events = Blueprint('events', __name__)
 import re
-
 
 API_KEY = '<api_key_coordinates>'
 API_KEY2 = '<api_key_weather>'
@@ -250,3 +255,67 @@ def get_event_by_id(event_id):
         sport_names = get_sport_names()       
         event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
         return jsonify(event_with_weather), 200
+
+# When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
+# Corresponding event must exist and have a sport type in db.
+@events.route('<event_id>/discussions', methods=['GET', 'POST'])
+@swag_from('doc/discussionForEvent_GET.yml', methods=['GET'])
+@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
+def discussionForEvent(event_id):
+
+    if request.method == 'GET':
+
+        if int(event_id) <=-1:
+            return "Wrong path parameters", 401
+        try:
+            eventList = Event.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+        eventList = Event.query.all()
+
+
+        sportName = ''
+
+        # Finds the event with the given id and its sport type
+        for i in range(len(eventList)):
+            if eventList[i].serialize()["id"] == int(event_id):
+                sportName = eventList[i].serialize()["sport"]
+
+
+        # ############# New
+
+        sportList = Sports.query.all()
+
+        for i in range(len(sportList)):
+            if sportList[i].serialize()["id"] == int(sportName):
+                sportName = sportList[i].serialize()["sport"]
+
+  
+        ############# New
+
+        description = 'No definition found for ' + sportName
+
+        # Find the corresponding definition for the sport type
+        response = requests.get(
+            'https://sports.api.decathlon.com/sports/' + sportName.lower())  # API to use
+        if response.status_code >= 200 and response.status_code < 300:
+            json_data = json.loads(response.text)
+            description = json_data['data']['attributes']['description']
+            if description == None:
+                description = 'No definition found for ' + sportName
+
+        try:
+            discussionPostList = DiscussionPost.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+
+        discussionPostList = DiscussionPost.query.all()
+        # Get the discussion from the database for the given event
+        text = 'No discussion found'
+
+        for i in range(len(discussionPostList)):
+            if discussionPostList[i].serialize()["id"] == int(event_id):
+                text = discussionPostList[i].serialize()["text"]
+
+        result = {"id": event_id, "description": description, "text": text}
+        return jsonify(result), 201

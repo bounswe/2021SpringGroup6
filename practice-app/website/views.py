@@ -1,3 +1,5 @@
+
+
 from flask import Blueprint, render_template, jsonify, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 import requests
@@ -145,4 +147,25 @@ def view_event(event_id):
         icon = event["weather_icon"]
         weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
         return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)
+
+
+
+
+# Shows the discussion page for the event with id event_id. 
+# It also shows the description of the sport type of the event 
+# using an external API 
+@views.route('/events/<event_id>/discussions', methods=["GET"])
+@login_required
+def discussionPage(event_id):
+    
+    BASE = 'http://127.0.0.1:5000/'  #  should be changed
+    response = requests.get(BASE + '/api/v1.0/events/' + event_id + '/discussions')
+
+    if response.status_code == 201:
+        description = response.json()["description"]
+        text = response.json()["text"]
+        return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
+    else:
+        return f"<h1>Error<h1>"
+
 
