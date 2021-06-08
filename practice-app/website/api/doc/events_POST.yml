@@ -19,7 +19,7 @@ parameters:
           example: Football Match at Trabzon
         date:
           type: string
-          description: Date of the event. Format is "DD-MM-YYYYTHH:MM"
+          description: Date of the event. Format is "YYYY-MM-DDTHH:MM"
           example: 2021-06-25T11:56
         location:
           type: string
@@ -31,7 +31,7 @@ parameters:
           example: 12434
         sport:
           type: integer
-          description: Id of the sport.
+          description: Id of the sport. Between 102-120.
           example: 103
 responses:
   201:
@@ -84,5 +84,5 @@ responses:
   400:
     description: Body parameters are not correct.
 
-  403:
-    description: There is an error, try later.
+  503:
+    description: "There is an error. Service unavailable."
