@@ -47,7 +47,26 @@ class Event(db.Model):
            'sport'                  : self.sport
        }
 
-class Sport(db.Model):
+
+
+
+
+# Corresponds to a discussion page for an event
+class DiscussionPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'text'                   : self.text
+       }
+
+
+
+
+class Sports(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Text)
 
@@ -55,5 +74,6 @@ class Sport(db.Model):
        """Return object data in JSON serializable format"""
        return {
            'id'                     : self.id,
-           'sport'                  : self.sport
+           'sport'                   : self.sport
        }
+
