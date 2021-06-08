@@ -50,6 +50,7 @@ class Event(db.Model):
 
 
 
+
 # Corresponds to a discussion page for an event
 class DiscussionPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -75,8 +76,4 @@ class Sports(db.Model):
            'id'                     : self.id,
            'sport'                   : self.sport
        }
-
-
-
-
 

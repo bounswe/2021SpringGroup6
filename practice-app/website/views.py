@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, jsonify, request, flash, redirect,
 from flask_login import login_required, current_user
 import requests
 import json
+from .models import Sport
 
 views = Blueprint('views', __name__)
 
@@ -34,29 +35,49 @@ def badge():
     
     return render_template("badge.html", user= current_user)
 
+
 """
     Get sport id-name pairs.
     return:
         Dictionary with id key, sport name value
 """
-def get_sport_names():
-    
-    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
 
-    r = requests.get(uri)
-    
-    result = r.json()
+def get_sport_names():
+    result = Sport.query.all()
 
     sports={}
 
-    for sport in result['sports']:
-        sports[sport['idSport']] = sport['strSport']
+    for sport in result:
+        sports[sport.id] = sport.sport
     return sports
+
+"""
+    List all sport id-name pairs with a name filter
+"""
+@views.route('sports/', methods=['POST','GET'])
+def sports_page():
+    if request.method == 'POST':
+        keyword = request.form.get('keyword')
+        # Call sports API to get filtered sports.
+        req = "http://127.0.0.1:5000/api/v1.0/sports?keyword=" + keyword
+        headers = {'Content-type': 'application/json'}
+        response = requests.get(req, headers=headers)
+        items = response.json()['sports']
+
+        # No error occured, list sports
+        if response.status_code == 200:
+            return render_template("sports.html", user= current_user, items=items)
+        # Error occured, error message
+        else:
+            flash('Some Error Occured', category='error')
+    
+    return render_template("sports.html", user= current_user, items=[])
 
 """
     Front-end to create event.
     
 """
+
 @views.route('create_event/', methods=['POST','GET'])
 @login_required
 def create_event():
@@ -151,6 +172,7 @@ def view_event(event_id):
 
 
 
+
 # Shows the discussion page for the event with id event_id. 
 # It also shows the description of the sport type of the event 
 # using an external API 
@@ -167,5 +189,4 @@ def discussionPage(event_id):
         return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
     else:
         return f"<h1>Error<h1>"
-
 
