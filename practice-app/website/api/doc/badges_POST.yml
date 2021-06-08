@@ -44,5 +44,5 @@ responses:
           description: Point of the badge
           example: 2
           
-  503:
-    description: "Error Occured, Try Again Later"
+  403:
+    description: There is an error, try later.

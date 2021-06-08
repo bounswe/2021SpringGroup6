@@ -36,28 +36,6 @@ def badge():
     
     return render_template("badge.html", user= current_user)
 
-@views.route('point_badge/', methods=['POST','GET'])
-def point_badge():
-    """
-    This prepares the front-end side of the badge point retrieval.
-    It can be used as a POST and GET. When it is used as a GET, badge point retrieval page is shown.
-    When it is used as a POST, badge point for a given badge name is shown.
-    """
-    if request.method == "POST":
-
-        badge_name = request.form.get('name')
-        req = f'http://127.0.0.1:5000/api/v1.0/badges/point?name={badge_name}'
-        headers = {'Content-type': 'application/json'}
-        response = requests.get(req, headers=headers)
-
-        if response.status_code != 200:
-            flash(response.text, category='error')
-            return render_template("home.html", user=current_user)
-            
-        return render_template("show_badge_point.html", user=current_user, badge=response.json())
-    
-    return render_template("point_badge.html", user=current_user)
-
 def get_sport_names():
     uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
 
