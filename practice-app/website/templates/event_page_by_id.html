@@ -1,19 +1,17 @@
 {% extends 'base.html' %} {% block title %} Get an event by ID {% endblock %} {%
-    block content %}
-    
-   
-    <div>
-        
-        <h3 align="center">EVENT INFORMATION</h3>
-        <p style="text-align:left;"> Event Name : {{event["name"]}} </p>
-        <p style="text-align:left;"> Event Date : {{event["date"]}} at {{event["hour"]}}  </p>
-        <p style="text-align:left;"> Event Type(Sport) : {{event["sport"]}} </p>
-        <p style="text-align:left;"> Weather : {{event["weather"]}} </p>
-        <img alt="weather" src={{weather_icon_url}}
-        width=100" height="100">
-        <p style="text-align:left;"> Event Address : {{event["formatted_address"]}} </p>
+block content %}
 
-    </div>
-   
-    {% endblock %}
-    
+<div>
+  <h3 align="center">EVENT INFORMATION</h3>
+  <p style="text-align: left">Event Name : {{event["name"]}}</p>
+  <p style="text-align: left">
+    Event Date : {{event["date"]}} at {{event["hour"]}}
+  </p>
+  <p style="text-align: left">Event Type(Sport) : {{event["sport"]}}</p>
+  <p style="text-align: left">Weather : {{event["weather"]}}</p>
+  <img alt="weather" src="{{weather_icon_url}}" width="100" height="100" />
+  <p style="text-align: left">Event Address : {{event["formatted_address"]}}</p>
+  <a href="{{url}}">Go To Discussion Page</a>
+</div>
+
+{% endblock %}
