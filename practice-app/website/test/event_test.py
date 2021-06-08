@@ -6,7 +6,7 @@ class TestEventAPI(unittest.TestCase):
 
     def test_date_correct_format(self):
         """
-            Given a string with correct format as YYYY-MM-DD, returns True
+            Check 
         """
         event = Event(date = "2021-12-30T12:30")
 

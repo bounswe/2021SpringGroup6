@@ -80,6 +80,63 @@ def check_weather_icon(weather_icon_id):
         return False
     return True
 
+#helper method for querying
+def query_handler_events(name, sport, date_from, date_to):
+    query = 'SELECT * FROM Event WHERE'
+    filters = []
+    # adds filter for name
+    if name:
+        filters.append(' name LIKE \'%' + name + '%\' AND')
+    # adds filter for sport name
+    if sport:
+        filters.append(' sport = ' + str(sport) + ' AND')
+    # adds filter for initial date
+    if date_from:
+        filters.append(' date >= \'' + date_from + '\' AND')
+    # adds filter for final date
+    if date_to:
+        filters.append(' date <= \'' + date_to + '\' AND')
+
+    # checks if there is any filter added
+    if filters:
+        for filt in filters:
+            query += filt
+        query = query[:-4] + ';'
+    else:
+        query = query[:-6] + ';'
+    return query
+
+"""
+    Check the validity of the sport field of event
+    parameters:
+        new_event: Event 
+    return:
+        True if valid False otherwise
+"""
+def check_event_sport(new_event):
+    try:
+        # sport Ids between 102-120
+        if int(new_event.sport) < 102 or int(new_event.sport) > 120:
+            return False
+        return True
+    except:
+        # sport string cannot be changed to integer
+        return False
+
+"""
+    Check the format of the date field of event
+    Format should match YYYY-MM-DDTHH:MM
+    parameters:
+        new_event: Event 
+    return:
+        True if valid False otherwise
+"""
+def check_event_date(new_event):
+    # Date format YYYY-MM-DDTHH:MM
+    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
+    if not re.match(date_regex, new_event.date):
+        return False
+    return True
 
 
 @events.route('/', methods = ['GET','POST'])
@@ -233,7 +290,7 @@ def get_event_by_id(event_id):
     if request.method == 'GET':
         if request.method == 'GET':
             event = Event.query.get(event_id)  
-        if(int(event_id) <= 0):
+        if(not check_event_id(event)):
             return jsonify({"error":"Event ID is not correct"}), 400          
         elif(event is None):         
             return jsonify({"error": "There is no such event"}), 404
@@ -244,7 +301,8 @@ def get_event_by_id(event_id):
             event_with_weather["date"] = event_with_weather["date"][:10]     
             weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
             event_with_weather["weather"] = weather
-            event_with_weather["weather_icon"] = weather_icon
+            if(check_weather_icon(weather_icon)):
+                event_with_weather["weather_icon"] = weather_icon
             sport_names = get_sport_names()    
             event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
             return jsonify(event_with_weather), 200
