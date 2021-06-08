@@ -82,7 +82,15 @@ def view_event(event_id):
         uri = f"http://127.0.0.1:5000/api/v1.0/events/{event_id}/"        
         res = requests.get(uri)      
         event = res.json()       
-        icon = event["weather_icon"]
-        weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
-        return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)
-
+       
+        # Incorrect information
+        if res.status_code == 400:
+            return "<h1>ERROR : The ID is invalid</h1>"
+        # There exists no such event with the corresponding ID
+        elif res.status_code == 404 :         
+            return "<h1>ERROR : There is no such event</h1>"
+        # Some other error
+        else:             
+            icon = event["weather_icon"]
+            weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"   
+            return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)

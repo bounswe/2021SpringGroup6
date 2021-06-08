@@ -2,6 +2,7 @@ from flask import Blueprint, request,  url_for, jsonify, make_response, abort, f
 from ..models import Event
 from .. import db
 import requests
+import re
 from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
@@ -42,7 +43,19 @@ def getCoordinates(address):
     else:
         return "",0,0,"Try Later"
 
-    
+def check_event_id(new_event):
+    event = new_event.serialize()
+    id = event["id"]
+    if(id <= 0):
+        return False
+    return True
+
+def check_weather_icon(weather_icon_id):
+    weather_icon_id_regex = "[0-9][0-9][dn]"
+    if not re.match(weather_icon_id_regex, weather_icon_id):
+        return False
+    return True
+
 
 
 @events.route('/', methods = ['GET','POST'])
@@ -94,13 +107,18 @@ def event():
 @swag_from('doc/event_GET.yml', methods=['GET'])
 def get_event_by_id(event_id):
     if request.method == 'GET':
-        event = Event.query.get(event_id)      
-        event_with_weather = event.serialize()
-        event_with_weather["hour"] =  event_with_weather["date"][11:]
-        event_with_weather["date"] = event_with_weather["date"][:10]     
-        weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
-        event_with_weather["weather"] = weather
-        event_with_weather["weather_icon"] = weather_icon
-        sport_names = get_sport_names()       
-        event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
-        return jsonify(event_with_weather), 200
+        event = Event.query.get(event_id)  
+        if(int(event_id) <= 0):
+            return jsonify({"error":"Event ID is not correct"}), 400          
+        elif(event is None):         
+            return jsonify({"error": "There is no such event"}), 404
+        else:                
+            event_with_weather = event.serialize()
+            event_with_weather["hour"] =  event_with_weather["date"][11:]
+            event_with_weather["date"] = event_with_weather["date"][:10]     
+            weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
+            event_with_weather["weather"] = weather
+            event_with_weather["weather_icon"] = weather_icon
+            sport_names = get_sport_names()       
+            event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
+            return jsonify(event_with_weather), 200
