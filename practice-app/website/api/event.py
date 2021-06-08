@@ -1,7 +1,9 @@
 
 from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
-from ..models import Event, DiscussionPost, Sports
+
+from ..models import Event, DiscussionPost, Sports, User
 from re import template
+
 from .. import db
 import json
 import sqlite3
@@ -11,6 +13,7 @@ from flasgger.utils import swag_from
 from sqlalchemy import exc
 from sqlalchemy.sql.elements import Null
 events = Blueprint('events', __name__)
+import re
 
 API_KEY = '<api_key_coordinates>'
 API_KEY2 = '<api_key_weather>'
@@ -24,6 +27,7 @@ def get_weather(latitude, longitude):
 
 """
     Get coordinates using Google Maps API
+
     parameters:
         address: "address of the location" 
     return:
@@ -60,6 +64,7 @@ def getCoordinates(address):
 
 """
     Check the validity of the sport field of event
+
     parameters:
         new_event: Event 
     return:
@@ -78,6 +83,7 @@ def check_event_sport(new_event):
 """
     Check the format of the date field of event
     Format should match YYYY-MM-DDTHH:MM
+
     parameters:
         new_event: Event 
     return:
@@ -178,6 +184,8 @@ def event():
                         201: "Event created and added to database."
                         400: "Body parameters are not correct."
                         403:  "There is an error, try later."
+
+
         """
 
         # All parameters must be present.
