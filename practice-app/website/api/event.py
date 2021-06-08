@@ -153,31 +153,7 @@ def event():
         date_to = query_parameters.get('date_to')
 
         # sets up querys
-        query = 'SELECT * FROM Event WHERE'
-        flag = False
-        
-        # adds filter for name
-        if name:
-            query += (' name LIKE \'%' + name + '%\' AND')
-            flag = True
-        # adds filter for sport name
-        if sport:
-            query += (' sport = ' + str(sport) + ' AND')
-            flag = True
-        # adds filter for initial date
-        if date_from:
-            query += (' date >= \'' + date_from + '\' AND')
-            flag = True
-        # adds filter for final date
-        if date_to:
-            query += (' date <= \'' + date_to + '\' AND')
-            flag = True
-
-        # checks if there is any filter added
-        if flag:
-            query = query[:-4] + ';'
-        else:
-            query = query[:-6] + ';'
+        query = query_handler_events(name, sport, date_from, date_to)
 
         # executes query and converts to json format
         eventList = db.engine.execute(query)

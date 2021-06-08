@@ -1,0 +1,49 @@
+swagger: "2.0"
+info:
+  description: "Endpoint for declaring a person as interested to an event. Event is determined by the route, user should be passed as a paremeter."
+  version: "1.0.0"
+  title: 'Amateur Sports Api'
+basePath: "/api/v1.0/events/"
+paths:
+  /{event_id}/interesteds:
+    post:
+      summary: "Declare as interested"
+      description: "Endpoint for declaring a person as interested to an event. Event is determined by the route, user should be passed as a paremeter."
+      parameters:
+        - in: "path"
+          name: event_id
+          required: True
+          type: "integer"
+          description: "Event id of the specified event."
+        - in: "body"
+          name: "User"
+          description: "User object that specifies the user."
+          schema:
+            type: "object"
+            required:
+              - user_id
+            properties:
+              user_id:
+                type: "integer"
+                description: "User id of the user that declares interest."
+                example: 12
+            
+          
+      responses:
+        200:
+          description: "Interested user is inserted into database."
+          schema:
+            type: "object"
+            properties:
+              event_id:
+                type: "integer"
+                description: "Event id of the specified event, foreign key."
+                example: 5
+              user_id:
+                type: "integer"
+                description: "User id of the user that declares interest, foreign key."
+                example: 12
+        400:
+          description: "Properties can not be inserted into database"
+        403:
+          description: "There is an error, try later."
