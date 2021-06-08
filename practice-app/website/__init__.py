@@ -29,7 +29,6 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(events, url_prefix='/api/v1.0/events/')
     app.register_blueprint(badges, url_prefix='/api/v1.0/badges/')
-    app.register_blueprint(badges, url_prefix='/api/v1.0/show_badge/')
     app.register_blueprint(sports, url_prefix='/api/v1.0/sports/')
 
     
