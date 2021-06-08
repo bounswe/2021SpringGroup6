@@ -31,23 +31,41 @@ def add_badge():
         
     return jsonify(badge.serialize()), 201
 
+
+def get_cat_pictures(badges):
+    """This is the function that returns a picture for all
+    elements in the parameter list."""
+
+    url = 'https://thatcopy.pw/catapi/rest/'
+    
+    return [requests.get(url).json()['url'] for _ in badges] 
+        
+
 @badges.route('show_badge/',methods = ['GET','POST'])
+@swag_from('doc/badges_GET.yml', methods=['POST'])
 def show_badge():
-    if request.method == 'POST':
+    """
+    This function is the that shows all the badges after the user
+    clicks the button. It uses RandomCat API to show random cat pictures.
+    Since it starts working with a POST request from the server, first 
+    thing it does is checking request method. 
+    Then it gets all the badges from the database and return a json that contains cat photos.
+
+    control variable provides that if the button is not clicked yet, it returns False and 
+    there will be no table. If the button is clicked control is True and there will be a 
+    table on the html file.
+    """
+    if request.method == 'GET':
         badges = Badge.query.all()
-        badges_serialized = []
-        for badge in badges:
-            badges_serialized.append(badge.serialize())
-        url = 'https://thatcopy.pw/catapi/rest/'
-        dog_photos = [requests.get(url).json()['url'] for _ in badges] 
+        badges_serialized = [i.serialize() for i in badges]
+        
+        cat_photos = get_cat_pictures(badges)
+
         control = True
-        result = {"badges":badges_serialized, "dog_photos":dog_photos, "control":control}
-        #return render_template("index.html", badges=zip(badges,dog_photos), control=control)
-        return jsonify(result), 201
+        result = {"badges":badges_serialized, "dog_photos":cat_photos, "control":control}
+        return jsonify(result), 200
         
     else:
-        badges = Badge.query.all()
         control = False
         result = {"control":control}
-        #return render_template("index.html", control=control)
-        return jsonify(result),201
+        return jsonify(result),200

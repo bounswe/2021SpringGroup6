@@ -78,14 +78,19 @@ def create_event():
 
 @views.route('show_badge/', methods=['POST','GET'])
 def show_badge():
+    """ This function takes a json from the show_badge API. That json contains
+    a boolean variable control, cat photos and other informations of badges from the
+    database. API also returns a status code and if the status code is not 200, it means
+    there is a problem.
+    """
     if request.method == "POST":
 
         req = "http://localhost:5000/api/v1.0/badges/show_badge/"
         headers = {'Content-type': 'application/json'}
-        response = requests.post(req, headers=headers)
+        response = requests.get(req, headers=headers)
         json_response = response.json()
         
-        if response.status_code != 201:
+        if response.status_code != 200:
             flash('Error Occured, Try Again Later', category='error')
 
         badges = []
