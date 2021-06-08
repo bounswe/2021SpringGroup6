@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% block title %} Sports {% endblock %} {% block
+content %}
+<h1 align="center">Filter Sport By Name</h1>
+<br />
+<form method="POST">
+  <div class="form-group">
+    <label for="keyword">keyword</label>
+    <input
+      type="text"
+      class="form-control"
+      id="keyword"
+      name="keyword"
+      placeholder="Enter keyword"
+      required
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Find</button>
+</form>
+<br>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">sport name</th>
+    </tr>
+  </thead>
+  {% for item in items %}
+  <tr>
+    <td>{{item['id']}}</td>
+    <td>{{item['sport']}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+Endpoint To Filter Sports By Sport Name
+---
+parameters:
+  - name: keyword
+    in: query
+    type: string
+    description: "Filters by sport name. Diplays if the sport name includes the string"
+    example: "ball"
+responses:
+  200:
+    description: Sports with the corresponding keyword is fetched.
+    schema:
+      type: object
+      properties:
+        sports:
+          type: array
+          description: Array of sports.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Id of the sport.
+                example: "102"
+              sport:
+                type: string
+                description: Name of the sport.
+                example: "Football"
+  503:
+    description: "There is an error. Service unavailable."

@@ -1,17 +1,28 @@
+
 from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
-from ..models import Event, User
+
+from ..models import Event, DiscussionPost, Sport, User
+from re import template
 
 from .. import db
+import json
+import sqlite3
 import requests
+import re
 from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
-events = Blueprint('events', __name__)
+from sqlalchemy.sql.elements import Null
 import re
+import os
+from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv())
 
-API_KEY = '<api_key_coordinates>'
-API_KEY2 = '<api_key_weather>'
+events = Blueprint('events', __name__)
+
+API_KEY = os.environ.get("API_KEY")
+API_KEY2 = os.environ.get("API_KEY2")
 
 def get_weather(latitude, longitude):
     parameters = {'lat': latitude, 'lon' : longitude, 'appid': API_KEY2 }
@@ -56,38 +67,16 @@ def getCoordinates(address):
     else:
         return "",0,0,"Try Later"
 
-
-"""
-    Check the validity of the sport field of event
-
-    parameters:
-        new_event: Event 
-    return:
-        True if valid False otherwise
-"""
-def check_event_sport(new_event):
-    try:
-        # sport Ids between 102-120
-        if int(new_event.sport) < 102 or int(new_event.sport) > 120:
-            return False
-        return True
-    except:
-        # sport string cannot be changed to integer
+def check_event_id(new_event):
+    event = new_event.serialize()
+    id = event["id"]
+    if(id <= 0):
         return False
+    return True
 
-"""
-    Check the format of the date field of event
-    Format should match YYYY-MM-DDTHH:MM
-
-    parameters:
-        new_event: Event 
-    return:
-        True if valid False otherwise
-"""
-def check_event_date(new_event):
-    # Date format YYYY-MM-DDTHH:MM
-    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
-    if not re.match(date_regex, new_event.date):
+def check_weather_icon(weather_icon_id):
+    weather_icon_id_regex = "[0-9][0-9][dn]"
+    if not re.match(weather_icon_id_regex, weather_icon_id):
         return False
     return True
 
@@ -116,6 +105,7 @@ def query_handler_events(name, sport, date_from, date_to):
     else:
         query = query[:-6] + ';'
     return query
+
 
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
@@ -153,6 +143,7 @@ def event():
         
 
     if request.method == 'POST':
+        print(API_KEY)
         """
             Used to create a new event.
             Endpoint description:
@@ -213,7 +204,7 @@ def event():
         # Check if creator_user is valid and there is a user registered with that id.
         user = User.query.get(request.json['creator_user'])
         if not user:
-            return "User Not Registered 5", 400
+            return jsonify({"error":"User Not Registered"}), 400
 
         # Check sport id.
         if not check_event_sport(new_event):
@@ -241,13 +232,85 @@ def event():
 @swag_from('doc/event_GET.yml', methods=['GET'])
 def get_event_by_id(event_id):
     if request.method == 'GET':
-        event = Event.query.get(event_id)      
-        event_with_weather = event.serialize()
-        event_with_weather["hour"] =  event_with_weather["date"][11:]
-        event_with_weather["date"] = event_with_weather["date"][:10]     
-        weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
-        event_with_weather["weather"] = weather
-        event_with_weather["weather_icon"] = weather_icon
-        sport_names = get_sport_names()       
-        event_with_weather["sport"] = sport_names[str(event_with_weather["sport"])]                
-        return jsonify(event_with_weather), 200
+        if request.method == 'GET':
+            event = Event.query.get(event_id)  
+        if(int(event_id) <= 0):
+            return jsonify({"error":"Event ID is not correct"}), 400          
+        elif(event is None):         
+            return jsonify({"error": "There is no such event"}), 404
+        else:    
+            event_with_weather = event.serialize()
+            event_with_weather['event_id'] = event_id
+            event_with_weather["hour"] =  event_with_weather["date"][11:]
+            event_with_weather["date"] = event_with_weather["date"][:10]     
+            weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
+            event_with_weather["weather"] = weather
+            event_with_weather["weather_icon"] = weather_icon
+            sport_names = get_sport_names()    
+            event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
+            return jsonify(event_with_weather), 200
+
+# When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
+# Corresponding event must exist and have a sport type in db.
+@events.route('<event_id>/discussions', methods=['GET', 'POST'])
+@swag_from('doc/discussionForEvent_GET.yml', methods=['GET'])
+#@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
+def discussionForEvent(event_id):
+
+    if request.method == 'GET':
+
+        if int(event_id) <=-1:
+            return "Wrong path parameters", 401
+        try:
+            eventList = Event.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+        eventList = Event.query.all()
+
+
+        sportName = ''
+
+        # Finds the event with the given id and its sport type
+        for i in range(len(eventList)):
+            if eventList[i].serialize()["id"] == int(event_id):
+                sportName = eventList[i].serialize()["sport"]
+
+
+        # ############# New
+
+        sportList = Sport.query.all()
+
+        for i in range(len(sportList)):
+            if sportList[i].serialize()["id"] == int(sportName):
+                sportName = sportList[i].serialize()["sport"]
+                break
+
+  
+        ############# New
+
+        description = 'No definition found for ' + sportName
+
+        # Find the corresponding definition for the sport type
+        response = requests.get(
+            'https://sports.api.decathlon.com/sports/' + sportName.lower())  # API to use
+        if response.status_code >= 200 and response.status_code < 300:
+            json_data = json.loads(response.text)
+            description = json_data['data']['attributes']['description']
+            if description == None:
+                description = 'No definition found for ' + sportName
+
+        try:
+            discussionPostList = DiscussionPost.query.all()
+        except exc.NoReferenceError as e:
+            return "Database error", 400
+
+        discussionPostList = DiscussionPost.query.all()
+        # Get the discussion from the database for the given event
+        text = 'No discussion found'
+
+        for i in range(len(discussionPostList)):
+            if discussionPostList[i].serialize()["id"] == int(event_id):
+                text = discussionPostList[i].serialize()["text"]
+
+        result = {"id": event_id, "description": description, "text": text}
+        return jsonify(result), 201
