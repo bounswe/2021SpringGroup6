@@ -187,11 +187,11 @@ def event_search():
         if request.form.get('name'):
             params.append("name=" + request.form.get('name'))
         if request.form.get('sport'):
-             params.append("sport=" + request.form.get('sport'))
+            params.append("sport=" + request.form.get('sport'))
         if request.form.get('date_from'):
-             params.append("date_from=" + request.form.get('date_from'))
+            params.append("date_from=" + request.form.get('date_from'))
         if request.form.get('date_to'):
-             params.append("date_to=" + request.form.get('date_to'))
+            params.append("date_to=" + request.form.get('date_to'))
 
         # handle collected parameters. change url accordingly
         if params:
@@ -215,7 +215,7 @@ def event_search():
         flash('Error Occured, Try Again Later', category='error')
 
   
-@views.route('event/<event_id>', methods=['GET'])
+@views.route('event/<event_id>/', methods=['GET'])
 def view_event(event_id):
     if request.method == 'GET':
         
@@ -224,7 +224,8 @@ def view_event(event_id):
         event = res.json()       
         icon = event["weather_icon"]
         weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
-        return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url)
+        url = f"/events/{event_id}/discussions"
+        return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url, url=url)
 
 
 # Shows the discussion page for the event with id event_id. 
@@ -235,7 +236,7 @@ def view_event(event_id):
 def discussionPage(event_id):
     
     BASE = 'http://127.0.0.1:5000/'  #  should be changed
-    response = requests.get(BASE + '/api/v1.0/events/' + event_id + '/discussions')
+    response = requests.get(BASE + 'api/v1.0/events/' + event_id + '/discussions')
 
     if response.status_code == 201:
         description = response.json()["description"]
