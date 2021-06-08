@@ -80,6 +80,32 @@ def check_weather_icon(weather_icon_id):
         return False
     return True
 
+#helper method for querying
+def query_handler_events(name, sport, date_from, date_to):
+    query = 'SELECT * FROM Event WHERE'
+    filters = []
+    # adds filter for name
+    if name:
+        filters.append(' name LIKE \'%' + name + '%\' AND')
+    # adds filter for sport name
+    if sport:
+        filters.append(' sport = ' + str(sport) + ' AND')
+    # adds filter for initial date
+    if date_from:
+        filters.append(' date >= \'' + date_from + '\' AND')
+    # adds filter for final date
+    if date_to:
+        filters.append(' date <= \'' + date_to + '\' AND')
+
+    # checks if there is any filter added
+    if filters:
+        for filt in filters:
+            query += filt
+        query = query[:-4] + ';'
+    else:
+        query = query[:-6] + ';'
+    return query
+
 """
     Check the validity of the sport field of event
     parameters:
@@ -127,31 +153,7 @@ def event():
         date_to = query_parameters.get('date_to')
 
         # sets up querys
-        query = 'SELECT * FROM Event WHERE'
-        flag = False
-        
-        # adds filter for name
-        if name:
-            query += (' name LIKE \'%' + name + '%\' AND')
-            flag = True
-        # adds filter for sport name
-        if sport:
-            query += (' sport = ' + str(sport) + ' AND')
-            flag = True
-        # adds filter for initial date
-        if date_from:
-            query += (' date >= \'' + date_from + '\' AND')
-            flag = True
-        # adds filter for final date
-        if date_to:
-            query += (' date <= \'' + date_to + '\' AND')
-            flag = True
-
-        # checks if there is any filter added
-        if flag:
-            query = query[:-4] + ';'
-        else:
-            query = query[:-6] + ';'
+        query = query_handler_events(name, sport, date_from, date_to)
 
         # executes query and converts to json format
         eventList = db.engine.execute(query)

@@ -23,12 +23,14 @@ def create_app():
     from .api.auth import auth
     from .api.event import events
     from .api.badge import badges
+    from .api.interesteds import interesteds
     from .api.sport import sports
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(events, url_prefix='/api/v1.0/events/')
     app.register_blueprint(badges, url_prefix='/api/v1.0/badges/')
+    app.register_blueprint(interesteds, url_prefix='/api/v1.0/events/')
     app.register_blueprint(sports, url_prefix='/api/v1.0/sports/')
 
     
