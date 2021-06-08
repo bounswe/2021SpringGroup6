@@ -12,7 +12,7 @@ API_KEY = '<api_key_coordinates>'
 API_KEY2 = '<api_key_weather>'
 
 def get_weather(latitude, longitude):
-    parameters = {'lat': latitude, 'lon' : longitude, 'appid': my_api_key }
+    parameters = {'lat': latitude, 'lon' : longitude, 'appid': API_KEY2 }
     uri = 'https://api.openweathermap.org/data/2.5/weather'
     r = requests.get(uri, params=parameters)
     r = r.json()
@@ -43,7 +43,32 @@ def getCoordinates(address):
         return "",0,0,"Try Later"
 
     
+#helper method for querying
+def query_handler_events(name, sport, date_from, date_to):
+    query = 'SELECT * FROM Event WHERE'
+    filters = []
+    # adds filter for name
+    if name:
+        filters.append(' name LIKE \'%' + name + '%\' AND')
+    # adds filter for sport name
+    if sport:
+        filters.append(' sport = ' + str(sport) + ' AND')
+    # adds filter for initial date
+    if date_from:
+        filters.append(' date >= \'' + date_from + '\' AND')
+    # adds filter for final date
+    if date_to:
+        filters.append(' date <= \'' + date_to + '\' AND')
 
+    # checks if there is any filter added
+    if filters:
+        for filt in filters:
+            query += filt
+        query = query[:-4] + ';'
+    else:
+        query = query[:-6] + ';'
+
+    return query
 
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
@@ -58,32 +83,10 @@ def event():
         date_from = query_parameters.get('date_from')
         date_to = query_parameters.get('date_to')
 
+        print(query_parameters.get('date_from'))
         # sets up querys
-        query = 'SELECT * FROM Event WHERE'
-        flag = False
-        
-        # adds filter for name
-        if name:
-            query += (' name LIKE \'%' + name + '%\' AND')
-            flag = True
-        # adds filter for sport name
-        if sport:
-            query += (' sport = ' + str(sport) + ' AND')
-            flag = True
-        # adds filter for initial date
-        if date_from:
-            query += (' date >= \'' + date_from + '\' AND')
-            flag = True
-        # adds filter for final date
-        if date_to:
-            query += (' date <= \'' + date_to + '\' AND')
-            flag = True
-
-        # checks if there is any filter added
-        if flag:
-            query = query[:-4] + ';'
-        else:
-            query = query[:-6] + ';'
+        query = query_handler_events(name, sport, date_from, date_to)
+        print(query)
 
         # executes query and converts to json format
         eventList = db.engine.execute(query)
