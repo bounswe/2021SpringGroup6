@@ -66,7 +66,7 @@ class DiscussionPost(db.Model):
 
 
 
-class Sports(db.Model):
+class Sport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Text)
 
