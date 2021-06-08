@@ -132,7 +132,7 @@ def event():
             if error != "Try Later":
                 return jsonify({"error": error}), 400
             else:
-                return jsonify({"error": "Try Later"}), 403
+                return jsonify({"error": "Service Unavailable"}), 503
 
         # Create database model
         new_event = Event(
@@ -167,7 +167,7 @@ def event():
         except exc.SQLAlchemyError as e:
             # In case of error, return error message
             db.session.rollback()
-            return jsonify({"error": "Try Later"}), 403
+            return jsonify({"error": "Service Unavailable"}), 503
         
         # No error, return new event information
         return jsonify(new_event.serialize()), 201
