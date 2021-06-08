@@ -165,5 +165,5 @@ def discussionPage(event_id):
         text = response.json()["text"]
         return render_template("discussionPage.html", user= current_user, event_id=event_id, definition = description, text = text.split('#')) 
     else:
-        flash('Something went wrong', category='error')
+        return f"<h1>Error<h1>"
 
