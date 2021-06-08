@@ -5,6 +5,11 @@ from .. import db
 from sqlalchemy import exc
 from flasgger.utils import swag_from
 from sqlalchemy import select
+import re
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 badges = Blueprint('badges',__name__)
 
@@ -17,7 +22,7 @@ def create_badge_point():
     It uses a Bitcoin Price API and get a number from that price.
     """
     url = 'https://rest.coinapi.io/v1/exchangerate/BTC/USD'
-    headers = {'X-CoinAPI-Key' : '206D8179-A9A3-4C59-860B-84C1E511EB55'}
+    headers = {'X-CoinAPI-Key' : os.environ.get("API_KEY_BADGE")}
     response = requests.get(url, headers=headers)
 
     return extract_point(response.json()['rate'])

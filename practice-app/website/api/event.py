@@ -12,11 +12,16 @@ from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
 from sqlalchemy.sql.elements import Null
-events = Blueprint('events', __name__)
 import re
+import os
+from dotenv import load_dotenv, find_dotenv
 
-API_KEY = '<api_key_coordinates>'
-API_KEY2 = '<api_key_weather>'
+load_dotenv(find_dotenv())
+
+events = Blueprint('events', __name__)
+
+API_KEY = os.environ.get("API_KEY")
+API_KEY2 = os.environ.get("API_KEY2")
 
 def get_weather(latitude, longitude):
     parameters = {'lat': latitude, 'lon' : longitude, 'appid': API_KEY2 }
@@ -157,6 +162,7 @@ def event():
         
 
     if request.method == 'POST':
+        print(API_KEY)
         """
             Used to create a new event.
             Endpoint description:
@@ -262,7 +268,7 @@ def get_event_by_id(event_id):
 # Corresponding event must exist and have a sport type in db.
 @events.route('<event_id>/discussions', methods=['GET', 'POST'])
 @swag_from('doc/discussionForEvent_GET.yml', methods=['GET'])
-@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
+#@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
 def discussionForEvent(event_id):
 
     if request.method == 'GET':
