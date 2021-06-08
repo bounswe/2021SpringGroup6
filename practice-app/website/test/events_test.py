@@ -23,3 +23,4 @@ class TestEventAPI(unittest.TestCase):
         })
         json_data = response.get_json()
         self.assertEqual(json_data.status, '200 OK')
+
