@@ -83,10 +83,8 @@ def event():
         date_from = query_parameters.get('date_from')
         date_to = query_parameters.get('date_to')
 
-        print(query_parameters.get('date_from'))
         # sets up querys
         query = query_handler_events(name, sport, date_from, date_to)
-        print(query)
 
         # executes query and converts to json format
         eventList = db.engine.execute(query)
