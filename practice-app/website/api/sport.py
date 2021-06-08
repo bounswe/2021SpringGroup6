@@ -57,4 +57,4 @@ def sport():
         return jsonify({"sports":[s.serialize() for s in result]}), 200
     except:
         # Some error occured.
-        return jsonify({"error":"Service unavailable"}), 403
+        return jsonify({"error":"Service unavailable"}), 503
