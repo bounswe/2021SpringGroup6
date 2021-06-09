@@ -1,36 +1,15 @@
-Endpoint to create add a new badge
+Endpoint to show all badges
 ---
-parameters:
-  - name: body
-    in: body
-    required: true
-    schema:
-      type: object
-      required:
-        - name
-        - symbol
-      properties:
-        name:
-          type: string
-          description: Name of the badge.
-          example: Man of the match
-        symbol:
-          type: string
-          description: It is a URL for the symbol picture of the badge.
-          example: https://www.wikihow.com/images_en/thumb/d/db/Get-the-URL-for-Pictures-Step-2-Version-6.jpg/v4-460px-Get-the-URL-for-Pictures-Step-2-Version-6.jpg.webp
 responses:
   200:
     description: Badges are taken from the database.
     schema:
       type: object
-      required:
-        - name
-        - symbol
       properties:
         name:
           type: string
           description: Name of the badge.
-          example: Man of the match
+          example: Best Scorer
         symbol:
           type: string
           description: It is a URL for the symbol picture of the badge.
@@ -38,11 +17,8 @@ responses:
         badgeID:
           type: integer
           description: Id of the badge
-          example: 8
+          example: 5
         point:
           type: integer
           description: Point of the badge
-          example: 2
-          
-  403:
-    description: There is an error, try later.
+          example: 3
