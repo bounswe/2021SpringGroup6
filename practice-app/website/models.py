@@ -100,3 +100,4 @@ class Sport(db.Model):
            'id'                     : self.id,
            'sport'                   : self.sport
        }
+    
