@@ -1,20 +1,13 @@
 Endpoint to get the event with the corresponding ID
 ---
 parameters:
-  - name: body
-    in: body
+  - name: event_id
+    in: path
     required: true
-    schema:
-      type: object
-      required:
-        - event_id
-        
-      properties:
-        event_id:
-          type: integer
-          description: ID of the event.
-          example: 56
-      
+    type: integer
+    description: ID of the event.
+    example : 56
+         
 responses:
   200:
     description: Event with the corresponding ID is fetched.
@@ -65,7 +58,7 @@ responses:
           description: Longitude of the address.
           example: 52.975874
         creator_user:
-          type: string
+          type: integer
           description: ID of the user creating the event. ID must be registered to a user.
           example: 16887
         sport:
@@ -86,5 +79,3 @@ responses:
           example: 03d
   400:
     description: "Event ID is not correct"
-
- 
