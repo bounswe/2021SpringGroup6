@@ -78,3 +78,4 @@ class TestEventAPI(unittest.TestCase):
 
 
         self.assertEqual(is_sport_correct, False)
+        
