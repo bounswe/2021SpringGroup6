@@ -112,7 +112,7 @@ def point_badge():
     if request.method == "POST":
 
         badge_name = request.form.get('name')
-        req = f'http://127.0.0.1:5000/api/v1.0/badges/point?name={badge_name}'
+        req = f'{BASE_URL}/api/v1.0/badges/point?name={badge_name}'
         headers = {'Content-type': 'application/json'}
         response = requests.get(req, headers=headers)
 
