@@ -38,4 +38,14 @@ class TestSportAPI(unittest.TestCase):
 
         self.assertEqual(no_data, expected)
 
+    def test_wrong_type(self):
+        """
+            Given a keyword which is not a string, sports should be filtered with its string representation and produce no error.
+        """
+
+        no_data = get_sport_by_keyword(self.data, 3)
+        expected = [] # No match
+
+        self.assertEqual(no_data, expected)
+
 

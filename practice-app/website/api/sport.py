@@ -17,7 +17,7 @@ sports = Blueprint('sports', __name__)
 def get_sport_by_keyword(sports, keyword):
     result = []
     for sport in sports:
-        if keyword in sport.sport:
+        if str(keyword) in sport.sport:
             result.append(sport)
     
     return result
