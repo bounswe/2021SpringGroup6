@@ -205,7 +205,6 @@ def event():
         
 
     if request.method == 'POST':
-        print(API_KEY)
         """
             Used to create a new event.
             Endpoint description:
