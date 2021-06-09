@@ -1,15 +1,6 @@
-swagger: "2.0"
-info:
-  description: "Endpoint for declaring a person as interested to an event. Event is determined by the route, user should be passed as a paremeter."
-  version: "1.0.0"
-  title: 'Amateur Sports Api'
-basePath: "/api/v1.0/events/"
-paths:
-  /{event_id}/interesteds:
-    post:
-      summary: "Declare as interested"
-      description: "Endpoint for declaring a person as interested to an event. Event is determined by the route, user should be passed as a paremeter."
-      parameters:
+Endpoint for declaring a person as interested to an event. Event is determined by the route, user should be passed as a paremeter.
+---
+parameters:
         - in: "path"
           name: event_id
           required: True

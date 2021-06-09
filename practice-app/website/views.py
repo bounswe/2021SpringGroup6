@@ -251,7 +251,7 @@ def event_search():
         flash('Error Occured, Try Again Later', category='error')
 
   
-@views.route('event/<event_id>/', methods=['GET'])
+@views.route('events/<event_id>/', methods=['GET'])
 def view_event(event_id):
     if request.method == 'GET':
         

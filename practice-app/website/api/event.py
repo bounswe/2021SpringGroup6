@@ -105,6 +105,7 @@ def query_handler_events(name, sport, date_from, date_to):
     else:
         query = query[:-6] + ';'
     return query
+
 """
     Check the validity of the sport field of event
     parameters:
@@ -136,7 +137,6 @@ def check_event_date(new_event):
     if not re.match(date_regex, new_event.date):
         return False
     return True
-
 
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])

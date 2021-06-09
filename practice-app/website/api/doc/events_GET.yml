@@ -1,15 +1,6 @@
-swagger: "2.0"
-info:
-  description: "Endpoint to display events. Supports basic filtering"
-  version: "1.0.0"
-  title: 'Amateur Sports Api'
-basePath: "/api/v1.0/events"
-paths:
-  /:
-    get:
-      summary: "Find all events"
-      description: "Basic filtering can be done. Filter by name, sport name, and date."
-      parameters: 
+Endpoint to display events. Supports basic filtering
+---
+parameters: 
           - in: "query"
             name: "name"
             type: "string"
@@ -26,7 +17,7 @@ paths:
             name: "date_to"
             type: "string"
             description: "Filters events after the given time. Format is YYYY-MM-DDTHH-MM"
-      responses:
+responses:
         200:
           description: "Events are fetched from database."
           schema:
