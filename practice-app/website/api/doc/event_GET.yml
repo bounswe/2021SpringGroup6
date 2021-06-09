@@ -1,11 +1,11 @@
 Endpoint to get the event with the corresponding ID
 ---
 parameters:
-  - name: body
-    in: body
+  - name: id
+    in: path
     required: true
     schema:
-      type: object
+      type: integer
       required:
         - event_id
         
@@ -65,7 +65,7 @@ responses:
           description: Longitude of the address.
           example: 52.975874
         creator_user:
-          type: string
+          type: integer
           description: ID of the user creating the event. ID must be registered to a user.
           example: 16887
         sport:
