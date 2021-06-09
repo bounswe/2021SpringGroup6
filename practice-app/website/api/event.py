@@ -399,6 +399,7 @@ def discussionForEvent(event_id):
             if discussionPostList[i].serialize()["id"] == int(event_id):
                 # check if there exists a discussion page for that event_id
                 doesExist = True
+                break
 
         if not doesExist:
             newPost = DiscussionPost(id=event_id, text=message)
