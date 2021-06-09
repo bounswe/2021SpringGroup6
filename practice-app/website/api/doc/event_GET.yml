@@ -7,10 +7,10 @@ parameters:
     schema:
       type: object
       required:
-        - id
+        - event_id
         
       properties:
-        name:
+        event_id:
           type: integer
           description: ID of the event.
           example: 56
@@ -34,7 +34,7 @@ responses:
         - weather
         - weather_icon
       properties:
-        id:
+        event_id:
           type: integer
           description: ID of the event.
           example: 56
@@ -84,6 +84,7 @@ responses:
           type: string
           description: The weather icon id, taken using OpenWeatherMap API.
           example: 03d
-  
+  400:
+    description: "Event ID is not correct"
 
  

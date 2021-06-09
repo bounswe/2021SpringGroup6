@@ -26,11 +26,26 @@ events = Blueprint('events', __name__)
 API_KEY = os.environ.get("API_KEY")
 API_KEY2 = os.environ.get("API_KEY2")
 
+
+
+
 def get_weather(latitude, longitude):
+    """
+    Get weather description using OpenWeather API.
+
+    parameters:
+        latitude : "latitude of the location"
+        longitude : "longitude 
+    return:
+        The weather description and the weather icon id
+    """
+   
+    # GET request to the uri using API_KEY2
     parameters = {'lat': latitude, 'lon' : longitude, 'appid': API_KEY2 }
     uri = 'https://api.openweathermap.org/data/2.5/weather'
     r = requests.get(uri, params=parameters)
     r = r.json()
+    # return the weather description and the weather icon id
     return r["weather"][0]["description"], r["weather"][0]["icon"]
 
 """
@@ -72,6 +87,13 @@ def get_coordinates(address):
         return "",0,0,"Try Later"
 
 def check_event_id(new_event):
+    """
+    Check if the given event id is valid
+    parameters:
+        new_event: Event 
+    return:
+        True if valid false otherwise
+    """
     event = new_event.serialize()
     id = event["id"]
     if(id <= 0):
@@ -79,6 +101,14 @@ def check_event_id(new_event):
     return True
 
 def check_weather_icon(weather_icon_id):
+    """
+    Check the validity of a given weather icon id
+    parameters:
+        weather_icon_id: String 
+    return:
+        True if valid false otherwise
+    """
+    # create the corresponding regex
     weather_icon_id_regex = "[0-9][0-9][dn]"
     if not re.match(weather_icon_id_regex, weather_icon_id):
         return False
@@ -269,22 +299,57 @@ def event():
 @events.route('/<event_id>/', methods = ['GET'])
 @swag_from('doc/event_GET.yml', methods=['GET'])
 def get_event_by_id(event_id):
+    """
+            Used to get the event with the corresponding ID
+            Endpoint description:
+                ./api/v1.0/events/<event_id>
+                'GET':
+                    JSON Request Body Format : {
+                                                event_id= ID of the event, required.
+                                               
+                                            }
+                    Response Example : {
+                                            "event_id": 24,
+                                            "date": "11.07.2021",
+                                            "entered_address": "Artvin",
+                                            "formatted_address": "Artvin, Merkez/Artvin, Turkey",                                           
+                                            "latitude": 52.54367,
+                                            "longitude": 28.87645,
+                                            "name": "Football match in Uskudar",
+                                            "sport": "Football"
+                                            "create_user" : 5748
+                                            "hour" : "09:00"
+                                            "weather" : "scattered clouds"
+                                            "weatcher_icon" : "03d"
+                                        }
+                    Status Codes:
+                        201: "Event created and added to database."
+                        400: "Event ID is not correct."                       
+
+        """
+
     if request.method == 'GET':
-        if request.method == 'GET':
-            event = Event.query.get(event_id)  
-        if(int(event_id) <= 0):
+        event = Event.query.get(event_id)  
+        # if event id is not valid return error
+        if(not check_event_id(event)):
             return jsonify({"error":"Event ID is not correct"}), 400          
+        # if there exists no such event return error.
         elif(event is None):         
-            return jsonify({"error": "There is no such event"}), 404
+            return jsonify({"error":"Event ID is not correct"}), 400
         else:    
             event_with_weather = event.serialize()
             event_with_weather['event_id'] = event_id
+            # Split the hour and the date.
             event_with_weather["hour"] =  event_with_weather["date"][11:]
             event_with_weather["date"] = event_with_weather["date"][:10]     
+            #get the weather and the weather_icon, sending request to OpenWeather API
             weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
             event_with_weather["weather"] = weather
-            event_with_weather["weather_icon"] = weather_icon
+            #check if weather_icon is valid.
+            if(check_weather_icon(weather_icon)):
+                event_with_weather["weather_icon"] = weather_icon
             sport_names = get_sport_names()    
+            # Change the sport id to the corresponding sport name
             event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
             return jsonify(event_with_weather), 200
 
