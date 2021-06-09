@@ -19,7 +19,7 @@ parameters:
           description: The text of the post.
           example: When will the event start, exactly?
 responses:
-  200:
+  201:
     description: New comment to the discussion is created and added to the database.
     schema:
       type: object
