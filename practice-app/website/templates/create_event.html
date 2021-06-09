@@ -56,4 +56,20 @@ block content %}
     </div>
   </div>
 </div>
-{% endblock %}
+
+{% if created %}
+<br />
+<div align="center">
+  <h3>Event Created</h3>
+  <h4>Title: {{event['name']}}</h4>
+  <p>Coordinates, long:{{event['longitude']}} , lat:{{event['longitude']}}</p>
+  <p>Formatted Address, {{event['formatted_address']}}</p>
+
+  <form action="../event/{{event['id']}}/">
+    <button type="submit" class="btn btn-primary">Go To Event Page</button>
+  </form>
+</div>
+<br />
+<br />
+
+{% endif %} {% endblock %}

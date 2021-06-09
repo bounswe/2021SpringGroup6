@@ -7,6 +7,34 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
 
+class Equipment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), unique=True)
+    price = db.Column(db.String(150))
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'name'                   : self.name,
+           'price'                  : self.price,
+       }
+    
+class Badge(db.Model):
+    badgeID = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    symbol = db.Column(db.String(200))
+    point = db.Column(db.Integer)
+
+    def serialize(self):
+        """Return object data in JSON serializable format"""
+        return {
+            'badgeID'                : self.badgeID,
+            'name'                   : self.name,
+            'symbol'                 : self.symbol,
+            'point'                  : self.point
+        }
+
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
@@ -32,8 +60,23 @@ class Event(db.Model):
            'sport'                  : self.sport
        }
 
+class Interesteds(db.Model):
+    #id = db.Column(db.Integer, primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    
+    def serialize(self):
+        """Return object data in JSON serializable format"""
+        return {
+            'event_id'              : self.event_id,
+            'user_id'               : self.user_id
+        }
 
 
+
+
+
+# Corresponds to a discussion page for an event
 class DiscussionPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text)
@@ -47,3 +90,13 @@ class DiscussionPost(db.Model):
 
 
 
+class Sport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sport = db.Column(db.Text)
+
+    def serialize(self):
+       """Return object data in JSON serializable format"""
+       return {
+           'id'                     : self.id,
+           'sport'                   : self.sport
+       }

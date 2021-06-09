@@ -1,0 +1,39 @@
+Endpoint for viewing the discussions for an event.
+---
+paths:
+  /api/v1.0/events/{event_id}/discussions:
+    get:
+      parameters:
+        - in: path
+          name: event_id   
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: The event ID
+responses:
+  201:
+    description: Discussion has been found and returned in the proper format
+    schema:
+      type: object
+      required:
+        - id
+        - description
+        - text
+      properties:
+        name:
+          id: integer
+          description: Id of the event
+          example: 4
+        description:
+          type: string
+          description: Description of the sport type for the event with the given id
+          example: Competitive or recreational team sport, football opposes two teams on a vast rectangular grassy field. By alternating between the defensive and the offensive position, you will have to carry the oval ball or to throw it to reach, with your team, the opposing team’s end zone. Hopefully, no one will block your game and your run. Hut! Hut! Hut!
+        text:
+          type: string
+          description: Discussions related with the given event
+          example: Tavares Will Merhaba
+  400:
+    description: A problem related with database has occured.
+  401:
+    description: Given event_id is wrong

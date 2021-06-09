@@ -1,0 +1,24 @@
+Endpoint to show all badges
+---
+responses:
+  200:
+    description: Badges are taken from the database.
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the badge.
+          example: Best Scorer
+        symbol:
+          type: string
+          description: It is a URL for the symbol picture of the badge.
+          example: https://www.wikihow.com/images_en/thumb/d/db/Get-the-URL-for-Pictures-Step-2-Version-6.jpg/v4-460px-Get-the-URL-for-Pictures-Step-2-Version-6.jpg.webp
+        badgeID:
+          type: integer
+          description: Id of the badge
+          example: 5
+        point:
+          type: integer
+          description: Point of the badge
+          example: 3
