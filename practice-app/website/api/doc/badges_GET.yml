@@ -22,3 +22,11 @@ responses:
           type: integer
           description: Point of the badge
           example: 3
+        dog_photos:
+          type: string
+          description: Cat photo from the RandomCat API
+          example: "https://i.thatcopy.pw/cat/H20brn4.jpg"
+        control:
+          type: boolean
+          description: Decides whether HTML should show badges or not 
+          example: True
