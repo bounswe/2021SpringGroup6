@@ -7,6 +7,9 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
+# endpoint for User Login
+# filters by email; if email does not exists, gives error
+# if email exists, checks password; if does not match, gives error
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -26,12 +29,19 @@ def login():
 
     return render_template("login.html", user=current_user)
 
+# endpoint for User Logout
+# logs out using imported logout_user function
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
+# endpoint for User Sign-up
+# gets the necessary inputs, checks if email exists
+# checks several steps, if does not fit, gives error
+# if no error, then creates new user by entered inputs, adds to the database
+# generate hash for password using sha266
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -56,7 +66,7 @@ def sign_up():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('Successfull', category='success')
+            flash('Successful', category='success')
             return redirect(url_for('views.home'))
 
     return render_template("sign_up.html", user=current_user)

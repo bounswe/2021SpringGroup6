@@ -1,0 +1,40 @@
+Endpoint to create a discussion post
+---
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - event_id
+        - text
+      properties:
+        event_id:
+          type: integer
+          description: Id of the event that the discussion belongs to.
+          example: 12
+        text:
+          type: string
+          description: The text of the post.
+          example: When will the event start, exactly?
+responses:
+  201:
+    description: New comment to the discussion is created and added to the database.
+    schema:
+      type: object
+      required:
+        - event_id
+        - text
+      properties:
+        event_id:
+          type: integer
+          description: Id of the event that the discussion belongs to.
+          example: 12
+          type: string
+          description: The text of the post.
+          example: When will the event start, exactly?
+  400:
+    description: Wrong parameters.
+  503:
+    description: Service not available.

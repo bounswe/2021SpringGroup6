@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block title %} Post A Comment {% endblock %} {%
+    block content %}
+    <div class="container" style="height: 100%">
+        <div class="row align-items-center h-100">
+          <div class="col-sm">
+            <form method="POST">
+              <h3 align="center">Post Your Comment</h3>
+              <div class="form-group">
+                <label for="name">Your comment</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="comment"
+                  name="comment"
+                  placeholder="Enter your comment"
+                  required
+                />
+              </div>
+              <br />  
+            <button type="submit" class="btn btn-primary">Post</button>
+          </form>
+        </div>
+    </div>
+{% endblock %}
