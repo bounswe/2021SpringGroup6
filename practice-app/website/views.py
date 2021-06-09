@@ -290,4 +290,27 @@ def discussionPage(event_id):
     else:
 
         return f"<h1>Error<h1>"
+      
+      
+@views.route('/events/<event_id>/discussionPost', methods=["GET", "POST"])
+@login_required
+def discussionPost(event_id):
+    
+    if request.method == 'GET':
+        return render_template("discussionPost.html", event_id=event_id, user=current_user)
+    else:
+        message = {"text" : request.form.get('comment')}
 
+        BASE = 'http://127.0.0.1:5000/'  #  should be changed
+        
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(BASE + '/api/v1.0/events/' + event_id + '/discussions', data=json.dumps(message), headers=headers)
+       
+        if response.status_code == 201:
+            flash('Comment Posted', category='success')
+            return redirect(url_for('views.discussionPage', event_id=event_id, user=current_user))
+        
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+
+        return redirect(url_for('views.discussionPost', event_id=event_id, user=current_user))

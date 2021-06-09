@@ -59,6 +59,7 @@ class Event(db.Model):
            'creator_user'           : self.creator_user,
            'sport'                  : self.sport
        }
+
 class Interesteds(db.Model):
     #id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), primary_key=True)
@@ -89,7 +90,6 @@ class DiscussionPost(db.Model):
 
 
 
-
 class Sport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sport = db.Column(db.Text)
@@ -100,4 +100,4 @@ class Sport(db.Model):
            'id'                     : self.id,
            'sport'                   : self.sport
        }
-
+    
