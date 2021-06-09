@@ -48,7 +48,6 @@ def create_equipment():
 
 @views.route('badge/', methods=['POST','GET'])
 def badge():
-
     """
     This prepares the front-end side of the badge addition functionality.
     It can be used as a POST and GET. When it is used as a GET, badge addition page is shown to provide related fields for it.
@@ -60,7 +59,7 @@ def badge():
             "symbol": request.form.get("symbol")
         }
 
-        req = "http://localhost:5000/api/v1.0/badges"
+        req = BASE_URL+"/api/v1.0/badges"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(badge), headers=headers)
 
@@ -84,7 +83,7 @@ def show_badge():
     """
     if request.method == "POST":
 
-        req = "http://localhost:5000/api/v1.0/badges/show_badge/"
+        req = BASE_URL+"/api/v1.0/badges/show_badge/"
         headers = {'Content-type': 'application/json'}
         response = requests.get(req, headers=headers)
         json_response = response.json()
