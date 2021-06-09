@@ -113,7 +113,7 @@ def point_badge():
 
         if response.status_code != 200:
             flash(response.text, category='error')
-            return render_template("home.html", user=current_user)
+            return redirect(url_for('views.home'))
             
         return render_template("show_badge_point.html", user=current_user, badge=response.json())
     
