@@ -369,7 +369,7 @@ def discussionForEvent(event_id):
 
     elif request.method == 'POST':
 
-        if event_id < 0:
+        if int(event_id) < 0:
             return "Wrong parameters", 400
 
         # get a random name 
