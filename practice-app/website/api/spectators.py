@@ -8,8 +8,8 @@ spectators = Blueprint('spectators', __name__)
 
 # endpoint for declaring a person as interested to an event
 # event is determined by the route, user should be passed as a paremeter
-@spectators.route('/<event_id>/interesteds', methods = ['POST'])
-@swag_from('doc/interesteds_POST.yml', methods = ['POST'])
+@spectators.route('/<event_id>/spectators', methods = ['POST'])
+@swag_from('doc/spectators_post.yml', methods = ['POST'])
 def declare_interest(event_id):
     if request.method == 'POST':
         # basic checks
@@ -17,7 +17,7 @@ def declare_interest(event_id):
             return {'error': 'Request is not in JSON format'}, 400
         if not 'user_id' in request.json:
             return {'error': "No user id provided"}, 400
-        interested = Interesteds(
+        interested = Spectators(
             event_id = event_id,
             user_id = request.json['user_id'] #current_user
         )
