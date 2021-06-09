@@ -317,8 +317,7 @@ def get_event_by_id(event_id):
                                         }
                     Status Codes:
                         201: "Event created and added to database."
-                        400: "Event ID is not correct."
-                        404: "There is no such event."
+                        400: "Event ID is not correct."                       
 
         """
 
