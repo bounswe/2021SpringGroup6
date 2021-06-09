@@ -253,6 +253,12 @@ def event_search():
   
 @views.route('event/<event_id>/', methods=['GET'])
 def view_event(event_id):
+    """
+    This is the front-end side of the show event by id functionality.
+    Shows the event information for the event with event_id and also
+    the corresponding weather icon, according to the weather description in
+    the event location.
+    """
     if request.method == 'GET':
         
         uri = f"http://127.0.0.1:5000/api/v1.0/events/{event_id}/"        
