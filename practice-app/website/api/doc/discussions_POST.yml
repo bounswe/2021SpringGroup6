@@ -38,3 +38,5 @@ responses:
     description: Wrong parameters.
   402:
     description: Text field cannot be empty.
+  503:
+    description: Service not available.

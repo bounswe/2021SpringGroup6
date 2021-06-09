@@ -83,6 +83,16 @@ def event():
         return jsonify(new_event.serialize()), 201
 
 
+def check_comment_has_text(message):
+    if len(message) < 1:
+        return False
+    else:
+        return True
+
+"""
+This method handles all requests for adding a discussion post and getting all
+discussion posts in order to show those in the event's discussion page.
+"""
 @events.route('<event_id>/discussions', methods=['GET', 'POST'])
 @swag_from('doc/discussions_GET.yml', methods=['GET'])
 @swag_from('doc/discussions_POST.yml', methods=['POST'])
@@ -93,13 +103,22 @@ def discussionForEvent(event_id):
         if event_id < 0:
             return "Wrong parameters", 401
 
-        req = requests.get(
-            'https://api.namefake.com/english-united-states/random/')
-        data = json.loads(req.content)
-        name_shown = data['name']
+        # get a random name 
+        response = requests.get(
+                'https://api.namefake.com/english-united-states/random/')
+    
+        if response.status_code >= 200 and response.status_code < 300:
+            # if the GET request sent is successful 
+            data = json.loads(response.content)
+            name_shown = data['name']
+
+        else:
+            name_shown = "No Name"
+
 
         message = request.json['text']
-        if len(message) < 1:
+        test = check_comment_has_text(message)
+        if not test: 
             return "Text field cannot be empty.", 402
 
         message = name_shown + ': ' + message
@@ -109,18 +128,25 @@ def discussionForEvent(event_id):
         doesExist = False
         for i in range(len(discussionPostList)):
             if discussionPostList[i].serialize()["id"] == int(event_id):
-                # exists
+                # check if there exists a discussion page for that event_id
                 doesExist = True
 
         if not doesExist:
             newPost = DiscussionPost(id=event_id, text=message)
-            db.session.add(newPost)
-            db.session.commit()
-            return jsonify(newPost.serialize()), 201
+            try:
+                db.session.add(newPost)
+                db.session.commit()
+                return jsonify(newPost.serialize()), 201
+            except exc.SQLAlchemyError as e:
+                 db.session.rollback()
+                 return "Service Unavailable", 503
 
         else:
-            currentRow = DiscussionPost.query.filter_by(id=event_id).first()
-
-            currentRow.text += '#' + message
-            db.session.commit()
-            return jsonify(currentRow.serialize()), 201
+            try:
+                currentRow = DiscussionPost.query.filter_by(id=event_id).first()
+                currentRow.text += '#' + message
+                db.session.commit()
+                return jsonify(currentRow.serialize()), 201
+            except exc.SQLAlchemyError as e:
+                db.session.rollback()
+                return "Service Unavailable", 503
