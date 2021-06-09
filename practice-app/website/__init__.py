@@ -12,7 +12,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'cmpe'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///database/{DB_NAME}'
 
     swagger = Swagger(app)
 
@@ -67,7 +67,7 @@ def get_sport_names():
     If database does not exist, create a database. Also sport table is filled
 """
 def create_database(app):
-    if not path.exists('../website/' + DB_NAME):
+    if not path.exists('website/database/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
         # Get sports
