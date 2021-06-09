@@ -10,7 +10,7 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    return event_search()
+    return redirect(url_for('views.event_search'))
     #return redirect("/events", code=200)
     #return render_template("home.html", user=current_user)
 
