@@ -1,6 +1,7 @@
 
-from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
 
+from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
+from sqlalchemy.sql.elements import Null
 from ..models import Event, DiscussionPost, Sport, User
 from re import template
 
@@ -20,6 +21,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 events = Blueprint('events', __name__)
+
 
 API_KEY = os.environ.get("API_KEY")
 API_KEY2 = os.environ.get("API_KEY2")
@@ -54,14 +56,15 @@ def get_weather(latitude, longitude):
     return:
         True if valid False otherwise
 """
-def getCoordinates(address):
+def get_coordinates(address):
+
 
     # Make GET request to the uri using API_KEY
     parameters = {'key': API_KEY , 'address': address}
     uri = 'https://maps.googleapis.com/maps/api/geocode/json'
 
     r = requests.get(uri, params=parameters)
-    
+
     result = r.json()
 
     # If there is no error return information from response.
@@ -71,6 +74,7 @@ def getCoordinates(address):
             longitude = result['results'][0]['geometry']['location']['lng']
             latitude = result['results'][0]['geometry']['location']['lat']
             return formatted_address, longitude, latitude, "OK"
+
     
     # Address not valid, error messages from API docs
     if result['status'] == "ZERO_RESULTS" or result['status'] == "INVALID_REQUEST": 
@@ -169,10 +173,11 @@ def check_event_date(new_event):
     return True
 
 
-@events.route('/', methods = ['GET','POST'])
+@events.route('/', methods=['GET', 'POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
 @swag_from('doc/events_GET.yml', methods=['GET'])
 def event():
+
     # handles get request
     if request.method == 'GET':
         # fethes body parameters
@@ -205,6 +210,7 @@ def event():
         
 
     if request.method == 'POST':
+
         """
             Used to create a new event.
             Endpoint description:
@@ -231,7 +237,7 @@ def event():
                     Status Codes:
                         201: "Event created and added to database."
                         400: "Body parameters are not correct."
-                        403:  "There is an error, try later."
+                        503:  "There is an error, try later."
 
 
         """
@@ -241,7 +247,7 @@ def event():
             return jsonify({"error":"Parameters not correct"}), 400
 
         # Get coordinates using Google Maps API.
-        formatted_address, longitude, latitude, error = getCoordinates(request.json['location'])
+        formatted_address, longitude, latitude, error = get_coordinates(request.json['location'])
 
         # Return error if fetch was not correct.
         if error != "OK":
@@ -283,12 +289,13 @@ def event():
         except exc.SQLAlchemyError as e:
             # In case of error, return error message
             db.session.rollback()
+
             return jsonify({"error": "Service Unavailable"}), 503
         
         # No error, return new event information
         return jsonify(new_event.serialize()), 201
 
-
+        
 @events.route('/<event_id>/', methods = ['GET'])
 @swag_from('doc/event_GET.yml', methods=['GET'])
 def get_event_by_id(event_id):
@@ -346,11 +353,24 @@ def get_event_by_id(event_id):
             event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
             return jsonify(event_with_weather), 200
 
+
+# checks whether an entered comment has text
+def check_comment_has_text(message):
+    if len(message) < 1:
+        return False
+    else:
+        return True
+
+      
+"""
+This method handles all requests for adding a discussion post and getting all
+discussion posts in order to show those in the event's discussion page.
+"""
 # When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
 # Corresponding event must exist and have a sport type in db.
 @events.route('<event_id>/discussions', methods=['GET', 'POST'])
 @swag_from('doc/discussionForEvent_GET.yml', methods=['GET'])
-#@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
+@swag_from('doc/discussionForEvent_POST.yml', methods=['POST'])
 def discussionForEvent(event_id):
 
     if request.method == 'GET':
@@ -410,3 +430,63 @@ def discussionForEvent(event_id):
 
         result = {"id": event_id, "description": description, "text": text}
         return jsonify(result), 201
+        
+
+    elif request.method == 'POST':
+
+        if int(event_id) < 0:
+            return "Wrong parameters", 400
+
+        # check whether the event exists
+        event = Event.query.get(int(event_id))
+        if not event:
+            return jsonify({"error":"Event Does Not Exist"}), 400
+        
+        # get a random name 
+        response = requests.get(
+                'https://api.namefake.com/english-united-states/random/')
+    
+        if response.status_code >= 200 and response.status_code < 300:
+            # if the GET request sent is successful 
+            data = json.loads(response.content)
+            name_shown = data['name']
+
+        else:
+            name_shown = "No Name"
+
+
+        message = request.json['text']
+        test = check_comment_has_text(message)
+        if not test: 
+            return "Text field cannot be empty.", 400
+
+        message = name_shown + ': ' + message
+
+        discussionPostList = DiscussionPost.query.all()
+
+        doesExist = False
+        for i in range(len(discussionPostList)):
+            if discussionPostList[i].serialize()["id"] == int(event_id):
+                # check if there exists a discussion page for that event_id
+                doesExist = True
+                break
+
+        if not doesExist:
+            newPost = DiscussionPost(id=event_id, text=message)
+            try:
+                db.session.add(newPost)
+                db.session.commit()
+                return jsonify(newPost.serialize()), 201
+            except exc.SQLAlchemyError as e:
+                 db.session.rollback()
+                 return "Service Unavailable", 503
+
+        else:
+            try:
+                currentRow = DiscussionPost.query.filter_by(id=event_id).first()
+                currentRow.text += '#' + message
+                db.session.commit()
+                return jsonify(currentRow.serialize()), 201
+            except exc.SQLAlchemyError as e:
+                db.session.rollback()
+                return "Service Unavailable", 503

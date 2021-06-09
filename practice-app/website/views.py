@@ -10,11 +10,19 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    return render_template("home.html", user=current_user)
+    return event_search()
+    #return redirect("/events", code=200)
+    #return render_template("home.html", user=current_user)
 
 @views.route('create_equipment/', methods=['POST','GET'])
-@login_required
 def create_equipment():
+    
+    """
+    This prepares the front-end side of the equipment addition functionality.
+    It can be used as a POST; when it is used as a POST, the provided fields for an equipment is posted.
+    The intended response is created.
+    """
+    
     if request.method == 'POST':
         equipment = {
             "name" : request.form.get("name")
@@ -111,7 +119,7 @@ def point_badge():
 
         if response.status_code != 200:
             flash(response.text, category='error')
-            return render_template("home.html", user=current_user)
+            return redirect(url_for('views.home'))
             
         return render_template("show_badge_point.html", user=current_user, badge=response.json())
     
@@ -242,16 +250,16 @@ def event_search():
 
     # return rendered page
     if response.status_code == 200:
-        flash('Events are fetched successfully', category='success')
+        #flash('Events are fetched successfully', category='success')
         # TODO: When event page implemented, redirect to it.
         return render_template("event_search.html", user= current_user, sports=sports, events=response.json())
     elif response.status_code == 400 :
-        flash('Check Information Entered', category='error')
+        return "<h1>Check Information Entered</h1>"
     else:
-        flash('Error Occured, Try Again Later', category='error')
+        return "<h1>Error Occured, Try Again Later</h1>"
 
   
-@views.route('event/<event_id>/', methods=['GET'])
+@views.route('events/<event_id>/', methods=['GET'])
 def view_event(event_id):
     """
     This is the front-end side of the show event by id functionality.
@@ -294,4 +302,27 @@ def discussionPage(event_id):
     else:
 
         return f"<h1>Error<h1>"
+      
+      
+@views.route('/events/<event_id>/discussionPost', methods=["GET", "POST"])
+@login_required
+def discussionPost(event_id):
+    
+    if request.method == 'GET':
+        return render_template("discussionPost.html", event_id=event_id, user=current_user)
+    else:
+        message = {"text" : request.form.get('comment')}
 
+        BASE = 'http://127.0.0.1:5000/'  #  should be changed
+        
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(BASE + '/api/v1.0/events/' + event_id + '/discussions', data=json.dumps(message), headers=headers)
+       
+        if response.status_code == 201:
+            flash('Comment Posted', category='success')
+            return redirect(url_for('views.discussionPage', event_id=event_id, user=current_user))
+        
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+
+        return redirect(url_for('views.discussionPost', event_id=event_id, user=current_user))
