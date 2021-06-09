@@ -1,20 +1,13 @@
 Endpoint to get the event with the corresponding ID
 ---
 parameters:
-  - name: id
+  - name: event_id
     in: path
     required: true
-    schema:
-      type: integer
-      required:
-        - event_id
-        
-      properties:
-        event_id:
-          type: integer
-          description: ID of the event.
-          example: 56
-      
+    type: integer
+    description: ID of the event.
+    example : 56
+         
 responses:
   200:
     description: Event with the corresponding ID is fetched.
