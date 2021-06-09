@@ -6,25 +6,29 @@ from sqlalchemy import exc
 
 spectators = Blueprint('spectators', __name__)
 
-# endpoint for declaring a person as interested to an event
-# event is determined by the route, user should be passed as a paremeter
+
 @spectators.route('/<event_id>/spectators', methods = ['POST'])
 @swag_from('doc/spectators_post.yml', methods = ['POST'])
 def declare_interest(event_id):
+    """
+    Endpoint for declaring a person as spectator to an event
+    Event is determined by the route, user should be passed as a paremeter
+    
+    """
     if request.method == 'POST':
         # basic checks
         if not request.json:
             return {'error': 'Request is not in JSON format'}, 400
         if not 'user_id' in request.json:
             return {'error': "No user id provided"}, 400
-        interested = Spectators(
+        spectator = Spectators(
             event_id = event_id,
             user_id = request.json['user_id'] #current_user
         )
     
     # insert into database
     try:
-        db.session.add(interested)
+        db.session.add(spectator)
         db.session.commit()
     except exc.NoReferenceError as e:
         db.session.rollback()
@@ -33,4 +37,4 @@ def declare_interest(event_id):
         db.session.rollback()
         return "Server problem", 503
     
-    return interested.serialize(), 201
+    return spectator.serialize(), 201
