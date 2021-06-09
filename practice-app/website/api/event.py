@@ -324,10 +324,12 @@ def get_event_by_id(event_id):
 
     if request.method == 'GET':
         event = Event.query.get(event_id)  
+        # if event id is not valid return error
         if(not check_event_id(event)):
             return jsonify({"error":"Event ID is not correct"}), 400          
+        # if there exists no such event return error.
         elif(event is None):         
-            return jsonify({"error": "There is no such event"}), 404
+            return jsonify({"error":"Event ID is not correct"}), 400
         else:    
             event_with_weather = event.serialize()
             event_with_weather['event_id'] = event_id

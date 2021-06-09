@@ -7,7 +7,7 @@ parameters:
     schema:
       type: object
       required:
-        - id
+        - event_id
         
       properties:
         event_id:
@@ -86,8 +86,5 @@ responses:
           example: 03d
   400:
     description: "Event ID is not correct"
-
-  404:
-    description: "There is no such event"
 
  
