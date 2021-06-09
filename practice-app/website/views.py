@@ -15,8 +15,14 @@ def home():
     #return render_template("home.html", user=current_user)
 
 @views.route('create_equipment/', methods=['POST','GET'])
-@login_required
 def create_equipment():
+    
+    """
+    This prepares the front-end side of the equipment addition functionality.
+    It can be used as a POST; when it is used as a POST, the provided fields for an equipment is posted.
+    The intended response is created.
+    """
+    
     if request.method == 'POST':
         equipment = {
             "name" : request.form.get("name")
