@@ -3,55 +3,78 @@ info:
   description: "Endpoint to display events. Supports basic filtering"
   version: "1.0.0"
   title: 'Amateur Sports Api'
-basePath: "api/v1.0/events"
+basePath: "/api/v1.0/events"
 paths:
   /:
     get:
       summary: "Find all events"
-      description: "Basic filtering can be done. Which are name, sport name, and date."
-      parameters:
-        name: "Header of the event"
-        type: string
-        description: "Filters by event name. Diplays if the event name includes the string"
-        example: "street ball"        
+      description: "Basic filtering can be done. Filter by name, sport name, and date."
+      parameters: 
+          - in: "query"
+            name: "name"
+            type: "string"
+            description: "Filters by event name. Diplays if the event name includes the string"
+          - in: "query"
+            name: "sport"
+            type: "integer"
+            description: "Filters by sport id."
+          - in: "query"
+            name: "date_from"
+            type: "string"
+            description: "Filters events before the given time. Format is YYYY-MM-DDTHH-MM"
+          - in: "query"
+            name: "date_to"
+            type: "string"
+            description: "Filters events after the given time. Format is YYYY-MM-DDTHH-MM"
       responses:
         200:
           description: "Events are fetched from database."
           schema:
             type: array
-            properties:
-              name:
-                type: string
-                description: Name of the event, title.
-                example: Football Match at Trabzon
-              date:
-                type: string
-                description: Date of the event. Format is "YYYY-MM-DDTHH:MM"
-                example: 2021-06-25T11:56
-              entered_address:
-                type: string
-                description: Address of the event, given using basic English.
-                example: Trabzon Akyazı Stadium
-              formatted_address:
-                type: string
-                description: Address of the event, taken using Google Maps API.
-                example: Akyazı, 61195 Ortahisar/Trabzon, Turkey
-              id:
-                type: integer
-                description: Id of the event
-                example: 2
-              latitude:
-                type: number
-                description: Latitude of the address.
-                example: 40.9988505
-              longitude:
-                type: number
-                description: Longitude of the address.
-                example: 39.6464687
-              creator_user:
-                type: integer
-                description: Id of the user creating the event. Id must be registered to a user.
-                example: 12434
+            items:
+              type: "object"
+              properties:
+                creator_name:
+                  type: "string"
+                  description: "First and last name of the organizator. Random value for every request."
+                  example: "Rhonda Lynch"
+                creator_user:
+                  type: "integer"
+                  description: "Id of the user creating the event. Id must be registered to a user."
+                  example: 12434
+                date:
+                  type: "string"
+                  description: "Date of the event. Format is YYYY-MM-DDTHH:MM"
+                  example: "2021-06-25T11:56"
+                entered_address:
+                  type: "string"
+                  description: "Address of the event, given by user when event is created."
+                  example: "Trabzon Akyazı Stadium"
+                formatted_address:
+                  type: "string"
+                  description: "Address of the event, taken using Google Maps API."
+                  example: "Akyazı, 61195 Ortahisar/Trabzon, Turkey"
+                id:
+                  type: "integer"
+                  description: "Id of the event"
+                  example: 2
+                latitude:
+                  type: "number"
+                  description: "Latitude of the address."
+                  example: 40.9988505
+                longitude:
+                  type: "number"
+                  description: "Longitude of the address."
+                  example: 39.6464687
+                name:
+                  type: "string"
+                  description: "Name of the event, title."
+                  example: "Football Match at Trabzon"
+                sport:
+                  type: "integer"
+                  description: "Id of sport type. Sport names are stored in database."
+                  example: 106
+                
         400:
           description: "Properties can not be fetched from database"
         403:

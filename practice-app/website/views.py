@@ -12,6 +12,31 @@ views = Blueprint('views', __name__)
 def home():
     return render_template("home.html", user=current_user)
 
+@views.route('create_equipment/', methods=['POST','GET'])
+@login_required
+def create_equipment():
+    if request.method == 'POST':
+        equipment = {
+            "name" : request.form.get("name")
+        }
+
+        req = "http://127.0.0.1:5000/api/v1.0/equipments/"
+        headers = {'Content-type': 'application/json'}
+        response = requests.post(req, data=json.dumps(equipment), headers=headers)
+
+        if response.status_code == 201:
+            flash('Equipment Created', category='success')
+            return redirect(url_for('views.home'))
+        elif response.status_code == 400 :
+            flash('Check Information Entered', category='error')
+        elif response.status_code == 409 :
+            flash('Equipment Already Exists!', category='error')
+        else:
+            flash('Error Occured, Try Again Later', category='error')
+    
+    return render_template("equipments.html", user=current_user)
+    
+
 @views.route('badge/', methods=['POST','GET'])
 def badge():
 
@@ -170,6 +195,30 @@ def create_event():
     
     return render_template("create_event.html", user= current_user, sports=sports, created = False, event = {})
 
+# helper method for url handling
+def url_handler_events(base, name, sport, date_from, date_to):
+    url = base
+    params = []
+
+    # collect parameters
+    if name:
+        params.append("name="+name)
+    if sport:
+        params.append("sport="+str(sport))
+    if date_from:
+        params.append("date_from="+date_from)
+    if date_to:
+        params.append("date_to="+date_to)
+    
+    # handle collected parameters. change url accordingly
+    if params:
+        url += "?"
+        for par in params:
+            url += (par+"&")
+        url = url[:-1]
+    
+    return url
+
 @views.route('events/', methods=['POST', 'GET'])
 @login_required
 def event_search():
@@ -181,25 +230,12 @@ def event_search():
 
     # handle post request from frontend. in form input format
     if request.method == 'POST':
+        
+        print(request.form.get('date_from'))
+        # change url according to posted parameters
+        req = url_handler_events(req, request.form.get('name'), request.form.get('sport'), request.form.get('date_from'), request.form.get('date_to'))
+        print(req)
 
-        # collect parameters
-        params = []
-        if request.form.get('name'):
-            params.append("name=" + request.form.get('name'))
-        if request.form.get('sport'):
-            params.append("sport=" + request.form.get('sport'))
-        if request.form.get('date_from'):
-            params.append("date_from=" + request.form.get('date_from'))
-        if request.form.get('date_to'):
-            params.append("date_to=" + request.form.get('date_to'))
-
-        # handle collected parameters. change url accordingly
-        if params:
-            req += "?"
-            for par in params:
-                req += (par + "&")
-            req = req[:-1]
-    
     # call api from event.py file
     headers = {'Content-type': 'application/json'}
     response = requests.get(req, headers = headers)
@@ -221,11 +257,18 @@ def view_event(event_id):
         
         uri = f"http://127.0.0.1:5000/api/v1.0/events/{event_id}/"        
         res = requests.get(uri)      
-        event = res.json()       
-        icon = event["weather_icon"]
-        weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
-        url = f"/events/{event_id}/discussions"
-        return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url, url=url)
+        event = res.json() 
+        # Incorrect information
+        if res.status_code == 400:
+            return "<h1>ERROR : The ID is invalid</h1>"
+        # There exists no such event with the corresponding ID
+        elif res.status_code == 404 :         
+            return "<h1>ERROR : There is no such event</h1>"
+        else:      
+            icon = event["weather_icon"]
+            weather_icon_url = f"http://openweathermap.org/img/wn/{icon}@2x.png"
+            url = f"/events/{event_id}/discussions"
+            return render_template("event_page_by_id.html", user = current_user, event = event, weather_icon_url = weather_icon_url, url=url)
 
 
 # Shows the discussion page for the event with id event_id. 

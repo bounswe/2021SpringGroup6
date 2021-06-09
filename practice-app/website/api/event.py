@@ -8,6 +8,7 @@ from .. import db
 import json
 import sqlite3
 import requests
+import re
 from ..views import get_sport_names
 from flasgger.utils import swag_from
 from sqlalchemy import exc
@@ -66,10 +67,47 @@ def getCoordinates(address):
     else:
         return "",0,0,"Try Later"
 
+def check_event_id(new_event):
+    event = new_event.serialize()
+    id = event["id"]
+    if(id <= 0):
+        return False
+    return True
+
+def check_weather_icon(weather_icon_id):
+    weather_icon_id_regex = "[0-9][0-9][dn]"
+    if not re.match(weather_icon_id_regex, weather_icon_id):
+        return False
+    return True
+
+#helper method for querying
+def query_handler_events(name, sport, date_from, date_to):
+    query = 'SELECT * FROM Event WHERE'
+    filters = []
+    # adds filter for name
+    if name:
+        filters.append(' name LIKE \'%' + name + '%\' AND')
+    # adds filter for sport name
+    if sport:
+        filters.append(' sport = ' + str(sport) + ' AND')
+    # adds filter for initial date
+    if date_from:
+        filters.append(' date >= \'' + date_from + '\' AND')
+    # adds filter for final date
+    if date_to:
+        filters.append(' date <= \'' + date_to + '\' AND')
+
+    # checks if there is any filter added
+    if filters:
+        for filt in filters:
+            query += filt
+        query = query[:-4] + ';'
+    else:
+        query = query[:-6] + ';'
+    return query
 
 """
     Check the validity of the sport field of event
-
     parameters:
         new_event: Event 
     return:
@@ -88,7 +126,6 @@ def check_event_sport(new_event):
 """
     Check the format of the date field of event
     Format should match YYYY-MM-DDTHH:MM
-
     parameters:
         new_event: Event 
     return:
@@ -96,7 +133,7 @@ def check_event_sport(new_event):
 """
 def check_event_date(new_event):
     # Date format YYYY-MM-DDTHH:MM
-    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])$"
+    date_regex = "^(20[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]2|5[0-9])$"
     if not re.match(date_regex, new_event.date):
         return False
     return True
@@ -116,31 +153,7 @@ def event():
         date_to = query_parameters.get('date_to')
 
         # sets up querys
-        query = 'SELECT * FROM Event WHERE'
-        flag = False
-        
-        # adds filter for name
-        if name:
-            query += (' name LIKE \'%' + name + '%\' AND')
-            flag = True
-        # adds filter for sport name
-        if sport:
-            query += (' sport = ' + str(sport) + ' AND')
-            flag = True
-        # adds filter for initial date
-        if date_from:
-            query += (' date >= \'' + date_from + '\' AND')
-            flag = True
-        # adds filter for final date
-        if date_to:
-            query += (' date <= \'' + date_to + '\' AND')
-            flag = True
-
-        # checks if there is any filter added
-        if flag:
-            query = query[:-4] + ';'
-        else:
-            query = query[:-6] + ';'
+        query = query_handler_events(name, sport, date_from, date_to)
 
         # executes query and converts to json format
         eventList = db.engine.execute(query)
@@ -162,7 +175,6 @@ def event():
         
 
     if request.method == 'POST':
-        print(API_KEY)
         """
             Used to create a new event.
             Endpoint description:
@@ -251,18 +263,23 @@ def event():
 @swag_from('doc/event_GET.yml', methods=['GET'])
 def get_event_by_id(event_id):
     if request.method == 'GET':
-        event = Event.query.get(event_id)      
-        event_with_weather = event.serialize()
-        event_with_weather['event_id'] = event_id
-        event_with_weather["hour"] =  event_with_weather["date"][11:]
-        event_with_weather["date"] = event_with_weather["date"][:10]     
-        weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
-        event_with_weather["weather"] = weather
-        event_with_weather["weather_icon"] = weather_icon
-        sport_names = get_sport_names()  
-        print(sport_names)     
-        event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
-        return jsonify(event_with_weather), 200
+        if request.method == 'GET':
+            event = Event.query.get(event_id)  
+        if(int(event_id) <= 0):
+            return jsonify({"error":"Event ID is not correct"}), 400          
+        elif(event is None):         
+            return jsonify({"error": "There is no such event"}), 404
+        else:    
+            event_with_weather = event.serialize()
+            event_with_weather['event_id'] = event_id
+            event_with_weather["hour"] =  event_with_weather["date"][11:]
+            event_with_weather["date"] = event_with_weather["date"][:10]     
+            weather, weather_icon = get_weather(event_with_weather["latitude"], event_with_weather["longitude"])
+            event_with_weather["weather"] = weather
+            event_with_weather["weather_icon"] = weather_icon
+            sport_names = get_sport_names()    
+            event_with_weather["sport"] = sport_names[event_with_weather["sport"]]                
+            return jsonify(event_with_weather), 200
 
 # When the id of the event given, corresponding discussion is returned by adding the definition of the sport type in the json format
 # Corresponding event must exist and have a sport type in db.
