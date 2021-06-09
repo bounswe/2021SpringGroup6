@@ -138,6 +138,7 @@ def check_event_date(new_event):
         return False
     return True
 
+
 @events.route('/', methods = ['GET','POST'])
 @swag_from('doc/events_POST.yml', methods=['POST'])
 @swag_from('doc/events_GET.yml', methods=['GET'])
