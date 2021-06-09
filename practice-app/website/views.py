@@ -295,7 +295,7 @@ def discussionPage(event_id):
 def discussionPost(event_id):
     
     if request.method == 'GET':
-        return render_template("discussionPost.html", event_id=event_id)
+        return render_template("discussionPost.html", event_id=event_id, user=current_user)
     else:
         message = {"text" : request.form.get('comment')}
 
@@ -306,10 +306,10 @@ def discussionPost(event_id):
        
         if response.status_code == 201:
             flash('Comment Posted', category='success')
-            return redirect(url_for('views.discussionPage', event_id=event_id))
+            return redirect(url_for('views.discussionPage', event_id=event_id, user=current_user))
         elif response.status_code == 400 :
             flash('Text cannot be empty', category='error')
         else:
             flash('Error Occured, Try Again Later', category='error')
 
-        return redirect(url_for('views.discussionPost', event_id=event_id))
+        return redirect(url_for('views.discussionPost', event_id=event_id, user=current_user))
