@@ -10,7 +10,9 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    return render_template("home.html", user=current_user)
+    return event_search()
+    #return redirect("/events", code=200)
+    #return render_template("home.html", user=current_user)
 
 @views.route('create_equipment/', methods=['POST','GET'])
 @login_required
@@ -242,13 +244,13 @@ def event_search():
 
     # return rendered page
     if response.status_code == 200:
-        flash('Events are fetched successfully', category='success')
+        #flash('Events are fetched successfully', category='success')
         # TODO: When event page implemented, redirect to it.
         return render_template("event_search.html", user= current_user, sports=sports, events=response.json())
     elif response.status_code == 400 :
-        flash('Check Information Entered', category='error')
+        return "<h1>Check Information Entered</h1>"
     else:
-        flash('Error Occured, Try Again Later', category='error')
+        return "<h1>Error Occured, Try Again Later</h1>"
 
   
 @views.route('events/<event_id>/', methods=['GET'])
