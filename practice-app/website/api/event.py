@@ -189,7 +189,7 @@ def event():
                     Status Codes:
                         201: "Event created and added to database."
                         400: "Body parameters are not correct."
-                        403:  "There is an error, try later."
+                        503:  "There is an error, try later."
 
 
         """
