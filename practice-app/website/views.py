@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 import requests
 import json
 from .models import Sport, Badge
+from .settings import *
 
 
 views = Blueprint('views', __name__)
@@ -28,7 +29,7 @@ def create_equipment():
             "name" : request.form.get("name")
         }
 
-        req = "http://127.0.0.1:5000/api/v1.0/equipments/"
+        req = BASE_URL+"/api/v1.0/equipments/"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(equipment), headers=headers)
 
@@ -62,15 +63,13 @@ def badge():
         req = "http://localhost:5000/api/v1.0/badges"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(badge), headers=headers)
-        result = response.content
-
 
         if response.status_code == 201:
             flash('Badge Added', category='success')
         else:
             flash('Error Occured, Try Again Later', category='error')
 
-        return render_template("home.html", user= current_user)
+        return redirect(url_for('views.home'))
     
     return render_template("badge.html", user= current_user)
 
@@ -149,7 +148,7 @@ def sports_page():
     if request.method == 'POST':
         keyword = request.form.get('keyword')
         # Call sports API to get filtered sports.
-        req = "http://127.0.0.1:5000/api/v1.0/sports?keyword=" + keyword
+        req = BASE_URL+"/api/v1.0/sports?keyword=" + keyword
         headers = {'Content-type': 'application/json'}
         response = requests.get(req, headers=headers)
         items = response.json()['sports']
@@ -184,7 +183,7 @@ def create_event():
         }
 
         # Make request to back-end API
-        req = "http://127.0.0.1:5000/api/v1.0/events"
+        req = BASE_URL+"/api/v1.0/events"
         headers = {'Content-type': 'application/json'}
         response = requests.post(req, data=json.dumps(event), headers=headers)
         event = response.json()
@@ -234,7 +233,7 @@ def event_search():
     sports = get_sport_names()
 
     # initialize request url
-    req = "http://127.0.0.1:5000/api/v1.0/events"
+    req = BASE_URL+"/api/v1.0/events"
 
     # handle post request from frontend. in form input format
     if request.method == 'POST':
@@ -269,7 +268,7 @@ def view_event(event_id):
     """
     if request.method == 'GET':
         
-        uri = f"http://127.0.0.1:5000/api/v1.0/events/{event_id}/"        
+        uri = f"{BASE_URL}/api/v1.0/events/{event_id}/"        
         res = requests.get(uri)      
         event = res.json() 
         # Incorrect information

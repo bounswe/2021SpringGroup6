@@ -1,5 +1,3 @@
-
-
 from flask import Blueprint, json, request,  url_for, jsonify, make_response, abort, flash
 from sqlalchemy.sql.elements import Null
 from ..models import Event, DiscussionPost, Sport, User
@@ -15,19 +13,9 @@ from flasgger.utils import swag_from
 from sqlalchemy import exc
 from sqlalchemy.sql.elements import Null
 import re
-import os
-from dotenv import load_dotenv, find_dotenv
-
-load_dotenv(find_dotenv())
+from ..settings import *
 
 events = Blueprint('events', __name__)
-
-
-API_KEY = os.environ.get("API_KEY")
-API_KEY2 = os.environ.get("API_KEY2")
-
-
-
 
 def get_weather(latitude, longitude):
     """

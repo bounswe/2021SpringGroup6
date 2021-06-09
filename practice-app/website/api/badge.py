@@ -5,11 +5,8 @@ from .. import db
 from sqlalchemy import exc
 from flasgger.utils import swag_from
 from sqlalchemy import select
-import re
-import os
-from dotenv import load_dotenv, find_dotenv
+from ..settings import *
 
-load_dotenv(find_dotenv())
 
 badges = Blueprint('badges',__name__)
 
