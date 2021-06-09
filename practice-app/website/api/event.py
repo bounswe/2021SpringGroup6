@@ -372,6 +372,11 @@ def discussionForEvent(event_id):
         if int(event_id) < 0:
             return "Wrong parameters", 400
 
+        # check whether the event exists
+        event = Event.query.get(int(event_id))
+        if not event:
+            return jsonify({"error":"Event Does Not Exist"}), 400
+        
         # get a random name 
         response = requests.get(
                 'https://api.namefake.com/english-united-states/random/')
