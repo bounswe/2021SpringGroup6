@@ -34,9 +34,7 @@ responses:
           type: string
           description: The text of the post.
           example: When will the event start, exactly?
-  401:
+  400:
     description: Wrong parameters.
-  402:
-    description: Text field cannot be empty.
   503:
     description: Service not available.
