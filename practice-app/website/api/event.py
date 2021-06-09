@@ -39,7 +39,7 @@ def get_weather(latitude, longitude):
     return:
         True if valid False otherwise
 """
-def getCoordinates(address):
+def get_coordinates(address):
 
     # Make GET request to the uri using API_KEY
     parameters = {'key': API_KEY , 'address': address}
@@ -211,7 +211,7 @@ def event():
             return jsonify({"error":"Parameters not correct"}), 400
 
         # Get coordinates using Google Maps API.
-        formatted_address, longitude, latitude, error = getCoordinates(request.json['location'])
+        formatted_address, longitude, latitude, error = get_coordinates(request.json['location'])
 
         # Return error if fetch was not correct.
         if error != "OK":
