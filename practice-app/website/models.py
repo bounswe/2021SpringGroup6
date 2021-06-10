@@ -72,8 +72,7 @@ class Interesteds(db.Model):
             'user_id'               : self.user_id
         }
 
-class Spectators(db.Model):
-    #id = db.Column(db.Integer, primary_key=True)
+class Spectators(db.Model):   
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     
