@@ -43,7 +43,7 @@ responses:
         date:
           type: string
           description: Date of the event. Format is "YYYY-MM-DD"
-          example: 2021-06-16
+          example: "2021-06-16"
         entered_address:
           type: string
           description: Address of the event, given using basic English.
