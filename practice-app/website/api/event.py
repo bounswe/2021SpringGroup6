@@ -289,13 +289,10 @@ def event():
 def get_event_by_id(event_id):
     """
             Used to get the event with the corresponding ID
+            event_id is a path parameter and it is required
             Endpoint description:
                 ./api/v1.0/events/<event_id>
-                'GET':
-                    JSON Request Body Format : {
-                                                event_id= ID of the event, required.
-                                               
-                                            }
+                'GET':                 
                     Response Example : {
                                             "event_id": 24,
                                             "date": "11.07.2021",
@@ -311,7 +308,7 @@ def get_event_by_id(event_id):
                                             "weatcher_icon" : "03d"
                                         }
                     Status Codes:
-                        201: "Event created and added to database."
+                        200: "Event has been fetched."
                         400: "Event ID is not correct."                       
 
         """
