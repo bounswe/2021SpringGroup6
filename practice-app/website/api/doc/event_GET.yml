@@ -29,9 +29,12 @@ responses:
       properties:
         event_id:
           type: integer
-          description: ID of the event.
+          description: ID of the event, given in the path
           example: 56
-       
+        id:
+          type: integer
+          description: ID of the event, obtained from database.
+          example: 56
         name:
           type: string
           description: Name of the event, title.

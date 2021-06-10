@@ -295,14 +295,15 @@ def get_event_by_id(event_id):
                 'GET':                 
                     Response Example : {
                                             "event_id": 24,
+                                            "id": 24,
+                                            "name": "Basketball Match at 9",
                                             "date": "11.07.2021",
                                             "entered_address": "Artvin",
                                             "formatted_address": "Artvin, Merkez/Artvin, Turkey",                                           
                                             "latitude": 43.54367,
                                             "longitude": 41.87645,
-                                            "name": "Basketball Match at 9",
-                                            "sport": "Basketball"
                                             "creator_user" : 5748
+                                            "sport": "Basketball"                                     
                                             "hour" : "09:00"
                                             "weather" : "scattered clouds"
                                             "weatcher_icon" : "03d"
