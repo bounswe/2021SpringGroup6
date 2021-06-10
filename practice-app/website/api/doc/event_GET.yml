@@ -14,7 +14,7 @@ responses:
     schema:
       type: object
       required:
-        - id
+        - event_id
         - name
         - date
         - formatted_address
@@ -35,32 +35,32 @@ responses:
         name:
           type: string
           description: Name of the event, title.
-          example: Basketball game in Kadikoy
+          example: Football Match at 9
         date:
           type: string
-          description: Date of the event. Format is "DD-MM-YYYYTHH:MM"
-          example: 2021-07-28T16:12
+          description: Date of the event. Format is "YYYY-MM-DD"
+          example: 2021-06-16
         entered_address:
           type: string
           description: Address of the event, given using basic English.
-          example: Fenerbahce Sukru Saracoglu Stadium
+          example: Ankara
         formatted_address:
           type: string
           description: Address of the event, taken using Google Maps API.
-          example: Artvin, Artvin Merkez/Artvin, Turkey
+          example: Ankara, Turkey
         
         latitude:
           type: number
           description: Latitude of the address.
-          example: 24.7578574
+          example: 39.9333635
         longitude:
           type: number
           description: Longitude of the address.
-          example: 52.975874
+          example: 32.8597419
         creator_user:
           type: integer
           description: ID of the user creating the event. ID must be registered to a user.
-          example: 16887
+          example: 158
         sport:
           type: string
           description: Name of the sport.
