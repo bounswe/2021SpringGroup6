@@ -302,7 +302,7 @@ def get_event_by_id(event_id):
                                             "longitude": 41.87645,
                                             "name": "Basketball Match at 9",
                                             "sport": "Basketball"
-                                            "create_user" : 5748
+                                            "creator_user" : 5748
                                             "hour" : "09:00"
                                             "weather" : "scattered clouds"
                                             "weatcher_icon" : "03d"
