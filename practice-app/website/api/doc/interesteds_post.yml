@@ -19,7 +19,7 @@ parameters:
           description: "User id of the user that declares interest."
           example: 12       
 responses:
-  200:
+  201:
     description: "Interested user is inserted into database."
     schema:
       type: "object"
@@ -34,5 +34,5 @@ responses:
           example: 12
   400:
     description: "Properties can not be inserted into database"
-  403:
+  503:
     description: "There is an error, try later."
