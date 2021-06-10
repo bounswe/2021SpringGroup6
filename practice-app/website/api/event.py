@@ -297,7 +297,7 @@ def get_event_by_id(event_id):
                                             "event_id": 24,
                                             "id": 24,
                                             "name": "Basketball Match at 9",
-                                            "date": "11.07.2021",
+                                            "date": "2021-06-16",
                                             "formatted_address": "Artvin, Merkez/Artvin, Turkey",   
                                             "entered_address": "Artvin",
                                             "longitude": 41.87645,                                      
