@@ -420,12 +420,13 @@ def discussionForEvent(event_id):
         return jsonify(result), 201
         
 
-    elif request.method == 'POST':
+    elif request.method == 'POST': # if the user wants to post a comment to a discussion
 
+        # event_id is wrong        
         if int(event_id) < 0:
             return jsonify({"error":"Wrong Parameters"}), 400
 
-        # check whether the event exists
+        # users shall not be able to enter a comment to a nonexistent event
         event = Event.query.get(int(event_id))
         if not event:
             return jsonify({"error":"Event Does Not Exist"}), 400
@@ -433,22 +434,24 @@ def discussionForEvent(event_id):
         # get a random name 
         response = requests.get(
                 'https://api.namefake.com/english-united-states/random/')
-    
+
+        # if the GET request sent is successful, use the name returned        
         if response.status_code >= 200 and response.status_code < 300:
-            # if the GET request sent is successful 
             data = json.loads(response.content)
             name_shown = data['name']
 
-        else:
+        else: # if cannot get the name for some reason, show the user's name as "No Name"
             name_shown = "No Name"
 
 
         message = request.json['text']
         test = check_comment_has_text(message)
+        
+        # if the text field is empty, this request is erroneous        
         if not test: 
             return jsonify({"error":"Text Field Cannot Be Empty"}), 400
 
-        message = name_shown + ': ' + message
+        message = name_shown + ': ' + message # combine the comment with the name
 
         discussionPostList = DiscussionPost.query.all()
 
@@ -459,6 +462,7 @@ def discussionForEvent(event_id):
                 doesExist = True
                 break
 
+        # if there is not a discussion page for this event, create one                
         if not doesExist:
             newPost = DiscussionPost(id=event_id, text=message)
             try:
@@ -469,9 +473,11 @@ def discussionForEvent(event_id):
                  db.session.rollback()
                  return jsonify({"error":"Service Unavailable"}), 503
 
+        # if there is already a discussion page for this event, update it            
         else:
             try:
                 currentRow = DiscussionPost.query.filter_by(id=event_id).first()
+                # different comments under the same discussion page are separated by sharp as we agreed on                
                 currentRow.text += '#' + message
                 db.session.commit()
                 return jsonify(currentRow.serialize()), 201
