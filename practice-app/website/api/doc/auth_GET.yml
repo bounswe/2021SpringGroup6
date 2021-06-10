@@ -1,0 +1,40 @@
+Endpoint to get user
+---
+parameters:
+  - name: email
+    in: body
+    required: true
+    type: string
+  - name: password
+    in: body
+    required: true
+    type: string
+   
+responses:
+  "Successful":
+    description: User logged in.
+    schema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        id:
+          type: integer
+          description: ID of the user.
+          example: 1
+        email:
+          type: string
+          description: Email of the user.
+          example: omer@gmail.com
+        first_name:
+          type: string
+          description: Name of the user.
+          example: Ömer
+        password:
+          type: string
+          description: Password of the user
+          example: "12345678"
+
+  "Error":
+    description: There is an error, try later.
