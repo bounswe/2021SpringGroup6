@@ -7,8 +7,8 @@ parameters:
     type: "integer"
     description: "Event id of the specified event."
   - in: "body"
-    name: "User"
-    description: "User object that specifies the user."
+    name: User
+    description: "User object specifying the user"
     schema:
       type: "object"
       required:
