@@ -34,6 +34,6 @@ responses:
           description: "User id of the user that wants to spectate, foreign key."
           example: 12
   400:
-    description: "Properties can not be inserted into database"
+    description: "Bad request"
   503:
-    description: "There is an error, try later."
+    description: "There is a server problem."
