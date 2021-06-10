@@ -1,10 +1,11 @@
 {% extends 'base.html' %} {% block title %} Show Badges {% endblock %} 
 {%block content %}
+<br>
     <div class="badgers">
 
         {% if control == True %}
         
-        <center><table border="1" cellpadding="1.5" style="border-style:solid">
+        <center><table  class="table" >
             <tr>
                 <th>ID</th>
                 <th>Name</th>
@@ -29,7 +30,7 @@
     
         <div class="form">
             <form method="POST">
-                <input type="submit" value="Print Badges">
+                <input class="btn btn-primary" type="submit" value="Print Badges">
             </form>
         </div>
     </div>   
