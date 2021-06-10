@@ -190,7 +190,6 @@ def create_event():
         # No error, show event information
         if response.status_code == 201:
             flash('Event Created', category='success')
-            # TODO: When event page implemented, redirect to it.
             return render_template("create_event.html", user= current_user, sports=sports, created = True, event = event)
         # Incorrect information
         elif response.status_code == 400 :
