@@ -298,10 +298,10 @@ def get_event_by_id(event_id):
                                             "date": "11.07.2021",
                                             "entered_address": "Artvin",
                                             "formatted_address": "Artvin, Merkez/Artvin, Turkey",                                           
-                                            "latitude": 52.54367,
-                                            "longitude": 28.87645,
-                                            "name": "Football match in Uskudar",
-                                            "sport": "Football"
+                                            "latitude": 43.54367,
+                                            "longitude": 41.87645,
+                                            "name": "Basketball Match at 9",
+                                            "sport": "Basketball"
                                             "create_user" : 5748
                                             "hour" : "09:00"
                                             "weather" : "scattered clouds"
