@@ -423,7 +423,7 @@ def discussionForEvent(event_id):
     elif request.method == 'POST':
 
         if int(event_id) < 0:
-            return "Wrong parameters", 400
+            return jsonify({"error":"Wrong Parameters"}), 400
 
         # check whether the event exists
         event = Event.query.get(int(event_id))
@@ -446,7 +446,7 @@ def discussionForEvent(event_id):
         message = request.json['text']
         test = check_comment_has_text(message)
         if not test: 
-            return "Text field cannot be empty.", 400
+            return jsonify({"error":"Text Field Cannot Be Empty"}), 400
 
         message = name_shown + ': ' + message
 
@@ -467,7 +467,7 @@ def discussionForEvent(event_id):
                 return jsonify(newPost.serialize()), 201
             except exc.SQLAlchemyError as e:
                  db.session.rollback()
-                 return "Service Unavailable", 503
+                 return jsonify({"error":"Service Unavailable"}), 503
 
         else:
             try:
@@ -477,4 +477,4 @@ def discussionForEvent(event_id):
                 return jsonify(currentRow.serialize()), 201
             except exc.SQLAlchemyError as e:
                 db.session.rollback()
-                return "Service Unavailable", 503
+                return jsonify({"error":"Service Unavailable"}), 503
