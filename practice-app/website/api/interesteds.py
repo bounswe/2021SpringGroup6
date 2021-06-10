@@ -9,7 +9,7 @@ interesteds = Blueprint('interesteds', __name__)
 # endpoint for declaring a person as interested to an event
 # event is determined by the route, user should be passed as a paremeter
 @interesteds.route('/<event_id>/interesteds', methods = ['POST'])
-@swag_from('doc/interesteds_POST.yml', methods = ['POST'])
+@swag_from('doc/interesteds_post.yml', methods = ['POST'])
 def declare_interest(event_id):
     if request.method == 'POST':
         # basic checks
