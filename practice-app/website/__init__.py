@@ -26,17 +26,19 @@ def create_app():
     from .api.interesteds import interesteds
     from .api.spectators import spectators
     from .api.sport import sports
+    from .api.equipment import equipments
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(events, url_prefix='/api/v1.0/events/')
     app.register_blueprint(badges, url_prefix='/api/v1.0/badges/')
     app.register_blueprint(interesteds, url_prefix='/api/v1.0/events/')
+    app.register_blueprint(equipments, url_prefix='/api/v1.0/equipments/')
     app.register_blueprint(spectators, url_prefix='/api/v1.0/events/')
     app.register_blueprint(sports, url_prefix='/api/v1.0/sports/')
 
     
-    from .models import User, Event
+    from .models import User, Event, Equipment
 
     create_database(app)
 
