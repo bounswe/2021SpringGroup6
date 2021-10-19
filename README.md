@@ -11,7 +11,6 @@
 * [DENİZ ARDA BUDAK](https://github.com/bounswe/2021SpringGroup6/wiki/Deniz-Arda-Budak)
 * [EKREM YUSUF EKMEKCİ](https://github.com/bounswe/2021SpringGroup6/wiki/Ekrem-Yusuf-Ekmekci)
 * [MUSA NURİ İHTİYAR](https://github.com/bounswe/2021SpringGroup6/wiki/Musa-Nuri-%C4%B0htiyar)
-* [CAN ATAKAN UĞUR](https://github.com/bounswe/2021SpringGroup6/wiki/Can-Atakan-U%C4%9Fur)
-
+* [SALİH CAN ÖZÇELİK](https://github.com/bounswe/2021SpringGroup6/wiki/Salih-Can-%C3%96z%C3%A7elik)
 ## Photo from our first meeting
-![Screenshot from 2021-03-29 21-39-34](https://user-images.githubusercontent.com/29127873/112883724-5302e880-90d7-11eb-9e55-f07c3cad75a5.png)
+![group_image](https://user-images.githubusercontent.com/29717371/137918109-b15a3a3a-9942-4c7e-967e-4a8d34358da0.jpg)
