@@ -29,4 +29,5 @@ dependencies:
     - pytz==2021.3
     - sqlparse==0.4.2
     - typing-extensions==3.10.0.2
+    - psycopg2==2.7.7
 prefix: /home/berk/miniconda3/envs/cmpe451
