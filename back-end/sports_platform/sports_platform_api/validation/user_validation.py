@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from generic_validators import english_dot, password, date, gender
+from generic_validators import english_dot, date, gender
 
 class Sport_SkillLevel(serializers.Serializer):
     sport = serializers.IntegerField(min_value = 0, required=True)
@@ -10,6 +10,5 @@ class User(serializers.Serializer):
    familyName = serializers.CharField(min_length = 2, max_length = 30, validators = [english_dot])
    sports = serializers.ListField(child=Sport_SkillLevel())
    name = serializers.CharField(min_length=2, max_length = 30, validattors = [english_dot])
-   password = serializers.CharField(min_length = 8, max_length = 15, validators = [password])
    date = serializers.DateField(validators = [date])
    gender =serializers.CharField(validators = [gender])
