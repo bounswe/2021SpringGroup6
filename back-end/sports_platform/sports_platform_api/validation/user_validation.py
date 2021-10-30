@@ -7,5 +7,5 @@ class Sport_SkillLevel(serializers.Serializer):
 
 class User(serializers.Serializer):
    email = serializers.EmailField(required=True)
-   surname = serializers.CharField(min_length = 2, max_length = 30, validators = [english_dot])
+   familyName = serializers.CharField(min_length = 2, max_length = 30, validators = [english_dot])
    sports = serializers.ListField(child=Sport_SkillLevel())
