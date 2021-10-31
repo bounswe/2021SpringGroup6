@@ -12,9 +12,13 @@ class User(models.Model):
    gender = models.SmallIntegerField(blank=True, null=True)
 
 
-
-
 class SportSkillLevel(models.Model):
     user_id = models.ForeignKey('User', on_delete=models.CASCADE)
     sport_id = models.ForeignKey('Sport', on_delete=models.CASCADE)
     skill_level = models.SmallIntegerField()
+
+
+class Block(models.Model):
+    blocker = models.ForeignKey('User', on_delete=models.CASCADE)
+    blocked = models.ForeignKey('User', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
