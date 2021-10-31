@@ -3,7 +3,7 @@ from django.db import models
 
 class User(models.Model):
    user_id = models.BigAutoField(primary_key=True)
-   email = models.CharField(max_length=60)
+   email = models.EmailField()
    password = models.CharField(max_length=30)
    identifier = models.CharField(max_length=30)
    name = models.CharField(max_length=30,blank=True)
@@ -12,9 +12,6 @@ class User(models.Model):
    gender = models.SmallIntegerField(blank=True, null=True)
 
 
-class Sport(models.Model):
-    sport_id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=30)
 
 
 class SportSkillLevel(models.Model):
