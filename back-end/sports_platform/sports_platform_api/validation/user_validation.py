@@ -15,3 +15,6 @@ class User(serializers.Serializer):
    date = serializers.DateField(validators = [date])
    gender =serializers.CharField(validators = [gender])
 
+
+class Block(serializers.Serializer):
+    date = serializers.DateField(validators = [date])
