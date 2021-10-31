@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-import .views
 
 # here we will add base urls for each application(in our case it corresponds to each type, e.g event and user)
 urlpatterns = [
