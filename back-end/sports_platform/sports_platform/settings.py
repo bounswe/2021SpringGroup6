@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'sports_platform_api.apps.SportsPlatformApiConfig'
 ]
 
+AUTH_USER_MODEL = 'sports_platform_api.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
