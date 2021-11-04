@@ -5,11 +5,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
 
 
+
 function Header() {
     return (
        <div>
            {/* From https://react-bootstrap.github.io/components/navbar/ */}
-           <Navbar bg="light" expand="lg">
+           <Navbar className="header" bg="info" expand="lg">
                 <Container>
                     <Navbar.Brand href="#home">Project Name</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
