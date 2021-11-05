@@ -78,8 +78,8 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
-    def add_sport_interest(self, sport_id, skill_level):
-        SportSkillLevel.objects.create(user_id_id=self.user_id,sport_id_id=sport_id, skill_level=skill_level)
+    def add_sport_interest(self, sport_name, skill_level):
+        SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
 
 
 class SportSkillLevel(models.Model):
