@@ -17,8 +17,8 @@ class User(serializers.Serializer):
    gender =serializers.CharField(validators = [gender])
 
 class Login(serializers.Serializer):
-    identifier = serializers.CharField(min_length = 3, max_length = 15, validators = [english_dot_number])
-    password = serializers.CharField(min_length = 8, max_length = 15, validators = [password])
+    identifier = serializers.CharField(min_length = 3, max_length = 15, validators = [english_dot_number], required= True)
+    password = serializers.CharField(min_length = 8, max_length = 15, validators = [password], required = True)
 
 class Block(serializers.Serializer):
     date = serializers.DateField(validators = [date])
