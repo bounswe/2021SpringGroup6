@@ -1,5 +1,4 @@
-import re 
-
+from django.db.utils import IntegrityError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -21,6 +20,8 @@ def create_user(request):
         guest.register(db_data)
     except ValueError:
         return Response('There is an error regarding the provided data', status=400)
+    except IntegrityError:
+        return Response('Username is already taken.', status=400)
     except Exception:
         return Response('There is an internal error, try again later.', status=500)
     return Response(status=201)
