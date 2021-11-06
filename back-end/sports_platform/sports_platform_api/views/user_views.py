@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import re 
 
 from rest_framework.decorators import api_view
@@ -13,13 +12,7 @@ def create_user(request):
     validation = user_validation.User(data=request.data)
     if not validation.is_valid():
         return Response(validation.errors, status=400)
-    if 'password' not in request.data:
-        return Response('Password must be provided', status=400)
-    if 'identifier' not in request.data:
-        return Response('Identifier must be provided', status=400)
-    password = request.data['password']
-    if not(re.search(r'^[a-zA-Z\._\*]*$', password) and (len(password)>=8) and (len(password)<=15)):
-        return Response('Password Requirements are not satisfied', status=400)
+    password = validation.data['password']
 
     try:
         db_data = request.data.copy()
@@ -31,22 +24,9 @@ def create_user(request):
     except Exception:
         return Response('There is an internal error, try again later.', status=500)
     return Response(status=201)
-=======
-from django.contrib.auth.hashers import identify_hasher
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from ..validation import user_validation
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from ..models import User
-from ..controllers import Guest
-import re
-
 
 @api_view(['POST'])
 def login(request):
-
     if request.user.is_authenticated:
         return Response(data= {"message": "Already logged in, logout first."}, status=400)
 
@@ -65,6 +45,3 @@ def login(request):
             return Response(data={"message": "Check credentials."}, status=403)
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
-
-    
->>>>>>> dd6603c563e27d8f1ad271c05af7ee3af044b6ac
