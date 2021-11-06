@@ -18,5 +18,5 @@ from django.urls import path, include
 # here we will add base urls for each application(in our case it corresponds to each type, e.g event and user)
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('sports_platform_api.urls'))
+    path('', include('sports_platform_api.urls')),
 ]

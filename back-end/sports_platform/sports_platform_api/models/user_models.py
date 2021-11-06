@@ -98,3 +98,11 @@ class Block(models.Model):
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
+
+class Follow(models.Model):
+    class Meta:
+        db_table = 'follow'
+
+    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
