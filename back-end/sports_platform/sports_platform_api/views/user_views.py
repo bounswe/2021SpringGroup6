@@ -30,7 +30,6 @@ def login(request):
         else:
             return Response(data={"message": "Check credentials."}, status=403)
     except Exception as e:
-        print(e)
         return Response(data={"message": "Try later."}, status=500)
 
     
