@@ -24,7 +24,6 @@ class UserManager(BaseUserManager):
         identifier = GlobalUserModel.normalize_username(identifier)
         user = self.model(identifier=identifier, email=email, **extra_fields)
         user.password = make_password(password)
-        user.save(using=self._db)
         return user
 
     def create_user(self, identifier, email, password, **extra_fields):
@@ -79,13 +78,16 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
+    def add_sport_interest(self, sport_name, skill_level):
+        SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
+
 
 class SportSkillLevel(models.Model):
     class Meta:
         db_table = 'sport_skill_level'
 
-    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
-    sport_id = models.ForeignKey('Sport', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     skill_level = models.SmallIntegerField()
 
 
@@ -95,4 +97,12 @@ class Block(models.Model):
 
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+
+class Follow(models.Model):
+    class Meta:
+        db_table = 'follow'
+
+    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
