@@ -13,16 +13,10 @@ def get_user(request, user_id):
     try:    
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        return Response('User id does not exist', status=400)
+        return Response(data={"message": 'User id does not exist'}, status=400)
     except Exception:
-        return Response('An error occured, please try again later.', status=500)
+        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
     
-    try:
-        sports = User.objects.filter(email='1@s.com')
-        print(type(sports))
-        print(sports)
-    except:
-        pass
     serialized_user = UserSerializer(user).data
     # drop last_login field that we  do not use
     serialized_user.pop('last_login')
