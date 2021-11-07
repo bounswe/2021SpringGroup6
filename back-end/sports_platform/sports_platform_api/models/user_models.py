@@ -3,7 +3,8 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-
+import datetime
+from django.db import IntegrityError
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -59,6 +60,13 @@ class UserManager(BaseUserManager):
             )
         return self.none()
 
+class Follow(models.Model):
+    class Meta:
+        db_table = 'follow'
+
+    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
 
 class User(AbstractBaseUser):
     class Meta:
@@ -79,6 +87,16 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
+    def follow(self, user_id):
+        date = datetime.datetime.now()
+        try:
+            Follow.objects.create(follower = self.id, following = user_id, date = date)
+            return True
+        except IntegrityError as e:
+            return 400
+        except Exception as e:
+            return 403
+
 
 class SportSkillLevel(models.Model):
     class Meta:
@@ -97,10 +115,3 @@ class Block(models.Model):
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
 
-class Follow(models.Model):
-    class Meta:
-        db_table = 'follow'
-
-    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
-    date = models.DateField(blank=True, null=True)
