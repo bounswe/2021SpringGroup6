@@ -102,6 +102,15 @@ class User(AbstractBaseUser):
             print(e)
             return 500
 
+    def unfollow(self, user_id):
+        try:
+            num_deleted, _ = Follow.objects.filter(follower = self.user_id, following = user_id).delete()
+            if num_deleted == 0:
+                return 403
+        except Exception as e:
+            print(e)
+            return 500
+
 
 class SportSkillLevel(models.Model):
     class Meta:
