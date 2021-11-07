@@ -63,6 +63,7 @@ class UserManager(BaseUserManager):
 class Follow(models.Model):
     class Meta:
         db_table = 'follow'
+        unique_together = (('follower', 'following'),)
 
     follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
     following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
@@ -94,7 +95,9 @@ class User(AbstractBaseUser):
             Follow.objects.create(follower = self, following = to_follow, date = date)
             return True
         except User.DoesNotExist:
-            return 400
+            return 401
+        except IntegrityError as e:
+            return 402
         except Exception as e:
             print(e)
             return 500
