@@ -90,12 +90,14 @@ class User(AbstractBaseUser):
     def follow(self, user_id):
         date = datetime.datetime.now()
         try:
-            Follow.objects.create(follower = self.id, following = user_id, date = date)
+            to_follow = User.objects.get(user_id=user_id)
+            Follow.objects.create(follower = self, following = to_follow, date = date)
             return True
-        except IntegrityError as e:
+        except User.DoesNotExist:
             return 400
         except Exception as e:
-            return 403
+            print(e)
+            return 500
 
 
 class SportSkillLevel(models.Model):
