@@ -1,7 +1,6 @@
 from django.db.utils import IntegrityError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 from ..controllers.guest import Guest
 from ..validation import user_validation
 
@@ -10,7 +9,7 @@ from ..validation import user_validation
 def create_user(request):    
     validation = user_validation.User(data=request.data)
     if not validation.is_valid():
-        return Response(validation.errors, status=400)
+        return Response(data = {"message": validation.errors}, status=400)
     password = validation.data['password']
 
     try:
@@ -19,11 +18,11 @@ def create_user(request):
         guest= Guest(db_data['email'], password)
         guest.register(db_data)
     except ValueError:
-        return Response('There is an error regarding the provided data', status=400)
+        return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError:
-        return Response('Username is already taken.', status=400)
+        return Response(data = {"message": 'Username is already taken.'}, status=400)
     except Exception:
-        return Response('There is an internal error, try again later.', status=500)
+        return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
     return Response(status=201)
 
 @api_view(['POST'])
