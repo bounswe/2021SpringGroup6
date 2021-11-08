@@ -38,7 +38,7 @@ def create_user(request):
     try:
         db_data = request.data.copy()
         db_data.update(validation.data) # get validated value if it has
-        guest= Guest(db_data['email'], password)
+        guest= Guest(db_data['identifier'], password)
         guest.register(db_data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)

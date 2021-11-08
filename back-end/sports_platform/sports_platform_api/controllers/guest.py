@@ -25,3 +25,4 @@ class Guest:
                     user.add_sport_interest(skills['sport'], skills['skill_level'])
             except Exception as e:
                 raise e
+        return user
