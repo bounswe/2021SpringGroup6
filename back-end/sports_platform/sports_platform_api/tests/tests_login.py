@@ -2,15 +2,19 @@ from django.test import Client, TestCase
 from ..models import User
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-
+from .test_helper_functions import create_mock_user
 
 class LoginTest(TestCase):
 
     def setUp(self):
         self.client = Client()
 
-        self.lion_user = User.objects.create_user(identifier="lion", password="roarroar", email="lion@roar.com")
-        self.cat_user = User.objects.create_user(identifier="cat", password="meowmeow", email="cat@meow.com")
+        lion_info = {'identifier': 'lion', 'password': 'roarroar', 'email': 'lion@roar.com'}
+        cat_info = {'identifier': 'cat', 'password': 'meowmeow', 'email': 'cat@meow.com'}
+
+
+        self.lion_user = create_mock_user(lion_info)
+        self.cat_user = create_mock_user(cat_info)
 
         self.lion_token, _ = Token.objects.get_or_create(user=self.lion_user)
         self.cat_token, _ = Token.objects.get_or_create(user=self.cat_user)
