@@ -1,15 +1,18 @@
+from django.db.utils import IntegrityError
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from ..controllers.guest import Guest
-from ..models.user_models import User
+from ..controllers import Guest
+from ..models import User
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
-from django.db.utils import IntegrityError
 
 
 @api_view(['GET'])
 def get_user(request, user_id):
+    if not request.user.is_authenticated:
+        return Response(data={'message': 'User is not logged in, first you need to login'}, status=401)
     try:    
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -48,7 +51,7 @@ def create_user(request):
 @api_view(['POST'])
 def login(request):
     if request.user.is_authenticated:
-        return Response(data= {"message": "Already logged in, logout first."}, status=400)
+        return Response(data= {"message": "Already logged in."}, status=400)
 
     validation = user_validation.Login(data = request.data)
     if not validation.is_valid():
@@ -60,7 +63,8 @@ def login(request):
     try:
         user = guest.login()
         if user is not None:
-            return Response(status=200)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response(data={"token": token.key},status=200)
         else:
             return Response(data={"message": "Check credentials."}, status=403)
     except Exception as e:
