@@ -49,6 +49,7 @@ REST_FRAMEWORK = {
     )
 }
 
+
 AUTH_USER_MODEL = 'sports_platform_api.User'
 
 MIDDLEWARE = [
