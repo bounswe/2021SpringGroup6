@@ -18,6 +18,7 @@ class GetUserTest(TestCase):
         self.serialzed_retrieved_user.pop('last_login')
         self.serialzed_retrieved_user['@context'] = 'https://schema.org/Person'
         self.serialzed_retrieved_user['@id'] = self.serialzed_retrieved_user['user_id']
+        self.serialzed_retrieved_user['sports'] = []
 
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.getting_user_token}'}
         self.path = f'/users/{self.serialzed_retrieved_user["user_id"]}'

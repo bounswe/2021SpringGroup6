@@ -80,11 +80,16 @@ class User(AbstractBaseUser):
 
     def add_sport_interest(self, sport_name, skill_level):
         SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
+    
+    def get_sport_skills(self):
+        skills = SportSkillLevel.objects.filter(user=self.user_id)
+        return [{"sport": skill.sport_id, "skill_level":skill.skill_level} for skill in skills]
 
 
 class SportSkillLevel(models.Model):
     class Meta:
         db_table = 'sport_skill_level'
+        unique_together = (('user', 'sport'),)
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)

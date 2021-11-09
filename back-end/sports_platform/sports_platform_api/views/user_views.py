@@ -13,8 +13,9 @@ from ..validation import user_validation
 def get_user(request, user_id):
     if not request.user.is_authenticated:
         return Response(data={'message': 'User is not logged in, first you need to login'}, status=401)
-    try:    
+    try:
         user = User.objects.get(pk=user_id)
+        sports = user.get_sport_skills()
     except User.DoesNotExist:
         return Response(data={"message": 'User id does not exist'}, status=400)
     except Exception:
@@ -26,6 +27,9 @@ def get_user(request, user_id):
     # add activity stream data
     serialized_user['@context'] = 'https://schema.org/Person'
     serialized_user['@id'] = user.user_id
+    serialized_user['sports'] = sports
+    if user_id != request.user.user_id:
+        pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
     return Response(serialized_user,status=200)
 
 @api_view(['POST'])
@@ -42,7 +46,8 @@ def create_user(request):
         guest.register(db_data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
-    except IntegrityError:
+    except IntegrityError as e:
+        print(e)
         return Response(data = {"message": 'Username is already taken.'}, status=400)
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
