@@ -44,11 +44,11 @@ INSTALLED_APPS = [
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':(
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'EXCEPTION_HANDLER': 'sports_platform_api.auth.custom_exception_handler'
 }
-
 
 AUTH_USER_MODEL = 'sports_platform_api.User'
 
