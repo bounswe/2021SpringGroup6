@@ -28,10 +28,10 @@ class RegisterTest(TestCase):
         self.request_body['name']='HATİCE'
         response = self.client.post('/users',self.request_body)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['name'][0],'Only English characters and . are allowed.')
+        self.assertEqual(response.json()['message']['name'][0],'Only English characters and . are allowed. Cannot start or end with .')
     
     def test_invalid_password(self):
         self.request_body['password']='qwerty'
         response = self.client.post('/users',self.request_body)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json(),'Password Requirements are not satisfied')
+        self.assertEqual(response.json()['message']['password'][0],'Ensure this field has at least 8 characters.')
