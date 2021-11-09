@@ -36,4 +36,4 @@ class RegisterTest(TestCase):
         self.request_body['password']='qwerty'
         response = self.client.post(self.path,self.request_body)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()['message']['password'], ['Ensure this field has at least 8 characters.'])
+        self.assertEqual(response.json()['message']['password'][0],'Ensure this field has at least 8 characters.')
