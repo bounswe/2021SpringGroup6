@@ -5,9 +5,6 @@ from ..models import Sport
 
 @api_view(['GET'])
 def get_sports(request):    
-    if not request.user.is_authenticated:
-        return Response(data={'message': 'User is not logged in, first you need to login'}, status=401)
-    
     try:
         sports = Sport.objects.all()
     except Exception:
