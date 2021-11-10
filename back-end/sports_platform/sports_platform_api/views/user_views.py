@@ -58,7 +58,7 @@ def logout(request):
     
     if not request.user.is_authenticated:
         return Response({"message": "User not logged in."},
-                        status=200)
+                        status=401)
     try:
         request.user.auth_token.delete()
         django.contrib.auth.logout(request)
