@@ -47,7 +47,6 @@ def create_user(request):
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError as e:
-        print(e)
         return Response(data = {"message": 'Username is already taken.'}, status=400)
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
