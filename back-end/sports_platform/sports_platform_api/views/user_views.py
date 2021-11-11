@@ -74,3 +74,20 @@ def login(request):
             return Response(data={"message": "Check credentials."}, status=403)
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
+
+@api_view(['POST'])
+def logout(request):
+    
+    if not request.user.is_authenticated:
+        return Response({"message": "User not logged in."},
+                        status=401)
+    try:
+        request.user.auth_token.delete()
+        django.contrib.auth.logout(request)
+
+    except Exception as e:
+        return Response({"message": "Try again."},
+                        status=500)
+
+    return Response({"message": "Successfully logged out."},
+                    status=200)
