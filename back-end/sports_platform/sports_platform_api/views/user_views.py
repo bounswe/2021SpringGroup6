@@ -11,8 +11,6 @@ from ..validation import user_validation
 
 @api_view(['GET'])
 def get_user(request, user_id):
-    if not request.user.is_authenticated:
-        return Response(data={'message': 'User is not logged in, first you need to login'}, status=401)
     try:
         user = User.objects.get(pk=user_id)
         sports = user.get_sport_skills()
@@ -27,7 +25,9 @@ def get_user(request, user_id):
     # add activity stream data
     serialized_user['@context'] = 'https://schema.org/Person'
     serialized_user['@id'] = user.user_id
-    serialized_user['sports'] = sports
+    serialized_user['@type'] = 'Person'
+
+    serialized_user['knowsAbout'] = sports
     if user_id != request.user.user_id:
         pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
     return Response(serialized_user,status=200)

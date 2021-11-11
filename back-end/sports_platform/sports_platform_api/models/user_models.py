@@ -83,7 +83,7 @@ class User(AbstractBaseUser):
     
     def get_sport_skills(self):
         skills = SportSkillLevel.objects.filter(user=self.user_id)
-        return [{"sport": skill.sport_id, "skill_level":skill.skill_level} for skill in skills]
+        return [{"@type":"PropertyValue","name": skill.sport_id, "value":skill.skill_level} for skill in skills]
 
 
 class SportSkillLevel(models.Model):

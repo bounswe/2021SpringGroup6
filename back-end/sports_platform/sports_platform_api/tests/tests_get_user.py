@@ -18,16 +18,11 @@ class GetUserTest(TestCase):
         self.serialzed_retrieved_user.pop('last_login')
         self.serialzed_retrieved_user['@context'] = 'https://schema.org/Person'
         self.serialzed_retrieved_user['@id'] = self.serialzed_retrieved_user['user_id']
-        self.serialzed_retrieved_user['sports'] = []
+        self.serialzed_retrieved_user['knowsAbout'] = []
 
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.getting_user_token}'}
         self.path = f'/users/{self.serialzed_retrieved_user["user_id"]}'
         self.invalid_user_path = f'/users/{100}'
-
-    def test_unauthorized(self):
-        response = self.client.get(self.path)
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json()['message'], 'User is not logged in, first you need to login')
 
     def test_user_not_exist(self):
         response = self.client.get(self.invalid_user_path,**self.header)
