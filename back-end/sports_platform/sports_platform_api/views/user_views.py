@@ -73,6 +73,24 @@ def login(request):
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
 
+
+@api_view(['POST'])
+def logout(request):
+
+    if not request.user.is_authenticated:
+        return Response({"message": "User not logged in."},
+                        status=401)
+    try:
+        request.user.auth_token.delete()
+        django.contrib.auth.logout(request)
+
+    except Exception as e:
+        return Response({"message": "Try again."},
+                        status=500)
+
+    return Response({"message": "Successfully logged out."},
+                    status=200)
+
 @api_view(['POST'])
 def follow_user(request, user_id):
 
@@ -138,6 +156,7 @@ def unfollow_user(request, user_id):
 
     except Exception as e:
         return Response(data=str(e), status=500)
+
 @api_view(['GET'])
 def get_following(request, user_id):
 
