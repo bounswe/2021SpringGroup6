@@ -91,22 +91,22 @@ def follow_user(request, user_id):
     user_to_follow = validation.validated_data['user_id']
 
     if user_to_follow == current_user.user_id:
-        return Response(data={"message": "User cannot follow itself."}, status=400)  
+        return Response(data={"message": "User cannot follow itself."}, status=400)
 
     try:
         res = current_user.follow(user_to_follow)
 
         if res == 401:
-            return Response(data={"message": "Enter a valid user_id to follow."}, status=400)  
+            return Response(data={"message": "Enter a valid user_id to follow."}, status=400)
         elif res == 402:
-            return Response(data={"message": "User already followed."}, status=400)  
+            return Response(data={"message": "User already followed."}, status=400)
         elif res == 500:
             return Response(data={"message": "Try later."}, status=500)
         else:
-            return Response(status=200) 
+            return Response(status=200)
 
     except Exception as e:
-        return Response(data=str(e), status=500) 
+        return Response(data=str(e), status=500)
 
 
 @api_view(['POST'])
@@ -123,21 +123,21 @@ def unfollow_user(request, user_id):
     validation = user_validation.Follow(data=request.data)
     if not validation.is_valid():
         return Response(validation.errors, status=400)
-    
-    user_to_follow = validation.validated_data['user_id']
+
+    user_to_unfollow = validation.validated_data['user_id']
 
     try:
-        res = current_user.unfollow(user_to_follow)
+        res = current_user.unfollow(user_to_unfollow)
 
         if res == 403:
-            return Response(data={"message": "Enter a valid user_id to unfollow."}, status=400)  
+            return Response(data={"message": "Enter a valid user_id to unfollow."}, status=400)
         elif res == 500:
             return Response(data={"message": "Try later."}, status=500)
         else:
-            return Response(status=200) 
+            return Response(status=200)
 
     except Exception as e:
-        return Response(data=str(e), status=500)  
+        return Response(data=str(e), status=500)
 @api_view(['GET'])
 def get_following(request, user_id):
 
