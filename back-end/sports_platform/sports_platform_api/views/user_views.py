@@ -172,3 +172,24 @@ def logout(request):
     return Response({"message": "Successfully logged out."},
                     status=200)
 
+@api_view(['GET'])
+def get_follower(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=403)
+
+    try:
+        user_followed = User.objects.get(user_id=user_id)
+
+        follower = user_followed.get_follower()
+
+        if follower == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data=follower, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
+    except Exception as e:
+        return Response(data={"message": "Try later."}, status=500)
