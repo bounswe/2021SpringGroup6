@@ -25,7 +25,6 @@ class UserManager(BaseUserManager):
         identifier = GlobalUserModel.normalize_username(identifier)
         user = self.model(identifier=identifier, email=email, **extra_fields)
         user.password = make_password(password)
-        user.save(using=self._db)
         return user
 
     def create_user(self, identifier, email, password, **extra_fields):
@@ -88,6 +87,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
+
     def follow(self, user_id):
         date = datetime.datetime.now()
         try:
@@ -111,13 +111,22 @@ class User(AbstractBaseUser):
             print(e)
             return 500
 
+    def add_sport_interest(self, sport_name, skill_level):
+        SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
+    
+    def get_sport_skills(self):
+        skills = SportSkillLevel.objects.filter(user=self.user_id)
+        return [{"@type":"PropertyValue","name": skill.sport_id, "value":skill.skill_level} for skill in skills]
+
+
 
 class SportSkillLevel(models.Model):
     class Meta:
         db_table = 'sport_skill_level'
+        unique_together = (('user', 'sport'),)
 
-    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
-    sport_id = models.ForeignKey('Sport', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     skill_level = models.SmallIntegerField()
 
 
