@@ -119,6 +119,42 @@ class User(AbstractBaseUser):
         return [{"@type":"PropertyValue","name": skill.sport_id, "value":skill.skill_level} for skill in skills]
 
 
+    def get_following(self):
+        try:
+            following = self.following.all()
+
+            data_dict = dict()
+            data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+            data_dict['summary'] = f"{self.identifier}'s following activities."
+            data_dict['type'] = "Collection"
+            data_dict['total_items'] = len(following)
+            data_dict['items'] = []
+
+            for following_user in following:
+                one_follow = dict()
+                one_follow['@context'] = "https://www.w3.org/ns/activitystreams"
+                one_follow['summary'] = f"{self.identifier} followed {following_user.following.identifier}"
+                one_follow['type'] = "Follow"
+
+                one_follow['actor'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  self.user_id,
+                    "identifier": self.identifier
+                }
+
+                one_follow['object'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  following_user.following.user_id,
+                    "identifier": following_user.following.identifier
+                }
+
+                data_dict['items'].append(one_follow)
+
+            return data_dict
+        except Exception as e:
+            print(e)
+            return 500
+
 
 class SportSkillLevel(models.Model):
     class Meta:
