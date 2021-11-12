@@ -138,6 +138,13 @@ def unfollow_user(request, user_id):
 
     except Exception as e:
         return Response(data=str(e), status=500)  
+@api_view(['GET'])
+def get_following(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=403)
 
 def logout(request):
     
@@ -147,10 +154,20 @@ def logout(request):
     try:
         request.user.auth_token.delete()
         django.contrib.auth.logout(request)
+        user_following = User.objects.get(user_id=user_id)
 
+        following = user_following.get_following()
+
+        if following == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data = following, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
         return Response({"message": "Try again."},
                         status=500)
+        return Response(data={"message": "Try later."}, status=500)
 
     return Response({"message": "Successfully logged out."},
                     status=200)
