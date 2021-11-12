@@ -146,14 +146,7 @@ def get_following(request, user_id):
     if not current_user.is_authenticated:
         return Response(data={"message": "Login required."}, status=403)
 
-def logout(request):
-    
-    if not request.user.is_authenticated:
-        return Response({"message": "User not logged in."},
-                        status=401)
     try:
-        request.user.auth_token.delete()
-        django.contrib.auth.logout(request)
         user_following = User.objects.get(user_id=user_id)
 
         following = user_following.get_following()
@@ -165,12 +158,8 @@ def logout(request):
     except User.DoesNotExist:
         return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
-        return Response({"message": "Try again."},
-                        status=500)
         return Response(data={"message": "Try later."}, status=500)
 
-    return Response({"message": "Successfully logged out."},
-                    status=200)
 
 @api_view(['GET'])
 def get_follower(request, user_id):
