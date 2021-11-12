@@ -155,6 +155,42 @@ class User(AbstractBaseUser):
             print(e)
             return 500
 
+    def get_follower(self):
+        try:
+            follower = self.follower.all()
+
+            data_dict = dict()
+            data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+            data_dict['summary'] = f"{self.identifier}'s being followed activities."
+            data_dict['type'] = "Collection"
+            data_dict['total_items'] = len(follower)
+            data_dict['items'] = []
+
+            for follower_user in follower:
+                one_follow = dict()
+                one_follow['@context'] = "https://www.w3.org/ns/activitystreams"
+                one_follow['summary'] = f"{follower_user.follower.identifier} followed {self.identifier}"
+                one_follow['type'] = "Follow"
+
+                one_follow['actor'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  follower_user.follower.user_id,
+                    "identifier": follower_user.follower.identifier
+                }
+
+                one_follow['object'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  self.user_id,
+                    "identifier": self.identifier
+                }
+
+                data_dict['items'].append(one_follow)
+
+            return data_dict
+        except Exception as e:
+            return 500
+
+
 
 class SportSkillLevel(models.Model):
     class Meta:
