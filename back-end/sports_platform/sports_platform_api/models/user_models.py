@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
         db_table = 'users'
 
     user_id = models.BigAutoField(primary_key=True)
-    email = models.EmailField()
+    email = models.EmailField(uniqıe=True)
     password = models.CharField(max_length=300)
     identifier = models.CharField(max_length=300, unique=True)
     name = models.CharField(max_length=300,blank=True)
