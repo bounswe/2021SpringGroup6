@@ -2,6 +2,8 @@ import {Fragment, useEffect} from 'react'
 import './App.css';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
+import PasswordChange from './PasswordChange';
+import PasswordReset from './PasswordReset';
 import Footer from './PermanentComponents/Footer';
 import {Row, Col} from 'react-bootstrap'
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
