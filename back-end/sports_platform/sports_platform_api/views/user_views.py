@@ -2,7 +2,7 @@ from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+import django.contrib.auth 
 from ..controllers import Guest
 from ..models import User
 from ..serializers.user_serializer import UserSerializer
@@ -28,6 +28,7 @@ def get_user(request, user_id):
         serialized_user['@id'] = user.user_id
         serialized_user['@type'] = 'Person'
 
+<<<<<<< HEAD
         serialized_user['knowsAbout'] = sports
         if user_id != request.user.user_id:
             pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
@@ -51,6 +52,15 @@ def get_user(request, user_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
              
         
+=======
+    serialized_user['knowsAbout'] = sports
+    if (request.user.is_authenticated) and (user_id == request.user.user_id):
+        return Response(serialized_user,status=200)
+    else:
+        # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
+        return Response(serialized_user,status=200)  
+    
+>>>>>>> 0db3c0eea6c38ead9bcbb18af487e65a2507bb92
 
 @api_view(['POST'])
 def create_user(request):    
