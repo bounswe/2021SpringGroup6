@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -46,11 +47,21 @@ def create_user(request):
         db_data = request.data.copy()
         db_data.update(validation.data) # get validated value if it has
         guest= Guest(db_data['identifier'], password)
-        guest.register(db_data)
+        with transaction.atomic():
+            guest.register(db_data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError as e:
-        return Response(data = {"message": 'Username is already taken.'}, status=400)
+        if 'sport' in str(e.__cause__):
+            response_message = 'Given sport is not supported.'
+        elif 'identifier' in str(e.__cause__):
+            response_message = 'Username is already taken'
+        elif 'email' in str(e.__cause__):
+            response_message = 'Email is already taken'
+        else:
+            response_message = 'There is an integrity error.'
+        
+        return Response(data = {"message": response_message}, status=400)
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
     return Response(status=201)
@@ -92,4 +103,38 @@ def logout(request):
                         status=500)
 
     return Response({"message": "Successfully logged out."},
+                    status=200)
+
+
+@api_view(['POST'])
+def forgot_password(request):
+
+    if request.user.is_authenticated:
+        return Response({"message": "Already logged in use change password on settings instead."},
+                        status=401)
+
+    validation = user_validation.Recover(data=request.data)
+    
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    try:
+        validated_data = validation.validated_data
+        guest = Guest(None, None)
+
+        res = guest.forget_password(validated_data['email'])
+
+        if res == 100:
+            # No user with email
+            return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
+                            status=200)
+        elif res == 500:
+            return Response({"message": "Try again."},
+                            status=500)
+
+    except Exception as e:
+        return Response({"message": "Try again."},
+                        status=500)
+
+    return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
                     status=200)
