@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import django.contrib.auth 
 from ..controllers import Guest
-from ..models import User
+from ..models import User, SportSkillLevel
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
 
@@ -28,9 +28,8 @@ def get_user(request, user_id):
         serialized_user['@context'] = 'https://schema.org/Person'
         serialized_user['@id'] = user.user_id
         serialized_user['@type'] = 'Person'
-
-<<<<<<< HEAD
         serialized_user['knowsAbout'] = sports
+        
         if user_id != request.user.user_id:
             pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
         return Response(serialized_user,status=200)
@@ -44,24 +43,13 @@ def get_user(request, user_id):
         try:
             sport_data = validation.data['sports'] if 'sports' in validation.data else None
             update_info = {k:v for k,v in validation.data.items() if k!='sports'}
-            User.objects.filter(pk=request.user.user_id).update(**update_info)
-            if sport_data:
-                for skills in sport_data:
-                    request.user.add_sport_interest(skills['sport'], skills['skill_level'])
+            with transaction.atomic():
+                request.user.update(sport_data, update_info)
             return Response(status=200)
         except Exception:
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
              
         
-=======
-    serialized_user['knowsAbout'] = sports
-    if (request.user.is_authenticated) and (user_id == request.user.user_id):
-        return Response(serialized_user,status=200)
-    else:
-        # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
-        return Response(serialized_user,status=200)  
-    
->>>>>>> 0db3c0eea6c38ead9bcbb18af487e65a2507bb92
 
 @api_view(['POST'])
 def create_user(request):    
