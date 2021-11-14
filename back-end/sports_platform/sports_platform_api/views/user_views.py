@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -73,11 +74,21 @@ def create_user(request):
         db_data = request.data.copy()
         db_data.update(validation.data) # get validated value if it has
         guest= Guest(db_data['identifier'], password)
-        guest.register(db_data)
+        with transaction.atomic():
+            guest.register(db_data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError as e:
-        return Response(data = {"message": 'Username is already taken.'}, status=400)
+        if 'sport' in str(e.__cause__):
+            response_message = 'Given sport is not supported.'
+        elif 'identifier' in str(e.__cause__):
+            response_message = 'Username is already taken'
+        elif 'email' in str(e.__cause__):
+            response_message = 'Email is already taken'
+        else:
+            response_message = 'There is an integrity error.'
+        
+        return Response(data = {"message": response_message}, status=400)
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
     return Response(status=201)
