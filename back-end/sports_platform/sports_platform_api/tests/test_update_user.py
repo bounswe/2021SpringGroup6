@@ -8,7 +8,7 @@ class UpdateUserTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = create_mock_user({'identifier':'lion', 'password': 'roarroar', 'email': 'lion@roar.com'})
-        self.user_token, _ = Token.objects.get_or_create(user=self.getting_user)
+        self.user_token, _ = Token.objects.get_or_create(user=self.user)
         self.update_info = {'name':'berk','familyName':'atil'}
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.user_token}'}
         self.path = f'/users/{self.user.user_id}'
