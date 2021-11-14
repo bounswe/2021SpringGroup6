@@ -30,9 +30,11 @@ def get_user(request, user_id):
         serialized_user['@type'] = 'Person'
         serialized_user['knowsAbout'] = sports
         
-        if user_id != request.user.user_id:
-            pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
-        return Response(serialized_user,status=200)
+        if (request.user.is_authenticated) and (user_id == request.user.user_id):
+            return Response(serialized_user,status=200)
+        else:
+        # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
+            return Response(serialized_user,status=200)  
     elif request.method == 'PUT':
         if not request.user.is_authenticated:
             return Response({"message": "User not logged in."},
