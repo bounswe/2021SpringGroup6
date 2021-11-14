@@ -70,7 +70,7 @@ class User(AbstractBaseUser):
     name = models.CharField(max_length=300,blank=True)
     familyName = models.CharField(max_length=30,blank=True)
     birthDate = models.DateField(blank=True, null=True)
-    gender = models.SmallIntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=40,blank=True, null=True)
 
     objects = UserManager()
 
