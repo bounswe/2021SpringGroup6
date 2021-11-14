@@ -43,7 +43,7 @@ class LogoutTest(TestCase):
         response = self.client.post(
             self.path, content_type='application/json')
         self.assertEqual(response.data, self.response_bodies[test_type])
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
 
     def test_success(self):
         test_type = 'success'
