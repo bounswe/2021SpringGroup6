@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from .test_helper_functions import create_mock_user
 from django.core import mail
 
-class LoginTest(TestCase):
+class RecoverTest(TestCase):
 
     def setUp(self):
         self.client = Client()
