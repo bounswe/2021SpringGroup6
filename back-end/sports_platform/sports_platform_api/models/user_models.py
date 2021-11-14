@@ -73,13 +73,13 @@ class User(AbstractBaseUser):
         db_table = 'users'
 
     user_id = models.BigAutoField(primary_key=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=300)
     identifier = models.CharField(max_length=300, unique=True)
     name = models.CharField(max_length=300,blank=True)
     familyName = models.CharField(max_length=30,blank=True)
     birthDate = models.DateField(blank=True, null=True)
-    gender = models.SmallIntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=40,blank=True, null=True)
 
     objects = UserManager()
 
@@ -209,4 +209,5 @@ class Block(models.Model):
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
+
 

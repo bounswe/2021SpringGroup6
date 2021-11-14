@@ -6,6 +6,7 @@ urlpatterns = [
     path('users/<int:user_id>/follower', user_views.follow_user),
     path('users/<int:user_id>/following', user_views.get_following),
     path('users', user_views.create_user),
-    path('users/<int:user_id>', user_views.get_user),
-    path('users/logout', user_views.logout)
+    path('users/logout', user_views.logout),
+    path('users/recover', user_views.forgot_password),
+    path('users/<int:user_id>', user_views.get_user)
 ]
