@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SportsPlatform</string>
+    <string name="title">Sports Platform</string>
+    <string name="paragraph">Sport</string>
+    <string name="login">Login</string>
+    <string name="Email">Email</string>
+</resources>
