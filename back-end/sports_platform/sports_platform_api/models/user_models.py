@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
         db_table = 'users'
 
     user_id = models.BigAutoField(primary_key=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=300)
     identifier = models.CharField(max_length=300, unique=True)
     name = models.CharField(max_length=300,blank=True)
@@ -80,11 +80,16 @@ class User(AbstractBaseUser):
 
     def add_sport_interest(self, sport_name, skill_level):
         SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
+    
+    def get_sport_skills(self):
+        skills = SportSkillLevel.objects.filter(user=self.user_id)
+        return [{"@type":"PropertyValue","name": skill.sport_id, "value":skill.skill_level} for skill in skills]
 
 
 class SportSkillLevel(models.Model):
     class Meta:
         db_table = 'sport_skill_level'
+        unique_together = (('user', 'sport'),)
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
