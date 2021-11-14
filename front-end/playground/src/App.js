@@ -1,8 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 import Footer from './PermanentComponents/Footer';
+import Login from './pages/Login/Login';
  
  
 
@@ -17,6 +17,7 @@ function App() {
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         Main Content <br />
       </h1>
+      <Login/>
       <Footer />
     </div>
   );
