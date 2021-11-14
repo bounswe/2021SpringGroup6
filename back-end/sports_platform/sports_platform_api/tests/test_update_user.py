@@ -20,5 +20,5 @@ class UpdateUserTest(TestCase):
         self.assertEqual(response.json()['message'],'User not logged in.')
 
     def test_success(self):
-        response = self.client.put(self.path, data=self.update_info, **self.header)
+        response = self.client.put(self.path,content_type='application/json', data=self.update_info, **self.header)
         self.assertEqual(response.status_code, 200)
