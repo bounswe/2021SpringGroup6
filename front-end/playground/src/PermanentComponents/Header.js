@@ -12,7 +12,7 @@ function Header() {
            {/* From https://react-bootstrap.github.io/components/navbar/ */}
            <Navbar className="header" bg="info" expand="lg">
                 <Container>
-                    <Navbar.Brand href="#home">Project Name</Navbar.Brand>
+                    <Navbar.Brand href="#home">Squad Game</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">

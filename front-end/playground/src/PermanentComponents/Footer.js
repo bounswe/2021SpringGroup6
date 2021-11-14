@@ -1,13 +1,16 @@
-import React from "react"
+import {React, Fragment} from "react"
 import Card from "react-bootstrap/Card";
 import './Footer.css';
 
 function Footer() {
     return(
-        <div>
-
-
-            <Card bg="danger" className="footer">
+        <Fragment>
+            <div className="footer-container">
+                <p>Phone: 0 212 111 11 11</p>
+                <p><a href="mailto:squadgamebypluto@gmail.com">squadgamebypluto@gmail.com</a></p>
+                <p>Istanbul / Turkey</p>
+            </div>
+            {/* <Card bg="danger" className="footer">
                 <Card.Header  >Contact Information</Card.Header>
                 <Card.Body>
                     <blockquote className="blockquote mb-0">
@@ -20,9 +23,8 @@ function Footer() {
                     </p>
                     </blockquote>
                 </Card.Body>
-            </Card>
-
-        </div>
+            </Card> */}
+        </Fragment>
     )
 }
 
