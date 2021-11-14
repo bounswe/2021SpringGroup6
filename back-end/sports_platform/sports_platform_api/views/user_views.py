@@ -104,3 +104,37 @@ def logout(request):
 
     return Response({"message": "Successfully logged out."},
                     status=200)
+
+
+@api_view(['POST'])
+def forgot_password(request):
+
+    if request.user.is_authenticated:
+        return Response({"message": "Already logged in use change password on settings instead."},
+                        status=401)
+
+    validation = user_validation.Recover(data=request.data)
+    
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    try:
+        validated_data = validation.validated_data
+        guest = Guest(None, None)
+
+        res = guest.forget_password(validated_data['email'])
+
+        if res == 100:
+            # No user with email
+            return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
+                            status=200)
+        elif res == 500:
+            return Response({"message": "Try again."},
+                            status=500)
+
+    except Exception as e:
+        return Response({"message": "Try again."},
+                        status=500)
+
+    return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
+                    status=200)
