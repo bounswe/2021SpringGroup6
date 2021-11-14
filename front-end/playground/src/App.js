@@ -4,6 +4,7 @@ import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 import Footer from './PermanentComponents/Footer';
 import {Row, Col} from 'react-bootstrap'
+import { Routes, Route, Outlet, Link } from 'react-router-dom';
  
  
 
@@ -14,7 +15,9 @@ function App() {
       document.title = 'Squad Game'
     }
   }, [])
-  return (
+
+  function Framework() {
+    return (
     <Fragment>
       <div style={{minHeight: '98vh'}}>
         <Row style={{maxHeight: '8vh'}}>
@@ -25,9 +28,7 @@ function App() {
             <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch'}}>
               <SidebarComponent />
               <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5}}>
-                <h1>
-                  Main Content
-                </h1>
+                <Outlet />
               </div>
             </div>
           {/* </Col> */}
@@ -36,7 +37,22 @@ function App() {
       <Row>
         <Footer />
       </Row>
-    </Fragment>
+    </Fragment>)
+  }
+
+  return (
+    <Routes>
+      <Route path="/" element={<Framework/>}>
+        <Route index element={<div>Welcome</div>} />
+        {/* <Route path="about" element={<About />} />
+        <Route path="dashboard" element={<Dashboard />} /> */}
+
+        {/* Using path="*"" means "match anything", so this route
+              acts like a catch-all for URLs that we don't have explicit
+              routes for. */}
+        {/* <Route path="*" element={<NoMatch />} /> */}
+      </Route>
+    </Routes>
   );
 }
 
