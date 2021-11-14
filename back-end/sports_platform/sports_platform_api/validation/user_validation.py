@@ -4,7 +4,7 @@ from .generic_validators import english_dot, date, gender, password, english_dot
 
 
 class Sport_SkillLevel(serializers.Serializer):
-    sport = serializers.IntegerField(min_value = 0, required=True)
+    sport = serializers.CharField(required=True)
     skill_level = serializers.IntegerField(min_value = 1, max_value = 5, required=True)
 
 
