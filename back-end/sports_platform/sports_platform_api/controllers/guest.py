@@ -73,5 +73,4 @@ def generate_random_password():
         password.append(random.choice(characters))
 
     random.shuffle(password)
-
     return "".join(password)
