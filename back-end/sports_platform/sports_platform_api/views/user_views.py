@@ -91,71 +91,91 @@ def logout(request):
     return Response({"message": "Successfully logged out."},
                     status=200)
 
-@api_view(['POST'])
+@api_view(['POST', 'DELETE', 'GET'])
 def follow_user(request, user_id):
 
-    current_user = request.user
+    if request.method == 'POST':
 
-    if not current_user.is_authenticated:
-        return Response(data={"message": "Login required."}, status=403)
-    
-    if current_user.user_id != user_id:
-        return Response(data={"message": "Not allowed to follow for another user."}, status=403)
+        current_user = request.user
 
-    validation = user_validation.Follow(data=request.data)
-    if not validation.is_valid():
-        return Response(validation.errors, status=400)
-    
-    user_to_follow = validation.validated_data['user_id']
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=403)
+        
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to follow for another user."}, status=403)
 
-    if user_to_follow == current_user.user_id:
-        return Response(data={"message": "User cannot follow itself."}, status=400)
+        validation = user_validation.Follow(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+        
+        user_to_follow = validation.validated_data['user_id']
 
-    try:
-        res = current_user.follow(user_to_follow)
+        if user_to_follow == current_user.user_id:
+            return Response(data={"message": "User cannot follow itself."}, status=400)
 
-        if res == 401:
-            return Response(data={"message": "Enter a valid user_id to follow."}, status=400)
-        elif res == 402:
-            return Response(data={"message": "User already followed."}, status=400)
-        elif res == 500:
+        try:
+            res = current_user.follow(user_to_follow)
+
+            if res == 401:
+                return Response(data={"message": "Enter a valid user_id to follow."}, status=400)
+            elif res == 402:
+                return Response(data={"message": "User already followed."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=200)
+
+        except Exception as e:
+            return Response(data=str(e), status=500)
+
+    elif request.method == 'DELETE':
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=403)
+
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to unfollow for another user."}, status=403)
+
+        validation = user_validation.Follow(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+
+        user_to_unfollow = validation.validated_data['user_id']
+
+        try:
+            res = current_user.unfollow(user_to_unfollow)
+
+            if res == 403:
+                return Response(data={"message": "Enter a valid user_id to unfollow."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=200)
+
+        except Exception as e:
+            return Response(data=str(e), status=500)
+
+    elif request.method == 'GET':
+
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=403)
+
+        try:
+            user_followed = User.objects.get(user_id=user_id)
+
+            follower = user_followed.get_follower()
+
+            if follower == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=follower, status=200)
+        except User.DoesNotExist:
+            return Response(data={"message": "User does not exist."}, status=400)
+        except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
-        else:
-            return Response(status=200)
-
-    except Exception as e:
-        return Response(data=str(e), status=500)
-
-
-@api_view(['POST'])
-def unfollow_user(request, user_id):
-
-    current_user = request.user
-
-    if not current_user.is_authenticated:
-        return Response(data={"message": "Login required."}, status=403)
-    
-    if current_user.user_id != user_id:
-        return Response(data={"message": "Not allowed to unfollow for another user."}, status=403)
-
-    validation = user_validation.Follow(data=request.data)
-    if not validation.is_valid():
-        return Response(validation.errors, status=400)
-
-    user_to_unfollow = validation.validated_data['user_id']
-
-    try:
-        res = current_user.unfollow(user_to_unfollow)
-
-        if res == 403:
-            return Response(data={"message": "Enter a valid user_id to unfollow."}, status=400)
-        elif res == 500:
-            return Response(data={"message": "Try later."}, status=500)
-        else:
-            return Response(status=200)
-
-    except Exception as e:
-        return Response(data=str(e), status=500)
 
 @api_view(['GET'])
 def get_following(request, user_id):
@@ -174,29 +194,6 @@ def get_following(request, user_id):
             return Response(data={"message": "Try later."}, status=500)
         else:
             return Response(data = following, status=200)
-    except User.DoesNotExist:
-        return Response(data={"message": "User does not exist."}, status=400)
-    except Exception as e:
-        return Response(data={"message": "Try later."}, status=500)
-
-
-@api_view(['GET'])
-def get_follower(request, user_id):
-
-    current_user = request.user
-
-    if not current_user.is_authenticated:
-        return Response(data={"message": "Login required."}, status=403)
-
-    try:
-        user_followed = User.objects.get(user_id=user_id)
-
-        follower = user_followed.get_follower()
-
-        if follower == 500:
-            return Response(data={"message": "Try later."}, status=500)
-        else:
-            return Response(data=follower, status=200)
     except User.DoesNotExist:
         return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
