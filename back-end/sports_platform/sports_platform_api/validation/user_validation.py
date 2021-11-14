@@ -32,3 +32,7 @@ class Login(serializers.Serializer):
 
 class Block(serializers.Serializer):
     date = serializers.DateField(validators = [date])
+
+
+class Recover(serializers.Serializer):
+    email = serializers.EmailField(required=True)
