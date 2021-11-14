@@ -119,7 +119,6 @@ def forgot_password(request):
                             status=500)
 
     except Exception as e:
-        print(e)
         return Response({"message": "Try again."},
                         status=500)
 
