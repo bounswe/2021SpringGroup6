@@ -1,9 +1,11 @@
 import {React, Fragment, useEffect, lazy, Suspense} from 'react'
+// import logo from './logo.svg';
 import './App.css';
 import {Row} from 'react-bootstrap'
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
+// import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
 
 //import PasswordChange from './PasswordChange';

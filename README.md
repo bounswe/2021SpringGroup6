@@ -1,4 +1,4 @@
-# 2021SpringGroup6 
+# 2021SpringGroup6 (Pluto Group - Squad Game Project)
 ## Description
   We are computer engineering students from Boğaziçi University. This is the repository for CmpE 352 Fundamentals of Software Engineering. In this course we deal with the software life cycle and the phases in software development. 
 [Our wiki page](https://github.com/bounswe/2021SpringGroup6/wiki "GROUP 6 WIKI PAGE")

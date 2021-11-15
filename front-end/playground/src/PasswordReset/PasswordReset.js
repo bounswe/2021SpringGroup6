@@ -7,7 +7,7 @@ import FormControl from "react-bootstrap/FormControl"
 import Alert from "react-bootstrap/Alert"
 import axios from 'axios';
 
-const baseURL = "users";
+const baseURL = "/users/recover";
 
 class PasswordReset extends React.Component {
 
@@ -15,7 +15,7 @@ class PasswordReset extends React.Component {
         super()
         this.state = {
             status: false,
-            form: {}, 
+            form: {email: ""}, 
             isProblematic: false
         }
 
@@ -28,11 +28,11 @@ class PasswordReset extends React.Component {
 
     handleChange(event) {
 
-        if (event.target.name === "username") {
+        if (event.target.name === "email") {
             let fieldName = event.target.name;
             let fleldVal = event.target.value;
             this.setState({form: {...this.state.form, [fieldName]: fleldVal}})
-            console.log(this.state.form.username)
+            console.log(this.state.form.email)
         } else {
             console.log(event.target.checked)
             this.setState({
@@ -45,8 +45,13 @@ class PasswordReset extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        if (! this.state.form || this.state.form.username.length < 3) {
-            alert('Too short username, its length must be greater than 2')
+
+
+        if(this.state.form.email === "") {
+            alert('Not a valid email')
+        }
+        else if (! this.state.form.email.includes("@")) {
+            alert('Not a valid email')
         }
         else if (this.state.status === false) {
             alert('Checkme forgotten')
@@ -67,9 +72,9 @@ class PasswordReset extends React.Component {
                 sports : [{"sport":"soccer", "skill_level":2}]
             }).then((response) => {
                 if(response.status === 200 || response.status === 201) {
-                    alert('Your new password has been sent to your email address')
+                    alert('If email provided is correct, a reset password is sent, please check spam.')
                 } else {
-                    alert('This username is invalid')
+                    alert('Not a valid email')
                 }
             }
             ).catch((error) => {
@@ -90,15 +95,15 @@ class PasswordReset extends React.Component {
                     <h1 className="title" style={{ fontSize: '50px'}}>Password Reset Page</h1>   
                     
                     <Form className="informationForm"onSubmit={this.handleSubmit} >
-                        <Form.Group className="mb-3" controlId="username">
-                            <Form.Label style={{ fontSize: '30px'}}>Username</Form.Label>
-                            {/*<Form.Control placeholder="Enter Username" />*/}
+                        <Form.Group className="mb-3" controlId="email">
+                            <Form.Label style={{ fontSize: '30px'}}>Email</Form.Label>
+                            {/*<Form.Control placeholder="Enter email" />*/}
                             
                             <FormControl 
                                 type='text'
-                                name='username' 
-                                placeholder='Enter Username' 
-                                defaultValue={this.state.form.username}
+                                name='email' 
+                                placeholder='Enter email' 
+                                defaultValue={this.state.form.email}
                                 onChange={this.handleChange.bind(this)}
                             />   
                         </Form.Group>
