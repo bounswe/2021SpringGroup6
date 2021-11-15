@@ -3,5 +3,6 @@
     <string name="title">Sports Platform</string>
     <string name="paragraph">Sport</string>
     <string name="login">Login</string>
-    <string name="Email">Email</string>
+    <string name="Identifier">Identifier</string>
+    <string name="Pass">Password</string>
 </resources>

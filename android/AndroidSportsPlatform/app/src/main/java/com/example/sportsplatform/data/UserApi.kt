@@ -1,7 +1,6 @@
 package com.example.sportsplatform.data
 
 import com.example.sportsplatform.data.models.UserResponse
-import com.example.sportsplatform.util.Constants
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,9 +12,10 @@ import retrofit2.http.Query
 
 interface UserApi {
 
-    @GET("user")
+    @GET("users/login")
     suspend fun searchUser(
-        @Query("q") city: String
+        @Query("identifier") identifier: String,
+        @Query("pass") pass: String
     ) : Response<UserResponse>
 
     companion object{
@@ -24,8 +24,6 @@ interface UserApi {
                 val url = chain.request()
                     .url()
                     .newBuilder()
-                    .addQueryParameter("appid", Constants.API_KEY)
-                    .addQueryParameter("units", "metric")
                     .build()
                 val request = chain.request()
                     .newBuilder()
@@ -42,7 +40,7 @@ interface UserApi {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .baseUrl("https://13.59.0.178:8080")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

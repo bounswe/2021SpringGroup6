@@ -14,7 +14,8 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
 
     val userLiveData = MutableLiveData<String>()
 
-    var email: String? = null
+    var identifier: String? = null
+    var pass: String? = null
 
     fun onSearchButtonClick(view: View){
         //weatherListener?.onStarted()
@@ -22,13 +23,13 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
 
         closeSoftKeyboard(view.context, view)
 
-        if(email.isNullOrEmpty()){
+        if(identifier.isNullOrEmpty()){
             return
         }
 
 
         Coroutines.main {
-            val currResponse = repo.findUser(email!!)
+            val currResponse = repo.findUser(identifier!!, pass!!)
             if (currResponse.isSuccessful) {
                 //weatherListener?.onSuccess()
                 val user = currResponse.body()?.name
