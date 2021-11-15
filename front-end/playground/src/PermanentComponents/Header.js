@@ -3,12 +3,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
-
+import './Header.css';
 
 
 function Header() {
     return (
-       <div>
+       <div className = 'page'>
            {/* From https://react-bootstrap.github.io/components/navbar/ */}
            <Navbar className="header" bg="info" expand="lg">
                 <Container>

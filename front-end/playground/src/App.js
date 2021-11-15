@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
+import PasswordChange from './PasswordChange';
+import PasswordReset from './PasswordReset';
 import Footer from './PermanentComponents/Footer';
  
  
@@ -11,12 +13,7 @@ function App() {
     <div>
       <Header />
       <SidebarComponent />
-      <h1>
-        Main Content 
-        <br /> <br /> <br /> <br /><br /> <br /> <br /> <br /><br /> <br /> <br /> <br /><br /> <br /> <br /> <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Main Content <br />
-      </h1>
+      <PasswordReset />
       <Footer />
     </div>
   );
