@@ -5,14 +5,9 @@ import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import FormControl from "react-bootstrap/FormControl"
 import Alert from "react-bootstrap/Alert"
-import axios from "axios";
-
-
+import axios from 'axios';
 
 const baseURL = "users";
-
-
-
 
 class PasswordReset extends React.Component {
 
@@ -78,7 +73,7 @@ class PasswordReset extends React.Component {
                 }
             }
             ).catch((error) => {
-                alert('This username is invalid')
+                alert('There is an error. Try again later')
             })
             console.log('Reached2')
             
@@ -88,9 +83,8 @@ class PasswordReset extends React.Component {
 
     render() {
         return (
-            <div className='page'>
-                
-                <br />
+            <div className='resetpage'>
+
                 {/* From https://react-bootstrap.netlify.app/components/forms/*/}
                 <Card variant="success" style={{ margin: '40px'}} className='all' >
                     <h1 className="title" style={{ fontSize: '50px'}}>Password Reset Page</h1>   
@@ -124,8 +118,6 @@ class PasswordReset extends React.Component {
                         
                     </Form>
                 </Card>
-                
-                    <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
             </div>
         )
     }

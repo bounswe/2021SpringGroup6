@@ -1,5 +1,6 @@
 import {React, Fragment} from "react"
 import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom'
 import './SidebarComponent.css';
 
 
@@ -13,7 +14,7 @@ function SidebarComponent() {
                 onSelect={selectedKey => alert(`selected ${selectedKey}`)}
             >
                 <Nav.Item>
-                    <Nav.Link href="/home">My Profile <hr /></Nav.Link>
+                    <Nav.Link><Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>My Profile <hr /></Link></Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link eventKey="link-1">My Events <hr /></Nav.Link>
