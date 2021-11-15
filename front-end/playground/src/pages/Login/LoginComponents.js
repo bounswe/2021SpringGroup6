@@ -12,14 +12,14 @@ import Link from '@mui/material/Link';
 
 function LoginComponents({Login, error}) {
 
-    const [details, setDetails] = useState({email:"", password :""});
+    const [details, setDetails] = useState({identifier:"", password :""});
 
     const submitHandler = e => {
         e.preventDefault();
 
         Login(details)
     }
-    const paperStyle={padding :20,height:'45vh',width:380, margin:"20px auto"}
+    const paperStyle={padding :20,height:'40vh',width:380, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}
 
     return (
@@ -30,7 +30,7 @@ function LoginComponents({Login, error}) {
                     <Grid align='center'>
                         { (error !=="") ? ( <div className="error">{error}</div> ) : ""}
                     </Grid>
-                    <TextField label='E-mail' placeholder='Enter e-mail' fullWidth required type ="email" name="email" id="email" onChange={e => setDetails({...details, email: e.target.value})} value={details.email} />
+                    <TextField label='Identifier' placeholder='Enter identifier' fullWidth required type ="identifier" name="identifier" id="identifier" onChange={e => setDetails({...details, identifier: e.target.value})} value={details.identifier} />
                     <TextField label='Password' placeholder='Enter password' fullWidth required type ="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
                     <FormControlLabel
                         control={
