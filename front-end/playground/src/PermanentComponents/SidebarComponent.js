@@ -1,6 +1,6 @@
 import {React, Fragment} from "react"
 import Nav from 'react-bootstrap/Nav';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import './SidebarComponent.css';
 
 

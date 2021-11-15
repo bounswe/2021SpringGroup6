@@ -8,14 +8,8 @@ import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
 
-//import PasswordChange from './PasswordChange';
-// import PasswordReset from './PasswordReset';
-// import Profile from './profile/Profile';
-
-//import PasswordChange from './PasswordChange';
 const PasswordReset = lazy(() => import('./PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./profile/Profile'));
-
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/RegistrationForm'));
  
@@ -60,6 +54,12 @@ function App() {
           element={
             <Suspense fallback={<>...</>}>
               <Login/>
+            </Suspense>}/>
+
+        <Route path="register" 
+          element={
+            <Suspense fallback={<>...</>}>
+              <Register/>
             </Suspense>}/>
 
         <Route path="forgot-password" 
