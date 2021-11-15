@@ -5,36 +5,53 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import django.contrib.auth 
 from ..controllers import Guest
-from ..models import User
+from ..models import User, SportSkillLevel
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
 import django.contrib.auth
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def get_user(request, user_id):
-    try:
-        user = User.objects.get(pk=user_id)
-        sports = user.get_sport_skills()
-    except User.DoesNotExist:
-        return Response(data={"message": 'User id does not exist'}, status=400)
-    except Exception:
-        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
-    
-    serialized_user = UserSerializer(user).data
-    # drop last_login field that we  do not use
-    serialized_user.pop('last_login')
-    # add activity stream data
-    serialized_user['@context'] = 'https://schema.org/Person'
-    serialized_user['@id'] = user.user_id
-    serialized_user['@type'] = 'Person'
-
-    serialized_user['knowsAbout'] = sports
-    if (request.user.is_authenticated) and (user_id == request.user.user_id):
-        return Response(serialized_user,status=200)
-    else:
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=user_id)
+            sports = user.get_sport_skills()
+        except User.DoesNotExist:
+            return Response(data={"message": 'User id does not exist'}, status=400)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+        
+        serialized_user = UserSerializer(user).data
+        # drop last_login field that we  do not use
+        serialized_user.pop('last_login')
+        # add activity stream data
+        serialized_user['@context'] = 'https://schema.org/Person'
+        serialized_user['@id'] = user.user_id
+        serialized_user['@type'] = 'Person'
+        serialized_user['knowsAbout'] = sports
+        
+        if (request.user.is_authenticated) and (user_id == request.user.user_id):
+            return Response(serialized_user,status=200)
+        else:
         # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
-        return Response(serialized_user,status=200)  
-    
+            return Response(serialized_user,status=200)  
+    elif request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                        status=401)
+        validation = user_validation.Update(data=request.data)
+        if not validation.is_valid():
+            return Response(data = {"message": validation.errors}, status=400)
+        try:
+            sport_data = validation.data['sports'] if 'sports' in validation.data else None
+            update_info = {k:v for k,v in validation.data.items() if k!='sports'}
+            with transaction.atomic():
+                request.user.update(sport_data, update_info)
+            return Response(status=200)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+             
+        
 
 @api_view(['POST'])
 def create_user(request):    
