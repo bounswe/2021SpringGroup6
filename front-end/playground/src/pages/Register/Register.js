@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import LoginComponent from "./LoginComponents";
-import Button from 'react-bootstrap/Button';
+import RegisterComponent from "./RegisterComponents";
 import axios from 'axios';
 
-function Login() {
+function Register() {
  
-  const [user, setUser] = useState({identifier:""});
+  const [user, setUser] = useState({email:"", password :"", identifier:""});
   const [error, setError] = useState("");
 
-  const Login = details => {
+  const Register = details => {
 
-    axios.post('/users/login', {identifier:details.identifier, password:details.password})
+    axios.post('/users', {email:details.email, password:details.password, identifier:details.identifier})
     .then(function (response) {
         if(response.status === 200){
             setUser(prevState => ({
                 ...prevState,
+                email:details.email,
+                password:details.password,
                 identifier:details.identifier,
                 'successMessage' : 'Login successful. Redirecting to home page..'
             }))
             //localStorage.setItem("ACCESS_TOKEN_NAME",response.data.identifier);
             //redirectToHome();
-            console.log("Logged in")
+            console.log("Registered in")
             console.log(response)
 
         } else{
@@ -44,14 +45,13 @@ function Login() {
   }
 
   return (
-    <div className="Login">
+    <div className="Register">
       {(user.identifier !== "") ? (
         <div className="welcome">
           <h2>HomePage</h2>
-          <Button onClick={Logout}>Logout</Button>
         </div>
       ):(
-        <LoginComponent Login={Login} error = {error} />
+        <RegisterComponent Register={Register} error = {error} />
       )}
     </div>
   )
@@ -59,4 +59,4 @@ function Login() {
 }
 
 
-export default Login;
+export default Register;

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom'
 
 
 
@@ -43,12 +43,12 @@ function LoginComponents({Login, error}) {
                     />
                     <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Log In</Button>
                     <Typography >
-                        <Link href="#" >
+                        <Link to="/forgot-password" >
                             Forgot password ?
                         </Link>
                     </Typography>
                     <Typography >
-                        <Link href="/Register" >
+                        <Link to="/register" >
                             Create New Account
                         </Link>
                     </Typography>
