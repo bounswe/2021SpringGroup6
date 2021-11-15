@@ -132,7 +132,7 @@ def follow_user(request, user_id):
         current_user = request.user
 
         if not current_user.is_authenticated:
-            return Response(data={"message": "Login required."}, status=403)
+            return Response(data={"message": "Login required."}, status=401)
         
         if current_user.user_id != user_id:
             return Response(data={"message": "Not allowed to follow for another user."}, status=403)
@@ -165,7 +165,7 @@ def follow_user(request, user_id):
         current_user = request.user
 
         if not current_user.is_authenticated:
-            return Response(data={"message": "Login required."}, status=403)
+            return Response(data={"message": "Login required."}, status=401)
 
         if current_user.user_id != user_id:
             return Response(data={"message": "Not allowed to unfollow for another user."}, status=403)
@@ -187,14 +187,14 @@ def follow_user(request, user_id):
                 return Response(status=200)
 
         except Exception as e:
-            return Response(data=str(e), status=500)
+            return Response(data={"message": "Try later."}, status=500)
 
     elif request.method == 'GET':
 
         current_user = request.user
 
         if not current_user.is_authenticated:
-            return Response(data={"message": "Login required."}, status=403)
+            return Response(data={"message": "Login required."}, status=401)
 
         try:
             user_following = User.objects.get(user_id=user_id)
@@ -218,7 +218,7 @@ def get_follower(request, user_id):
     current_user = request.user
 
     if not current_user.is_authenticated:
-        return Response(data={"message": "Login required."}, status=403)
+        return Response(data={"message": "Login required."}, status=401)
 
     try:
         user_followed = User.objects.get(user_id=user_id)
