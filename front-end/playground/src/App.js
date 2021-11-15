@@ -3,7 +3,7 @@ import './App.css';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
-import PasswordReset from './PasswordReset';
+import PasswordReset from './PasswordReset/PasswordReset';
 import Footer from './PermanentComponents/Footer';
  
  
