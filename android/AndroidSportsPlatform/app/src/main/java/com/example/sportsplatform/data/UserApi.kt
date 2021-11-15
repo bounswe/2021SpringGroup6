@@ -31,7 +31,6 @@ interface UserApi {
                     .build()
 
                 return@Interceptor chain.proceed(request)
-
             }
 
             val okHttpClient = OkHttpClient.Builder()
