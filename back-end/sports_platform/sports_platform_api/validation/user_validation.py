@@ -18,6 +18,14 @@ class User(serializers.Serializer):
    gender =serializers.CharField(required=False, validators = [gender])
    password = serializers.CharField(min_length = 8, max_length = 15, validators = [password], required = True)
 
+class Update(serializers.Serializer):
+   email = serializers.EmailField(required=False)
+   familyName = serializers.CharField(required=False,min_length = 2, max_length = 30, validators = [english_dot])
+   sports = serializers.ListField(required=False, child=Sport_SkillLevel())
+   name = serializers.CharField(required=False,min_length=2, max_length = 30, validators = [english_dot])
+   birthDate = serializers.DateField(required=False, validators = [date])
+   gender =serializers.CharField(required=False, validators = [gender])
+
 class Login(serializers.Serializer):
     identifier = serializers.CharField(min_length = 3, max_length = 15, validators = [english_dot_number], required= True)
     password = serializers.CharField(min_length = 8, max_length = 15, validators = [password], required = True)
