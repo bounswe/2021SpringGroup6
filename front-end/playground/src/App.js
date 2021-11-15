@@ -13,9 +13,11 @@ import Footer from './PermanentComponents/Footer';
 // import Profile from './profile/Profile';
 
 //import PasswordChange from './PasswordChange';
-const PasswordReset = lazy(() => import('./PasswordReset'));
+const PasswordReset = lazy(() => import('./PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./profile/Profile'));
- 
+
+const Login = lazy(() => import('./pages/Login/Login'));
+const Register = lazy(() => import('./pages/Register/RegistrationForm'));
  
 
 function App() {
@@ -54,10 +56,10 @@ function App() {
       
         <Route index element={<>Welcome</>} />
 
-        <Route path="profile" 
+        <Route path="login" 
           element={
             <Suspense fallback={<>...</>}>
-              <Profile/>
+              <Login/>
             </Suspense>}/>
 
         <Route path="forgot-password" 
@@ -65,6 +67,14 @@ function App() {
             <Suspense fallback={<>...</>}>
               <PasswordReset/>
             </Suspense>}/>
+
+        <Route path="profile" 
+          element={
+            <Suspense fallback={<>...</>}>
+              <Profile/>
+            </Suspense>}/>
+
+        
 
         {/* Using path="*"" means "match anything", so this route
               acts like a catch-all for URLs that we don't have explicit
