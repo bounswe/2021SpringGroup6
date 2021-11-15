@@ -3,7 +3,8 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-
+import datetime
+from django.db import IntegrityError
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -58,6 +59,14 @@ class UserManager(BaseUserManager):
             )
         return self.none()
 
+class Follow(models.Model):
+    class Meta:
+        db_table = 'follow'
+        unique_together = (('follower', 'following'),)
+
+    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
 
 class User(AbstractBaseUser):
     class Meta:
@@ -78,6 +87,28 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
+
+    def follow(self, user_id):
+        date = datetime.datetime.now()
+        try:
+            to_follow = User.objects.get(user_id=user_id)
+            Follow.objects.create(follower = self, following = to_follow, date = date)
+            return True
+        except User.DoesNotExist:
+            return 401
+        except IntegrityError as e:
+            return 402
+        except Exception as e:
+            return 500
+
+    def unfollow(self, user_id):
+        try:
+            num_deleted, _ = Follow.objects.filter(follower = self.user_id, following = user_id).delete()
+            if num_deleted == 0:
+                return 403
+        except Exception as e:
+            return 500
+
     def add_sport_interest(self, sport_name, skill_level):
         SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
     
@@ -94,6 +125,78 @@ class User(AbstractBaseUser):
                     self.add_sport_interest(skills['sport'], skills['skill_level'])
                 else:# updating the skill level
                     sport_skill.update(**skills)
+
+
+    def get_following(self):
+        try:
+            following = self.following.all()
+
+            data_dict = dict()
+            data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+            data_dict['summary'] = f"{self.identifier}'s following activities."
+            data_dict['type'] = "Collection"
+            data_dict['total_items'] = len(following)
+            data_dict['items'] = []
+
+            for following_user in following:
+                one_follow = dict()
+                one_follow['@context'] = "https://www.w3.org/ns/activitystreams"
+                one_follow['summary'] = f"{self.identifier} followed {following_user.following.identifier}"
+                one_follow['type'] = "Follow"
+
+                one_follow['actor'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  self.user_id,
+                    "identifier": self.identifier
+                }
+
+                one_follow['object'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  following_user.following.user_id,
+                    "identifier": following_user.following.identifier
+                }
+
+                data_dict['items'].append(one_follow)
+
+            return data_dict
+        except Exception as e:
+            return 500
+
+    def get_follower(self):
+        try:
+            follower = self.follower.all()
+
+            data_dict = dict()
+            data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+            data_dict['summary'] = f"{self.identifier}'s being followed activities."
+            data_dict['type'] = "Collection"
+            data_dict['total_items'] = len(follower)
+            data_dict['items'] = []
+
+            for follower_user in follower:
+                one_follow = dict()
+                one_follow['@context'] = "https://www.w3.org/ns/activitystreams"
+                one_follow['summary'] = f"{follower_user.follower.identifier} followed {self.identifier}"
+                one_follow['type'] = "Follow"
+
+                one_follow['actor'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  follower_user.follower.user_id,
+                    "identifier": follower_user.follower.identifier
+                }
+
+                one_follow['object'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  self.user_id,
+                    "identifier": self.identifier
+                }
+
+                data_dict['items'].append(one_follow)
+
+            return data_dict
+        except Exception as e:
+            return 500
+
 
 
 class SportSkillLevel(models.Model):
@@ -114,10 +217,4 @@ class Block(models.Model):
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
 
-class Follow(models.Model):
-    class Meta:
-        db_table = 'follow'
 
-    follower = models.ForeignKey('User', related_name='following', on_delete=models.CASCADE)
-    following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
-    date = models.DateField(blank=True, null=True)

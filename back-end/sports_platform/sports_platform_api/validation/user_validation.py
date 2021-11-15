@@ -33,6 +33,10 @@ class Login(serializers.Serializer):
 class Block(serializers.Serializer):
     date = serializers.DateField(validators = [date])
 
+class Follow(serializers.Serializer):
+    user_id = serializers.IntegerField(min_value = 1, max_value = 9223372036854775807)
+
 
 class Recover(serializers.Serializer):
     email = serializers.EmailField(required=True)
+

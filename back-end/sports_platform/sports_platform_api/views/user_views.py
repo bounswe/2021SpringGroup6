@@ -8,7 +8,7 @@ from ..controllers import Guest
 from ..models import User, SportSkillLevel
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
-
+import django.contrib.auth
 
 @api_view(['GET', 'PUT'])
 def get_user(request, user_id):
@@ -105,8 +105,10 @@ def login(request):
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
 
+
 @api_view(['POST'])
-def logout(request): 
+def logout(request):
+
     if not request.user.is_authenticated:
         return Response({"message": "User not logged in."},
                         status=401)
@@ -120,6 +122,118 @@ def logout(request):
 
     return Response({"message": "Successfully logged out."},
                     status=200)
+
+
+@api_view(['POST', 'DELETE', 'GET'])
+def follow_user(request, user_id):
+
+    if request.method == 'POST':
+
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+        
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to follow for another user."}, status=403)
+
+        validation = user_validation.Follow(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+        
+        user_to_follow = validation.validated_data['user_id']
+
+        if user_to_follow == current_user.user_id:
+            return Response(data={"message": "User cannot follow itself."}, status=400)
+
+        try:
+            res = current_user.follow(user_to_follow)
+
+            if res == 401:
+                return Response(data={"message": "Enter a valid user_id to follow."}, status=400)
+            elif res == 402:
+                return Response(data={"message": "User already followed."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=200)
+
+        except Exception as e:
+            return Response(data=str(e), status=500)
+
+    elif request.method == 'DELETE':
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to unfollow for another user."}, status=403)
+
+        validation = user_validation.Follow(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+
+        user_to_unfollow = validation.validated_data['user_id']
+
+        try:
+            res = current_user.unfollow(user_to_unfollow)
+
+            if res == 403:
+                return Response(data={"message": "Enter a valid user_id to unfollow."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=200)
+
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
+
+    elif request.method == 'GET':
+
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        try:
+            user_following = User.objects.get(user_id=user_id)
+
+            following = user_following.get_following()
+
+            if following == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=following, status=200)
+        except User.DoesNotExist:
+            return Response(data={"message": "User does not exist."}, status=400)
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
+
+        
+
+@api_view(['GET'])
+def get_follower(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        user_followed = User.objects.get(user_id=user_id)
+
+        follower = user_followed.get_follower()
+
+        if follower == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data=follower, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
+    except Exception as e:
+        return Response(data={"message": "Try later."}, status=500)
+
 
 
 @api_view(['POST'])
@@ -154,3 +268,5 @@ def forgot_password(request):
 
     return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
                     status=200)
+
+
