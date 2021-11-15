@@ -1,8 +1,8 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
-import PasswordChange from './PasswordChange';
+// import PasswordChange from './PasswordChange';
 import PasswordReset from './PasswordReset';
 import Footer from './PermanentComponents/Footer';
  
