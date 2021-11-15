@@ -8,10 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.Repository
 import com.example.sportsplatform.util.Coroutines
+import com.example.sportsplatform.util.toast
 
 
 class PlatformViewModel(private val repo: Repository) : ViewModel() {
 
+    var platformListener: PlatformListener? = null
     val userLiveData = MutableLiveData<String>()
 
     var identifier: String? = null
@@ -32,9 +34,12 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
             val currResponse = repo.findUser(identifier!!, pass!!)
             if (currResponse.isSuccessful) {
                 //weatherListener?.onSuccess()
-                val user = currResponse.body()?.name
-                userLiveData.postValue(user)
+                val userToken = currResponse.body()?.token
+                userLiveData.postValue(userToken)
+                view.context.toast("Success")
             } else {
+                view.context.toast(identifier!!)
+                view.context.toast(pass!!)
                 //weatherListener?.onFailure()
             }
         }

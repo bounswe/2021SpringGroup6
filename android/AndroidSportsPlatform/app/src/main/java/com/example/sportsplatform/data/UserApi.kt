@@ -1,22 +1,22 @@
 package com.example.sportsplatform.data
 
-import com.example.sportsplatform.data.models.UserResponse
+import com.example.sportsplatform.data.models.TokenResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserApi {
 
-    @GET("users/login")
+    @POST("users/login/")
     suspend fun searchUser(
         @Query("identifier") identifier: String,
-        @Query("pass") pass: String
-    ) : Response<UserResponse>
+        @Query("password") password: String
+    ) : Response<TokenResponse>
 
     companion object{
         operator fun invoke() : UserApi {
@@ -39,7 +39,7 @@ interface UserApi {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://13.59.0.178:8080")
+                .baseUrl("http://13.59.0.178:8080")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
