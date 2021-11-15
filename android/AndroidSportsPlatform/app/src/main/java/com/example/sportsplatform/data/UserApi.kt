@@ -7,16 +7,17 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface UserApi {
 
+    @Headers("Content-Type: application/json")
     @POST("users/login/")
     suspend fun searchUser(
-        @Query("identifier") identifier: String,
-        @Query("password") password: String
-    ) : Response<TokenResponse>
+            @Body requestBody: String
+    ): Response<TokenResponse>
 
     companion object{
         operator fun invoke() : UserApi {

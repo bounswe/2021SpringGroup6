@@ -32,6 +32,7 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
 
         Coroutines.main {
             val currResponse = repo.findUser(identifier!!, pass!!)
+            view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
                 //weatherListener?.onSuccess()
                 val userToken = currResponse.body()?.token
