@@ -10,20 +10,19 @@ function Login() {
 
   const Login = details => {
 
-    axios.post('/users/login', {identifier:details.identifier, password:details.password})
+    axios.post('http://13.59.0.178:8080/users/login', {identifier:details.identifier, password:details.password})
     .then(function (response) {
         if(response.status === 200){
             setUser(prevState => ({
                 ...prevState,
                 identifier:details.identifier,
-                'successMessage' : 'Registration successful. Redirecting to home page..'
+                'successMessage' : 'Login successful. Redirecting to home page..'
             }))
-            localStorage.setItem("ACCESS_TOKEN_NAME",response.data.identifier);
+            //localStorage.setItem("ACCESS_TOKEN_NAME",response.data.identifier);
             //redirectToHome();
             console.log("Logged in")
             console.log(response)
-            const token = localStorage.getItem("ACCESS_TOKEN_NAME")
-            console.log(token)
+
         } else{
             console.log("Some error ocurred");
         }

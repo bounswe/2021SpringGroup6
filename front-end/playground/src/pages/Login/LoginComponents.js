@@ -19,7 +19,7 @@ function LoginComponents({Login, error}) {
 
         Login(details)
     }
-    const paperStyle={padding :20,height:'45vh',width:380, margin:"20px auto"}
+    const paperStyle={padding :20,height:'40vh',width:380, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}
 
     return (

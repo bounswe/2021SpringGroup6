@@ -10,7 +10,13 @@ import Link from '@mui/material/Link';
 function RegistrationForm(props) {
     const [state , setState] = useState({
         email : "",
-        password : ""
+        password : "",
+        identifier:"",
+        name:"",
+        surname:"",
+        location:"",
+        age:0,
+        gender:""
     })
     
     const sendDetailsToServer = () => {
@@ -20,13 +26,14 @@ function RegistrationForm(props) {
                 "email":state.email,
                 "password":state.password,
                 "identifier":state.identifier,
+                "name":state.name,
+                "surname":state.surname,
+                "location":state.location,
+                "age":state.age,
+                "gender":state.gender
             }
-            const formData = new FormData();
-            formData.append("email",state.email)
-            formData.append("identifier",state.identifier)
-            formData.append("password",state.password)
-            //const formData = new FormData();
-            axios.post('http://13.59.0.178:8080/users', formData)
+
+            axios.post('http://13.59.0.178:8080/users', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
@@ -58,8 +65,6 @@ function RegistrationForm(props) {
         }
     }
     const handleChange = (e) => {
-        console.log(state.password)
-        console.log(state.confirmPassword)
 
         const {id , value} = e.target   
         setState(prevState => ({
@@ -68,7 +73,7 @@ function RegistrationForm(props) {
         }))
         //console.log(this.state.password)
     }
-    const paperStyle={padding :20,height:'45vh',width:380, margin:"20px auto"}
+    const paperStyle={padding :20,height:'70vh',width:380, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}
   return(
         <Grid>
@@ -83,25 +88,25 @@ function RegistrationForm(props) {
                                 onChange={handleChange}
                             />
 
-                            <TextField label='ConfirmPassword' placeholder='Enter password' fullWidth required type ="password" name="confirmPassword" id="confirmPassword"
+                            <TextField label='Confirm Password' placeholder='Enter password' fullWidth required type ="password" name="confirmPassword" id="confirmPassword"
                                 onChange={handleChange}
                             />
                             <TextField label='Identifier' placeholder='Enter identifier' fullWidth required type ="identifier" name="identifier" id="identifier"
                                 onChange={handleChange}
                             />
-                            <TextField label='name' placeholder='name' fullWidth required type ="name" name="name" id="name"
+                            <TextField label='Name' placeholder='Enter Name' fullWidth  type ="name" name="name" id="name"
                                 onChange={handleChange}
                             />
-                            <TextField label='surname' placeholder='surname' fullWidth required type ="surname" name="surname" id="surname"
+                            <TextField label='Surname' placeholder='Enter surname' fullWidth  type ="surname" name="surname" id="surname"
                                 onChange={handleChange}
                             />
-                            <TextField label='location' placeholder='location' fullWidth required type ="location" name="location" id="location"
+                            <TextField label='Location' placeholder='Enter location' fullWidth  type ="location" name="location" id="location"
                                 onChange={handleChange}
                             />
-                            <TextField label='age' placeholder='age' fullWidth required type ="age" name="age" id="age"
+                            <TextField label='Age' placeholder='Enter age' fullWidth  type ="age" name="age" id="age"
                                 onChange={handleChange}
                             />
-                            <TextField label='gender' placeholder='Enter gender' fullWidth required type ="gender" name="gender" id="gender"
+                            <TextField label='Gender' placeholder='Enter gender' fullWidth  type ="gender" name="gender" id="gender"
                                 onChange={handleChange}
                             />
 
