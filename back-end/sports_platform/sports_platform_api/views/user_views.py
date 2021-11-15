@@ -1,35 +1,57 @@
+from django.db import transaction
 from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import django.contrib.auth 
 from ..controllers import Guest
-from ..models import User
+from ..models import User, SportSkillLevel
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
 import django.contrib.auth
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def get_user(request, user_id):
-    try:
-        user = User.objects.get(pk=user_id)
-        sports = user.get_sport_skills()
-    except User.DoesNotExist:
-        return Response(data={"message": 'User id does not exist'}, status=400)
-    except Exception:
-        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
-    
-    serialized_user = UserSerializer(user).data
-    # drop last_login field that we  do not use
-    serialized_user.pop('last_login')
-    # add activity stream data
-    serialized_user['@context'] = 'https://schema.org/Person'
-    serialized_user['@id'] = user.user_id
-    serialized_user['@type'] = 'Person'
-
-    serialized_user['knowsAbout'] = sports
-    if user_id != request.user.user_id:
-        pass # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
-    return Response(serialized_user,status=200)
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=user_id)
+            sports = user.get_sport_skills()
+        except User.DoesNotExist:
+            return Response(data={"message": 'User id does not exist'}, status=400)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+        
+        serialized_user = UserSerializer(user).data
+        # drop last_login field that we  do not use
+        serialized_user.pop('last_login')
+        # add activity stream data
+        serialized_user['@context'] = 'https://schema.org/Person'
+        serialized_user['@id'] = user.user_id
+        serialized_user['@type'] = 'Person'
+        serialized_user['knowsAbout'] = sports
+        
+        if (request.user.is_authenticated) and (user_id == request.user.user_id):
+            return Response(serialized_user,status=200)
+        else:
+        # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
+            return Response(serialized_user,status=200)  
+    elif request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                        status=401)
+        validation = user_validation.Update(data=request.data)
+        if not validation.is_valid():
+            return Response(data = {"message": validation.errors}, status=400)
+        try:
+            sport_data = validation.data['sports'] if 'sports' in validation.data else None
+            update_info = {k:v for k,v in validation.data.items() if k!='sports'}
+            with transaction.atomic():
+                request.user.update(sport_data, update_info)
+            return Response(status=200)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+             
+        
 
 @api_view(['POST'])
 def create_user(request):    
@@ -42,11 +64,21 @@ def create_user(request):
         db_data = request.data.copy()
         db_data.update(validation.data) # get validated value if it has
         guest= Guest(db_data['identifier'], password)
-        guest.register(db_data)
+        with transaction.atomic():
+            guest.register(db_data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError as e:
-        return Response(data = {"message": 'Username is already taken.'}, status=400)
+        if 'sport' in str(e.__cause__):
+            response_message = 'Given sport is not supported.'
+        elif 'identifier' in str(e.__cause__):
+            response_message = 'Username is already taken'
+        elif 'email' in str(e.__cause__):
+            response_message = 'Email is already taken'
+        else:
+            response_message = 'There is an integrity error.'
+        
+        return Response(data = {"message": response_message}, status=400)
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
     return Response(status=201)
@@ -90,6 +122,7 @@ def logout(request):
 
     return Response({"message": "Successfully logged out."},
                     status=200)
+
 
 @api_view(['POST', 'DELETE', 'GET'])
 def follow_user(request, user_id):
@@ -200,4 +233,40 @@ def get_follower(request, user_id):
         return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
+
+
+
+@api_view(['POST'])
+def forgot_password(request):
+
+    if request.user.is_authenticated:
+        return Response({"message": "Already logged in use change password on settings instead."},
+                        status=401)
+
+    validation = user_validation.Recover(data=request.data)
     
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    try:
+        validated_data = validation.validated_data
+        guest = Guest(None, None)
+
+        res = guest.forget_password(validated_data['email'])
+
+        if res == 100:
+            # No user with email
+            return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
+                            status=200)
+        elif res == 500:
+            return Response({"message": "Try again."},
+                            status=500)
+
+    except Exception as e:
+        return Response({"message": "Try again."},
+                        status=500)
+
+    return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
+                    status=200)
+
+

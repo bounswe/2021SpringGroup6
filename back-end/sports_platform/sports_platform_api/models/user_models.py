@@ -73,13 +73,13 @@ class User(AbstractBaseUser):
         db_table = 'users'
 
     user_id = models.BigAutoField(primary_key=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=300)
     identifier = models.CharField(max_length=300, unique=True)
     name = models.CharField(max_length=300,blank=True)
     familyName = models.CharField(max_length=30,blank=True)
     birthDate = models.DateField(blank=True, null=True)
-    gender = models.SmallIntegerField(blank=True, null=True)
+    gender = models.CharField(max_length=40,blank=True, null=True)
 
     objects = UserManager()
 
@@ -117,6 +117,16 @@ class User(AbstractBaseUser):
     def get_sport_skills(self):
         skills = SportSkillLevel.objects.filter(user=self.user_id)
         return [{"@type":"PropertyValue","name": skill.sport_id, "value":skill.skill_level} for skill in skills]
+    
+    def update(self, sport_data, update_info):
+        User.objects.filter(pk=self.user_id).update(**update_info)
+        if sport_data:
+            for skills in sport_data:
+                sport_skill = SportSkillLevel.objects.filter(user_id=self.user_id, sport_id=skills['sport'])
+                if len(sport_skill) == 0:# adding new sport skill
+                    self.add_sport_interest(skills['sport'], skills['skill_level'])
+                else:# updating the skill level
+                    sport_skill.update(**skills)
 
 
     def get_following(self):
@@ -209,4 +219,5 @@ class Block(models.Model):
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
+
 
