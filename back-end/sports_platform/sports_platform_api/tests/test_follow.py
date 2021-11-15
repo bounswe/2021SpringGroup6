@@ -146,7 +146,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.post(
@@ -162,7 +162,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.post(
@@ -179,7 +179,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.post(
@@ -194,7 +194,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.post(
@@ -209,7 +209,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.post(
@@ -224,7 +224,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.delete(
@@ -240,7 +240,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.delete(
@@ -255,7 +255,7 @@ class FollowTest(TestCase):
         request_user_id = self.request_user_id[test_type]
         token = self.request_token[test_type]
 
-        path = "/users/" + str(request_param) + "/follower"
+        path = "/users/" + str(request_param) + "/following"
 
         request_body = {"user_id": request_user_id}
         response = self.client.delete(

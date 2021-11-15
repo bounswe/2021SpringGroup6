@@ -164,21 +164,23 @@ def follow_user(request, user_id):
             return Response(data={"message": "Login required."}, status=403)
 
         try:
-            user_followed = User.objects.get(user_id=user_id)
+            user_following = User.objects.get(user_id=user_id)
 
-            follower = user_followed.get_follower()
+            following = user_following.get_following()
 
-            if follower == 500:
+            if following == 500:
                 return Response(data={"message": "Try later."}, status=500)
             else:
-                return Response(data=follower, status=200)
+                return Response(data=following, status=200)
         except User.DoesNotExist:
             return Response(data={"message": "User does not exist."}, status=400)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
 
+        
+
 @api_view(['GET'])
-def get_following(request, user_id):
+def get_follower(request, user_id):
 
     current_user = request.user
 
@@ -186,15 +188,16 @@ def get_following(request, user_id):
         return Response(data={"message": "Login required."}, status=403)
 
     try:
-        user_following = User.objects.get(user_id=user_id)
+        user_followed = User.objects.get(user_id=user_id)
 
-        following = user_following.get_following()
+        follower = user_followed.get_follower()
 
-        if following == 500:
+        if follower == 500:
             return Response(data={"message": "Try later."}, status=500)
         else:
-            return Response(data = following, status=200)
+            return Response(data=follower, status=200)
     except User.DoesNotExist:
         return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
+    
