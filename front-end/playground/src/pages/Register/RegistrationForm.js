@@ -5,8 +5,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 
 function RegistrationForm(props) {
@@ -21,10 +19,11 @@ function RegistrationForm(props) {
             const payload={
                 "email":state.email,
                 "password":state.password,
+                "identifier":state.identifier,
             }
             const formData = new FormData();
             formData.append("email",state.email)
-            formData.append("identifier",state.email)
+            formData.append("identifier",state.identifier)
             formData.append("password",state.password)
             //const formData = new FormData();
             axios.post('http://13.59.0.178:8080/users', formData)
@@ -85,6 +84,24 @@ function RegistrationForm(props) {
                             />
 
                             <TextField label='ConfirmPassword' placeholder='Enter password' fullWidth required type ="password" name="confirmPassword" id="confirmPassword"
+                                onChange={handleChange}
+                            />
+                            <TextField label='Identifier' placeholder='Enter identifier' fullWidth required type ="identifier" name="identifier" id="identifier"
+                                onChange={handleChange}
+                            />
+                            <TextField label='name' placeholder='name' fullWidth required type ="name" name="name" id="name"
+                                onChange={handleChange}
+                            />
+                            <TextField label='surname' placeholder='surname' fullWidth required type ="surname" name="surname" id="surname"
+                                onChange={handleChange}
+                            />
+                            <TextField label='location' placeholder='location' fullWidth required type ="location" name="location" id="location"
+                                onChange={handleChange}
+                            />
+                            <TextField label='age' placeholder='age' fullWidth required type ="age" name="age" id="age"
+                                onChange={handleChange}
+                            />
+                            <TextField label='gender' placeholder='Enter gender' fullWidth required type ="gender" name="gender" id="gender"
                                 onChange={handleChange}
                             />
 

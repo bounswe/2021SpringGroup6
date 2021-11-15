@@ -1,42 +1,52 @@
 import React, { useState } from 'react';
 import LoginComponent from "./LoginComponents";
 import Button from 'react-bootstrap/Button';
-import axios from "axios";
+import axios from 'axios';
 
 function Login() {
-  const adminUser = {
-    email : "admin@admin.com",
-    password : "admin"
-  }
-
-
-  const [user, setUser] = useState({email:""});
+ 
+  const [user, setUser] = useState({identifier:""});
   const [error, setError] = useState("");
 
   const Login = details => {
+
+    axios.post('/users/login', {identifier:details.identifier, password:details.password})
+    .then(function (response) {
+        if(response.status === 200){
+            setUser(prevState => ({
+                ...prevState,
+                identifier:details.identifier,
+                'successMessage' : 'Registration successful. Redirecting to home page..'
+            }))
+            localStorage.setItem("ACCESS_TOKEN_NAME",response.data.identifier);
+            //redirectToHome();
+            console.log("Logged in")
+            console.log(response)
+            const token = localStorage.getItem("ACCESS_TOKEN_NAME")
+            console.log(token)
+        } else{
+            console.log("Some error ocurred");
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });  
+
     console.log(details);
 
-    if (details.email === adminUser.email && details.password === adminUser.password){ // need to connect with DB
-      console.log("Logged in")
-      setUser({ 
-        email : details.email
-      });
-    }else {
-      console.log("Can't logged in");
-      setError("Please Sign Up")
-    }
+
   }
 
   const Logout = () => { // need to connect with DB
       console.log("Logout")
       setUser({ 
-        email : ""
+        identifier : ""
       });
   }
 
   return (
     <div className="Login">
-      {(user.email !== "") ? (
+      {(user.identifier !== "") ? (
         <div className="welcome">
           <h2>HomePage</h2>
           <Button onClick={Logout}>Logout</Button>
