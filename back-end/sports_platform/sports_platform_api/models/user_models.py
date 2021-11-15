@@ -99,7 +99,6 @@ class User(AbstractBaseUser):
         except IntegrityError as e:
             return 402
         except Exception as e:
-            print(e)
             return 500
 
     def unfollow(self, user_id):
@@ -108,7 +107,6 @@ class User(AbstractBaseUser):
             if num_deleted == 0:
                 return 403
         except Exception as e:
-            print(e)
             return 500
 
     def add_sport_interest(self, sport_name, skill_level):
@@ -162,7 +160,6 @@ class User(AbstractBaseUser):
 
             return data_dict
         except Exception as e:
-            print(e)
             return 500
 
     def get_follower(self):
