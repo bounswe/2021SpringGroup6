@@ -30,8 +30,8 @@ function LoginComponents({Login, error}) {
                     <Grid align='center'>
                         { (error !=="") ? ( <div className="error">{error}</div> ) : ""}
                     </Grid>
-                    <TextField label='E-mail' placeholder='Enter e-mail' fullWidth required type ="email" name="email" id="email"onChange={e => setDetails({...details, email: e.target.value})} value={details.email} />
-                    <TextField label='Password' placeholder='Enter password' fullWidth required type ="password" name="password" id="password"onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
+                    <TextField label='E-mail' placeholder='Enter e-mail' fullWidth required type ="email" name="email" id="email" onChange={e => setDetails({...details, email: e.target.value})} value={details.email} />
+                    <TextField label='Password' placeholder='Enter password' fullWidth required type ="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
                     <FormControlLabel
                         control={
                         <Checkbox
@@ -48,7 +48,7 @@ function LoginComponents({Login, error}) {
                         </Link>
                     </Typography>
                     <Typography >
-                        <Link href="#" >
+                        <Link href="/Register" >
                             Create New Account
                         </Link>
                     </Typography>

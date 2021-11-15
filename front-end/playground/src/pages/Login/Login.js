@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import LoginComponent from "../../PermanentComponents/LoginComponents";
+import LoginComponent from "./LoginComponents";
 import Button from 'react-bootstrap/Button';
+import axios from "axios";
 
 function Login() {
   const adminUser = {
     email : "admin@admin.com",
     password : "admin"
   }
+
 
   const [user, setUser] = useState({email:""});
   const [error, setError] = useState("");
@@ -46,5 +48,6 @@ function Login() {
   )
 
 }
+
 
 export default Login;
