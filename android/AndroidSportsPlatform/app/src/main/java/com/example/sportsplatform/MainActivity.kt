@@ -6,12 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.ActivityMainBinding
+import com.example.sportsplatform.util.hide
+import com.example.sportsplatform.util.show
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), KodeinAware {
+class MainActivity : AppCompatActivity(), PlatformListener, KodeinAware {
 
     private lateinit var viewModel: PlatformViewModel
     override val kodein by kodein()
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         viewModel = ViewModelProvider(this, factory).get(PlatformViewModel::class.java)
         binding.viewmodel = viewModel
+        viewModel.platformListener = this
 
         initObservers()
 
@@ -33,4 +36,15 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         })
     }
 
+    override fun onStarted(){
+        progressBar.show()
+    }
+
+    override fun onSuccess() {
+        progressBar.hide()
+    }
+
+    override fun onFailure() {
+        progressBar.hide()
+    }
 }

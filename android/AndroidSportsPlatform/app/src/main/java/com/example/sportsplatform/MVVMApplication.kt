@@ -1,7 +1,6 @@
 package com.example.sportsplatform
 
 import android.app.Application
-import com.example.sportsplatform.PlatformViewModelFactory
 import com.example.sportsplatform.data.Repository
 import com.example.sportsplatform.data.UserApi
 import org.kodein.di.Kodein
@@ -21,7 +20,5 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from singleton { UserApi() }
         bind() from singleton { Repository(instance()) }
         bind() from provider { PlatformViewModelFactory(instance()) }
-
     }
-
 }

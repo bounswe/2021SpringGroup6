@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">SportsPlatform</string>
-    <string name="title">Sports Platform</string>
-    <string name="paragraph">Sport</string>
+    <string name="app_name">Squad Game</string>
+    <string name="title">Squad Game</string>
+    <string name="paragraph"></string>
     <string name="login">Login</string>
-    <string name="Email">Email</string>
+    <string name="Identifier">Identifier</string>
+    <string name="Pass">Password</string>
+    <string name="register">REGISTER</string>
+    <string name="todo">TODO</string>
 </resources>
