@@ -41,7 +41,7 @@ class LoginTest(TestCase):
         'identifier_starts_with_dot':{"message": {"identifier": ["Only English characters, numbers and . are allowed. Cannot start or end with ."]}},
         'short_password_identifier_with_special':{"message": {"identifier": ["Only English characters, numbers and . are allowed. Cannot start or end with ."], "password": ["Ensure this field has at least 8 characters."]}},
         'wrong_credentials':{"message": "Check credentials."},
-        'success': {"token": self.lion_token.key},
+        'success': {"token": self.lion_token.key, "user_id": self.lion_user.user_id},
         'already_logged_in': {"message": "Already logged in."},
         }
 
