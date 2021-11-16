@@ -5,4 +5,6 @@
     <string name="login">Login</string>
     <string name="Identifier">Identifier</string>
     <string name="Pass">Password</string>
+    <string name="register">REGISTER</string>
+    <string name="todo">TODO</string>
 </resources>
