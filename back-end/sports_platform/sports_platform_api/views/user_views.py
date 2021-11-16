@@ -99,7 +99,7 @@ def login(request):
         user = guest.login()
         if user is not None:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response(data={"token": token.key},status=200)
+            return Response(data={"token": token.key, "user_id": user.user_id},status=200)
         else:
             return Response(data={"message": "Check credentials."}, status=403)
     except Exception as e:
