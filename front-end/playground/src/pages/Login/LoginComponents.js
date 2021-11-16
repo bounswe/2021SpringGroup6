@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 
 
@@ -14,10 +14,12 @@ function LoginComponents({Login, error}) {
 
     const [details, setDetails] = useState({identifier:"", password :""});
 
-    const submitHandler = e => {
+    const submitHandler = async e => {
         e.preventDefault();
 
-        Login(details)
+        await Login(details);
+
+        console.log('\nlocal\n', localStorage.getItem('user'));
     }
     const paperStyle={padding :20,height:'40vh',width:380, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}

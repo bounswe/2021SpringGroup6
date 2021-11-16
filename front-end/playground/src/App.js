@@ -1,26 +1,32 @@
-import {React, Fragment, useEffect, lazy, Suspense} from 'react'
+import {React, Fragment, useEffect, lazy, Suspense, useState} from 'react'
 // import logo from './logo.svg';
 import './App.css';
 import {Row} from 'react-bootstrap'
-import { Routes, Route, Outlet, Link } from 'react-router-dom';
+import { Routes, Route, Outlet, Link, Redirect } from 'react-router-dom';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
 
-const PasswordReset = lazy(() => import('./PasswordReset/PasswordReset'));
-const Profile = lazy(() => import('./profile/Profile'));
+import {UserContext} from './UserContext'
+
+import gif from './images/squadgamegif.gif'
+
+const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
+const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/RegistrationForm'));
  
 
 function App() {
+  const [user, setUser] = useState({identifier: ""});
   useEffect(() => {
-    document.title = 'Squad Game'
-    return () => {
-      document.title = 'Squad Game'
-    }
+    // get value from local storage
+    setUser(localStorage.getItem('user') || {identifier: ""})
+    console.log('\nlocal\n', localStorage.getItem('user'))
   }, [])
+
+  useEffect(() => {console.log('\nuser\n', user)}, [user])
 
   function Framework() {
     return (
@@ -32,7 +38,7 @@ function App() {
         <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
           <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch'}}>
             <SidebarComponent />
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5}}>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column'}}>
               <Outlet />
             </div>
           </div>
@@ -44,44 +50,114 @@ function App() {
     </Fragment>)
   }
 
-  return (
-    <Routes>
-      <Route path="/" element={<Framework/>}>
+  function FrameworkLogin() {
+    return (
+    <Fragment>
+      <div style={{minHeight: '98vh'}}>
+        <Row style={{maxHeight: '8vh'}}>
+          <Header />
+        </Row>
+        <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
+          <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center'}}>
+            <Outlet />
+          </div>
+        </Row>
+      </div>
+      <Row>
+        <Footer />
+      </Row>
+    </Fragment>)
+  }
+
+  function HomePage() {
+    return (<Fragment>
+      <div id="deneme" 
+        style={{height: '100%', display: 'flex', flexDirection: 'column', 
+          justifyContent: user.token ? 'center' : 'space-around' , alignItems: 'center'}}>
+        <img src={gif} width="250" />
+        {user.token ? 
+          <span className="main-logo">Squad Game</span> 
+          : 
+          <span>
+            Welcome <Link to="/login">Login Here</Link>
+            </span>}
+      </div>
       
-        <Route index element={<>Welcome</>} />
+    </Fragment>)
+  }
 
-        <Route path="login" 
-          element={
-            <Suspense fallback={<>...</>}>
-              <Login/>
-            </Suspense>}/>
+  return (
+    <UserContext.Provider value={{user, setUser}}>
+      <Routes>
+        {user.token ? 
+          <Route path="/" element={<Framework/>}>
+          
+            <Route index element={<HomePage/>} />
 
-        <Route path="register" 
-          element={
-            <Suspense fallback={<>...</>}>
-              <Register/>
-            </Suspense>}/>
+            <Route path="login" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <Login/>
+                </Suspense>}/>
 
-        <Route path="forgot-password" 
-          element={
-            <Suspense fallback={<>...</>}>
-              <PasswordReset/>
-            </Suspense>}/>
+            <Route path="register" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <Register/>
+                </Suspense>}/>
 
-        <Route path="profile" 
-          element={
-            <Suspense fallback={<>...</>}>
-              <Profile/>
-            </Suspense>}/>
+            <Route path="forgot-password" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <PasswordReset/>
+                </Suspense>}/>
 
-        
+            <Route path="profile" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <Profile/>
+                </Suspense>}/>
 
-        {/* Using path="*"" means "match anything", so this route
-              acts like a catch-all for URLs that we don't have explicit
-              routes for. */}
-        <Route path="*" element={<>Welcome</>} />
-      </Route>
-    </Routes>
+            
+
+            {/* Using path="*"" means "match anything", so this route
+                  acts like a catch-all for URLs that we don't have explicit
+                  routes for. */}
+            <Route path="*" element={<>Welcome</>} />
+          </Route>
+
+        :
+          
+          <Route path="/" element={<FrameworkLogin/>}>
+          
+            <Route index element={<HomePage/>} />
+
+            <Route path="login" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <Login/>
+                </Suspense>}/>
+
+            <Route path="register" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <Register/>
+                </Suspense>}/>
+
+            <Route path="forgot-password" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <PasswordReset/>
+                </Suspense>}/>
+            
+
+            {/* Using path="*"" means "match anything", so this route
+                  acts like a catch-all for URLs that we don't have explicit
+                  routes for. */}
+            <Route path="*" element={<><p>Welcome <Link to="/login">Login Here</Link></p></>} />
+          </Route>}
+      </Routes>
+    </UserContext.Provider>
   );
 }
 
