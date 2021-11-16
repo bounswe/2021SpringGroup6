@@ -236,11 +236,11 @@ function Profile() {
             <UncontrolledCollapse toggler="#toggler">
                 {SportNames.map((sport, index) => {
                     let level = profileInfo.sports.filter((usersport, index) => {return (usersport.sport === sport)});
-                    level = level === [] ? 0 : level[0];
-                    if (level > 0) {console.log('level', level)}
+                    console.log('level', level)
+                    level = level.length === 0 ? 0 : Number(level[0].skill_level);
                     return (<div key={sport} className="lowerInput" style={{}}>
                         <Label for={sport}>
-                            {sport}
+                            {`${sport}: ${level || 0}`}
                         </Label>
                         <Input
                             id={sport}

@@ -19,6 +19,8 @@ function RegisterComponents({Register, error}) {
         e.preventDefault();
 
         Register(details)
+        
+        window.location.href = '/login'
     }
     const paperStyle={padding :30, width:480, margin:"3rem auto"}
     const btnstyle={margin:'8px 0'}
@@ -33,13 +35,13 @@ function RegisterComponents({Register, error}) {
                     </Grid>
                     <TextField label='E-mail' placeholder='Enter e-mail' fullWidth required type ="email" name="email" id="email"  onChange={e => setDetails({...details, email: e.target.value})} value={details.email} />
                     <TextField className="lowerInput"  label='Password' placeholder='Enter password' fullWidth required type ="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
-                    <TextField className="lowerInput"  label='Identifier' placeholder='Enter Identifier' fullWidth required type ="identifier" name="identifier" id="identifier" onChange={e => setDetails({...details, identifier: e.target.value})} value={details.identifier} />
+                    <TextField className="lowerInput"  label='Identifier' placeholder='Enter User Name' fullWidth required type ="identifier" name="identifier" id="identifier" onChange={e => setDetails({...details, identifier: e.target.value})} value={details.identifier} />
                     <TextField className="lowerInput"  label='Name' placeholder='Enter name' fullWidth  type ="name" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name} />
                     <TextField className="lowerInput"  label='Surname' placeholder='Enter surname' fullWidth  type ="surname" name="surname" id="surname" onChange={e => setDetails({...details, surname: e.target.value})} value={details.surname} />
                     <TextField className="lowerInput"  label='Birth Date' placeholder='Enter birthdate' fullWidth  type ="birthdate" name="birthdate" id="birthdate" onChange={e => setDetails({...details, birthdate: e.target.value})} value={details.birthdate} />
                     <TextField className="lowerInput"  label='Gender' placeholder='Enter gender' fullWidth  type ="gender" name="gender" id="gender" onChange={e => setDetails({...details, gender: e.target.value})} value={details.gender} />
 
-                    <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Sign In</Button>
+                    <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Sign Up</Button>
                     <Typography >
                         <Link to="/forgot-password" >
                             Forgot password ?
