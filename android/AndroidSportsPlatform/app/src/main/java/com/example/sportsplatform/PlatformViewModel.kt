@@ -52,6 +52,15 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
         }
     }
 
+    fun onRegisterButtonClick(view: View){
+
+        Coroutines.main {
+            Intent(view.context, RegisterActivity::class.java).also{
+                view.context.startActivity(it)
+            }
+        }
+    }
+
     private fun closeSoftKeyboard(context: Context, v: View) {
         val iMm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         iMm.hideSoftInputFromWindow(v.windowToken, 0)
