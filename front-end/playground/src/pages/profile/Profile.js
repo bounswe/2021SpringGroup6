@@ -76,7 +76,7 @@ function Profile() {
 
     return (
     <div style={{minWidth: '45%', padding: '4rem 0'}}>
-        <div className="title">
+        <div className="profile-title">
             <span>Profile Settings</span>
             <Button 
                 disabled={!validateEmail(profileInfo.email)}

@@ -92,9 +92,9 @@ class PasswordReset extends React.Component {
 
                 {/* From https://react-bootstrap.netlify.app/components/forms/*/}
                 <Card variant="success" style={{ margin: '40px'}} className='all' >
-                    <h1 className="title" style={{ fontSize: '50px'}}>Password Reset Page</h1>   
+                    <h1 className="forgot-title" style={{ fontSize: '50px'}}>Password Reset Page</h1>   
                     
-                    <Form className="informationForm"onSubmit={this.handleSubmit} >
+                    <Form className="forgot-informationForm"onSubmit={this.handleSubmit} >
                         <Form.Group className="mb-3" controlId="email">
                             <Form.Label style={{ fontSize: '30px'}}>Email</Form.Label>
                             {/*<Form.Control placeholder="Enter email" />*/}

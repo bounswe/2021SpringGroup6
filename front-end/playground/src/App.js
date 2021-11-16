@@ -2,7 +2,7 @@ import {React, Fragment, useEffect, lazy, Suspense, useState} from 'react'
 // import logo from './logo.svg';
 import './App.css';
 import {Row} from 'react-bootstrap'
-import { Routes, Route, Outlet, Link, Redirect } from 'react-router-dom';
+import { Routes, Route, Outlet, Link, Navigate } from 'react-router-dom';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
@@ -15,7 +15,7 @@ import gif from './images/squadgamegif.gif'
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
-const Register = lazy(() => import('./pages/Register/RegistrationForm'));
+const Register = lazy(() => import('./pages/Register/Register'));
  
 
 function App() {
@@ -100,12 +100,6 @@ function App() {
                   <Login/>
                 </Suspense>}/>
 
-            <Route path="register" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <Register/>
-                </Suspense>}/>
-
             <Route path="forgot-password" 
               element={
                 <Suspense fallback={<>...</>}>
@@ -123,7 +117,7 @@ function App() {
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit
                   routes for. */}
-            <Route path="*" element={<>Welcome</>} />
+            <Route path="*" element={<Navigate replace to="/" />} />
           </Route>
 
         :
@@ -154,7 +148,7 @@ function App() {
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit
                   routes for. */}
-            <Route path="*" element={<><p>Welcome <Link to="/login">Login Here</Link></p></>} />
+            <Route path="*" element={<Navigate replace to="/" />} />
           </Route>}
       </Routes>
     </UserContext.Provider>

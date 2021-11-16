@@ -1,4 +1,4 @@
-.title {
+.profile-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 16px;
@@ -8,5 +8,5 @@
 }
 
 .lowerInput {
-    margin-top: 16px;
+    margin-top: 1rem;
 }

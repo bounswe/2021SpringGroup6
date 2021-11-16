@@ -28,11 +28,11 @@ function Header() {
                                     Home
                                 </Link>
                             </Nav.Link>
-                            <Nav.Link href="#link">Events</Nav.Link>
+                            <Nav.Link href="">Events</Nav.Link>
                             <NavDropdown title="Additional Features" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Equipments</NavDropdown.Item>
+                            <NavDropdown.Item href="">Equipments</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.2">Badges</NavDropdown.Item>
+                            <NavDropdown.Item href="">Badges</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

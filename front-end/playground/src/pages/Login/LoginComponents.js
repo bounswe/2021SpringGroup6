@@ -6,7 +6,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link, Navigate } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+import './LoginComponents.css'
 
 
 
@@ -21,7 +23,7 @@ function LoginComponents({Login, error}) {
 
         console.log('\nlocal\n', localStorage.getItem('user'));
     }
-    const paperStyle={padding :20,height:'40vh',width:380, margin:"20px auto"}
+    const paperStyle={padding :30,width:480, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}
 
     return (
@@ -32,8 +34,26 @@ function LoginComponents({Login, error}) {
                     <Grid align='center'>
                         { (error !=="") ? ( <div className="error">{error}</div> ) : ""}
                     </Grid>
-                    <TextField label='Identifier' placeholder='Enter identifier' fullWidth required type ="identifier" name="identifier" id="identifier" onChange={e => setDetails({...details, identifier: e.target.value})} value={details.identifier} />
-                    <TextField label='Password' placeholder='Enter password' fullWidth required type ="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password} />
+                    <TextField 
+                        label='User Name' 
+                        placeholder='Enter user name' 
+                        fullWidth required 
+                        type="identifier" 
+                        name="identifier" 
+                        id="identifier" 
+                        onChange={e => setDetails({...details, identifier: e.target.value})} 
+                        value={details.identifier} 
+                    />
+                    <TextField className="lowerInput"
+                        label='Password' 
+                        placeholder='Enter password' 
+                        fullWidth required 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        onChange={e => setDetails({...details, password: e.target.value})} 
+                        value={details.password}
+                    />
                     <FormControlLabel
                         control={
                         <Checkbox
