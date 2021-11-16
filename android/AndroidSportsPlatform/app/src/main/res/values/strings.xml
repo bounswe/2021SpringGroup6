@@ -10,4 +10,6 @@
     <string name="todo">TODO</string>
     <string name="e_mail">e-mail</string>
     <string name="home">HOME</string>
+    <string name="profile">profile</string>
+    <string name="menu">menu</string>
 </resources>
