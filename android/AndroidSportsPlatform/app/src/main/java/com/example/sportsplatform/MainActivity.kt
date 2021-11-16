@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         binding.viewmodel = viewModel
 
         initObservers()
-
     }
     private fun initObservers(){
         viewModel.userLiveData.observe(this, Observer {

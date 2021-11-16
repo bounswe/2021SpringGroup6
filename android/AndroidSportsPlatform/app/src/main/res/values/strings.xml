@@ -3,5 +3,7 @@
     <string name="title">Sports Platform</string>
     <string name="paragraph">Sport</string>
     <string name="login">Login</string>
+    <string name="profile">Profile</string>
+    <string name="menu">Menu</string>
     <string name="Email">Email</string>
 </resources>

@@ -39,10 +39,12 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
         }
     }
 
+
     private fun closeSoftKeyboard(context: Context, v: View) {
         val iMm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         iMm.hideSoftInputFromWindow(v.windowToken, 0)
         v.clearFocus()
     }
+
 
 }
