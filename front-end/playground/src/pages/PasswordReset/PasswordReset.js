@@ -61,18 +61,11 @@ class PasswordReset extends React.Component {
             console.log('Reached1')
             axios
             .post(baseURL, {
-                email : "elif@example.com",
-                password : "12fgh45y2",
-                identifier : "elif",
-                name : "elif",
-                surname : "ball",
-                location : "trabzon",
-                age : 22,
-                gender : "female",
-                sports : [{"sport":"soccer", "skill_level":2}]
+                email : this.state.form.email
             }).then((response) => {
                 if(response.status === 200 || response.status === 201) {
                     alert('If email provided is correct, a reset password is sent, please check spam.')
+                    window.location.href = '/'
                 } else {
                     alert('Not a valid email')
                 }

@@ -22,8 +22,9 @@ function App() {
   const [user, setUser] = useState({identifier: ""});
   useEffect(() => {
     // get value from local storage
-    setUser(localStorage.getItem('user') || {identifier: ""})
-    console.log('\nlocal\n', localStorage.getItem('user'))
+    // importsetUser(localStorage.getItem('user') || {identifier: ""})
+    //console.log('\nlocal\n', localStorage.getItem('user'))
+    console.log('app is being rendered')
   }, [])
 
   useEffect(() => {console.log('\nuser\n', user)}, [user])
@@ -74,7 +75,7 @@ function App() {
       <div id="deneme" 
         style={{height: '100%', display: 'flex', flexDirection: 'column', 
           justifyContent: user.token ? 'center' : 'space-around' , alignItems: 'center'}}>
-        <img src={gif} width="250" />
+        <img src={gif} width="250" alt="logo" />
         {user.token ? 
           <span className="main-logo">Squad Game</span> 
           : 

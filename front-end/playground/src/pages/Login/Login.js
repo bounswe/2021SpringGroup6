@@ -10,17 +10,22 @@ function Login() {
   const {user, setUser} = useContext(UserContext);
   const [error, setError] = useState("");
 
-  const Login = async details => {
+  const Login = details => {
 
     axios.post('/users/login', {identifier:details.identifier, password:details.password})
     .then(function (response) {
         if(response.status === 200){
             setUser(prevState => ({
-                ...prevState,
+                //...prevState,
                 identifier:details.identifier,
-                token: response.data.token
+                token: response.data.token,
+                user_id: response.data.user_id,
             }))
-            localStorage.setItem("user",{identifier:details.identifier, token:response.data.token});
+            localStorage.setItem("user",{
+              identifier:details.identifier, 
+              token:response.data.token, 
+              user_id: response.data.user_id
+            });
             //redirectToHome();
             console.log("Logged in")
             console.log('\nresponse\n', response)

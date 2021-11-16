@@ -17,26 +17,29 @@ function Profile() {
         gender : '',
         sports: []
     });
-    useEffect(() => {
-        // set user attributes
-        //console.log('\nuser\n', user)
-        axios.get(`/users/${user.id}`)
+
+    useEffect(() => {console.log('\nprofile info\n', profileInfo);}, [profileInfo])
+
+    const getUserInfo = () => {
+        axios.get(`/users/${user.user_id}`)
         .then(function (response) {
             if(response.status === 200){
-                setUser(prevState => ({
-                    ...prevState,
-                    ...response.data
-                }));
+                // setUser(prevState => ({
+                //     ...prevState,
+                //     ...response.data
+                // }));
                 // prepare profile info object, not ready yet
-                const {user_id, knowsAbout,/* @context, @id, @type,*/ ...profile} = response;
-                profile.sports = SportNames.map((sport, index) => ({sport: index, skill_level: response.knowsAbout[index]}))
+                const {user_id, knowsAbout,/* @context, @id, @type,*/ ...profile} = response.data;
+                profile.sports = response.data.knowsAbout.map((element) => ({
+                    sport: element.name, 
+                    skill_level: element.value})) || [];
                 delete profile["@context"];
                 delete profile["@id"];
                 delete profile["@type"];
 
-                setProfileInfo(prev => ({...prev, profile}))
+                setProfileInfo(prev => ({...prev, ...profile}))
                 //localStorage.setItem("user",{});
-                console.log('\nresponse\n', response)
+                console.log('\nsuccessful user data response\n', response.data)
             } else{
                 console.log("Some error ocurred");
             }
@@ -44,6 +47,12 @@ function Profile() {
         .catch(function (error) {
             console.log(error);
         });
+    }
+
+    useEffect(() => {
+        // set user attributes
+        //console.log('\nuser\n', user)
+        getUserInfo();
     }, [])
 
     function validateEmail(email) {
@@ -55,12 +64,25 @@ function Profile() {
         setProfileInfo((prev) => ({...prev, [info.field]: info.value}))
     }
 
-    function handleSportsChange(info) {
-        console.log('\nsport\n', info.field, info.value, typeof info.value);
+    function handleSportsChange({sport_name, skill_level}) {
+        let flag = false;
+        const tempInfo = profileInfo.sports.map((sport) => {
+            if (sport.sport === sport_name) {
+                sport.skill_level = Number(skill_level);
+                flag = true;
+            }
+            return sport
+        });
+        if (flag) {
+            setProfileInfo((prev) => ({...prev, sports: tempInfo}))
+        } else {
+            setProfileInfo((prev) => ({...prev, sports: [...prev.sports, {sport: sport_name, skill_level: skill_level}]}))
+        }
+        //console.log('\nsport\n', info.field, info.value, typeof info.value);
     }
 
     function formSubmit() {
-        axios.put(`/users/${user.id}`, profileInfo)
+        axios.put(`/users/${user.user_id}`, profileInfo)
         .then(function (response) {
             if(response.status === 200){
                 alert('Saved Successfully!')
@@ -212,17 +234,20 @@ function Profile() {
                 Sports
             </Button>
             <UncontrolledCollapse toggler="#toggler">
-                {SportNames.map((sport, index) => (
-                    <div key={sport} className="lowerInput" style={{}}>
+                {SportNames.map((sport, index) => {
+                    let level = profileInfo.sports.filter((usersport, index) => {return (usersport.sport === sport)});
+                    level = level === [] ? 0 : level[0];
+                    if (level > 0) {console.log('level', level)}
+                    return (<div key={sport} className="lowerInput" style={{}}>
                         <Label for={sport}>
                             {sport}
                         </Label>
                         <Input
                             id={sport}
                             name={sport}
-                            //value={profileInfo.sports[index]}
+                            defaultValue={level}
                             onChange={(event) => {
-                                handleSportsChange({field: 'sport', value: event.target.value})
+                                handleSportsChange({sport_name: sport, skill_level: event.target.value})
                             }}
                             type="select"
                         >   
@@ -245,8 +270,8 @@ function Profile() {
                                 {5}
                             </option>
                         </Input>
-                    </div>
-                ))}
+                    </div>)
+                })}
             </UncontrolledCollapse>
         </Card>
     </div>
