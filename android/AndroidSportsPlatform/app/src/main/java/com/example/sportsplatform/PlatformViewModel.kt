@@ -2,6 +2,7 @@ package com.example.sportsplatform
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
@@ -40,6 +41,9 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
                 val userToken = currResponse.body()?.identifier
                 userLiveData.postValue(userToken)
                 view.context.toast("Success")
+                Intent(view.context, MainActivity2::class.java).also{
+                    view.context.startActivity(it)
+                }
             } else {
                 view.context.toast(identifier!!)
                 view.context.toast(pass!!)

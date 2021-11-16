@@ -16,7 +16,8 @@
         android:minHeight="48dp"
         android:text=""
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="52dp" />
+        tools:layout_editor_absoluteY="52dp"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/name"
@@ -46,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="e-mail"
+        android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,8 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mailAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/mailAddress"
+        android:importantForAutofill="no" />
     <EditText
         android:id="@+id/location"
         android:layout_width="wrap_content"
@@ -111,9 +113,13 @@
         android:id="@+id/imageView2"
         android:layout_width="151dp"
         android:layout_height="131dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.086"
         app:srcCompat="@drawable/_51symbol"
-        tools:layout_editor_absoluteX="230dp"
-        tools:layout_editor_absoluteY="52dp" />
+        android:contentDescription="@string/todo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
