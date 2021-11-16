@@ -1,6 +1,6 @@
 package com.example.sportsplatform.data
 
-import com.example.sportsplatform.data.models.TokenResponse
+import com.example.sportsplatform.data.models.UserRequest
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -8,16 +8,15 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface UserApi {
 
-    @Headers("Content-Type: application/json")
-    @POST("users/login/")
+    @POST("users/login")
     suspend fun searchUser(
-            @Body requestBody: String
-    ): Response<TokenResponse>
+            @Body userRequest: UserRequest
+    ): Response<UserRequest>
+
 
     companion object{
         operator fun invoke() : UserApi {

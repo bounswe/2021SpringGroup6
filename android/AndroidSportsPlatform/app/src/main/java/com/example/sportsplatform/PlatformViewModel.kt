@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.Repository
+import com.example.sportsplatform.data.models.UserRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
 
@@ -25,17 +26,18 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
 
         closeSoftKeyboard(view.context, view)
 
-        if(identifier.isNullOrEmpty()){
+        if(identifier.isNullOrEmpty() || pass.isNullOrEmpty()){
             return
         }
 
 
         Coroutines.main {
-            val currResponse = repo.findUser(identifier!!, pass!!)
+            val userRequest = UserRequest(identifier!!, pass!!)
+            val currResponse = repo.findUser(userRequest)
             view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
                 //weatherListener?.onSuccess()
-                val userToken = currResponse.body()?.token
+                val userToken = currResponse.body()?.identifier
                 userLiveData.postValue(userToken)
                 view.context.toast("Success")
             } else {
