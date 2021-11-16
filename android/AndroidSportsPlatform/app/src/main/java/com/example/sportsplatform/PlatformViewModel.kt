@@ -21,8 +21,6 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
     var pass: String? = null
 
     fun onSearchButtonClick(view: View){
-        //weatherListener?.onStarted()
-        //closeSoftKeyboard(view.context, view)
 
         closeSoftKeyboard(view.context, view)
 
@@ -30,22 +28,28 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
             return
         }
 
-
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
-            view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
                 //weatherListener?.onSuccess()
-                val userToken = currResponse.body()?.identifier
-                userLiveData.postValue(userToken)
+                val userToken = currResponse.body()?.user_id
+                userLiveData.postValue(userToken.toString())
                 view.context.toast("Success")
+                view.context.toast(userToken.toString())
             } else {
                 view.context.toast(identifier!!)
                 view.context.toast(pass!!)
+                view.context.toast("Fail")
                 //weatherListener?.onFailure()
             }
         }
+    }
+
+    fun onRegisterButtonClick(view: View){
+
+        closeSoftKeyboard(view.context, view)
+
     }
 
     private fun closeSoftKeyboard(context: Context, v: View) {
