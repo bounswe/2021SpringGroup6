@@ -21,7 +21,7 @@ function LoginComponents({Login, error}) {
 
         await Login(details);
 
-        console.log('\nlocal\n', localStorage.getItem('user'));
+        console.log('\nlocal\n', JSON.parse(localStorage.getItem('user')));
     }
     const paperStyle={padding :30,width:480, margin:"20px auto"}
     const btnstyle={margin:'8px 0'}

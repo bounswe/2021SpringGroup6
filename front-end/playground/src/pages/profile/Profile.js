@@ -1,26 +1,18 @@
-import {React, Fragment, useState, useEffect, useContext} from 'react';
+import {React, useState, useEffect, useContext} from 'react';
 import { Card } from 'react-bootstrap'
 import './Profile.css';
 import {UserContext} from '../../UserContext';
 import axios from 'axios';
 import SportNames from '../../PermanentComponents/SportNames.js';
-import { Button, Input, Label, Collapse,  UncontrolledCollapse } from 'reactstrap';
+import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
 
 function Profile() {
     const {user, setUser} = useContext(UserContext);
-    const [profileInfo, setProfileInfo] = useState({
-        email: '',
-        identifier: '',
-        name: '',
-        familyName: '',
-        birthDate : '',
-        gender : '',
-        sports: []
-    });
-
-    useEffect(() => {console.log('\nprofile info\n', profileInfo);}, [profileInfo])
 
     const getUserInfo = () => {
+        if(user.profile) {
+            return {...user.profile}
+        }
         axios.get(`/users/${user.user_id}`)
         .then(function (response) {
             if(response.status === 200){
@@ -36,24 +28,38 @@ function Profile() {
                 delete profile["@context"];
                 delete profile["@id"];
                 delete profile["@type"];
-
-                setProfileInfo(prev => ({...prev, ...profile}))
-                //localStorage.setItem("user",{});
-                console.log('\nsuccessful user data response\n', response.data)
+                return {...profile}
             } else{
                 console.log("Some error ocurred");
+                return {
+                    email: '',
+                    identifier: '',
+                    name: '',
+                    familyName: '',
+                    birthDate : '',
+                    gender : '',
+                    sports: []
+                }
             }
         })
         .catch(function (error) {
+            console.log("Some error ocurred");
             console.log(error);
+            return {
+                email: '',
+                identifier: '',
+                name: '',
+                familyName: '',
+                birthDate : '',
+                gender : '',
+                sports: []
+            }
         });
     }
+    
+    const [profileInfo, setProfileInfo] = useState(getUserInfo());
 
-    useEffect(() => {
-        // set user attributes
-        //console.log('\nuser\n', user)
-        getUserInfo();
-    }, [])
+    useEffect(() => {console.log('\nprofile info\n', profileInfo);}, [profileInfo])
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -65,6 +71,7 @@ function Profile() {
     }
 
     function handleSportsChange({sport_name, skill_level}) {
+        if (skill_level === 0) return;
         let flag = false;
         const tempInfo = profileInfo.sports.map((sport) => {
             if (sport.sport === sport_name) {
@@ -78,14 +85,26 @@ function Profile() {
         } else {
             setProfileInfo((prev) => ({...prev, sports: [...prev.sports, {sport: sport_name, skill_level: skill_level}]}))
         }
-        //console.log('\nsport\n', info.field, info.value, typeof info.value);
     }
 
     function formSubmit() {
-        axios.put(`/users/${user.user_id}`, profileInfo)
+        const toBeSent = {};
+        for (let key in profileInfo) {
+            if (profileInfo[key]){
+                if (key !== 'sports' || (key === 'sports' && profileInfo[key].length > 0))
+                    toBeSent[key] = profileInfo[key]
+            }
+        }
+        console.log('\nprofile info to be sent\n', toBeSent);
+        axios.put(`/users/${user.user_id}`, toBeSent, {headers:{'Authorization': `Token ${user.token}`}})
         .then(function (response) {
             if(response.status === 200){
-                alert('Saved Successfully!')
+                alert('Saved Successfully!');
+                setUser((prev) => ({...prev, profile: {...toBeSent}}));
+                localStorage.setItem("user",
+                    JSON.stringify({...JSON.parse(localStorage.getItem('user')), 
+                        profile: {...toBeSent}}));
+                console.log('reach here\n')
             } else{
                 alert("Please try again.");
             }
@@ -180,7 +199,7 @@ function Profile() {
 
             <div className="lowerInput" style={{}}>
                 <Label for="BirthDate">
-                    BirthDate
+                    Birth Date
                 </Label>
                 <Input
                     id="BirthDate"
@@ -197,7 +216,7 @@ function Profile() {
 
             <div className="lowerInput" style={{}}>
                 <Label for="Gender">
-                    Gender
+                    {`Gender ${profileInfo.gender ? `: ${profileInfo.gender}` : ''}`}
                 </Label>
                 <Input
                     id="Gender"
@@ -205,18 +224,19 @@ function Profile() {
                     placeholder=""
                     value={profileInfo.gender}
                     onChange={(event) => {
-                        handleChange({field: 'gender', value: event.target.value})
+                        handleChange({field: 'gender', 
+                            value: event.target.value === 'other' ? 'decline_to_report' : event.target.value})
                     }}
                     type="select"
                 >
                     <option>
-                        Other
+                        other
                     </option>
                     <option>
-                        Male
+                        male
                     </option>
                     <option>
-                        Female
+                        female
                     </option>
                 </Input>
             </div>
@@ -236,18 +256,17 @@ function Profile() {
             <UncontrolledCollapse toggler="#toggler">
                 {SportNames.map((sport, index) => {
                     let level = profileInfo.sports.filter((usersport, index) => {return (usersport.sport === sport)});
-                    console.log('level', level)
                     level = level.length === 0 ? 0 : Number(level[0].skill_level);
                     return (<div key={sport} className="lowerInput" style={{}}>
                         <Label for={sport}>
-                            {`${sport}: ${level || 0}`}
+                            {`${sport}`}
                         </Label>
                         <Input
                             id={sport}
                             name={sport}
                             defaultValue={level}
                             onChange={(event) => {
-                                handleSportsChange({sport_name: sport, skill_level: event.target.value})
+                                handleSportsChange({sport_name: sport, skill_level: Number(event.target.value)})
                             }}
                             type="select"
                         >   

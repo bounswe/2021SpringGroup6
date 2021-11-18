@@ -15,20 +15,49 @@ function Login() {
     axios.post('/users/login', {identifier:details.identifier, password:details.password})
     .then(function (response) {
         if(response.status === 200){
-            setUser(prevState => ({
-                //...prevState,
+            axios.get(`/users/${response.data.user_id}`)
+            .then(function (profile_response) {
+                if(profile_response.status === 200){
+                    const {
+                      user_id, 
+                      knowsAbout, 
+                      "@context": context, 
+                      "@id": id, 
+                      "@type": type, 
+                      ...profile
+                    } = profile_response.data;
+                    profile.sports = knowsAbout.map((element) => ({
+                        sport: element.name, 
+                        skill_level: element.value})) || [];
+                    setUser({
+                      identifier: details.identifier,
+                      token: response.data.token,
+                      user_id: response.data.user_id,
+                      context, id, type, 
+                      profile: profile,
+                    });
+                    localStorage.setItem("user",JSON.stringify({
+                      identifier:details.identifier, 
+                      token:response.data.token, 
+                      user_id: response.data.user_id,
+                      context, id, type, 
+                      profile: profile,
+                    }));
+                }
+            })
+            .catch(function (error) {
+                //console.log(error);
+                setUser({
                 identifier:details.identifier,
                 token: response.data.token,
                 user_id: response.data.user_id,
-            }))
-            localStorage.setItem("user",{
-              identifier:details.identifier, 
-              token:response.data.token, 
-              user_id: response.data.user_id
+                });
+                localStorage.setItem("user",JSON.stringify({
+                  identifier:details.identifier, 
+                  token:response.data.token, 
+                  user_id: response.data.user_id
+                }));
             });
-            //redirectToHome();
-            console.log("Logged in")
-            console.log('\nresponse\n', response)
         } else{
             console.log("Some error ocurred");
         }

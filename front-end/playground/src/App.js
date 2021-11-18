@@ -19,13 +19,8 @@ const Register = lazy(() => import('./pages/Register/Register'));
  
 
 function App() {
-  const [user, setUser] = useState({identifier: ""});
-  useEffect(() => {
-    // get value from local storage
-    // importsetUser(localStorage.getItem('user') || {identifier: ""})
-    //console.log('\nlocal\n', localStorage.getItem('user'))
-    console.log('app is being rendered')
-  }, [])
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
+  const [sidebarToggle, setSidebarToggle] = useState(true)
 
   useEffect(() => {console.log('\nuser\n', user)}, [user])
 
@@ -38,7 +33,7 @@ function App() {
         </Row>
         <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
           <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch'}}>
-            <SidebarComponent />
+            <SidebarComponent toggle={sidebarToggle} setToggle={setSidebarToggle} />
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column'}}>
               <Outlet />
             </div>

@@ -18,7 +18,7 @@ function Header() {
                     >
                         Squad Game
                     </Link>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Toggle className="navbar-collapse-custom" aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" style={{color: 'white'}}>
                         <Nav className="me-auto">
                             <Nav.Link>
