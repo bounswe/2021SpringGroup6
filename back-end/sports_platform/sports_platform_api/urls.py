@@ -11,6 +11,5 @@ urlpatterns = [
     path('sports', sport_views.get_sports),
     path('users/<int:user_id>', user_views.get_user),
     path('users/logout', user_views.logout),
-    path('users/recover', user_views.forgot_password),
-    path('users/<user_id>/visible_attributes',user_views.set_visibility)
+    path('users/recover', user_views.forgot_password)
 ]
