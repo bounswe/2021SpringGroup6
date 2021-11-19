@@ -275,8 +275,7 @@ def set_visibility(request, user_id):
 
     if not current_user.is_authenticated:
         return Response(data={"message": "Login required."}, status=401)
-
-    if current_user.user_id != user_id:
+    if current_user.user_id != int(user_id):
         return Response(data={"message": "Users cannot change other users' visibility information"}, status=403)
 
     validation = user_validation.Set_Visibility(data=request.data)
