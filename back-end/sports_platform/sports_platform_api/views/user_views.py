@@ -37,7 +37,7 @@ def get_user(request, user_id):
             return Response(serialized_user,status=200)  
     elif request.method == 'PUT':
         if not request.user.is_authenticated:
-            return Response({"message": "User not logged in."},
+            return Response({"message": "Login required"},
                         status=401)
         validation = user_validation.Update(data=request.data)
         if not validation.is_valid():
@@ -269,4 +269,22 @@ def forgot_password(request):
     return Response({"message": "If email provided is correct, a reset password is sent, please check spam."},
                     status=200)
 
+@api_view(['PUT'])
+def set_visibility(request, user_id):
+    current_user = request.user
 
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    if current_user.user_id != user_id:
+        return Response(data={"message": "Users cannot change other users' visibility information"}, status=403)
+
+    validation = user_validation.Set_Visibility(data=request.data)
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+    try:
+        with transaction.atomic():
+            current_user.set_visibility(validation.validated_data)
+            return Response(status=200)
+    except Exception:
+        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
