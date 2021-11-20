@@ -31,7 +31,7 @@ class Login(serializers.Serializer):
     password = serializers.CharField(min_length = 8, max_length = 15, validators = [password], required = True)
 
 class Block(serializers.Serializer):
-    date = serializers.DateField(validators = [date])
+    user_id =  serializers.IntegerField(min_value = 1, max_value = 9223372036854775807)
 
 class Follow(serializers.Serializer):
     user_id = serializers.IntegerField(min_value = 1, max_value = 9223372036854775807)

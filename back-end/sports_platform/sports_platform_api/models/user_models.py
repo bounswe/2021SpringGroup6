@@ -87,6 +87,18 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
 
+    def block(self, user_id):
+        date = datetime.datetime.now()
+        try:
+            user_to_block = User.objects.get(user_id=user_id)
+            Block.objects.create(blocker = self, blocked = user_to_block, date = date)
+            return True
+        except User.DoesNotExist:
+            return 401
+        except IntegrityError:
+            return 402
+        except Exception:
+            return 500
 
     def follow(self, user_id):
         date = datetime.datetime.now()
@@ -212,6 +224,7 @@ class SportSkillLevel(models.Model):
 class Block(models.Model):
     class Meta:
         db_table = 'block'
+        unique_together = (('blocker', 'blocked'),)
 
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
