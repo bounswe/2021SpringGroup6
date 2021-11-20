@@ -37,7 +37,7 @@ def get_user(request, user_id):
             return Response(serialized_user,status=200)  
     elif request.method == 'PUT':
         if not request.user.is_authenticated:
-            return Response({"message": "Login required"},
+            return Response({"message": "Login required."},
                         status=401)
         validation = user_validation.Update(data=request.data)
         if not validation.is_valid():
