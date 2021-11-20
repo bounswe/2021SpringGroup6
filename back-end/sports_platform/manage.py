@@ -11,16 +11,17 @@ def normalize_name(sport_name):
 
 def sport_records():
     from sports_platform_api.models.sport_models import Sport
-    uri = 'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'
-    sports = requests.get(uri).json()
-
-    for sport in sports['sports']:
-        try:
-            sport_name = normalize_name(sport['strSport'])
-            Sport.objects.create(name=sport_name)
-        except: # Already exists
-            pass
-    
+    uri = 'https://www.thesportsdb.com/api/v1/json/2/all_sports.php'
+    try:
+        sports = requests.get(uri).json()
+        for sport in sports['sports']:
+            try:
+                sport_name = normalize_name(sport['strSport'])
+                Sport.objects.create(name=sport_name)
+            except: # Already exists
+                pass
+    except:
+        pass # error from external library so skip
 
 def main():
     """Run administrative tasks."""

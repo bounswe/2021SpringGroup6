@@ -5,7 +5,7 @@ import random
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.conf import settings
-from django.db import IntegrityError, transaction
+from django.db import  transaction
 
 class Guest:
 
