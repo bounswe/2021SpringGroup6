@@ -20,7 +20,7 @@ class SetVisibilityTest(TestCase):
     
     def test_forbidden(self):
         response = self.client.put(self.invalid_user_path, content_type='application/json', data=self.info, **self.header)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()['message'], 'Users cannot change other users visibility information')
 
     def test_success(self):
