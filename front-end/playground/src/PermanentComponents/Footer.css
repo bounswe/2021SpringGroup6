@@ -5,3 +5,12 @@
    width:100%;
    text-align: center;
 }
+
+.footer-container {
+   display: flex; 
+   flex-direction: row; 
+   justify-content: space-around;
+   padding-top: 20px;
+   padding-bottom: 10px;
+   background-color: #eeeeee;
+}

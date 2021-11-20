@@ -1,12 +1,46 @@
-.col-md-12.d-none.d-md-block.bg-warning.sidebar{
-    max-width: 180px;
+.sidebar{
+    padding-top: 1rem;
     float: left;
+    font-size: 16px;
+    background-color: #ed1b76;
+    height: 100%;
+    color: white;
     font-size: 20px;
-    margin-right: 40px;
-    
+    /* width: 170px; */
 }
 
+.nav-link {
+    color: white !important;
+}
 
+.sidebar-toggle {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
 
+.sidebar-toggle-icon-wrapper {
+    cursor: pointer;
+    border-radius: 0.65rem;
+    margin: 3px 0 0 3px;
+}
+
+.sidebar-toggle-icon-wrapper:hover {
+    background-color: #f44786;
+}
+
+.sidebar-toggle-icon {
+    height: 2rem;
+    width: 2rem
+}
+
+.sidebar-toggle-icon-left {
+    padding-left: 0.65rem;
+}
+
+.sidebar-toggle-icon-right {
+    padding: 0 0.32rem;
+}
 
 

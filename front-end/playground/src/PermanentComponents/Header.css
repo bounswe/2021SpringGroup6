@@ -1,3 +1,11 @@
 .page {
     
 }
+
+.header-container {
+    background-color: black;
+}
+
+.navbar-collapse-custom {
+    background-color: #ed1b76 !important;
+}
