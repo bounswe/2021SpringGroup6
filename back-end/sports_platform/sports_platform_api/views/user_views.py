@@ -61,11 +61,9 @@ def create_user(request):
     password = validation.data['password']
 
     try:
-        db_data = request.data.copy()
-        db_data.update(validation.data) # get validated value if it has
-        guest= Guest(db_data['identifier'], password)
+        guest= Guest(validation.data['identifier'], password)
         with transaction.atomic():
-            guest.register(db_data)
+            guest.register(validation.data)
     except ValueError:
         return Response(data = {"message": 'There is an error regarding the provided data'}, status=400)
     except IntegrityError as e:
