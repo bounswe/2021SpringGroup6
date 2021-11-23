@@ -268,3 +268,33 @@ def forgot_password(request):
                     status=200)
 
 
+@api_view(['POST', 'DELETE'])
+def block_user(request, user_id):
+
+    if request.method == 'DELETE':
+        current_user = request.user
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to unblock for another user."}, status=403)
+
+        validation = user_validation.Block(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+
+        user_to_unblock= validation.validated_data['user_id']
+
+        if user_to_unblock == current_user.user_id:
+            return Response(data={"message": "User cannot unblock herself."}, status=400)
+
+        try:
+            res = current_user.unblock(user_to_unblock)
+            if res == 403:
+                return Response(data={"message": "Enter a valid user_id to unblock."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "An error occured, please try again later"}, status=500)
+            else:
+                return Response(status=200)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)

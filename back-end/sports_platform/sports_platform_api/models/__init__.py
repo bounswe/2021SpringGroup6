@@ -4,5 +4,5 @@ https://docs.djangoproject.com/en/3.2/topics/db/models/#organizing-models-in-a-p
 Import other models on this file
 """
 
-from .user_models import User, SportSkillLevel, Follow
+from .user_models import User, SportSkillLevel, Follow, Block
 from .sport_models import Sport
