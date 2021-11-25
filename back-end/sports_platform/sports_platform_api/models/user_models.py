@@ -74,18 +74,26 @@ class User(AbstractBaseUser):
 
     user_id = models.BigAutoField(primary_key=True)
     email = models.EmailField(unique=True)
+    email_visibility = models.BooleanField(default=True)
     password = models.CharField(max_length=300)
     identifier = models.CharField(max_length=300, unique=True)
     name = models.CharField(max_length=300,blank=True)
+    name_visibility = models.BooleanField(default=True)
     familyName = models.CharField(max_length=30,blank=True)
+    familyName_visibility = models.BooleanField(default=True)
     birthDate = models.DateField(blank=True, null=True)
+    birthDate_visibility = models.BooleanField(default=True)
     gender = models.CharField(max_length=40,blank=True, null=True)
+    gender_visibility = models.BooleanField(default=True)
 
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'identifier'
     REQUIRED_FIELDS = ['email']
+
+    def set_visibility(self, info):
+        User.objects.filter(pk=self.user_id).update(**info)
 
 
     def follow(self, user_id):

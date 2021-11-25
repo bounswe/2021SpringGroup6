@@ -12,5 +12,6 @@ urlpatterns = [
     path('users/<int:user_id>', user_views.get_user),
     path('users/logout', user_views.logout),
     path('users/recover', user_views.forgot_password),
-    path('users/<int:user_id>/blocked', user_views.block_user)
+    path('users/<int:user_id>/blocked', user_views.block_user),
+    path('users/<user_id>/visible_attributes',user_views.set_visibility)
 ]

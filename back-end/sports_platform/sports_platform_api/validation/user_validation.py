@@ -17,6 +17,11 @@ class User(serializers.Serializer):
    birthDate = serializers.DateField(required=False, validators = [date])
    gender =serializers.CharField(required=False, validators = [gender])
    password = serializers.CharField(min_length = 8, max_length = 15, validators = [password], required = True)
+   email_visibility = serializers.BooleanField(required=False)
+   name_visibility = serializers.BooleanField(required=False)
+   familyName_visibility = serializers.BooleanField(required=False)
+   birthDate_visibility = serializers.BooleanField(required=False)
+   gender_visibility = serializers.BooleanField(required=False)
 
 class Update(serializers.Serializer):
    email = serializers.EmailField(required=False)
@@ -40,3 +45,9 @@ class Follow(serializers.Serializer):
 class Recover(serializers.Serializer):
     email = serializers.EmailField(required=True)
 
+class Set_Visibility(serializers.Serializer):
+    email_visibility = serializers.BooleanField(required=False)
+    name_visibility = serializers.BooleanField(required=False)
+    familyName_visibility = serializers.BooleanField(required=False)
+    birthDate_visibility = serializers.BooleanField(required=False)
+    gender_visibility = serializers.BooleanField(required=False)
