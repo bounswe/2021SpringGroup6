@@ -10,5 +10,5 @@ def get_sports(request):
     except Exception:
         return Response(data = {"message": 'There is an internal error, try again later.'}, status=500)
     
-    serialized_sports = [sport.name for sport in sports]
-    return Response(data = {'sport_names':serialized_sports}, status=200)
+    serialized_sports = [{"@type":"Thing","name": sport.name,} for sport in sports]
+    return Response(data = serialized_sports, status=200)
