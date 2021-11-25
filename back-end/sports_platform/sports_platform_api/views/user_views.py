@@ -302,7 +302,7 @@ def block_user(request, user_id):
         user_to_unblock= validation.validated_data['user_id']
 
         if user_to_unblock == current_user.user_id:
-            return Response(data={"message": "User cannot unblock herself."}, status=400)
+            return Response(data={"message": "User cannot unblock itself."}, status=400)
 
         try:
             res = current_user.unblock(user_to_unblock)
