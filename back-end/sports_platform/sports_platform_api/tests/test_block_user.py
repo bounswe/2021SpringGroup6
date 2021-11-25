@@ -49,7 +49,7 @@ class BlockTest(TestCase):
 
         self.response_bodies = {'block_for_other': {"message": "Not allowed to block for another user."},
             'already_blocked': {"message": "User already blocked."},
-            'block_yourself': {"message": "User cannot block herself."},
+            'block_yourself': {"message": "User cannot block itself."},
             'block_non_existing': {"message": "Enter a valid user_id to block."}
         }
 
