@@ -1,6 +1,5 @@
 from django.test import Client, TestCase
 from rest_framework.authtoken.models import Token
-from ..serializers.user_serializer import UserSerializer
 from .test_helper_functions import create_mock_user
 
 
@@ -17,7 +16,7 @@ class UpdateUserTest(TestCase):
     def test_not_authorized(self):
         response = self.client.put(self.invalid_user_path,self.update_info)
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json()['message'],'User not logged in.')
+        self.assertEqual(response.json()['message'],'Login required.')
 
     def test_success(self):
         response = self.client.put(self.path,content_type='application/json', data=self.update_info, **self.header)

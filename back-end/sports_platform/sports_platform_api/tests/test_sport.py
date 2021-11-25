@@ -12,7 +12,7 @@ class GetSportTest(TestCase):
         self.path = '/sports'
         Sport.objects.create(name="soccer")
         Sport.objects.create(name="hockey")
-        self.sports = { "sport_names": ["soccer", "hockey"]}
+        self.sports =[{"@type":"Thing", "name":"soccer"}, {"@type":"Thing", "name":"hockey"}]
 
     def test_success(self):
         response = self.client.get(self.path)
