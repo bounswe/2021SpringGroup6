@@ -25,6 +25,6 @@ class DeleteUserTest(TestCase):
         self.assertEqual(response.json()['message'],'User not logged in.')
     
     def test_delete_another(self):
-        response = self.client.delete(self.invalid_path)
+        response = self.client.delete(self.invalid_path, **self.header)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['message'], "User cannot delete others' accounts.")
