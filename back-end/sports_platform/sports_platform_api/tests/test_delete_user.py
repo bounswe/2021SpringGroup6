@@ -13,6 +13,7 @@ class DeleteUserTest(TestCase):
         self.lion_token, _ = Token.objects.get_or_create(user=self.lion_user)
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.lion_token}'}
         self.path = f'/users/{self.lion_user.user_id}'
+        self.invalid_path = f'/users/10'
 
     def test_success(self):
         response = self.client.delete(self.path, **self.header)
@@ -22,3 +23,8 @@ class DeleteUserTest(TestCase):
         response = self.client.delete(self.path)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json()['message'],'User not logged in.')
+    
+    def test_delete_another(self):
+        response = self.client.delete(self.invalid_path)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['message'], "User cannot delete others' accounts.")

@@ -54,6 +54,10 @@ def get_user(request, user_id):
         if not request.user.is_authenticated:
             return Response({"message": "User not logged in."},
                         status=401)
+        
+        if user_id != request.user.user_id:
+            return Response(data={"message": "User cannot delete others' accounts."}, status=400)
+
         try:
             with transaction.atomic():
                 request.user.delete()
