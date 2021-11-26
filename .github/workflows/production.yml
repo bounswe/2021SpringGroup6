@@ -49,5 +49,5 @@ jobs:
         AWS_S3_BUCKET: pluto-react-front-end
         AWS_ACCESS_KEY_ID: AKIA6QL5RZFAMUBWYGSU
         AWS_SECRET_ACCESS_KEY: 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
-        AWS_REGION: US East (Ohio) us-east-2
+        AWS_REGION: us-east-2
         SOURCE_DIR: "build"
