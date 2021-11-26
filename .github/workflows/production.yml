@@ -50,4 +50,4 @@ jobs:
         AWS_ACCESS_KEY_ID: AKIA6QL5RZFAMUBWYGSU
         AWS_SECRET_ACCESS_KEY: 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
         AWS_REGION: us-east-2
-        SOURCE_DIR: 'front-end'
+        SOURCE_DIR: 'front-end/playground/public'
