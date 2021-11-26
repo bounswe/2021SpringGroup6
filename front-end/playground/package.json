@@ -2,7 +2,7 @@
   "name": "playground",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://13.59.0.178:8080",
+  "proxy": "http://18.217.235.17:8080",
   "dependencies": {
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
