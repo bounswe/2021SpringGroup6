@@ -128,6 +128,14 @@ class User(AbstractBaseUser):
                 return 403
         except Exception as e:
             return 500
+        
+    def unblock(self, user_id):
+        try:
+            num_unblocked, _ = Block.objects.filter(blocker=self.user_id, blocked=user_id).delete()
+            if num_unblocked == 0:
+                return 403
+        except Exception:
+            return 500
 
     def add_sport_interest(self, sport_name, skill_level):
         SportSkillLevel.objects.create(user_id=self.user_id,sport_id=sport_name, skill_level=skill_level)
@@ -146,6 +154,8 @@ class User(AbstractBaseUser):
                 else:# updating the skill level
                     sport_skill.update(**skills)
 
+    def delete(self):
+        User.objects.filter(pk=self.user_id).delete()
 
     def get_following(self):
         try:
@@ -233,9 +243,7 @@ class Block(models.Model):
     class Meta:
         db_table = 'block'
         unique_together = (('blocker', 'blocked'),)
-
+        
     blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
-
-
