@@ -48,8 +48,4 @@ jobs:
       with:
         args: --acl public-read --delete
       env:
-        AWS_S3_BUCKET: pluto-react-front-end-playground
-        AWS_ACCESS_KEY_ID: AKIA6QL5RZFAMUBWYGSU
-        AWS_SECRET_ACCESS_KEY: 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
-        AWS_REGION: us-east-2
         SOURCE_DIR: 'front-end/playground/build'
