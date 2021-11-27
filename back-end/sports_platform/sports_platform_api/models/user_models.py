@@ -142,6 +142,8 @@ class User(AbstractBaseUser):
                 else:# updating the skill level
                     sport_skill.update(**skills)
 
+    def delete(self):
+        User.objects.filter(pk=self.user_id).delete()
 
     def get_following(self):
         try:

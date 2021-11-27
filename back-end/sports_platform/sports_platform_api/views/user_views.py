@@ -10,7 +10,7 @@ from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
 import django.contrib.auth
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def get_user(request, user_id):
     if request.method == 'GET':
         try:
@@ -50,8 +50,20 @@ def get_user(request, user_id):
             return Response(status=200)
         except Exception:
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
-             
+    elif request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                        status=401)
         
+        if user_id != request.user.user_id:
+            return Response(data={"message": "User cannot delete others' accounts."}, status=400)
+
+        try:
+            with transaction.atomic():
+                request.user.delete()
+            return Response(status=200)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
 
 @api_view(['POST'])
 def create_user(request):    
