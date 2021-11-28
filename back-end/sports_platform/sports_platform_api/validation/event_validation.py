@@ -22,4 +22,7 @@ class Event(serializers.Serializer):
         if data['minSkillSevel'] > data['maxSkillSevel']:
             raise serializers.ValidationError("minSkillLevel should be smaller than or equal to maxSkillLevel")
 
+        if not (data['startDate'].contains('T') or data['startDate'].contains('t')):
+            raise serializers.ValidationError("startDate should include time")
+
         return data
