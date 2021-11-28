@@ -21,8 +21,8 @@ class Event(models.Model):
     name = models.CharField(primary_key=True, max_length=100, primary_key=True)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     organizer = models.ForeignKey('User', on_delete=models.CASCADE)
-    description = models.TextField()
-    
+    description = models.TextField(blank=True)
+
     startDate = models.DateTimeField()
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
@@ -35,6 +35,8 @@ class Event(models.Model):
     maxspectatorcapacity = models.IntegerField()
     minskilllevel = models.IntegerField()
     maxskilllevel = models.IntegerField()
+
+    created_on = models.DateTimeField()
     
 
 
