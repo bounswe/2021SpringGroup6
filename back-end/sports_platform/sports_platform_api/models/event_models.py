@@ -1,18 +1,6 @@
 from django.db import models
 
 
-creator: int
-name: string
-time: string
-date: string
-latitude: double
-longitude: double
-minParticipants: int
-totalSpectators: string
-maxParticipants: int
-description: string
-minSkillLevel: int
-
 class Event(models.Model):
     class Meta:
         db_table = 'event'
@@ -30,11 +18,11 @@ class Event(models.Model):
     city = models.CharField()
     district = models.CharField()
 
-    minimumattendeecapacity = models.IntegerField(min_value=0)
-    maximumattendeecapacity = models.IntegerField()
-    maxspectatorcapacity = models.IntegerField()
-    minskilllevel = models.IntegerField()
-    maxskilllevel = models.IntegerField()
+    minimumAttendeeCapacity = models.IntegerField(min_value=0)
+    maximumAttendeeCapacity = models.IntegerField()
+    maxSpectatorCapacity = models.IntegerField()
+    minSkillLevel = models.IntegerField()
+    maxSkillLevel = models.IntegerField()
 
     created_on = models.DateTimeField()
     
@@ -52,15 +40,15 @@ class EventParticipants(models.Model):
 class EventSpectators(models.Model):
     class Meta:
         db_table = 'event_spectators'
-        unique_together = (('spectator', 'event'),)
+        unique_together = (('user', 'event'),)
 
-    spectator = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
 
 
 class EventParticipationRequesters(models.Model):
     class Meta:
-        db_table = 'event_spectators'
+        db_table = 'event_participation_requesters'
         unique_together = (('user', 'event'),)
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
