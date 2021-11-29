@@ -1,12 +1,16 @@
 from django.db import models
-
+import datetime
+from requests.api import get
+from ..helpers import get_address
+from django.db import IntegrityError, transaction
+from ..models import Sport
 
 class Event(models.Model):
     class Meta:
         db_table = 'event'
 
     event_id = models.BigAutoField(primary_key=True)
-    name = models.CharField(primary_key=True, max_length=100, primary_key=True)
+    name = models.CharField(max_length=100)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     organizer = models.ForeignKey('User', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
@@ -15,10 +19,11 @@ class Event(models.Model):
 
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
-    city = models.CharField()
-    district = models.CharField()
+    city = models.CharField(max_length=200)
+    district = models.CharField(max_length=200)
+    country = models.CharField(max_length=200)
 
-    minimumAttendeeCapacity = models.IntegerField(min_value=0)
+    minimumAttendeeCapacity = models.IntegerField()
     maximumAttendeeCapacity = models.IntegerField()
     maxSpectatorCapacity = models.IntegerField()
     minSkillLevel = models.IntegerField()
