@@ -20,9 +20,9 @@ class Event(serializers.Serializer):
     def validate(self, data):
 
         if data['minSkillLevel'] > data['maxSkillLevel']:
-            raise serializers.ValidationError("minSkillLevel should be smaller than or equal to maxSkillLevel")
+            raise serializers.ValidationError({"skillLevel": "minSkillLevel should be smaller than or equal to maxSkillLevel"})
 
         if not data['startDate'].time():
-            raise serializers.ValidationError("startDate should include time")
+            raise serializers.ValidationError({"time": "startDate should include time"})
 
         return data
