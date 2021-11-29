@@ -30,7 +30,33 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     created_on = models.DateTimeField()
-    
+
+    def create_event(data):
+
+        data['created_on'] = datetime.datetime.now()
+        address = get_address(data['latitude'], data['longitude'])
+
+        if address == 500:
+            return 500
+        elif address == 400:
+            return 101
+
+        data['country'] = address['country']
+        data['city'] = address['state']
+        data['district'] = address['county']
+
+        try:
+            data['sport'] = Sport.objects.get(name=data['sport'])
+        except Sport.DoesNotExist:
+            return 102
+        try:
+            with transaction.atomic():
+                event = Event.objects.create(**data)
+            return {"@id": event.event_id}
+        except Exception as e:
+            return 500
+
+
 
 
 class EventParticipants(models.Model):
