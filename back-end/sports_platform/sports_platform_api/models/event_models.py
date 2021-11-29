@@ -4,6 +4,7 @@ from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
 from ..models import Sport
+from datetime import datetime, timezone
 
 class Event(models.Model):
     class Meta:
@@ -33,7 +34,10 @@ class Event(models.Model):
 
     def create_event(data):
 
-        data['created_on'] = datetime.datetime.now()
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        data['created_on'] = dt
         address = get_address(data['latitude'], data['longitude'])
 
         if address == 500:
