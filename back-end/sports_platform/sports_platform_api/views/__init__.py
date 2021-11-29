@@ -4,3 +4,5 @@ Check https://simpleisbetterthancomplex.com/tutorial/2016/08/02/how-to-split-vie
 and adding to urls.py
 """
 from .user_views import *
+from .sport_views import *
+from .event_views import *
