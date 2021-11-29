@@ -300,6 +300,36 @@ def set_visibility(request, user_id):
 @api_view(['POST', 'DELETE'])
 def block_user(request, user_id):
     current_user = request.user
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        if current_user.user_id != user_id:
+            return Response(data={"message": "Not allowed to block for another user."}, status=403)
+
+        validation = user_validation.Block(data=request.data)
+        if not validation.is_valid():
+            return Response(validation.errors, status=400)
+
+        user_to_block= validation.validated_data['user_id']
+
+        if user_to_block == current_user.user_id:
+            return Response(data={"message": "User cannot block itself."}, status=400)
+
+        try:
+            res = current_user.block(user_to_block)
+            if res == 401:
+                return Response(data={"message": "Enter a valid user_id to block."}, status=400)
+            elif res == 402:
+                return Response(data={"message": "User already blocked."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "An error occured, please try again later."}, status=500)
+            else:
+                return Response(status=200)
+        except Exception as e:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500) 
+   
+
     if request.method == 'DELETE':   
         if not current_user.is_authenticated:
             return Response(data={"message": "Login required."}, status=401)
@@ -310,7 +340,7 @@ def block_user(request, user_id):
         validation = user_validation.Block(data=request.data)
         if not validation.is_valid():
             return Response(validation.errors, status=400)
-
+            
         user_to_unblock= validation.validated_data['user_id']
 
         if user_to_unblock == current_user.user_id:
