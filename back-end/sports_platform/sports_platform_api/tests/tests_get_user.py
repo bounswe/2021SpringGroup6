@@ -13,15 +13,20 @@ class GetUserTest(TestCase):
 
         info_retrieved = {'identifier':'lion1', 'password': 'roarroar', 'email': 'lion1@roar.com','email_visibility':False}
         retrieved_user = create_mock_user(info_retrieved)
-        self.serialzed_retrieved_user = UserSerializer(retrieved_user).data
-        self.serialzed_retrieved_user.pop('last_login')
-        self.serialzed_retrieved_user['@context'] = 'https://schema.org/Person'
-        self.serialzed_retrieved_user['@id'] = self.serialzed_retrieved_user['user_id']
-        self.serialzed_retrieved_user['@type'] = 'Person'
-        self.serialzed_retrieved_user['knowsAbout'] = []
-        self.serialzed_retrieved_user.pop('email')
+        self.user_token, _ = Token.objects.get_or_create(user=self.getting_user)
+        self.header = {'HTTP_AUTHORIZATION': f'Token {self.user_token}'}
 
-        self.path = f'/users/{self.serialzed_retrieved_user["user_id"]}'
+        self.serialized_retrieved_user = UserSerializer(retrieved_user).data
+        self.serialized_retrieved_user.pop('last_login')
+        self.serialized_retrieved_user['@context'] = 'https://schema.org/Person'
+        self.serialized_retrieved_user['@id'] = self.serialized_retrieved_user['user_id']
+        self.serialized_retrieved_user['@type'] = 'Person'
+        self.serialized_retrieved_user['knowsAbout'] = []
+
+        self.other_user_data = self.serialized_retrieved_user
+        self.other_user_data.pop('email')
+
+        self.path = f'/users/{self.serialized_retrieved_user["user_id"]}'
         self.invalid_user_path = f'/users/{100}'
 
     def test_user_not_exist(self):
@@ -29,8 +34,13 @@ class GetUserTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['message'],'User id does not exist')
 
-    def test_success(self):
+    def test_success__own(self):
+        response = self.client.get(self.path, **self.header)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, self.serialized_retrieved_user)
+
+    def test_success_other(self):
         response = self.client.get(self.path)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, self.serialzed_retrieved_user)
+        self.assertEqual(response.data, self.other_user_data)
 
