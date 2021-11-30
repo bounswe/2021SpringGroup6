@@ -78,6 +78,23 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
+    def add_spectator(self, user_id):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            num_of_spectators = len(self.interested_users.all())
+            if num_of_spectators >= self.maxSpectatorCapacity:
+                return 403 # Full Capacity
+            requester = User.objects.get(user_id=user_id)
+            EventSpectators.objects.create(event=self, user=requester, requested_on=dt)
+            return True
+        except User.DoesNotExist:  # User does not exist
+            return 401
+        except IntegrityError as e:  # already a spectator
+            return 402
+        except Exception as e:
+            return 500
 
 
 class EventParticipants(models.Model):
