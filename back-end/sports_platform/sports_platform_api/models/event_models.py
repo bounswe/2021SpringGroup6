@@ -32,6 +32,7 @@ class Event(models.Model):
 
     created_on = models.DateTimeField()
 
+    @staticmethod
     def create_event(data):
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
