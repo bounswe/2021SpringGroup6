@@ -26,3 +26,10 @@ class Event(serializers.Serializer):
             raise serializers.ValidationError({"time": "startDate should include time"})
 
         return data
+
+
+class Accept_Participant(serializers.Serializer):
+    user_id_list = serializers.ListField(
+        child=serializers.IntegerField(
+            min_value=0, max_value=9223372036854775807)
+    )
