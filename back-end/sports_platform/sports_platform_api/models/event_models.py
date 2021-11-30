@@ -102,8 +102,8 @@ class EventParticipants(models.Model):
         db_table = 'event_participants'
         unique_together = (('user', 'event'),)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', related_name='participating_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='participant_users', on_delete=models.CASCADE)
     accepted_on = models.DateTimeField()
 
 
@@ -112,9 +112,9 @@ class EventSpectators(models.Model):
         db_table = 'event_spectators'
         unique_together = (('user', 'event'),)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
-    joined_on = models.DateTimeField()
+    user = models.ForeignKey('User', related_name='spectating_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='spectator_users',  on_delete=models.CASCADE)
+    requested_on = models.DateTimeField()
 
 
 class EventParticipationRequesters(models.Model):
@@ -122,6 +122,6 @@ class EventParticipationRequesters(models.Model):
         db_table = 'event_participation_requesters'
         unique_together = (('user', 'event'),)
 
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', related_name='interested_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='interested_users', on_delete=models.CASCADE)
     requested_on = models.DateTimeField()
