@@ -297,7 +297,7 @@ def set_visibility(request, user_id):
     except Exception:
         return Response(data={'message': 'An error occured, please try again later.'}, status=500)
 
-@api_view(['POST', 'DELETE'])
+@api_view(['POST', 'DELETE', 'GET'])
 def block_user(request, user_id):
     current_user = request.user
     if request.method == 'POST':
@@ -330,7 +330,7 @@ def block_user(request, user_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500) 
    
 
-    if request.method == 'DELETE':   
+    elif request.method == 'DELETE':   
         if not current_user.is_authenticated:
             return Response(data={"message": "Login required."}, status=401)
 
@@ -356,3 +356,21 @@ def block_user(request, user_id):
                 return Response(status=200)
         except Exception:
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+    
+    elif request.method == 'GET':
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        try:
+            user_blocked = User.objects.get(user_id=user_id)
+
+            blocked = user_blocked.get_blocked()
+
+            if blocked == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=blocked, status=200)
+        except User.DoesNotExist:
+            return Response(data={"message": "User does not exist."}, status=400)
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
