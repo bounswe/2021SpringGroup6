@@ -250,7 +250,7 @@ class User(AbstractBaseUser):
             for blocked_user in blockeds:
                 one_block = dict()
                 one_block['@context'] = "https://www.w3.org/ns/activitystreams"
-                one_block['summary'] = f"{self.identifier} blocked {blocked_user.blocked.identifier}  "
+                one_block['summary'] = f"{self.identifier} blocked {blocked_user.blocked.identifier}"
                 one_block['type'] = "Block"
 
                 one_block['actor'] = {
