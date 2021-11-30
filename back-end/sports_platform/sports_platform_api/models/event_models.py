@@ -78,6 +78,66 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
+    def add_participant(self, user_id_list):
+        
+        num_remaining_places = self.maximumAttendeeCapacity - len(self.participant_users.all())
+
+        data_dict = dict()
+        data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+        data_dict['summary'] = f"{self.organizer.identifier} accepted users to {self.name} event"
+        data_dict['type'] = "Collection"
+        
+        data_dict['items'] = []
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+            with transaction.atomic():
+                for user in user_id_list:
+                    print(user_id_list)
+                    if num_remaining_places <= 0:
+                        data_dict['total_items'] = len(data_dict['items'])
+                        return data_dict
+
+                    try:
+                        request_object = EventParticipationRequesters.objects.get(user = user)
+                        print(request_object)
+                    except:
+                        continue
+
+                    EventParticipants.objects.create(event=self, user=request_object.user, accepted_on=dt)
+                    request_object.delete()
+
+                    acception = dict()
+                    acception['@context'] = "https://www.w3.org/ns/activitystreams"
+                    acception['summary'] = f"{self.organizer.name} accepted {request_object.user.identifier} to event {self.name}."
+                    acception['type'] = "Accept"
+
+                    acception['actor'] = {
+                        "type": "https://schema.org/Person",
+                        "@id":  self.organizer.user_id,
+                        "identifier": self.organizer.identifier
+                    }
+
+                    acception['object'] = {
+                        "type": "https://schema.org/Person",
+                        "@id":  request_object.user.user_id,
+                        "identifier": request_object.user.identifier
+                    }
+
+                    acception['target'] = {
+                        "type": "https://schema.org/SportsEvent",
+                        "@id":  self.event_id,
+                    }
+
+                    num_remaining_places -= 1
+                    data_dict['items'].append(acception)
+        except:
+            return 500
+                
+
+        data_dict['total_items'] = len(data_dict['items'])
+        return data_dict
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
