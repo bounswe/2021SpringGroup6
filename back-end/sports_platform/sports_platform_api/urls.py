@@ -17,4 +17,5 @@ urlpatterns = [
     path('events', event_views.create_event),
     path('events/<int:event_id>/spectators', event_views.attend_spectator),
     path('events/<int:event_id>/interesteds', event_views.add_interest),
+    path('events/<int:event_id>/participants', event_views.accept_participant),
 ]
