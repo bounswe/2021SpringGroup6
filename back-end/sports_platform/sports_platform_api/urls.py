@@ -15,4 +15,5 @@ urlpatterns = [
     path('users/<user_id>/visible_attributes', user_views.set_visibility),
 
     path('events', event_views.create_event),
+    path('events/<int:event_id>/spectators', event_views.attend_spectator),
 ]
