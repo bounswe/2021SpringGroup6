@@ -11,7 +11,7 @@ class GetUserTest(TestCase):
         info_retriever = {'identifier':'lion', 'password': 'roarroar', 'email': 'lion@roar.com'}
         self.getting_user = create_mock_user(info_retriever)
 
-        info_retrieved = {'identifier':'lion1', 'password': 'roarroar', 'email': 'lion1@roar.com'}
+        info_retrieved = {'identifier':'lion1', 'password': 'roarroar', 'email': 'lion1@roar.com','email_visibility':False}
         retrieved_user = create_mock_user(info_retrieved)
         self.serialzed_retrieved_user = UserSerializer(retrieved_user).data
         self.serialzed_retrieved_user.pop('last_login')
@@ -19,6 +19,7 @@ class GetUserTest(TestCase):
         self.serialzed_retrieved_user['@id'] = self.serialzed_retrieved_user['user_id']
         self.serialzed_retrieved_user['@type'] = 'Person'
         self.serialzed_retrieved_user['knowsAbout'] = []
+        self.serialzed_retrieved_user.pop('email')
 
         self.path = f'/users/{self.serialzed_retrieved_user["user_id"]}'
         self.invalid_user_path = f'/users/{100}'
@@ -32,3 +33,4 @@ class GetUserTest(TestCase):
         response = self.client.get(self.path)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, self.serialzed_retrieved_user)
+
