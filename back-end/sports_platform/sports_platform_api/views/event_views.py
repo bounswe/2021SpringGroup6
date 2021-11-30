@@ -70,3 +70,30 @@ def attend_spectator(request, event_id):
 
     except Exception:
         return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['POST'])
+def add_interest(request, event_id):
+
+    if not request.user.is_authenticated:
+        return Response({"message": "User not logged in."},
+                        status=401)
+
+    user = request.user
+
+    try:
+        event = Event.objects.get(event_id=event_id)
+
+        res = event.add_interest(user.user_id)
+
+        if res == 401:
+            return Response(data={"message": "Try with a valid user."}, status=400)
+        elif res == 402:
+            return Response(data={"message": "Already sent request for the event."}, status=400)
+        elif res == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(status=201)
+
+    except Exception:
+        return Response(data={"message": 'Try later.'}, status=500)
