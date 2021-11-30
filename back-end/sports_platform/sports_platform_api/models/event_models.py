@@ -3,7 +3,7 @@ import datetime
 from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
-from ..models import Sport
+from ..models import Sport, User
 from datetime import datetime, timezone
 
 class Event(models.Model):
@@ -62,6 +62,22 @@ class Event(models.Model):
             return 500
 
 
+    def add_interest(self, user_id):
+        
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            requester = User.objects.get(user_id=user_id)
+            EventParticipationRequesters.objects.create(event=self, user=requester, requested_on = dt)
+            return True
+        except User.DoesNotExist: # User does not exist
+            return 401
+        except IntegrityError as e: # already sent request
+            return 402 
+        except Exception as e:
+            return 500
+
 
 
 class EventParticipants(models.Model):
@@ -71,6 +87,7 @@ class EventParticipants(models.Model):
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    accepted_on = models.DateTimeField()
 
 
 class EventSpectators(models.Model):
@@ -80,6 +97,7 @@ class EventSpectators(models.Model):
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    joined_on = models.DateTimeField()
 
 
 class EventParticipationRequesters(models.Model):
@@ -89,3 +107,4 @@ class EventParticipationRequesters(models.Model):
 
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    requested_on = models.DateTimeField()
