@@ -28,8 +28,6 @@ class GetBlockedTest(TestCase):
 
         self.path = "/users/" + str(self.lion_user.user_id) + "/blocked"
 
-        self.request_token = {self.cat_token}
-
         self.response_body = {
             "@context": "https://www.w3.org/ns/activitystreams",
             "summary": "lion's blocking activities.",
