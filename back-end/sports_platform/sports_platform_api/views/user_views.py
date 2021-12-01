@@ -1,14 +1,15 @@
 from django.db import transaction
+import django.contrib.auth 
 from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import django.contrib.auth 
+
 from ..controllers import Guest
-from ..models import User, SportSkillLevel
+from ..helpers import filter_visibility
+from ..models import User
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
-import django.contrib.auth
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def get_user(request, user_id):
@@ -33,7 +34,7 @@ def get_user(request, user_id):
         if (request.user.is_authenticated) and (user_id == request.user.user_id):
             return Response(serialized_user,status=200)
         else:
-        # TODO here we need to check visibility of the attributes and based on this, we need to remove invisible ones in the future
+            serialized_user = filter_visibility(user.__dict__, serialized_user)
             return Response(serialized_user,status=200)  
     elif request.method == 'PUT':
         if not request.user.is_authenticated:
