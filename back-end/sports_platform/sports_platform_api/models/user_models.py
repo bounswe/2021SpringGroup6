@@ -68,6 +68,15 @@ class Follow(models.Model):
     following = models.ForeignKey('User', related_name='follower', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
 
+class Block(models.Model):
+    class Meta:
+        db_table = 'block'
+        unique_together = (('blocker', 'blocked'),)
+        
+    blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
+    blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
+    date = models.DateField(blank=True, null=True)
+
 class User(AbstractBaseUser):
     class Meta:
         db_table = 'users'
@@ -226,6 +235,41 @@ class User(AbstractBaseUser):
             return data_dict
         except Exception as e:
             return 500
+    
+    def get_blocked(self):
+        try:
+            blockeds = Block.objects.filter(blocker=self.user_id)
+
+            data_dict = dict()
+            data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
+            data_dict['summary'] = f"{self.identifier}'s blocking activities."
+            data_dict['type'] = "Collection"
+            data_dict['total_items'] = len(blockeds)
+            data_dict['items'] = []
+
+            for blocked_user in blockeds:
+                one_block = dict()
+                one_block['@context'] = "https://www.w3.org/ns/activitystreams"
+                one_block['summary'] = f"{self.identifier} blocked {blocked_user.blocked.identifier}"
+                one_block['type'] = "Block"
+
+                one_block['actor'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  self.user_id,
+                    "identifier": self.identifier
+                }
+
+                one_block['object'] = {
+                    "type": "https://schema.org/Person",
+                    "@id":  blocked_user.blocked.user_id,
+                    "identifier": blocked_user.blocked.identifier
+                }
+
+                data_dict['items'].append(one_block)
+
+            return data_dict
+        except Exception:
+            return 500
 
 
 
@@ -237,13 +281,3 @@ class SportSkillLevel(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     skill_level = models.SmallIntegerField()
-
-
-class Block(models.Model):
-    class Meta:
-        db_table = 'block'
-        unique_together = (('blocker', 'blocked'),)
-        
-    blocker = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
-    blocked = models.ForeignKey('User', related_name='+', on_delete=models.CASCADE)
-    date = models.DateField(blank=True, null=True)
