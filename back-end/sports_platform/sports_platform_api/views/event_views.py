@@ -213,30 +213,35 @@ def add_interest(request, event_id):
             return Response(data={"message": 'Try later.'}, status=500)
 def accept_participant(request, event_id):
 
-    if not request.user.is_authenticated:
-        return Response({"message": "User not logged in."},
-                        status=401)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
 
-    user = request.user
+        user = request.user
 
-    validation = event_validation.Accept_Participant(data=request.data)
-    if not validation.is_valid():
-        return Response(data={"message": validation.errors}, status=400)
+        validation = event_validation.Accept_Participant(data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
 
-    try:
-        event = Event.objects.get(event_id=event_id)
+        try:
+            event = Event.objects.get(event_id=event_id)
 
-        if event.organizer.user_id != user.user_id:
-            return Response(data={"message": "Only organizers can accept users for the event."}, status=403)
+            if event.organizer.user_id != user.user_id:
+                return Response(data={"message": "Only organizers can accept users for the event."}, status=403)
 
-        res = event.add_participant(validation.validated_data['user_id_list'])
+            res = event.add_participant(
+                validation.validated_data['accept_user_id_list'], validation.validated_data['reject_user_id_list'])
 
-        if res == 500:
-            return Response(data={"message": "Try later."}, status=500)
-        else:
-            return Response(data = res, status=200)
-    except Event.DoesNotExist:
-        return Response(data={"message": "Try with a valid event."}, status=400)
-    except Exception as e:
-        print(e)
-        return Response(data={"message": 'Try later.'}, status=500)
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "This event accepts participants without approval."}, status=500)
+            else:
+                return Response(data = res, status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            print(e)
+            return Response(data={"message": 'Try later.'}, status=500)
+        
