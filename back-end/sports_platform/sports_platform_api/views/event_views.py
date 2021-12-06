@@ -184,6 +184,32 @@ def add_interest(request, event_id):
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
+            print("hey")
+            print(e)
+            return Response(data={"message": 'Try later.'}, status=500)
+
+    elif request.method == 'DELETE':
+
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+
+            res = event.delete_interest(user)
+
+            if res == 401:
+                return Response(data={"message": "Not interested for this event"}, status=400)
+            if res == 500:
+                return Response(data={"message": 'Try later.'}, status=500)
+            else:
+                return Response(status=204)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
 def accept_participant(request, event_id):
 
