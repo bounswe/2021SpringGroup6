@@ -82,6 +82,29 @@ class Event(models.Model):
     def add_participant(self, user_id_list):
         
         num_remaining_places = self.maximumAttendeeCapacity - len(self.participant_users.all())
+    def get_interesteds(self):
+
+        if self.acceptWithoutApproval:
+            return 400
+
+        try:
+            interesteds = self.interested_users.all()
+        except:
+            return 500
+
+        interested_users = []
+
+        for interested in interesteds:
+
+            data_dict = dict()
+
+            data_dict['@context'] = "https://schema.org/Person"
+            data_dict['@id'] = interested.user.user_id
+            data_dict['identifier'] = interested.user.identifier
+
+            interested_users.append(data_dict)
+
+        return interested_users
 
         data_dict = dict()
         data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
