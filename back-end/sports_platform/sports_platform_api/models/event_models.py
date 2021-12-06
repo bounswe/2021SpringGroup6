@@ -30,6 +30,7 @@ class Event(models.Model):
     minSkillLevel = models.IntegerField()
     maxSkillLevel = models.IntegerField()
 
+    acceptWithoutApproval = models.BooleanField()
     created_on = models.DateTimeField()
 
     @staticmethod

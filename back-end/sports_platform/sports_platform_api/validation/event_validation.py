@@ -16,6 +16,7 @@ class Event(serializers.Serializer):
     maxSpectatorCapacity = serializers.IntegerField(min_value=0, required=True)
     minSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=True)
     maxSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=True)
+    acceptWithoutApproval = serializers.BooleanField(required=True)
 
     def validate(self, data):
 
