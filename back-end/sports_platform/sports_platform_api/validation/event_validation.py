@@ -28,6 +28,8 @@ class Event(serializers.Serializer):
 
         return data
 
+class Request_Message(serializers.Serializer):
+    message = serializers.CharField(required=False)
 
 class Accept_Participant(serializers.Serializer):
     user_id_list = serializers.ListField(
