@@ -86,8 +86,8 @@ class Event(models.Model):
             '@type': 'Place',
             'geo': {
                 '@type':'GeoCoordinates',
-                'latitude': self.latitude,
-                'longitude': self.longitude
+                'latitude': float(self.latitude),
+                'longitude': float(self.longitude)
             },
             'address': f'{self.district}, {self.city}, {self.country}'
         }
