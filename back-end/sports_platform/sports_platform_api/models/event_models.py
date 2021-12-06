@@ -207,11 +207,25 @@ class Event(models.Model):
         dt = utc_dt.astimezone()
 
         try:
-            num_of_spectators = len(self.interested_users.all())
+            num_of_spectators = len(self.spectator_users.all())
             if num_of_spectators >= self.maxSpectatorCapacity:
-                return 403 # Full Capacity
+                return 403  # Full Capacity
             requester = User.objects.get(user_id=user_id)
-            EventSpectators.objects.create(event=self, user=requester, requested_on=dt)
+
+            try:
+                EventParticipants.objects.get(event=self, user=requester)
+                return 404  # already patricipating
+            except EventParticipants.DoesNotExist:
+                pass
+
+            try:
+                EventParticipationRequesters.objects.get(event=self, user=requester)
+                return 405  # already patricipating
+            except EventParticipants.DoesNotExist:
+                pass
+
+            EventSpectators.objects.create(
+                event=self, user=requester, requested_on=dt)
             return True
         except User.DoesNotExist:  # User does not exist
             return 401
