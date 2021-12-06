@@ -81,6 +81,8 @@ class GetEventTest(TestCase):
         response = self.client.get(self.path)
         self.assertEqual(response.status_code, 200)
         response.data.pop('created_on')
+        print(response.data)
+        print(self.response_body)
         self.assertEqual(response.data, self.response_body)
 
     def test_not_exist_event(self):
