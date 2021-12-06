@@ -185,4 +185,5 @@ class EventParticipationRequesters(models.Model):
 
     user = models.ForeignKey('User', related_name='interested_events', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', related_name='interested_users', on_delete=models.CASCADE)
+    message = models.TextField()
     requested_on = models.DateTimeField()
