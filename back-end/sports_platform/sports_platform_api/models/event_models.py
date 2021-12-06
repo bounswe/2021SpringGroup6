@@ -5,7 +5,6 @@ from ..helpers import get_address
 from django.db import transaction
 from ..models import Sport
 from datetime import datetime, timezone
-from ..serializers.event_seralizer import EventSerializer
 
 
 class EventParticipants(models.Model):
@@ -115,7 +114,7 @@ class Event(models.Model):
 
 
     def get_info(self):
-        serialized = EventSerializer(self).data
+        serialized = {}
         serialized['@context'] = 'https://schema.org'
         serialized['@type'] = 'SportsEvent'
         serialized['location'] = self._scheme_location()
