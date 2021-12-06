@@ -79,7 +79,7 @@ class GetEventTest(TestCase):
     def test_success(self):
         response = self.client.get(self.path)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, self.response_body)
+        self.assertDictEqual(response.data, self.response_body)
 
     def test_not_exist_event(self):
         response = self.client.get(self.invalid_path)
