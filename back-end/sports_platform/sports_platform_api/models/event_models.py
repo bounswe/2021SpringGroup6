@@ -202,6 +202,19 @@ class Event(models.Model):
             return 401
         except Exception as e:
             return 500
+
+    def delete_participant(self, user):
+
+        try:
+            request_object = EventParticipants.objects.get(event=self, user=user)
+            request_object.delete()
+            return True
+        except EventParticipants.DoesNotExist:
+            return 401
+        except Exception as e:
+            return 500
+
+
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
