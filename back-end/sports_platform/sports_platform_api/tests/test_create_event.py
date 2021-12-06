@@ -33,7 +33,8 @@ class CreateEventTest(TestCase):
                                     "maxSpectatorCapacity": 59,
                                     "minSkillLevel": 3,
                                     "maxSkillLevel": 5,
-                                    "acceptWithoutApproval": False
+                                    "acceptWithoutApproval": False,
+                                    "duration": 60
                                 }
 
 

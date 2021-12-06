@@ -33,6 +33,7 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     acceptWithoutApproval = models.BooleanField()
+    duration = models.IntegerField()
 
     created_on = models.DateTimeField()
 

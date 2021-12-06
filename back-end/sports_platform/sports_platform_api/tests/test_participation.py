@@ -53,7 +53,8 @@ class ParticipationTest(TestCase):
             "minSkillLevel": 1,
             "maxSkillLevel": 3,
             "acceptWithoutApproval": False,
-            "organizer": self.lion_user
+            "organizer": self.lion_user,
+            "duration": 20
         }
 
         event_data_2 = {
@@ -68,7 +69,8 @@ class ParticipationTest(TestCase):
             "minSkillLevel": 1,
             "maxSkillLevel": 2,
             "acceptWithoutApproval": True,
-            "organizer": self.cat_user
+            "organizer": self.cat_user,
+            "duration": 34
         }
 
         event_data_3 = {
@@ -83,7 +85,8 @@ class ParticipationTest(TestCase):
             "minSkillLevel": 1,
             "maxSkillLevel": 3,
             "acceptWithoutApproval": False,
-            "organizer": self.lion_user
+            "organizer": self.lion_user,
+            "duration": 45
         }
 
         Sport.objects.create(name="soccer")
