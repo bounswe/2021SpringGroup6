@@ -118,7 +118,7 @@ class Event(models.Model):
         serialized['@context'] = 'https://schema.org'
         serialized['@type'] = 'SportsEvent'
         serialized['location'] = self._scheme_location()
-        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer}
+        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer.user_id}
         participants = EventParticipants.objects.filter(event=self.event_id)
         serialized['attendee'] = self._scheme_participants(participants)
         spectators = EventSpectators.objects.filter(event=self.event_id)
