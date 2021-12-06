@@ -52,7 +52,8 @@ def get_event(request, event_id):
         serialized.update(event_information)
     except Event.DoesNotExist:
         return Response(data={"message": 'Event id does not exist'}, status=400)
-    except Exception:
+    except Exception as e:
+        print(str(e))
         return Response(data={'message': 'An error occured, please try again later.'}, status=500)
     
     return Response(serialized, status=200)
