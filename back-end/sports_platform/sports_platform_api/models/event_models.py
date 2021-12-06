@@ -62,20 +62,39 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
+    def add_interest(self, user_id, message):
 
-    def add_interest(self, user_id):
-        
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
-
         try:
             requester = User.objects.get(user_id=user_id)
-            EventParticipationRequesters.objects.create(event=self, user=requester, requested_on = dt)
-            return True
-        except User.DoesNotExist: # User does not exist
+
+            try:
+                EventParticipants.objects.get(event=self, user=requester)
+                return 404  # already patricipating
+            except EventParticipants.DoesNotExist:
+                pass
+            if self.acceptWithoutApproval:
+                num_remaining_places = self.maximumAttendeeCapacity - \
+                    len(self.participant_users.all())
+                if num_remaining_places == 0:
+                    return 403  # no place left
+                else:
+                    EventParticipants.objects.create(
+                        event=self, user=requester, accepted_on=dt)
+                    return True
+            else:
+                if "message" in message.keys():
+                    EventParticipationRequesters.objects.create(
+                        event=self, user=requester, requested_on=dt, message=message['message'])
+                else:
+                    EventParticipationRequesters.objects.create(
+                        event=self, user=requester, requested_on=dt)
+                return True
+        except User.DoesNotExist:  # User does not exist
             return 401
-        except IntegrityError as e: # already sent request
-            return 402 
+        except IntegrityError as e:  # already sent request
+            return 402
         except Exception as e:
             return 500
 
