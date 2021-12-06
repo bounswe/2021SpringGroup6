@@ -43,38 +43,41 @@ def create_event(request):
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET', 'DELETE'])
 def attend_spectator(request, event_id):
 
-    if not request.user.is_authenticated:
-        return Response({"message": "User not logged in."},
-                        status=401)
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
 
-    user = request.user
+        user = request.user
 
-    try:
-        event = Event.objects.get(event_id = event_id)            
+        try:
+            event = Event.objects.get(event_id = event_id)            
 
-        res = event.add_spectator(user.user_id)
+            res = event.add_spectator(user.user_id)
 
-        if res == 401:
-            return Response(data={"message": "Try with a valid user."}, status=400)
-        elif res == 402:
-            return Response(data={"message": "Already a spectator for the event."}, status=400)
-        elif res == 403:
-            return Response(data={"message": "Spectator capacity is full for this event."}, status=400)
-        elif res == 500:
-            return Response(data={"message": "Try later."}, status=500)
-        else:
-            return Response(status=201)
+            if res == 401:
+                return Response(data={"message": "Try with a valid user."}, status=400)
+            elif res == 402:
+                return Response(data={"message": "Already a spectator for the event."}, status=400)
+            elif res == 403:
+                return Response(data={"message": "Spectator capacity is full for this event."}, status=400)
+            elif res == 404:
+                return Response(data={"message": "Registered as participant to this event, if being spectator is wanted, remove participating status."}, status=400)
+            elif res == 404:
+                return Response(data={"message": "Showed interest to participate this event. If spectator status is wanted remove the interest."}, status=400)
+            elif res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=201)
 
-    except Event.DoesNotExist:
-        return Response(data={"message": "Try with a valid event."}, status=400)
-    except Exception:
-        return Response(data={"message": 'Try later.'}, status=500)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception:
+            return Response(data={"message": 'Try later.'}, status=500)
 
-
-@api_view(['POST'])
 def add_interest(request, event_id):
 
     if not request.user.is_authenticated:
