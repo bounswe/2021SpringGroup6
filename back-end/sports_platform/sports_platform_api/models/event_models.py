@@ -1,10 +1,12 @@
 from django.db import models
 import datetime
+import requests
 from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
 from ..models import Sport, User
 from datetime import datetime, timezone
+
 
 class Event(models.Model):
     class Meta:
@@ -31,6 +33,7 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     acceptWithoutApproval = models.BooleanField()
+
     created_on = models.DateTimeField()
 
     @staticmethod
@@ -69,11 +72,13 @@ class Event(models.Model):
         try:
             requester = User.objects.get(user_id=user_id)
 
+            ###### SPECTATOR MU
             try:
                 EventParticipants.objects.get(event=self, user=requester)
-                return 404  # already patricipating
+                return 404  # already participating
             except EventParticipants.DoesNotExist:
                 pass
+
             if self.acceptWithoutApproval:
                 num_remaining_places = self.maximumAttendeeCapacity - \
                     len(self.participant_users.all())
@@ -132,7 +137,7 @@ class Event(models.Model):
 
         data_dict = dict()
         data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
-        data_dict['summary'] = f"{self.organizer.identifier} accepted users to '{self.name}' event"
+        data_dict['summary'] = f"{self.organizer.identifier} accepted and rejected users to '{self.name}' event"
         data_dict['type'] = "Collection"
 
         data_dict['items'] = []
@@ -141,28 +146,26 @@ class Event(models.Model):
         dt = utc_dt.astimezone()
         try:
             with transaction.atomic():
-                    print(user_id_list)
                 for user in accept_user_id_list:
                     if num_remaining_places <= 0:
                         data_dict['total_items'] = len(data_dict['items'])
                         return data_dict
 
                     try:
-                        print(request_object)
                         request_object = EventParticipationRequesters.objects.get(event=self, user=user)
                     except:
                         continue
 
                     try:
                         EventParticipants.objects.get(event=self, user=user)
-                        continue  # already patricipating
+                        continue  # already participating
                     except EventParticipants.DoesNotExist:
                         pass
 
                     try:
                         EventSpectators.objects.get(event=self, user=user)
                         continue  # already a spectator
-                    except EventParticipants.DoesNotExist:
+                    except EventSpectators.DoesNotExist:
                         pass
 
                     EventParticipants.objects.create(
@@ -171,7 +174,7 @@ class Event(models.Model):
 
                     acception = dict()
                     acception['@context'] = "https://www.w3.org/ns/activitystreams"
-                    acception['summary'] = f"{self.organizer.name} accepted {request_object.user.identifier} to event '{self.name}'."
+                    acception['summary'] = f"{self.organizer.identifier} accepted {request_object.user.identifier} to event '{self.name}'."
                     acception['type'] = "Accept"
 
                     acception['actor'] = {
@@ -206,15 +209,26 @@ class Event(models.Model):
 
                     try:
                         request_object = EventParticipationRequesters.objects.get(event=self, user=user)
-                        print(request_object)
                     except:
                         continue
+
+                    try:
+                        EventParticipants.objects.get(event=self, user=user)
+                        continue  # already participating
+                    except EventParticipants.DoesNotExist:
+                        pass
+
+                    try:
+                        EventSpectators.objects.get(event=self, user=user)
+                        continue  # already a spectator
+                    except EventSpectators.DoesNotExist:
+                        pass
 
                     request_object.delete()
 
                     rejected = dict()
                     rejected['@context'] = "https://www.w3.org/ns/activitystreams"
-                    rejected['summary'] = f"{self.organizer.name} rejected {request_object.user.identifier}'s request to join the event '{self.name}'."
+                    rejected['summary'] = f"{self.organizer.identifier} rejected {request_object.user.identifier}'s request to join the event '{self.name}'."
                     rejected['type'] = "Reject"
 
                     rejected['actor'] = {
@@ -237,9 +251,8 @@ class Event(models.Model):
                     }
 
                     data_dict['items'].append(rejected)
-        except:
+        except Exception as e:
             return 500
-                
 
         data_dict['total_items'] = len(data_dict['items'])
         return data_dict
@@ -311,14 +324,14 @@ class Event(models.Model):
 
             try:
                 EventParticipants.objects.get(event=self, user=requester)
-                return 404  # already patricipating
+                return 404  # already participating
             except EventParticipants.DoesNotExist:
                 pass
 
             try:
                 EventParticipationRequesters.objects.get(event=self, user=requester)
-                return 405  # already patricipating
-            except EventParticipants.DoesNotExist:
+                return 405  # already participating
+            except EventParticipationRequesters.DoesNotExist:
                 pass
 
             EventSpectators.objects.create(
