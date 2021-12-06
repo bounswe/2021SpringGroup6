@@ -157,6 +157,27 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
+    def get_spectators(self):
+
+        try:
+            spectators = self.spectator_users.all()
+        except Exception as e:
+            return 500
+
+        spectator_users = []
+
+        for spectator in spectators:
+
+            data_dict = dict()
+
+            data_dict['@context'] = "https://schema.org/Person"
+            data_dict['@id'] = spectator.user.user_id
+            data_dict['identifier'] = spectator.user.identifier
+
+            spectator_users.append(data_dict)
+
+        return spectator_users
+
 
 class EventParticipants(models.Model):
     class Meta:
