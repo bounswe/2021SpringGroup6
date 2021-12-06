@@ -30,6 +30,7 @@ class GetEventTest(TestCase):
         address = get_address(event_info["latitude"], event_info["longitude"])
         
         self.response_body = {
+            "event_id": event.event_id,
             "@context": "https://schema.org",
             "@type": "SportsEvent",
             "name": "lets play soccer",
