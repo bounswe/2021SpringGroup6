@@ -139,6 +139,16 @@ class Event(models.Model):
 
         data_dict['total_items'] = len(data_dict['items'])
         return data_dict
+    def delete_spectator(self, user):
+
+        try:
+            request_object = EventSpectators.objects.get(event=self, user=user)
+            request_object.delete()
+            return True
+        except EventSpectators.DoesNotExist:
+            return 401
+        except Exception as e:
+            return 500
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
