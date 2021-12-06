@@ -47,6 +47,8 @@ class GetEventTest(TestCase):
                 "address": f'{address["county"]}, {address["state"]}, {address["country"]}'
             },
             "maximumAttendeeCapacity": 50,
+            "minSkillLevel":3,
+            "maxSkillLevel": 5,
             "attendee": [],
             "organizer": {
                 "@context": "https://schema.org",
