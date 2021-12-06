@@ -243,6 +243,28 @@ class Event(models.Model):
 
         data_dict['total_items'] = len(data_dict['items'])
         return data_dict
+
+    def get_participants(self):
+
+        try:
+            participating = self.participant_users.all()
+        except Exception as e:
+            return 500
+
+        participant_users = []
+
+        for participant in participating:
+
+            data_dict = dict()
+
+            data_dict['@context'] = "https://schema.org/Person"
+            data_dict['@id'] = participant.user.user_id
+            data_dict['identifier'] = participant.user.identifier
+
+            participant_users.append(data_dict)
+
+        return participant_users
+
     def delete_interest(self, user):
 
         try:
