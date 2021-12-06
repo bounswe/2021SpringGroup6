@@ -5,4 +5,4 @@ class EventSerializer(serializers.ModelSerializer):
      class Meta:
         model = Event
         exclude = ['latitude', 'longitude', 'city', 'district', 'country',
-                  'minimumAttendeeCapacity', 'maxSpectatorCapacity']
+                  'minimumAttendeeCapacity', 'maxSpectatorCapacity','acceptWithoutApproval']

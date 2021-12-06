@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event, EventParticipants
+from ..models import Event
 from ..validation import event_validation
 
 
