@@ -1,3 +1,4 @@
+import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..models import Event
@@ -92,6 +93,9 @@ def attend_spectator(request, event_id):
             else:
                 event_dict['audience'] = res
                 return Response(data=event_dict, status=200)
+
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
 
@@ -156,8 +160,6 @@ def add_interest(request, event_id):
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
-            print("hey")
-            print(e)
             return Response(data={"message": 'Try later.'}, status=500)
 
     elif request.method == 'GET':
@@ -174,6 +176,8 @@ def add_interest(request, event_id):
 
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
+            elif res == 400:
+                return Response(data={"message": "This event does not require organizer approval to participate."}, status=400)
             else:
                 event_dict['additionalProperty'] = {
                     "@type": "PropertyValue",
@@ -184,8 +188,6 @@ def add_interest(request, event_id):
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
-            print("hey")
-            print(e)
             return Response(data={"message": 'Try later.'}, status=500)
 
     elif request.method == 'DELETE':
@@ -243,11 +245,10 @@ def accept_participant(request, event_id):
             if res == 401:
                 return Response(data={"message": "This event accepts participants without approval."}, status=500)
             else:
-                return Response(data = res, status=200)
+                return Response(data = res, status=201)
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
-            print(e)
             return Response(data={"message": 'Try later.'}, status=500)
         
     elif request.method == 'GET':
