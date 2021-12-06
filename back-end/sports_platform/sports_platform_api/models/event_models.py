@@ -162,6 +162,17 @@ class Event(models.Model):
 
         data_dict['total_items'] = len(data_dict['items'])
         return data_dict
+    def delete_interest(self, user):
+
+        try:
+            request_object = EventParticipationRequesters.objects.get(event=self, user=user)
+            request_object.delete()
+            return True
+        except EventParticipationRequesters.DoesNotExist:
+            return 401
+        except Exception as e:
+            return 500
+
     def delete_spectator(self, user):
 
         try:
