@@ -1,8 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event
+from ..models import Event, EventParticipants
 from ..validation import event_validation
-
 
 
 @api_view(['POST'])
@@ -41,3 +40,16 @@ def create_event(request):
         
     except Exception:
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
+
+
+@api_view(['GET'])
+def get_event(request, event_id):
+    try:
+        event = Event.objects.get(pk=event_id)
+        event_information = event.get_info()
+    except Event.DoesNotExist:
+        return Response(data={"message": 'Event id does not exist'}, status=400)
+    except Exception:
+        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+    
+    return Response(event_information, status=200)

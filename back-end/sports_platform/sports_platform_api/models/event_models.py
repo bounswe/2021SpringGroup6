@@ -2,9 +2,29 @@ from django.db import models
 import datetime
 from requests.api import get
 from ..helpers import get_address
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from ..models import Sport
 from datetime import datetime, timezone
+from ..serializers.event_seralizer import EventSerializer
+
+
+class EventParticipants(models.Model):
+    class Meta:
+        db_table = 'event_participants'
+        unique_together = (('user', 'event'),)
+
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+
+
+class EventSpectators(models.Model):
+    class Meta:
+        db_table = 'event_spectators'
+        unique_together = (('user', 'event'),)
+
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+
 
 class Event(models.Model):
     class Meta:
@@ -60,26 +80,52 @@ class Event(models.Model):
             return {"@id": event.event_id}
         except Exception as e:
             return 500
+    
+    def _scheme_location(self):
+        return {
+            '@context': 'https://schema.org',
+            '@type': 'Place',
+            'geo': {
+                '@type':'GeoCoordinates',
+                'latitude': self.latitude,
+                'longitude': self.longitude
+            },
+            'address': f'{self.district}, {self.city}, {self.country}'
+        }
+    
+    def _scheme_participants(self, participants):
+        return [{"@context":"https://schema.org","@type":"Person","@id": participant.user} for participant in participants]
+
+    def _scheme_additional(self, spectators):
+        return [
+            {
+             "@type": "PropertyValue",
+             "name": "minimumAttendeeCapacity",
+             "value": self.minimumAttendeeCapacity
+             },{
+            "@type": "PropertyValue",
+            "name": "maxSpectatorCapacity",
+            "value": self.maxSpectatorCapacity
+             },{
+            "@type":"PropertyValue",
+            "name":"spectator",
+            "value":[{"@context":"https://schema.org","@type":"Person","@id": spectator.user} for spectator in spectators]
+            }
+        ]
 
 
+    def get_info(self):
+        serialized = EventSerializer(self).data
+        serialized['@context'] = 'https://schema.org'
+        serialized['@type'] = 'SportsEvent'
+        serialized['location'] = self._scheme_location()
+        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer}
+        participants = EventParticipants.objects.filter(event=self.event_id)
+        serialized['attendee'] = self._scheme_participants(participants)
+        spectators = EventSpectators.objects.filter(event=self.event_id)
+        serialized['additionalProperty'] = self._scheme_additional(spectators)
 
-
-class EventParticipants(models.Model):
-    class Meta:
-        db_table = 'event_participants'
-        unique_together = (('user', 'event'),)
-
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
-
-
-class EventSpectators(models.Model):
-    class Meta:
-        db_table = 'event_spectators'
-        unique_together = (('user', 'event'),)
-
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+        return serialized
 
 
 class EventParticipationRequesters(models.Model):

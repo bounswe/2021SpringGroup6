@@ -13,6 +13,6 @@ urlpatterns = [
     path('users/recover', user_views.forgot_password),
     path('users/<int:user_id>/blocked', user_views.block_user),
     path('users/<user_id>/visible_attributes', user_views.set_visibility),
-
     path('events', event_views.create_event),
+    path('events/<int:event_id>',event_views.get_event)
 ]
