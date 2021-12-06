@@ -1,7 +1,9 @@
 from django.test import Client, TestCase
 from .test_helper_functions import create_mock_user
 from ..models.event_models import Event
+from ..models.sport_models import Sport
 from ..helpers.geo import get_address
+
 class GetEventTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -9,6 +11,7 @@ class GetEventTest(TestCase):
                      'password': 'roarroar', 'email': 'lion@roar.com'}
 
         lion_user = create_mock_user(lion_info)
+        Sport.objects.create(name="soccer")
 
         event_info = {
             "name": "lets play soccer",
@@ -68,7 +71,7 @@ class GetEventTest(TestCase):
                 }
             ]
         }
-        print(event)
+
         self.path = f"/events/{event['@id']}"
 
         self.invalid_path = f'/events/100'
