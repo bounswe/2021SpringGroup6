@@ -68,8 +68,9 @@ class GetEventTest(TestCase):
                 }
             ]
         }
-
+        print(event)
         self.path = f"/events/{event['@id']}"
+
         self.invalid_path = f'/events/100'
 
     def test_success(self):
