@@ -245,3 +245,23 @@ def accept_participant(request, event_id):
             print(e)
             return Response(data={"message": 'Try later.'}, status=500)
         
+    elif request.method == 'GET':
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+
+            res = event.get_participants()
+            event_dict = dict()
+            event_dict['@context'] = "https://schema.org/SportsEvent"
+            event_dict['@id'] = event.event_id
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                event_dict['attendee'] = res
+                return Response(data=event_dict, status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+
