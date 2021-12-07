@@ -31,7 +31,7 @@ def _follow(activity):
                 "type": "https://schema.org/Person", 
                 "@id": activity.object.user_id,
                 "identifier": activity.object.identifier
-            },
+            }
     }
 
 def _create_event(activity):
