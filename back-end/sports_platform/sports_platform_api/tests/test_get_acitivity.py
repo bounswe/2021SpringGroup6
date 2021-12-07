@@ -24,7 +24,7 @@ class GetActivityStreamTest(TestCase):
         utc_dt = datetime.datetime.now(datetime.timezone.utc) 
         dt = utc_dt.astimezone()
         follow=ActivityStream.objects.create(type='Follow',actor=self.cat_user, object=self.lion_user, date=dt)
-        self.path = "activitystream?limit=5"
+        self.path = "/activitystream?limit=2"
 
         self.response_body = {
                 "@context": "https://www.w3.org/ns/activitystreams",
