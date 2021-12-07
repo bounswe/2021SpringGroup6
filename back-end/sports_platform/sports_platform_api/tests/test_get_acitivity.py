@@ -18,10 +18,10 @@ class GetActivityStreamTest(TestCase):
         self.lion_user = create_mock_user(lion_info)
         self.cat_user = create_mock_user(cat_info)
         self.token, _ = Token.objects.get_or_create(user=self.lion_user)
-        utc_dt = datetime.now(datetime.timezone.utc)  
+        utc_dt = datetime.datetime.now(datetime.timezone.utc)  
         dt = utc_dt.astimezone()
         block=ActivityStream.objects.create(type='Block',actor=self.lion_user, object=self.cat_user, date=dt)
-        utc_dt = datetime.now(datetime.timezone.utc) 
+        utc_dt = datetime.datetime.now(datetime.timezone.utc) 
         dt = utc_dt.astimezone()
         follow=ActivityStream.objects.create(type='Follow',actor=self.cat_user, object=self.lion_user, date=dt)
         self.path = "activitystream?limit=5"
