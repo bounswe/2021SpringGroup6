@@ -103,7 +103,7 @@ class ParticipationTest(TestCase):
         EventParticipants.objects.create(event = self.event_with_approval, user = self.dog_user, accepted_on = dt)
         EventSpectators.objects.create(event = self.event_3, user=self.dog_user, requested_on = dt)
         EventSpectators.objects.create(event=self.event_without_approval, user=self.dog_user, requested_on=dt)
-        EventParticipationRequesters.objects.create(event = self.event_with_approval, user = self.dog_user, requested_on = dt)
+        EventParticipationRequesters.objects.create(event = self.event_with_approval, user = self.dog_user, requested_on = dt, message = "Please accept, I really like this sport.")
         EventParticipationRequesters.objects.create(event = self.event_with_approval, user = self.cat_user, requested_on = dt)
         EventParticipationRequesters.objects.create(event = self.event_with_approval, user = self.sheep_user, requested_on = dt)
         

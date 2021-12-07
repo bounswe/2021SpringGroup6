@@ -124,6 +124,13 @@ class Event(models.Model):
             data_dict['@id'] = interested.user.user_id
             data_dict['identifier'] = interested.user.identifier
 
+            if interested.message:
+                data_dict['additionalProperty'] = {
+                    "@type": "PropertyValue",
+                    "name": f"MessageToParticipateEvent{interested.event.event_id}",
+                    "value": interested.message
+                }
+
             interested_users.append(data_dict)
 
         return interested_users
@@ -393,5 +400,5 @@ class EventParticipationRequesters(models.Model):
 
     user = models.ForeignKey('User', related_name='interested_events', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', related_name='interested_users', on_delete=models.CASCADE)
-    message = models.TextField()
+    message = models.TextField(blank=True)
     requested_on = models.DateTimeField()
