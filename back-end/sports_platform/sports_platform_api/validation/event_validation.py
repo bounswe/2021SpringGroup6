@@ -16,6 +16,8 @@ class Event(serializers.Serializer):
     maxSpectatorCapacity = serializers.IntegerField(min_value=0, required=True)
     minSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=True)
     maxSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=True)
+    acceptWithoutApproval = serializers.BooleanField(required=True)
+    duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807)
 
     def validate(self, data):
 
@@ -26,3 +28,16 @@ class Event(serializers.Serializer):
             raise serializers.ValidationError({"time": "startDate should include time"})
 
         return data
+
+class Request_Message(serializers.Serializer):
+    message = serializers.CharField(required=False)
+
+class Accept_Participant(serializers.Serializer):
+    accept_user_id_list = serializers.ListField(
+        child=serializers.IntegerField(
+            min_value=0, max_value=9223372036854775807)
+    )
+    reject_user_id_list = serializers.ListField(
+        child=serializers.IntegerField(
+            min_value=0, max_value=9223372036854775807)
+    )
