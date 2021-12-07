@@ -180,6 +180,8 @@ class Event(models.Model):
 
                     EventParticipants.objects.create(
                         event=self, user=request_object.user, accepted_on=dt)
+                    ActivityStream.objects.create(type='Accept', actor=self.organizer, target=self, object=request_object.user, date=dt)
+
                     request_object.delete()
 
                     acception = dict()
@@ -346,6 +348,8 @@ class Event(models.Model):
 
             EventSpectators.objects.create(
                 event=self, user=requester, requested_on=dt)
+            ActivityStream.objects.create(type='Activity', actor=requester, target=self, date=dt)
+
             return True
         except User.DoesNotExist:  # User does not exist
             return 401
