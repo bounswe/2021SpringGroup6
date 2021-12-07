@@ -149,8 +149,7 @@ class Event(models.Model):
             with transaction.atomic():
                 for user in accept_user_id_list:
                     if num_remaining_places <= 0:
-                        data_dict['total_items'] = len(data_dict['items'])
-                        return data_dict
+                        break
 
                     try:
                         request_object = EventParticipationRequesters.objects.get(event=self, user=user)
