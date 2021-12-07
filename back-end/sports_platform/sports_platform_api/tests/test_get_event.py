@@ -70,6 +70,11 @@ class GetEventTest(TestCase):
                 "@type": "PropertyValue",
                 "name": "maxSpectatorCapacity",
                 "value": 59
+                },
+                {
+                "@type": "PropertyValue",
+                "name": "interesteds",
+                "value": []
                 }
             ]
         }
