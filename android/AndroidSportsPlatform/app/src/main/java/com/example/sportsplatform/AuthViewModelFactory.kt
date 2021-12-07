@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.data.Repository
 
-class PlatformViewModelFactory(
+class AuthViewModelFactory(
     private val repository: Repository
 ) : ViewModelProvider.NewInstanceFactory() {
 
