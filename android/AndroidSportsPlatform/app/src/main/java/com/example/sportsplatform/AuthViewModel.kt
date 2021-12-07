@@ -51,7 +51,7 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
                 val userToken = currResponse.body()?.token
                 userLiveData.postValue(userToken)
                 view.context.toast("Success")
-                Intent(view.context, ProfilePageActivity::class.java).also{
+                Intent(view.context, ProfileActivity::class.java).also{
                     view.context.startActivity(it)
                 }
             } else {
@@ -83,7 +83,7 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
             view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
 
-                Intent(view.context, ProfilePageActivity::class.java).also{
+                Intent(view.context, ProfileActivity::class.java).also{
                     view.context.startActivity(it)
                 }
 
