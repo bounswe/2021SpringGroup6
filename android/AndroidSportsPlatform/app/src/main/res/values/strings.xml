@@ -12,4 +12,11 @@
     <string name="home">HOME</string>
     <string name="profile">profile</string>
     <string name="menu">menu</string>
+    <string name="surname">surname</string>
+    <string name="password">password</string>
+    <string name="location">location</string>
+    <string name="age">age</string>
+    <string name="gender">gender</string>
+    <string name="name">name</string>
+    <string name="sports">sports</string>
 </resources>

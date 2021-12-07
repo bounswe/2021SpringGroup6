@@ -13,19 +13,19 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), PlatformListener, KodeinAware {
+class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
 
-    private lateinit var viewModel: PlatformViewModel
+    private lateinit var viewModel: AuthViewModel
     override val kodein by kodein()
-    private val factory : PlatformViewModelFactory by instance()
+    private val factory : AuthViewModelFactory by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel = ViewModelProvider(this, factory).get(PlatformViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         binding.viewmodel = viewModel
-        viewModel.platformListener = this
+        viewModel.authListener = this
 
         initObservers()
 

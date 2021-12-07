@@ -1,5 +1,8 @@
 package com.example.sportsplatform.data
 
+import com.example.sportsplatform.data.models.TokenResponse
+import com.example.sportsplatform.data.models.UserRegisterRequest
+import com.example.sportsplatform.data.models.UserRegisterResponse
 import com.example.sportsplatform.data.models.UserRequest
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -14,9 +17,13 @@ interface UserApi {
 
     @POST("users/login")
     suspend fun searchUser(
-            @Body userRequest: UserRequest
-    ): Response<UserRequest>
+        @Body userRequest: UserRequest
+    ): Response<TokenResponse>
 
+    @POST("users")
+    suspend fun registerUser(
+        @Body userRegisterRequest: UserRegisterRequest
+    ): Response<UserRegisterResponse>
 
     companion object{
         operator fun invoke() : UserApi {

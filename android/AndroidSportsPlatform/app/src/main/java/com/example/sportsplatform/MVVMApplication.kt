@@ -19,6 +19,6 @@ class MVVMApplication : Application(), KodeinAware {
 
         bind() from singleton { UserApi() }
         bind() from singleton { Repository(instance()) }
-        bind() from provider { PlatformViewModelFactory(instance()) }
+        bind() from provider { AuthViewModelFactory(instance()) }
     }
 }

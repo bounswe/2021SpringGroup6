@@ -8,18 +8,28 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.Repository
+import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.data.models.UserRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
 
 
-class PlatformViewModel(private val repo: Repository) : ViewModel() {
+class AuthViewModel(private val repo: Repository) : ViewModel() {
 
-    var platformListener: PlatformListener? = null
+    var authListener: AuthListener? = null
     val userLiveData = MutableLiveData<String>()
 
     var identifier: String? = null
     var pass: String? = null
+    var registerName: String? = null
+    var username: String? = null
+    var gender: String? = null
+    var email: String? = null
+    var surname: String? = null
+    var location: String? = null
+    var age: String? = null
+    var registerPassword: String? = null
+    var sports: String? = null
 
     fun onSearchButtonClick(view: View){
         //weatherListener?.onStarted()
@@ -37,17 +47,16 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
             val currResponse = repo.findUser(userRequest)
             view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
-                //weatherListener?.onSuccess()
-                val userToken = currResponse.body()?.identifier
+
+                val userToken = currResponse.body()?.token
                 userLiveData.postValue(userToken)
                 view.context.toast("Success")
-                Intent(view.context, MainActivity2::class.java).also{
+                Intent(view.context, ProfileActivity::class.java).also{
                     view.context.startActivity(it)
                 }
             } else {
                 view.context.toast(identifier!!)
                 view.context.toast(pass!!)
-                //weatherListener?.onFailure()
             }
         }
     }
@@ -58,6 +67,30 @@ class PlatformViewModel(private val repo: Repository) : ViewModel() {
             Intent(view.context, RegisterActivity::class.java).also{
                 view.context.startActivity(it)
             }
+
+            val userRegisterRequest = UserRegisterRequest(
+                    email = email!!,
+                    password = registerPassword!!,
+                    identifier = username!!,
+                    name = registerName!!,
+                    familyName = surname!!,
+                    birthDate = age!!,
+                    gender = gender!!,
+                    sports = sports!!
+            )
+
+            val currResponse = repo.signUser(userRegisterRequest)
+            view.context.toast(currResponse.toString())
+            if (currResponse.isSuccessful) {
+
+                Intent(view.context, ProfileActivity::class.java).also{
+                    view.context.startActivity(it)
+                }
+
+            } else {
+                view.context.toast("Fail")
+            }
+
         }
     }
 
