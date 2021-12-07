@@ -16,6 +16,7 @@ class GetEventTest(TestCase):
         event_info = {
             "name": "lets play soccer",
             "sport": "soccer",
+            "duration": 2,
             "startDate": "2021-12-13T13:00:00",
             "latitude": 41.002697,
             "longitude": 39.716763,
@@ -27,7 +28,6 @@ class GetEventTest(TestCase):
             "organizer": lion_user
         }
         event = Event.create_event(event_info)
-        print(event)
         address = get_address(event_info["latitude"], event_info["longitude"])
         
         self.response_body = {
@@ -36,6 +36,7 @@ class GetEventTest(TestCase):
             "@type": "SportsEvent",
             "name": "lets play soccer",
             "sport": "soccer",
+            "duration": 2,
             "startDate": "2021-12-13T13:00:00Z",
             "location":{
                 "@context": "https://schema.org",

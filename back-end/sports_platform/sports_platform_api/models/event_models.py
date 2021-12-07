@@ -94,6 +94,7 @@ class Event(models.Model):
                 event = Event.objects.create(**data)
             return {"@id": event.event_id}
         except Exception as e:
+            print(str(e))
             return 500
     
     def _scheme_location(self):
