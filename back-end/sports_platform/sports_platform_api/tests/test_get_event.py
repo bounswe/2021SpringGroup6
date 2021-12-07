@@ -53,6 +53,7 @@ class GetEventTest(TestCase):
             "minSkillLevel":3,
             "maxSkillLevel": 5,
             "attendee": [],
+            "audience" : [],
             "organizer": {
                 "@context": "https://schema.org",
                 "@type": "Person",
@@ -69,11 +70,6 @@ class GetEventTest(TestCase):
                 "@type": "PropertyValue",
                 "name": "maxSpectatorCapacity",
                 "value": 59
-                },
-                {
-                "@type": "PropertyValue",
-                "name": "spectator",
-                "value":[]
                 }
             ]
         }

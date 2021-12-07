@@ -111,7 +111,7 @@ class Event(models.Model):
     def _scheme_participants(self, participants):
         return [{"@context":"https://schema.org","@type":"Person","@id": participant.user} for participant in participants]
 
-    def _scheme_additional(self, spectators):
+    def _scheme_additional(self):
         return [
             {
              "@type": "PropertyValue",
@@ -121,11 +121,7 @@ class Event(models.Model):
             "@type": "PropertyValue",
             "name": "maxSpectatorCapacity",
             "value": self.maxSpectatorCapacity
-             },{
-            "@type":"PropertyValue",
-            "name":"spectator",
-            "value":[{"@context":"https://schema.org","@type":"Person","@id": spectator.user} for spectator in spectators]
-            }
+             }
         ]
 
 
@@ -138,7 +134,8 @@ class Event(models.Model):
         participants = EventParticipants.objects.filter(event=self.event_id)
         serialized['attendee'] = self._scheme_participants(participants)
         spectators = EventSpectators.objects.filter(event=self.event_id)
-        serialized['additionalProperty'] = self._scheme_additional(spectators)
+        serialized['audience'] = [{"@context":"https://schema.org","@type":"Person","@id": spectator.user} for spectator in spectators]
+        serialized['additionalProperty'] = self._scheme_additional()
 
         return serialized
 
