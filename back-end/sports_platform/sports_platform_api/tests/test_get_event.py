@@ -27,6 +27,7 @@ class GetEventTest(TestCase):
             "organizer": lion_user
         }
         event = Event.create_event(event_info)
+        print(event)
         address = get_address(event_info["latitude"], event_info["longitude"])
         
         self.response_body = {
