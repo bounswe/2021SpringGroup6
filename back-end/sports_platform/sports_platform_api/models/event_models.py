@@ -3,7 +3,8 @@ import datetime
 from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
-from ..models import Sport,ActivityStream
+from ..models import Sport
+from ..models.activity_stream_models import ActivityStream
 from datetime import datetime, timezone
 
 class Event(models.Model):
@@ -57,9 +58,10 @@ class Event(models.Model):
         try:
             with transaction.atomic():
                 event = Event.objects.create(**data)
-            ActivityStream.objects.create(type='Create',actor=data['organizer'], object=event, date=dt)
+            ActivityStream.objects.create(type='Create',actor=data['organizer'], target=event, date=dt)
             return {"@id": event.event_id}
         except Exception as e:
+            print(str(e))
             return 500
 
 
