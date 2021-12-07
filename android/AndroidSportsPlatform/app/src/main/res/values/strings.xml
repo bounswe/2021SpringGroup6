@@ -6,5 +6,17 @@
     <string name="Identifier">Identifier</string>
     <string name="Pass">Password</string>
     <string name="register">REGISTER</string>
+    <string name="todo1">TODO</string>
     <string name="todo">TODO</string>
+    <string name="e_mail">e-mail</string>
+    <string name="home">HOME</string>
+    <string name="profile">profile</string>
+    <string name="menu">menu</string>
+    <string name="surname">surname</string>
+    <string name="password">password</string>
+    <string name="location">location</string>
+    <string name="age">age</string>
+    <string name="gender">gender</string>
+    <string name="name">name</string>
+    <string name="sports">sports</string>
 </resources>
