@@ -24,6 +24,7 @@ class GetEventTest(TestCase):
             "maximumAttendeeCapacity": 50,
             "maxSpectatorCapacity": 59,
             "minSkillLevel": 3,
+            "acceptWithoutApproval": False,
             "maxSkillLevel": 5,
             "organizer": lion_user
         }
