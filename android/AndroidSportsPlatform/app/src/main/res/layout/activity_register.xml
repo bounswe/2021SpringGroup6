@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/name"
             android:inputType="textPersonName"
@@ -50,8 +51,7 @@
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/identifier"
-            app:layout_constraintVertical_bias="0.0"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/surname"
@@ -69,7 +69,7 @@
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintVertical_bias="0.027" />
+            app:layout_constraintVertical_bias="0.009" />
 
         <EditText
             android:id="@+id/mailAddress"
@@ -112,6 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/location"
             android:inputType="text"
@@ -122,14 +123,14 @@
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password"
-            app:layout_constraintVertical_bias="0.069"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/age"
             android:inputType="number"
@@ -140,8 +141,7 @@
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/location"
-            app:layout_constraintVertical_bias="0.127"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.037" />
 
         <EditText
             android:id="@+id/gender"
@@ -158,7 +158,7 @@
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/age"
-            app:layout_constraintVertical_bias="0.112" />
+            app:layout_constraintVertical_bias="0.051" />
 
         <EditText
             android:id="@+id/sports"
@@ -190,7 +190,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sports"
-            app:layout_constraintVertical_bias="0.515" />
+            app:layout_constraintVertical_bias="0.401" />
 
         <ImageView
             android:id="@+id/imageView2"
