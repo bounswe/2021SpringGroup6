@@ -6,6 +6,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import datetime
 from django.db import IntegrityError
 
+from .activity_stream_models import ActivityStream
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -106,6 +108,7 @@ class User(AbstractBaseUser):
         try:
             user_to_block = User.objects.get(user_id=user_id)
             Block.objects.create(blocker = self, blocked = user_to_block, date = date)
+            ActivityStream.objects.create(type='Block',actor=self, object=user_to_block, date=date)
             return True
         except User.DoesNotExist:
             return 401
@@ -122,6 +125,7 @@ class User(AbstractBaseUser):
         try:
             to_follow = User.objects.get(user_id=user_id)
             Follow.objects.create(follower = self, following = to_follow, date = date)
+            ActivityStream.objects.create(type='Follow',actor=self, object=to_follow, date=date)
             return True
         except User.DoesNotExist:
             return 401

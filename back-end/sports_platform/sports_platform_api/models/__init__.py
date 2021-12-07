@@ -7,3 +7,4 @@ Import other models on this file
 from .user_models import User, SportSkillLevel, Follow, Block
 from .sport_models import Sport
 from .event_models import *
+from .activity_stream_models import ActivityStream
