@@ -45,7 +45,7 @@ def _create_event(activity):
                 "@id": activity.actor.user_id,
                 "identifier": activity.actor.identifier
             },
-            "target": {
+            "object": {
                 "type": "https://schema.org/Event", 
                 "@id": activity.target.event_id,
                 "name": activity.target.name
@@ -75,8 +75,24 @@ def _accept_event(activity):
             },
     }
 
-def _spectator(activity): #TODO implement after we create this in the other MR
-    pass
+def _spectator(activity):
+    return {
+            "@context": "https://www.w3.org/ns/activitystreams",
+            "summary": f"{activity.actor.identifier} joins to {activity.target.name} as a spectator",
+            "id": activity.id,
+            "type": "Activity",
+            "actor": {
+                "type": "https://schema.org/Person", 
+                "@id": activity.actor.user_id,
+                "identifier": activity.actor.identifier
+            },
+            "target": {
+                "type": "https://schema.org/Event", 
+                "@id": activity.target.event_id,
+                "name": activity.target.name
+            },
+    }
+
 
 def create_activity_response(activities):
     functions = {'Block':_block, 'Follow': _follow, 'Create': _create_event,
