@@ -109,7 +109,7 @@ class Event(models.Model):
         }
     
     def _scheme_participants(self, participants):
-        return [{"@context":"https://schema.org","@type":"Person","@id": participant.user} for participant in participants]
+        return [{"@context":"https://schema.org","@type":"Person","@id": participant.user.user_id, "identifier": participant.user.identifier} for participant in participants]
 
     def _scheme_additional(self,interesteds):
         return [
@@ -125,7 +125,7 @@ class Event(models.Model):
              {
             "@type": "PropertyValue",
             "name": "interesteds",
-            "value": [{"@context":"https://schema.org","@type":"Person","@id": interested.user} for interested in interesteds]
+            "value": [{"@context":"https://schema.org","@type":"Person","@id": interested.user.user_id, "identifier": interested.user.identifier} for interested in interesteds]
              }
         ]
 
@@ -135,11 +135,11 @@ class Event(models.Model):
         serialized['@context'] = 'https://schema.org'
         serialized['@type'] = 'SportsEvent'
         serialized['location'] = self._scheme_location()
-        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer.user_id}
+        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer.user_id, "identifier":self.organizer.identifier}
         participants = EventParticipants.objects.filter(event=self.event_id)
         serialized['attendee'] = self._scheme_participants(participants)
         spectators = EventSpectators.objects.filter(event=self.event_id)
-        serialized['audience'] = [{"@context":"https://schema.org","@type":"Person","@id": spectator.user} for spectator in spectators]
+        serialized['audience'] = [{"@context":"https://schema.org","@type":"Person","@id": spectator.user.user_id, "identifier":spectator.user.identifier} for spectator in spectators]
         interesteds = EventSpectators.objects.filter(event=self.event_id)
         serialized['additionalProperty'] = self._scheme_additional(interesteds)
 

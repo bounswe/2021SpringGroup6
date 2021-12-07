@@ -57,7 +57,8 @@ class GetEventTest(TestCase):
             "organizer": {
                 "@context": "https://schema.org",
                 "@type": "Person",
-                "@id":lion_user.user_id 
+                "@id":lion_user.user_id ,
+                "identifier":lion_user.identifier
             },
             "description": "",
             "additionalProperty": [
