@@ -4,7 +4,8 @@ import requests
 from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
-from ..models import Sport, User, ActivityStream
+from ..models.activity_stream_models import ActivityStream
+from ..models import Sport, User
 from datetime import datetime, timezone
 
 
