@@ -66,7 +66,6 @@ class Event(models.Model):
             ActivityStream.objects.create(type='Create',actor=data['organizer'], target=event, date=dt)
             return {"@id": event.event_id}
         except Exception as e:
-            print(str(e))
             return 500
 
     def add_interest(self, user_id, message):
