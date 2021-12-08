@@ -76,6 +76,11 @@ class GetEventTest(TestCase):
                 "@type": "PropertyValue",
                 "name": "interesteds",
                 "value": []
+                },
+                {
+                "@type": "PropertyValue",
+                "name": "acceptWithoutApproval",
+                "value": False
                 }
             ]
         }

@@ -126,6 +126,11 @@ class Event(models.Model):
             "@type": "PropertyValue",
             "name": "interesteds",
             "value": [{"@context":"https://schema.org","@type":"Person","@id": interested.user.user_id, "identifier": interested.user.identifier} for interested in interesteds]
+             },
+             {
+            "@type": "PropertyValue",
+            "name": "acceptWithoutApproval",
+            "value": self.acceptWithoutApproval
              }
         ]
 
