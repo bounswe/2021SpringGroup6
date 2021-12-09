@@ -1,5 +1,7 @@
 from django.urls import path
 
+from sports_platform_api.views import activity_stream_views
+
 from .views import *
 
 urlpatterns = [
@@ -14,6 +16,7 @@ urlpatterns = [
     path('users/<int:user_id>/blocked', user_views.block_user),
     path('users/<user_id>/visible_attributes', user_views.set_visibility),
     path('events', event_views.create_event),
+    path('activitystream',activity_stream_views.get_activity_stream),
     path('events/<int:event_id>',event_views.get_event),
     path('events/<int:event_id>/spectators', event_views.attend_spectator),
     path('events/<int:event_id>/interesteds', event_views.add_interest),
