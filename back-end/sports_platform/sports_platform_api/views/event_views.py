@@ -3,8 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..models import Event
 from ..validation import event_validation
-
-
+from ..serializers.event_seralizer import EventSerializer
 
 @api_view(['POST'])
 def create_event(request):
@@ -44,6 +43,21 @@ def create_event(request):
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
 
 
+@api_view(['GET'])
+def get_event(request, event_id):
+    try:
+        event = Event.objects.get(pk=event_id)
+        seralized = EventSerializer(event).data
+        event_information = event.get_info()
+        seralized.update(event_information)
+    except Event.DoesNotExist:
+        return Response(data={"message": 'Event id does not exist'}, status=400)
+    except Exception:
+        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+    
+    return Response(seralized, status=200)
+
+    
 @api_view(['POST', 'GET', 'DELETE'])
 def attend_spectator(request, event_id):
 

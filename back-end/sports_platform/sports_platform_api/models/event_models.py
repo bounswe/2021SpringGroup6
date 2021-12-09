@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError, transaction
 import datetime
 import requests
 from requests.api import get
@@ -7,6 +7,36 @@ from django.db import IntegrityError, transaction
 from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User
 from datetime import datetime, timezone
+
+class EventParticipants(models.Model):
+    class Meta:
+        db_table = 'event_participants'
+        unique_together = (('user', 'event'),)
+
+    user = models.ForeignKey('User', related_name='participating_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='participant_users', on_delete=models.CASCADE)
+    accepted_on = models.DateTimeField()
+
+
+class EventSpectators(models.Model):
+    class Meta:
+        db_table = 'event_spectators'
+        unique_together = (('user', 'event'),)
+
+    user = models.ForeignKey('User', related_name='spectating_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='spectator_users',  on_delete=models.CASCADE)
+    requested_on = models.DateTimeField()
+
+
+class EventParticipationRequesters(models.Model):
+    class Meta:
+        db_table = 'event_participation_requesters'
+        unique_together = (('user', 'event'),)
+
+    user = models.ForeignKey('User', related_name='interested_events', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', related_name='interested_users', on_delete=models.CASCADE)
+    message = models.TextField(blank=True)
+    requested_on = models.DateTimeField()
 
 
 class Event(models.Model):
@@ -67,6 +97,60 @@ class Event(models.Model):
             return {"@id": event.event_id}
         except Exception as e:
             return 500
+    
+    def _scheme_location(self):
+        return {
+            '@context': 'https://schema.org',
+            '@type': 'Place',
+            'geo': {
+                '@type':'GeoCoordinates',
+                'latitude': float(self.latitude),
+                'longitude': float(self.longitude)
+            },
+            'address': f'{self.district}, {self.city}, {self.country}'
+        }
+    
+    def _scheme_participants(self, participants):
+        return [{"@context":"https://schema.org","@type":"Person","@id": participant.user.user_id, "identifier": participant.user.identifier} for participant in participants]
+
+    def _scheme_additional(self,interesteds):
+        return [
+            {
+             "@type": "PropertyValue",
+             "name": "minimumAttendeeCapacity",
+             "value": self.minimumAttendeeCapacity
+             },{
+            "@type": "PropertyValue",
+            "name": "maxSpectatorCapacity",
+            "value": self.maxSpectatorCapacity
+             },
+             {
+            "@type": "PropertyValue",
+            "name": "interesteds",
+            "value": [{"@context":"https://schema.org","@type":"Person","@id": interested.user.user_id, "identifier": interested.user.identifier} for interested in interesteds]
+             },
+             {
+            "@type": "PropertyValue",
+            "name": "acceptWithoutApproval",
+            "value": self.acceptWithoutApproval
+             }
+        ]
+
+
+    def get_info(self):
+        serialized = {}
+        serialized['@context'] = 'https://schema.org'
+        serialized['@type'] = 'SportsEvent'
+        serialized['location'] = self._scheme_location()
+        serialized['organizer'] = {'@context':'https://schema.org', '@type':'Person', '@id':self.organizer.user_id, "identifier":self.organizer.identifier}
+        participants = EventParticipants.objects.filter(event=self.event_id)
+        serialized['attendee'] = self._scheme_participants(participants)
+        spectators = EventSpectators.objects.filter(event=self.event_id)
+        serialized['audience'] = [{"@context":"https://schema.org","@type":"Person","@id": spectator.user.user_id, "identifier":spectator.user.identifier} for spectator in spectators]
+        interesteds = EventSpectators.objects.filter(event=self.event_id)
+        serialized['additionalProperty'] = self._scheme_additional(interesteds)
+
+        return serialized
 
     def add_interest(self, user_id, message):
 
@@ -347,7 +431,7 @@ class Event(models.Model):
 
             EventSpectators.objects.create(
                 event=self, user=requester, requested_on=dt)
-            ActivityStream.objects.create(type='Activity', actor=requester, target=self, date=dt)
+            ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
 
             return True
         except User.DoesNotExist:  # User does not exist
@@ -377,34 +461,3 @@ class Event(models.Model):
             spectator_users.append(data_dict)
 
         return spectator_users
-
-
-class EventParticipants(models.Model):
-    class Meta:
-        db_table = 'event_participants'
-        unique_together = (('user', 'event'),)
-
-    user = models.ForeignKey('User', related_name='participating_events', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', related_name='participant_users', on_delete=models.CASCADE)
-    accepted_on = models.DateTimeField()
-
-
-class EventSpectators(models.Model):
-    class Meta:
-        db_table = 'event_spectators'
-        unique_together = (('user', 'event'),)
-
-    user = models.ForeignKey('User', related_name='spectating_events', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', related_name='spectator_users',  on_delete=models.CASCADE)
-    requested_on = models.DateTimeField()
-
-
-class EventParticipationRequesters(models.Model):
-    class Meta:
-        db_table = 'event_participation_requesters'
-        unique_together = (('user', 'event'),)
-
-    user = models.ForeignKey('User', related_name='interested_events', on_delete=models.CASCADE)
-    event = models.ForeignKey('Event', related_name='interested_users', on_delete=models.CASCADE)
-    message = models.TextField(blank=True)
-    requested_on = models.DateTimeField()
