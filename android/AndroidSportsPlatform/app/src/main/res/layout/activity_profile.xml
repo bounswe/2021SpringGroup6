@@ -10,6 +10,10 @@
             name="viewmodel2"
             type="com.example.sportsplatform.AuthViewModel" />
 
+        <variable
+            name="profileviewmodel"
+            type="com.example.sportsplatform.ProfileViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,11 +54,11 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{viewmodel2::onSearchButtonClick}"
+            android:onClick="@{profileviewmodel::onProfileButtonClick}"
             android:text="@string/profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.199"
+            app:layout_constraintHorizontal_bias="0.17"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.942" />
@@ -64,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="84dp"
-            android:onClick="@{viewmodel2::onSearchButtonClick}"
+            android:onClick="@{profileviewmodel::onMenuButtonClick}"
             android:text="@string/menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +76,20 @@
             app:layout_constraintStart_toEndOf="@+id/button"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.942" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="53dp"
+            android:layout_height="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintHorizontal_bias="0.42"
+            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{profileviewmodel::onSearchImageButtonClick}"
+            app:layout_constraintVertical_bias="0.952"
+            app:srcCompat="@drawable/search_button"
+            android:contentDescription="@string/searchButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
