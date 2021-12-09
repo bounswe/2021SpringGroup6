@@ -96,7 +96,7 @@ def _spectator(activity):
 
 def create_activity_response(activities):
     functions = {'Block':_block, 'Follow': _follow, 'Create': _create_event,
-                'Accept': _accept_event, "Activity": _spectator}
+                'Accept': _accept_event, "Spectator": _spectator}
     response = {"@context": "https://www.w3.org/ns/activitystreams",
                 "summary": "Activity stream",
                 "type": "OrderedCollection",
