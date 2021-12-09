@@ -3,7 +3,8 @@ import datetime
 import requests
 from requests.api import get
 from ..helpers import get_address
-from django.db import transaction
+from django.db import IntegrityError, transaction
+from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User
 from datetime import datetime, timezone
 
@@ -92,6 +93,7 @@ class Event(models.Model):
         try:
             with transaction.atomic():
                 event = Event.objects.create(**data)
+            ActivityStream.objects.create(type='Create',actor=data['organizer'], target=event, date=dt)
             return {"@id": event.event_id}
         except Exception as e:
             return 500
@@ -261,6 +263,8 @@ class Event(models.Model):
 
                     EventParticipants.objects.create(
                         event=self, user=request_object.user, accepted_on=dt)
+                    ActivityStream.objects.create(type='Accept', actor=self.organizer, target=self, object=request_object.user, date=dt)
+
                     request_object.delete()
 
                     acception = dict()
@@ -427,6 +431,8 @@ class Event(models.Model):
 
             EventSpectators.objects.create(
                 event=self, user=requester, requested_on=dt)
+            ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
+
             return True
         except User.DoesNotExist:  # User does not exist
             return 401
