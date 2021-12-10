@@ -1,0 +1,21 @@
+.event-container {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.tabs-title{
+    width: 100%;
+    justify-content: center;
+}
+
+.tab-contentt {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

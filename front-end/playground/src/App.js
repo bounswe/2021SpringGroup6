@@ -22,9 +22,6 @@ const EventPage = lazy(() => import('./pages/Event/EventPage'));
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
-  const [sidebarToggle, setSidebarToggle] = useState(true)
-
-  useEffect(() => {console.log('\nuser\n', user)}, [user])
 
   function Framework() {
     return (
@@ -33,10 +30,8 @@ function App() {
         <Header />
       </div>
       <div className="body-part" style={{minHeight: '92vh'}}>
-        <div><SidebarComponent /></div>
-        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column', flexWrap: 'wrap'}}>
-          <Outlet />
-        </div>
+        <SidebarComponent />
+        <Outlet />
       </div>
       <div>
         <Footer />
@@ -64,8 +59,8 @@ function App() {
   }
 
   function HomePage() {
-    return (<Fragment>
-      <div id="deneme" 
+    return (<div className="default-body">
+      <div
         style={{height: '100%', display: 'flex', flexDirection: 'column', 
           justifyContent: user.token ? 'center' : 'space-around' , alignItems: 'center'}}>
         <img src={gif} width="250" alt="logo" />
@@ -77,7 +72,7 @@ function App() {
             </span>}
       </div>
       
-    </Fragment>)
+    </div>)
   }
 
   return (
@@ -88,7 +83,7 @@ function App() {
           
             <Route index element={<HomePage/>} />
 
-            <Route path="login" 
+            {/* <Route path="login" 
               element={
                 <Suspense fallback={<>...</>}>
                   <Login/>
@@ -98,7 +93,7 @@ function App() {
               element={
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
-                </Suspense>}/>
+                </Suspense>}/> */}
 
             <Route path="profile" 
               element={

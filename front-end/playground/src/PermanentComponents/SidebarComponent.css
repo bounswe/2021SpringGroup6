@@ -1,9 +1,7 @@
 .sidebar{
     padding-top: 1rem;
-    float: left;
     font-size: 16px;
     background-color: #ed1b76;
-    height: 100%;
     color: white;
     font-size: 20px;
     /* width: 170px; */
@@ -19,7 +17,8 @@
     flex-direction: column;
     justify-content: flex-start; */
     position: absolute;
-    top: 8vh
+    top: 8vh;
+    z-index: 99;
 }
 
 .sidebar-toggle-icon-wrapper {

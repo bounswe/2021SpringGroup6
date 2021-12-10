@@ -95,7 +95,6 @@ function Profile() {
                     toBeSent[key] = profileInfo[key]
             }
         }
-        console.log('\nprofile info to be sent\n', toBeSent);
         axios.put(`/users/${user.user_id}`, toBeSent, {headers:{'Authorization': `Token ${user.token}`}})
         .then(function (response) {
             if(response.status === 200){
@@ -104,7 +103,6 @@ function Profile() {
                 localStorage.setItem("user",
                     JSON.stringify({...JSON.parse(localStorage.getItem('user')), 
                         profile: {...toBeSent}}));
-                console.log('reach here\n')
             } else{
                 alert("Please try again.");
             }

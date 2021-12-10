@@ -1,5 +1,7 @@
 import {React, useState, Fragment} from 'react';
-import {Tabs, Tab} from 'react-bootstrap';
+import './EventPage.css';
+
+import {Tabs, Tab, TabContainer, TabContent} from 'react-bootstrap';
 
 function EventPage(props) {
   const [tabName, setTabName] = useState('home');
@@ -8,15 +10,16 @@ function EventPage(props) {
   }
 
   return (
-      <Fragment>
+      <div className="event-container">
         <Tabs
-        id="controlled-tab-example"
+        id="tab-eg"
         activeKey={tabName}
         onSelect={(k) => setTabName(k)}
-        className="mb-3"
+        className="tabs-title"
         >
+        {/* <TabContainer> */}
             <Tab eventKey="home" title="Home">
-                <div>home</div>
+                <div className="tab-contentt">home</div>
             </Tab>
             <Tab eventKey="profile" title="Profile">
                 <div>profile</div>
@@ -24,88 +27,9 @@ function EventPage(props) {
             <Tab eventKey="contact" title="Contact">
                 <div>contact</div>
             </Tab>
+        {/* </TabContainer> */}
         </Tabs>
-        <Tabs
-        id="controlled-tab-example"
-        activeKey={tabName}
-        onSelect={(k) => setTabName(k)}
-        className="mb-3"
-        >
-            <Tab eventKey="home" title="Home">
-                <div>home</div>
-            </Tab>
-            <Tab eventKey="profile" title="Profile">
-                <div>profile</div>
-            </Tab>
-            <Tab eventKey="contact" title="Contact">
-                <div>contact</div>
-            </Tab>
-        </Tabs>
-        <Tabs
-        id="controlled-tab-example"
-        activeKey={tabName}
-        onSelect={(k) => setTabName(k)}
-        className="mb-3"
-        >
-            <Tab eventKey="home" title="Home">
-                <div>home</div>
-            </Tab>
-            <Tab eventKey="profile" title="Profile">
-                <div>profile</div>
-            </Tab>
-            <Tab eventKey="contact" title="Contact">
-                <div>contact</div>
-            </Tab>
-        </Tabs>
-        <Tabs
-        id="controlled-tab-example"
-        activeKey={tabName}
-        onSelect={(k) => setTabName(k)}
-        className="mb-3"
-        >
-            <Tab eventKey="home" title="Home">
-                <div>home</div>
-            </Tab>
-            <Tab eventKey="profile" title="Profile">
-                <div>profile</div>
-            </Tab>
-            <Tab eventKey="contact" title="Contact">
-                <div>contact</div>
-            </Tab>
-        </Tabs>
-        <Tabs
-        id="controlled-tab-example"
-        activeKey={tabName}
-        onSelect={(k) => setTabName(k)}
-        className="mb-3"
-        >
-            <Tab eventKey="home" title="Home">
-                <div>home</div>
-            </Tab>
-            <Tab eventKey="profile" title="Profile">
-                <div>profile</div>
-            </Tab>
-            <Tab eventKey="contact" title="Contact">
-                <div>contact</div>
-            </Tab>
-        </Tabs>
-        <Tabs
-        id="controlled-tab-example"
-        activeKey={tabName}
-        onSelect={(k) => setTabName(k)}
-        className="mb-3"
-        >
-            <Tab eventKey="home" title="Home">
-                <div>home</div>
-            </Tab>
-            <Tab eventKey="profile" title="Profile">
-                <div>profile</div>
-            </Tab>
-            <Tab eventKey="contact" title="Contact">
-                <div>contact</div>
-            </Tab>
-        </Tabs>
-    </Fragment>
+    </div>
   );
 }
 

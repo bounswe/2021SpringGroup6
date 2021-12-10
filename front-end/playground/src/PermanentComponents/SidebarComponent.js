@@ -30,44 +30,46 @@ function SidebarComponent(props) {
         entered: {left: sidebarWidth},
         exited: {left: '0'},
     }
+
     return(
         <Fragment>
             {/* From https://stackoverflow.com/questions/60482018/make-a-sidebar-from-react-bootstrap */}
             <Transition in={toggle} timeout={0}>
             {(state) => (
             <>
-                <Nav id="sidebar"
-                    style={{...linkStyle, ...transitionStyles[state]}}
-                    className={`d-md-block sidebar`}
-                    activeKey="/home"
-                    onSelect={selectedKey => {
-                        if (selectedKey === "logout") {
-                            setUser({identifier: ""});
-                            localStorage.setItem("user",JSON.stringify({identifier: ""}));
-                        }
-                    }}
-                >
-                    <Nav.Item>
-                        <Nav.Link href="profile" className="sidebar-link" >
-                            {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
-                                My Profile <hr />
-                            </Link> */}
-                            My Profile <hr />
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link href="event" className="sidebar-link" >My Events <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="Badges" className="sidebar-link" >My Badges <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="Equipments" className="sidebar-link" >My Equipments <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="logout" className="sidebar-link" >Logout <hr /></Nav.Link>
-                    </Nav.Item>
-                </Nav>
+                <div className="sidebar" style={{...linkStyle, ...transitionStyles[state]}}>
+                    <Nav id="sidebar"                        
+                        className={`d-md-block`}
+                        activeKey="/home"
+                        onSelect={selectedKey => {
+                            if (selectedKey === "logout") {
+                                setUser({identifier: ""});
+                                localStorage.setItem("user",JSON.stringify({identifier: ""}));
+                            }
+                        }}
+                    >
+                        <Nav.Item>
+                            <Nav.Link href="profile" className="sidebar-link" >
+                                {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
+                                    Profile <hr />
+                                </Link> */}
+                                Profile <hr />
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="event" className="sidebar-link" >Events <hr /></Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="Badges" className="sidebar-link" >Badges <hr /></Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="Equipments" className="sidebar-link" >Equipments <hr /></Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="logout" className="sidebar-link" >Logout <hr /></Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                </div>
                 <div className={`sidebar-toggle`} style={{...linkToggleStyle, ...transitionToggleStyles[state]}}>
                     <div 
                         className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}
