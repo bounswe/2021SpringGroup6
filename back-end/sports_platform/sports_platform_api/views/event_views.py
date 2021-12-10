@@ -317,7 +317,7 @@ def search_event(request):
 
     validated_body = validation.validated_data
     events = Event.search_event(validated_body)
-    response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
+    response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'OrderedCollection',
                 'total_items':len(events),'items':[]}
     
     for event in events:

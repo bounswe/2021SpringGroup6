@@ -103,9 +103,9 @@ class Event(models.Model):
             or_filter = Q()
             for skill in data['skillLevel']:
                 or_filter |= Q(**{'minSkillLevel__lte':skill, 'maxSkillLevel__gte':skill })
-            results = Event.objects.filter(or_filter, **filter_dict)
+            results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
         else:
-            results = Event.objects.filter(**filter_dict)
+            results = Event.objects.filter(**filter_dict).order_by('-startDate')
         return results
 
     

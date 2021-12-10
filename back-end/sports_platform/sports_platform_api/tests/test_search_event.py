@@ -58,7 +58,7 @@ class SearchEventTest(TestCase):
         event = Event.create_event(event_info1)
         address = get_address(event_info1["latitude"], event_info1["longitude"])
 
-        base_response =  {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
+        base_response =  {'@context':"https://www.w3.org/ns/activitystreams", 'type':'OrderedCollection',
                           'total_items':1}
         event1 = {
             "event_id": event['@id'],
@@ -171,7 +171,7 @@ class SearchEventTest(TestCase):
         event1_response = copy.deepcopy(base_response)
         all_response = copy.deepcopy(base_response)
         event1_response['items'] = [event1]
-        all_response['items'] = [event2, event1]
+        all_response['items'] = [event1, event2]
         all_response['total_items'] = 2
         self.request_bodies = {'missing_latitude': {'latitudeBetweenStart': 40.456},
                                'missing_longitude': {'longitudeBetweenEnd': 40.456},
@@ -255,8 +255,7 @@ class SearchEventTest(TestCase):
         response = self.client.post(self.path, request_body, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {self.lion_token}'})
         for index,_ in enumerate(response.data['items']):
             response.data['items'][index].pop('created_on')
-        print(response.data['items'][0]['event_id'])
-        print(self.response_bodies[test_type]['items'][0]['event_id'])
+       
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, self.response_bodies[test_type])
 
