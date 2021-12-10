@@ -326,4 +326,4 @@ def search_event(request):
         seralized.update(event_information)
         response['items'].append(seralized)
 
-    return Response(response, status=200)
+    return Response(status=200)
