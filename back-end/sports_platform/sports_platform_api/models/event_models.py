@@ -1,8 +1,9 @@
 from django.db import models, IntegrityError, transaction
+import datetime
+import requests
 from requests.api import get
 from ..helpers import get_address
 from django.db import IntegrityError, transaction
-from django.db.models import Q
 from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User
 from datetime import datetime, timezone
@@ -69,6 +70,7 @@ class Event(models.Model):
 
     @staticmethod
     def create_event(data):
+
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
 
@@ -96,59 +98,6 @@ class Event(models.Model):
         except Exception as e:
             return 500
     
-    @staticmethod
-    def search_event(data):
-        filter_dict = Event._create_filter_dict(data)
-        if 'skillLevel' in data:
-            or_filter = Q()
-            for skill in data['skillLevel']:
-                or_filter |= Q(**{'minSkillLevel__lte':skill, 'maxSkillLevel__gte':skill })
-            results = Event.objects.filter(or_filter, **filter_dict)
-        else:
-            results = Event.objects.filter(**filter_dict)
-        return results
-
-    
-    @staticmethod
-    def _create_filter_dict(data):
-        filters = {}
-        if 'creator' in data:
-            filters['organizer'] = data['creator']
-        
-        if 'nameContains' in data:
-            filters['name__contains'] = data['nameContains']
-        
-        if ('timeBetweenStart' in data) and ('timeBetweenEnd' in data):
-            filters['startDate__time__range'] = (data['timeBetweenStart'],data['timeBetweenEnd'])
-        elif 'timeBetweenStart' in data:
-            filters['startDate__date'] = data['timeBetweenStart']
-        elif 'timeBetweenEnd' in data:
-            filters['startDate__date'] = data['timeBetweenEnd']
-        
-        if ('dateBetweenStart' in data) and ('timeBetweenEnd' in data):
-            filters['startDate__date__range'] = (data['dateBetweenStart'],data['dateBetweenEnd'])
-        elif 'dateBetweenStart' in data:
-            filters['startDate__date'] = data['dateBetweenStart']
-        elif 'dateBetweenEnd' in data:
-            filters['startDate__date'] = data['dateBetweenEnd']
-        
-        if 'latitudeBetweenStart' in data:
-            filters['latitude__range'] = (data['latitudeBetweenStart'], data['latitudeBetweenEnd'])
-        if 'longitudeBetweenStart' in data:
-            filters['longitude__range'] = (data['longitudeBetweenStart'], data['longitudeBetweenEnd'])
-        
-        if 'city' in data:
-            filters['city'] = data['city']
-        if 'district' in data:
-            filters['district'] = data['district']
-        if 'country' in data:
-            filters['country'] = data['country']
-        if 'sport' in data:
-            filters['sport'] = data['sport']
-        
-        return filters
-
-
     def _scheme_location(self):
         return {
             '@context': 'https://schema.org',
