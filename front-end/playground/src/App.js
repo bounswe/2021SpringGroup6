@@ -16,6 +16,7 @@ const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
+const CreateEvent = lazy(() => import('./pages/Event/Creation/Create'));
  
 
 function App() {
@@ -108,6 +109,12 @@ function App() {
                   <Profile/>
                 </Suspense>}/>
 
+            <Route path="create-event" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <CreateEvent/>
+                </Suspense>}/>
+
             
 
             {/* Using path="*"" means "match anything", so this route
@@ -138,6 +145,12 @@ function App() {
               element={
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
+                </Suspense>}/>
+
+            <Route path="create-event" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <CreateEvent/>
                 </Suspense>}/>
             
 

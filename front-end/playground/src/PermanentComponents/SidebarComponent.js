@@ -33,15 +33,19 @@ function SidebarComponent(props) {
                         if (selectedKey === "logout") {
                             setUser({identifier: ""});
                             localStorage.setItem("user",JSON.stringify({identifier: ""}));
-                        } else
+                        } else if (selectedKey === "profile") {
+
+                        } else {
                             alert(`selected ${selectedKey}`)
+                        }
                     }}
                 >
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
+                        <Nav.Link href="profile">
+                            {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
                                 My Profile <hr />
-                            </Link>
+                            </Link> */}
+                            My Profile <hr />
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
