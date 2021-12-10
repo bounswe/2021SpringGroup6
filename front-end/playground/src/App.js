@@ -29,22 +29,18 @@ function App() {
   function Framework() {
     return (
     <Fragment>
-      <div style={{minHeight: '98vh'}}>
-        <Row style={{maxHeight: '8vh'}}>
-          <Header />
-        </Row>
-        <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
-          <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch'}}>
-            <SidebarComponent toggle={sidebarToggle} setToggle={setSidebarToggle} />
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column'}}>
-              <Outlet />
-            </div>
-          </div>
-        </Row>
+      <div style={{maxHeight: '8vh'}}>
+        <Header />
       </div>
-      <Row>
+      <div className="body-part" style={{minHeight: '92vh'}}>
+        <div><SidebarComponent /></div>
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column', flexWrap: 'wrap'}}>
+          <Outlet />
+        </div>
+      </div>
+      <div>
         <Footer />
-      </Row>
+      </div>
     </Fragment>)
   }
 

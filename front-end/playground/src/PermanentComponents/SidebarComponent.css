@@ -19,6 +19,7 @@
     flex-direction: column;
     justify-content: flex-start; */
     position: absolute;
+    top: 8vh
 }
 
 .sidebar-toggle-icon-wrapper {

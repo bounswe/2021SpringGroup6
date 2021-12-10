@@ -10,23 +10,24 @@ import {MdArrowForwardIos, MdArrowBackIos} from 'react-icons/md'
 function SidebarComponent(props) {
     const {user, setUser} = useContext(UserContext);
     const [toggle, setToggle] = useState(true);
+    const sidebarWidth = '170px', transitionDuration = '300ms';
     const linkStyle = {
-        transition: `width 350ms linear`,
+        transition: `width ${transitionDuration} linear`,
         width: '0'
     }
     const transitionStyles = {
         entering: { width: '0' },
-        exiting:  { width: '170px' },
-        entered:  { width: '170px' },
+        exiting:  { width: sidebarWidth },
+        entered:  { width: sidebarWidth },
         exited:   { width: '0' },
     };
     const linkToggleStyle = {
-        transition: `left 350ms linear`,
+        transition: `left ${transitionDuration} linear`,
     }
     const transitionToggleStyles = {
         entering: {left: '0'},
-        exiting: {left: '170px'},
-        entered: {left: '170px'},
+        exiting: {left: sidebarWidth},
+        entered: {left: sidebarWidth},
         exited: {left: '0'},
     }
     return(
@@ -43,10 +44,6 @@ function SidebarComponent(props) {
                         if (selectedKey === "logout") {
                             setUser({identifier: ""});
                             localStorage.setItem("user",JSON.stringify({identifier: ""}));
-                        } else if (selectedKey === "profile") {
-
-                        } else {
-                            alert(`selected ${selectedKey}`)
                         }
                     }}
                 >
@@ -59,7 +56,7 @@ function SidebarComponent(props) {
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Events" className="sidebar-link" >My Events <hr /></Nav.Link>
+                        <Nav.Link href="event" className="sidebar-link" >My Events <hr /></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="Badges" className="sidebar-link" >My Badges <hr /></Nav.Link>
