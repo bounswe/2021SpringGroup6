@@ -7,12 +7,24 @@
     align-items: flex-start;
 }
 
-.tabs-title{
+.event-nav {
     width: 100%;
     justify-content: center;
+    
+}
+.event-nav a{
+    color: black !important;
+    cursor: pointer !important;
+}
+.event-nav a:hover{
+    color: #ed1b76 !important;
+}
+.event-nav .active{
+    color: #ed1b76 !important;
+    border-bottom: 2px solid
 }
 
-.tab-contentt {
+.custom-tab-content {
     width: 100%;
     flex-grow: 1;
     display: flex;
