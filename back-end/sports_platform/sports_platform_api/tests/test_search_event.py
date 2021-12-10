@@ -255,9 +255,8 @@ class SearchEventTest(TestCase):
         response = self.client.post(self.path, request_body, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {self.lion_token}'})
         for index,_ in enumerate(response.data['items']):
             response.data['items'][index].pop('created_on')
-        print(response.data['total_items'])
-        print(response_bodies.data[test_type]['total_items'])
-
+        print(response.data['items'][0]['event_id'])
+        print(self.response_bodies[test_type]['items'][0]['event_id'])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, self.response_bodies[test_type])
 
