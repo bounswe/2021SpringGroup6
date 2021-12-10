@@ -17,6 +17,7 @@ const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const CreateEvent = lazy(() => import('./pages/Event/Creation/Create'));
+const EventPage = lazy(() => import('./pages/Event/EventPage'));
  
 
 function App() {
@@ -115,6 +116,11 @@ function App() {
                   <CreateEvent/>
                 </Suspense>}/>
 
+            <Route path="event" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <EventPage/>
+                </Suspense>}/>
             
 
             {/* Using path="*"" means "match anything", so this route

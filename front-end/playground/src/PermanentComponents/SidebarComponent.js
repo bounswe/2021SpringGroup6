@@ -20,11 +20,21 @@ function SidebarComponent(props) {
         entered:  { width: '170px' },
         exited:   { width: '0' },
     };
+    const linkToggleStyle = {
+        transition: `left 350ms linear`,
+    }
+    const transitionToggleStyles = {
+        entering: {left: '0'},
+        exiting: {left: '170px'},
+        entered: {left: '170px'},
+        exited: {left: '0'},
+    }
     return(
         <Fragment>
             {/* From https://stackoverflow.com/questions/60482018/make-a-sidebar-from-react-bootstrap */}
             <Transition in={toggle} timeout={0}>
             {(state) => (
+            <>
                 <Nav id="sidebar"
                     style={{...linkStyle, ...transitionStyles[state]}}
                     className={`d-md-block sidebar`}
@@ -41,7 +51,7 @@ function SidebarComponent(props) {
                     }}
                 >
                     <Nav.Item>
-                        <Nav.Link href="profile">
+                        <Nav.Link href="profile" className="sidebar-link" >
                             {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
                                 My Profile <hr />
                             </Link> */}
@@ -49,32 +59,33 @@ function SidebarComponent(props) {
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Events">My Events <hr /></Nav.Link>
+                        <Nav.Link eventKey="Events" className="sidebar-link" >My Events <hr /></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Badges">My Badges <hr /></Nav.Link>
+                        <Nav.Link eventKey="Badges" className="sidebar-link" >My Badges <hr /></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="Equipments">My Equipments <hr /></Nav.Link>
+                        <Nav.Link eventKey="Equipments" className="sidebar-link" >My Equipments <hr /></Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="logout">Logout <hr /></Nav.Link>
+                        <Nav.Link eventKey="logout" className="sidebar-link" >Logout <hr /></Nav.Link>
                     </Nav.Item>
                 </Nav>
+                <div className={`sidebar-toggle`} style={{...linkToggleStyle, ...transitionToggleStyles[state]}}>
+                    <div 
+                        className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}
+                        onClick={() => {setToggle((prev) => (!prev))}}    
+                    >
+                        {/* <MdArrowBackIos className="sidebar-toggle-icon" onClick={() => {setToggle((prev) => (!prev))}} /> */}
+                        { toggle ? 
+                            <MdArrowBackIos className="sidebar-toggle-icon" /> 
+                            : 
+                            <MdArrowForwardIos className="sidebar-toggle-icon" />}
+                    </div>
+                </div>
+            </>
             )}
             </Transition>
-            <div className={`sidebar-toggle`}>
-                <div 
-                    className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}
-                    onClick={() => {setToggle((prev) => (!prev))}}    
-                >
-                    {/* <MdArrowBackIos className="sidebar-toggle-icon" onClick={() => {setToggle((prev) => (!prev))}} /> */}
-                    { toggle ? 
-                        <MdArrowBackIos className="sidebar-toggle-icon" /> 
-                        : 
-                        <MdArrowForwardIos className="sidebar-toggle-icon" />}
-                </div>
-            </div>
         </Fragment>
     )
 }
