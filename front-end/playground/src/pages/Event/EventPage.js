@@ -3,6 +3,8 @@ import './EventPage.css';
 
 import {Tabs, Tab, TabContainer, TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 
+import {DiscussionPage} from './Discussion/DiscussionPage';
+
 function EventPage(props) {
   const [tabName, setTabName] = useState('Event');
   const changeTab = (name) => {
@@ -44,7 +46,7 @@ function EventPage(props) {
             </NavItem>
         </Nav>
 
-        {/* pay attention to custom class. it makes the container flex. if flex does not work for you, please contact with the author */}
+        {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
         <TabContent activeTab={tabName} className="custom-tab-content">
             <TabPane tabId='Event'>
               <div>Event</div>
@@ -53,7 +55,7 @@ function EventPage(props) {
               <div>Participation</div>
             </TabPane>
             <TabPane tabId="Discussion">
-              <div>Discussion</div>
+              <DiscussionPage/>
             </TabPane>
         </TabContent>
     </div>

@@ -49,7 +49,7 @@ function SidebarComponent(props) {
                         }}
                     >
                         <Nav.Item>
-                            <Nav.Link href="profile" className="sidebar-link" >
+                            <Nav.Link href="/profile" className="sidebar-link" >
                                 {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
                                     Profile <hr />
                                 </Link> */}
@@ -57,7 +57,7 @@ function SidebarComponent(props) {
                             </Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link href="event" className="sidebar-link" >Events <hr /></Nav.Link>
+                            <Nav.Link href="/event" className="sidebar-link" >Events <hr /></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey="Badges" className="sidebar-link" >Badges <hr /></Nav.Link>

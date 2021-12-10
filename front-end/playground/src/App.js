@@ -98,7 +98,7 @@ function App() {
             <Route path="profile" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <Profile/>
+                  <div className="default-body"><Profile/></div>
                 </Suspense>}/>
 
             <Route path="create-event" 
@@ -107,11 +107,19 @@ function App() {
                   <CreateEvent/>
                 </Suspense>}/>
 
-            <Route path="event" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <EventPage/>
-                </Suspense>}/>
+            <Route path="event">
+              <Route index 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <EventPage/>
+                  </Suspense>}/>
+              
+              <Route path=":id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <div className="default-body"><div>In maintanence...</div></div>
+                  </Suspense>}/>
+            </Route>
             
 
             {/* Using path="*"" means "match anything", so this route
