@@ -1,7 +1,7 @@
 import {React, useState, Fragment} from 'react';
 import './PersonalEvents.css';
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, Routes, Route } from "react-router-dom";
 
 import {
   Tabs, 
@@ -20,16 +20,27 @@ import {
 } from 'reactstrap';
 
 import {Data} from './MockData'
+import { EventModal } from '../EventModal';
 
 function PersonalEvents(props) {
     const [events, setEvents] = useState(Data || []);
+    // const location = useLocation();
+    // console.log('location\n', location)
 
     return (
         <div className="personal-events-container">
+            <Routes //location={(location.state && location.state.backgroundLocation) || location}
+            >
+                <Route path="modal/:id" element={<EventModal />} />
+            </Routes>
             {events.map(event => {
                 return (
                     <Fragment key={event.id}>
-                        <Link to={`/event/${event.id}`}>
+                        <Link 
+                            key={event.id}
+                            to={`/event/modal/${event.id}`} 
+                            // state={{ backgroundLocation: location }}
+                        >
                             <Card className="event-card" onClick={() => {}}>
                                 <CardImg
                                     alt="Card image cap"

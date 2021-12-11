@@ -2,7 +2,7 @@ import {React, Fragment, useEffect, lazy, Suspense, useState} from 'react'
 // import logo from './logo.svg';
 import './App.css';
 import {Row} from 'react-bootstrap'
-import { Routes, Route, Outlet, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Outlet, Link, Navigate, useLocation } from 'react-router-dom';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
@@ -13,17 +13,22 @@ import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
 
+import {EventModal} from './pages/Event/EventModal';
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const CreateEvent = lazy(() => import('./pages/Event/Creation/Create'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
+// const EventModal = lazy(() => import('./pages/Event/EventModal'));
  
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   const [window_width, window_height] = UseWindowSize();
+  // const location = useLocation();
+  // console.log('location\n', location)
+  // let state = location.state as { backgroundLocation?: Location };
 
   function Framework() {
     return (
@@ -79,7 +84,8 @@ function App() {
 
   return (
     <UserContext.Provider value={{user, setUser}}>
-      <Routes>
+      <Routes //location={(location.state && location.state.backgroundLocation) || location}
+      >
         {user.token ? 
           <Route path="/" element={<Framework/>}>
           
@@ -114,6 +120,13 @@ function App() {
                 element={
                   <Suspense fallback={<>...</>}>
                     <EventPage/>
+                  </Suspense>}/>
+              
+              <Route path="modal/:id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <div>hello</div>
+                    {/* <EventModal/> */}
                   </Suspense>}/>
               
               <Route path=":id" 
