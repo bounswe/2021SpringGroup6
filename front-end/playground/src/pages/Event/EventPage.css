@@ -24,7 +24,25 @@
     border-bottom: 2px solid
 }
 
-.custom-tab-content {
+.custom-tab-content-Event {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.custom-tab-content-Participation {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-tab-content-Discussion {
     width: 100%;
     flex-grow: 1;
     display: flex;
