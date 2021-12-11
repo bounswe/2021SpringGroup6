@@ -1,4 +1,4 @@
-import requests
+from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..models import Event
@@ -43,20 +43,37 @@ def create_event(request):
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def get_event(request, event_id):
-    try:
-        event = Event.objects.get(pk=event_id)
-        seralized = EventSerializer(event).data
-        event_information = event.get_info()
-        seralized.update(event_information)
-    except Event.DoesNotExist:
-        return Response(data={"message": 'Event id does not exist'}, status=400)
-    except Exception:
-        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
-    
-    return Response(seralized, status=200)
+    if request.method == 'GET':
+        try:
+            event = Event.objects.get(pk=event_id)
+            seralized = EventSerializer(event).data
+            event_information = event.get_info()
+            seralized.update(event_information)
+        except Event.DoesNotExist:
+            return Response(data={"message": 'Event id does not exist'}, status=400)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+        
+        return Response(seralized, status=200)
+    elif request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+        try:
+            event = Event.objects.get(event_id = event_id)   
 
+            if event.organizer.user_id != request.user.user_id:
+                return Response(data={"message": "Only organizers can delete events."}, status=403)
+            
+            with transaction.atomic():
+                event.delete()
+            return Response(status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception:
+            return Response(data={"message": 'Try later.'}, status=500)
     
 @api_view(['POST', 'GET', 'DELETE'])
 def attend_spectator(request, event_id):
