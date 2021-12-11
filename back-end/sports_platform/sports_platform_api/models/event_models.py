@@ -80,9 +80,32 @@ class Event(models.Model):
         elif address == 400:
             return 101
 
+        order = ["state", "province", 
+                 "district", "county", "municipality", "city", "town", "village", "hamlet"]
+
         data['country'] = address['country']
-        data['city'] = address['state']
-        data['district'] = address['county']
+
+        i = 0
+        c = 0
+
+        while i<len(order):
+            if order[i] not in address.keys():
+                i+=1
+                print(i)
+                continue
+            if c==0:
+                data['city'] = address[order[i]]
+                i+=1
+                c+=1
+            else:
+                data['district'] = address[order[i]]
+                c+=1
+                break
+        
+        if c<1:
+            data['city'] = ""
+        if c<2:
+            data['district'] = ""
 
         try:
             data['sport'] = Sport.objects.get(name=data['sport'])
