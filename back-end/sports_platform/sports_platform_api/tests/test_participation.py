@@ -1,5 +1,5 @@
 from django.test import Client, TestCase
-from ..models import Event, EventParticipationRequesters, EventSpectators, EventParticipants, Sport
+from ..models import Event, EventParticipationRequesters, EventSpectators, EventParticipants, Sport, SportSkillLevel
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .test_helper_functions import create_mock_user
@@ -92,8 +92,14 @@ class ParticipationTest(TestCase):
         Sport.objects.create(name="soccer")
         Sport.objects.create(name="basketball")
 
-        self.event_with_approval = Event.objects.get(event_id = Event.create_event(event_data_1)['@id'])
+        SportSkillLevel.objects.get_or_create(user=self.lion_user, sport_id="soccer", skill_level=2)
+        SportSkillLevel.objects.get_or_create(user=self.lion_user, sport_id="basketball", skill_level=5)
+        SportSkillLevel.objects.get_or_create(user=self.cat_user, sport_id="soccer", skill_level=2)
+        SportSkillLevel.objects.get_or_create(user=self.cat_user, sport_id="basketball", skill_level=2)
+        SportSkillLevel.objects.get_or_create(user=self.dog_user, sport_id="soccer", skill_level=2)
+        SportSkillLevel.objects.get_or_create(user=self.dog_user, sport_id="basketball", skill_level=2)
 
+        self.event_with_approval = Event.objects.get(event_id = Event.create_event(event_data_1)['@id'])
         self.event_without_approval = Event.objects.get(event_id=Event.create_event(event_data_2)['@id'])
         self.event_3 = Event.objects.get(event_id=Event.create_event(event_data_3)['@id'])
 
@@ -122,6 +128,8 @@ class ParticipationTest(TestCase):
                               'delete_spectator': self.event_3.event_id,
                               'delete_participating': self.event_with_approval.event_id,
                               'accept_reject_participants': self.event_with_approval.event_id,
+                              'wrong_skill_level': self.event_without_approval.event_id,
+                              'no_skill_level': self.event_without_approval.event_id,
                               }
 
         self.request_token = {'already_participating': self.dog_token,
@@ -136,6 +144,8 @@ class ParticipationTest(TestCase):
                               'delete_spectator': self.dog_token,
                               'delete_participating': self.dog_token,
                               'accept_reject_participants': self.lion_token,
+                              'wrong_skill_level': self.lion_token,
+                              'no_skill_level': self.sheep_token,
                               }
 
         self.response_bodies = {'already_participating': {"message": "Already participating the event."},
@@ -194,7 +204,10 @@ class ParticipationTest(TestCase):
                                         }
                                     ],
                                     "total_items": 2
-                                }
+                                },
+                                'wrong_skill_level': {"message": "User skill level does not match the requirements for the event."},
+                                'no_skill_level': {"message": "No skill level is entered for the sport."},
+
                             }
 
         
@@ -374,6 +387,28 @@ class ParticipationTest(TestCase):
         self.assertFalse(EventParticipants.objects.filter(
             event=request_param, user=self.sheep_user.user_id).exists())
 
-    
+    def test_no_skill_level(self):
+        test_type = 'no_skill_level'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
 
-    
+        path = "/events/" + str(request_param) + "/interesteds"
+
+        response = self.client.post(
+            path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, self.response_bodies[test_type])
+
+    def test_wrong_skill_level(self):
+        test_type = 'wrong_skill_level'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/interesteds"
+
+        response = self.client.post(
+            path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, self.response_bodies[test_type])
