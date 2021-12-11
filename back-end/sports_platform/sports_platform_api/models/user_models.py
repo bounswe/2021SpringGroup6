@@ -275,6 +275,35 @@ class User(AbstractBaseUser):
         except Exception:
             return 500
 
+    def get_participating_events(self):
+
+        try:
+            events = self.participating_events.all().order_by('event_id')
+
+            data_dict = dict()
+            data_dict['@context'] = "https://schema.org/Person"
+            data_dict['@id'] = self.user_id
+            data_dict['identifier'] = self.identifier
+            data_dict['additionalProperty'] = dict()
+            data_dict['additionalProperty'] = {
+                "@type": "PropertyValue",
+                "name": "participatingEvents",
+                "value": []
+            }
+
+            for event in events:
+
+                event_dict = {
+                    "type": "https://schema.org/SportsEvent",
+                    "@id":  event.event.event_id,
+                    "name": event.event.name
+                }
+
+                data_dict['additionalProperty']['value'].append(event_dict)
+
+            return data_dict
+        except Exception as e:
+            return 500
 
 
 class SportSkillLevel(models.Model):
