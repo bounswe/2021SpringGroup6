@@ -11,11 +11,9 @@ import UseWindowSize from './WindowSizing'
 function SidebarComponent(props) {
     const {user, setUser} = useContext(UserContext);
     const [window_width, window_height] = UseWindowSize();
-    const [toggleVisibility, setToggleVisibility] = useState(window_width > 480 ? 'block' : 'none')
-    const [toggle, setToggle] = useState(true);
+    const [toggle, setToggle] = useState(window_width > 480);
 
     useEffect(() => {
-        console.log('window_width\n', window_width);
         if (window_width < 480) {
             setToggle(false)
         } else if (window_width < 720) {
@@ -23,16 +21,7 @@ function SidebarComponent(props) {
         } else {
             setToggle(true);
         }
-    }, [window_width])
-
-    useEffect(() => {
-        console.log('toggle\n', toggle);
-        if (!toggle) {
-            setTimeout(() =>{setToggleVisibility('none')}, transitionDuration)
-        } else {
-            setToggleVisibility('block');
-        }
-    }, [toggle]);
+    }, [window_width]);
 
     const sidebarWidth = '140px', transitionDuration = 300;
     const linkStyle = {
@@ -61,7 +50,7 @@ function SidebarComponent(props) {
             <Transition in={toggle} timeout={0}>
             {(state) => (
             <>
-                <div className="sidebar" style={{...linkStyle, ...transitionStyles[state], display: toggleVisibility}}>
+                <div className="sidebar" style={{...linkStyle, ...transitionStyles[state]}}>
                     <Nav id="sidebar"                        
                         className={`d-md-block`}
                         activeKey="/home"
