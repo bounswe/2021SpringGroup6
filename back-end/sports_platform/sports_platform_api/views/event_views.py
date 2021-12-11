@@ -228,8 +228,6 @@ def add_interest(request, event_id):
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
 
-        
-
 
 @api_view(['POST', 'GET', 'DELETE'])
 def accept_participant(request, event_id):
@@ -308,3 +306,24 @@ def accept_participant(request, event_id):
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['POST'])
+def search_event(request):
+    validation = event_validation.Search(data=request.data)
+
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    validated_body = validation.validated_data
+    events = Event.search_event(validated_body)
+    response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'OrderedCollection',
+                'total_items':len(events),'items':[]}
+    
+    for event in events:
+        seralized = EventSerializer(event).data
+        event_information = event.get_info()
+        seralized.update(event_information)
+        response['items'].append(seralized)
+
+    return Response(response, status=200)
