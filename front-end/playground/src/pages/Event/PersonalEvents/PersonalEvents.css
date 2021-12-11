@@ -1,11 +1,18 @@
 .personal-events-container {
-    padding: 1rem;
+    /* padding: 1rem; */
+    margin-left: 1rem;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.event-card {
+.personal-events-container a {
     margin: 1rem;
+    color: black;
+    text-decoration: none;
+}
+
+.event-card {
+
 }

@@ -1,4 +1,4 @@
-import {React, Fragment, useContext, useState, useEffect} from 'react';
+import {React, Fragment, useContext, useState, useEffect, useRef} from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 import {Transition} from 'react-transition-group';
@@ -10,6 +10,7 @@ import UseWindowSize from './WindowSizing'
 
 function SidebarComponent(props) {
     const {user, setUser} = useContext(UserContext);
+    const sidebarRef = useRef(null);
     const [window_width, window_height] = UseWindowSize();
     const [toggle, setToggle] = useState(window_width > 480);
 
@@ -23,7 +24,8 @@ function SidebarComponent(props) {
         }
     }, [window_width]);
 
-    const sidebarWidth = '140px', transitionDuration = 300;
+    const sidebarWidth = (sidebarRef.current && sidebarRef.current.clientWidth) || '140px';
+    const transitionDuration = 300;
     const linkStyle = {
         transition: `width ${transitionDuration}ms linear`,
         width: '0'
@@ -50,10 +52,10 @@ function SidebarComponent(props) {
             <Transition in={toggle} timeout={0}>
             {(state) => (
             <>
-                <div className="sidebar" style={{...linkStyle, ...transitionStyles[state]}}>
                     <Nav id="sidebar"                        
-                        className={`d-md-block`}
+                        className={`d-md-block sidebar`}
                         activeKey="/home"
+                        style={{...linkStyle, ...transitionStyles[state]}}
                         onSelect={selectedKey => {
                             if (selectedKey === "logout") {
                                 setUser({identifier: ""});
@@ -62,27 +64,39 @@ function SidebarComponent(props) {
                         }}
                     >
                         <Nav.Item>
-                            <Nav.Link href="/profile" className="sidebar-link" >
-                                {/* <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
+                            <Link to="/profile" className="sidebar-link">
                                     Profile <hr />
-                                </Link> */}
-                                Profile <hr />
-                            </Nav.Link>
+                            </Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link href="/event" className="sidebar-link" >Events <hr /></Nav.Link>
+                            <Link to="/event" className="sidebar-link" >
+                                Events <hr />
+                            </Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="Badges" className="sidebar-link" >Badges <hr /></Nav.Link>
+                            <Link to="/" className="sidebar-link" >
+                                Badges <hr />
+                            </Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="Equipments" className="sidebar-link" >Equipments <hr /></Nav.Link>
+                            <Link to="/" className="sidebar-link" >
+                                Equipments <hr />
+                            </Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link eventKey="logout" className="sidebar-link" >Logout <hr /></Nav.Link>
+                            <Link to="" className="sidebar-link" onClick={() => {
+                                setUser({identifier: ""});
+                                localStorage.setItem("user",JSON.stringify({identifier: ""}));
+                            }} >
+                                Logout <hr />
+                            </Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="/" className="sidebar-link redundant" >
+                                Equipmentsssssss <hr />
+                            </Link>
                         </Nav.Item>
                     </Nav>
-                </div>
                 <div className={`sidebar-toggle`} style={{...linkToggleStyle, ...transitionToggleStyles[state]}}>
                     <div 
                         className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}

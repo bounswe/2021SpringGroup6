@@ -8,7 +8,8 @@ import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
 
-import {UserContext} from './UserContext'
+import {UserContext} from './UserContext';
+import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
 
@@ -22,6 +23,7 @@ const EventPage = lazy(() => import('./pages/Event/EventPage'));
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
+  const [window_width, window_height] = UseWindowSize();
 
   function Framework() {
     return (
