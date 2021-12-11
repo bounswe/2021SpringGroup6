@@ -4,7 +4,7 @@ from ..helpers import get_address
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from ..models.activity_stream_models import ActivityStream
-from ..models import Sport, User
+from ..models import Sport, User, SportSkillLevel
 from datetime import datetime, timezone
 
 class EventParticipants(models.Model):
@@ -210,12 +210,25 @@ class Event(models.Model):
         try:
             requester = User.objects.get(user_id=user_id)
 
-            ###### SPECTATOR MU
+            try:
+                EventSpectators.objects.get(event=self, user=requester)
+                return 405  # already participating
+            except EventSpectators.DoesNotExist:
+                pass
+            
             try:
                 EventParticipants.objects.get(event=self, user=requester)
                 return 404  # already participating
             except EventParticipants.DoesNotExist:
                 pass
+
+            try:
+                user_skill_level = SportSkillLevel.objects.get(user=requester, sport=self.sport).skill_level
+                if user_skill_level < self.minSkillLevel or user_skill_level > self.maxSkillLevel:
+                    return 407
+
+            except SportSkillLevel.DoesNotExist:
+                return 406
 
             if self.acceptWithoutApproval:
                 num_remaining_places = self.maximumAttendeeCapacity - \
