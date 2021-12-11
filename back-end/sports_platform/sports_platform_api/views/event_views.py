@@ -167,6 +167,8 @@ def add_interest(request, event_id):
                 return Response(data={"message": "Participant capacity is full for this event."}, status=400)
             elif res == 404:
                 return Response(data={"message": "Already participating the event."}, status=400)
+            elif res == 405:
+                return Response(data={"message": "Registered as spectator to this event, if being participant is wanted, remove spectating status."}, status=400)
             elif res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             else:

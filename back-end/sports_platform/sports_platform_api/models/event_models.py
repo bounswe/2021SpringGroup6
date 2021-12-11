@@ -210,7 +210,12 @@ class Event(models.Model):
         try:
             requester = User.objects.get(user_id=user_id)
 
-            ###### SPECTATOR MU
+            try:
+                EventSpectators.objects.get(event=self, user=requester)
+                return 405  # already participating
+            except EventParticipants.DoesNotExist:
+                pass
+            
             try:
                 EventParticipants.objects.get(event=self, user=requester)
                 return 404  # already participating
