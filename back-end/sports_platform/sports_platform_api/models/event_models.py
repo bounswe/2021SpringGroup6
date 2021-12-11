@@ -213,7 +213,7 @@ class Event(models.Model):
             try:
                 EventSpectators.objects.get(event=self, user=requester)
                 return 405  # already participating
-            except EventParticipants.DoesNotExist:
+            except EventSpectators.DoesNotExist:
                 pass
             
             try:
@@ -223,7 +223,7 @@ class Event(models.Model):
                 pass
 
             try:
-                user_skill_level = SportSkillLevel.obejcts.get(user=requester, sport=self.sport).skillLevel
+                user_skill_level = SportSkillLevel.objects.get(user=requester, sport=self.sport).skill_level
                 if user_skill_level < self.minSkillLevel or user_skill_level > self.maxSkillLevel:
                     return 407
 
