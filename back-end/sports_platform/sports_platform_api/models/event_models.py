@@ -91,7 +91,6 @@ class Event(models.Model):
         while i<len(order):
             if order[i] not in address.keys():
                 i+=1
-                print(i)
                 continue
             if c==0:
                 data['city'] = address[order[i]]
