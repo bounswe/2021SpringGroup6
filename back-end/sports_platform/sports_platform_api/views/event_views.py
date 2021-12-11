@@ -169,6 +169,10 @@ def add_interest(request, event_id):
                 return Response(data={"message": "Already participating the event."}, status=400)
             elif res == 405:
                 return Response(data={"message": "Registered as spectator to this event, if being participant is wanted, remove spectating status."}, status=400)
+            elif res == 406:
+                return Response(data={"message": "No skill level is entered for the sport."}, status=400)
+            elif res == 407:
+                return Response(data={"message": "User skill level does not match the requirements for the event."}, status=400)
             elif res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             else:
