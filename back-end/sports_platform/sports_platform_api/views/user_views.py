@@ -375,3 +375,72 @@ def block_user(request, user_id):
             return Response(data={"message": "User does not exist."}, status=400)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['GET'])
+def get_participating_events(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        user = User.objects.get(user_id=user_id)
+
+        events = user.get_participating_events()
+
+        if events == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data=events, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
+    except Exception as e:
+        return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['GET'])
+def get_interested_events(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        user = User.objects.get(user_id=user_id)
+
+        events = user.get_interested_events()
+
+        if events == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data=events, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
+    except Exception as e:
+        return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['GET'])
+def get_spectating_events(request, user_id):
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        user = User.objects.get(user_id=user_id)
+
+        events = user.get_spectating_events()
+
+        if events == 500:
+            return Response(data={"message": "Try later."}, status=500)
+        else:
+            return Response(data=events, status=200)
+    except User.DoesNotExist:
+        return Response(data={"message": "User does not exist."}, status=400)
+    except Exception as e:
+        return Response(data={"message": "Try later."}, status=500)
