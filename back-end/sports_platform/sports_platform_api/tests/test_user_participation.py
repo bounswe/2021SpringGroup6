@@ -115,12 +115,18 @@ class UserParticipationTest(TestCase):
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_with_approval.event_id,
-                                                                    "name": self.event_with_approval.name
+                                                                    "name": self.event_with_approval.name,
+                                                                    "sport": self.event_with_approval.sport.name,
+                                                                    "startDate": self.event_with_approval.startDate,
+                                                                    "location": self.event_with_approval._scheme_location()
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_3.event_id,
-                                                                    "name": self.event_3.name
+                                                                    "name": self.event_3.name,
+                                                                    "sport": self.event_3.sport.name,
+                                                                    "startDate": self.event_3.startDate,
+                                                                    "location": self.event_3._scheme_location()
                                                                 }
                                                             ]
                                                         }
@@ -136,13 +142,19 @@ class UserParticipationTest(TestCase):
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_with_approval.event_id,
-                                                                    "name": self.event_with_approval.name
+                                                                    "name": self.event_with_approval.name,
+                                                                    "sport": self.event_with_approval.sport.name,
+                                                                    "startDate": self.event_with_approval.startDate,
+                                                                    "location": self.event_with_approval._scheme_location()
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_without_approval.event_id,
-                                                                    "name": self.event_without_approval.name
-                                                                }
+                                                                    "name": self.event_without_approval.name,
+                                                                    "sport": self.event_without_approval.sport.name,
+                                                                    "startDate": self.event_without_approval.startDate,
+                                                                    "location": self.event_without_approval._scheme_location()
+                                                                },
                                                             ]
                                                         }
                                                     },
@@ -157,12 +169,18 @@ class UserParticipationTest(TestCase):
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_without_approval.event_id,
-                                                                    "name": self.event_without_approval.name
+                                                                    "name": self.event_without_approval.name,
+                                                                    "sport": self.event_without_approval.sport.name,
+                                                                    "startDate": self.event_without_approval.startDate,
+                                                                    "location": self.event_without_approval._scheme_location()
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
                                                                     "@id":  self.event_3.event_id,
-                                                                    "name": self.event_3.name
+                                                                    "name": self.event_3.name,
+                                                                    "sport": self.event_3.sport.name,
+                                                                    "startDate": self.event_3.startDate,
+                                                                    "location": self.event_3._scheme_location()
                                                                 }
                                                             ]
                                                         }
