@@ -23,7 +23,7 @@ export const getUserInteresteds = async () => {
 
   return axios({
     method: 'GET',
-    url: `users/${localData.user_id}/interested`,
+    url: `/users/${localData.user_id}/interested`,
     headers: {
       Authorization: token,
     },
@@ -42,7 +42,7 @@ export const getUserAccepteds = async () => {
 
   return axios({
     method: 'GET',
-    url: `users/${localData.user_id}/participating`,
+    url: `/users/${localData.user_id}/participating`,
     headers: {
       Authorization: token,
     },
@@ -61,7 +61,7 @@ export const getUserSpectatings = async () => {
 
   return axios({
     method: 'GET',
-    url: `users/${localData.user_id}/spectating`,
+    url: `/users/${localData.user_id}/spectating`,
     headers: {
       Authorization: token,
     },

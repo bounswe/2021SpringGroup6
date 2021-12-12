@@ -84,7 +84,7 @@ function EventInformation(props) {
                     <CardSubtitle className="mt-2 mb-2 text-muted">
                         <div style={{margin: '0 1rem'}}>
                             <span>
-                                Starting on {new Date(eventInfo.startDate).toString()}
+                                Starting on {(new Date(eventInfo.startDate).toString()).split(' GMT')[0]}
                             </span>
                             <span style={{float: 'right', color: 'blue'}}>
                                 {eventInfo.duration} minutes event

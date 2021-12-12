@@ -4,6 +4,7 @@ import './EventPage.css';
 
 import {DiscussionPage} from './Discussion/DiscussionPage';
 import {EventInformation} from './EventInformation/EventInformation';
+import {EventParticipationInfoPage} from './EventParticipationInfoPage/EventParticipationInfoPage';
 
 import {getEvent} from '../../services/Events';
 
@@ -93,18 +94,21 @@ function EventPage(props) {
 
         {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
         <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}`}>
-            <TabPane tabId='Event'>
-                {eventInfo.startDate ? 
-                    <EventInformation eventInfo={eventInfo} isLoading={isLoading} /> 
-                    : 
-                    <div>Loading</div>
-                }
-            </TabPane>
-            <TabPane tabId="Participation">
-            </TabPane>
-            <TabPane tabId="Discussion">
-                <DiscussionPage/>
-            </TabPane>
+            {eventInfo.startDate ? 
+                <>
+                    <TabPane tabId='Event'>            
+                        <EventInformation eventInfo={eventInfo} isLoading={isLoading} /> 
+                    </TabPane>
+                    <TabPane tabId="Participation">
+                        <EventParticipationInfoPage eventInfo={eventInfo} isLoading={isLoading} />
+                    </TabPane>
+                    <TabPane tabId="Discussion">
+                        <DiscussionPage/>
+                    </TabPane>
+                </>
+                :
+                <div>Loading</div>
+            }
         </TabContent>
     </div>
   );

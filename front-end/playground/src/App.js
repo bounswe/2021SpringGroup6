@@ -17,7 +17,6 @@ const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
-const CreateEvent = lazy(() => import('./pages/Event/Creation/Create'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 
@@ -99,17 +98,19 @@ function App() {
                   <PasswordReset/>
                 </Suspense>}/> */}
 
-            <Route path="profile" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <div className="default-body"><Profile/></div>
-                </Suspense>}/>
+            <Route path="profile">
+                <Route index 
+                  element={
+                    <Suspense fallback={<>...</>}>
+                      <div className="default-body"><Profile/></div>
+                    </Suspense>}/>
+                <Route path=":id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <div className="default-body"><Profile/></div>
+                  </Suspense>}/>
 
-            <Route path="create-event" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <CreateEvent/>
-                </Suspense>}/>
+            </Route>
 
             <Route path="event">
               <Route index 
@@ -130,6 +131,12 @@ function App() {
                     <EventPage/>
                   </Suspense>}/>
             </Route>
+
+            <Route path="event-settings" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <EventSettingsPage/>
+                </Suspense>}/>
             
 
             {/* Using path="*"" means "match anything", so this route
@@ -161,13 +168,6 @@ function App() {
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
                 </Suspense>}/>
-
-            <Route path="create-event" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <CreateEvent/>
-                </Suspense>}/>
-            
 
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit

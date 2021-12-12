@@ -25,10 +25,11 @@ import {
 
 function CardComponent(props) {
     const {event} = props;
+
     return (
         <Link 
             key={event.event_id}
-            to={`/event/${event.event_id}`} 
+            to={`/event/${event.event_id || event['@id'] || ''}`} 
             // state={{ backgroundLocation: location }}
         >
             <Card className="event-card" onClick={() => {}}>
@@ -46,7 +47,7 @@ function CardComponent(props) {
                         {event.sport}
                     </CardSubtitle>
                     <CardText>
-                        {event.description}
+                        {(event.location && event.location.address) || 'Unknown location'}
                     </CardText>
                     <CardText>
                         {(event.participants && event.participantslength) || null }
@@ -54,8 +55,8 @@ function CardComponent(props) {
                 </CardBody>
                 <CardFooter>
                     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <span>{event.startDate}</span>
-                        <span>Max: {event.maximumAttendeeCapacity}</span>
+                        <span>{(new Date(event.startDate).toString()).split(' GMT')[0]}</span>
+                        <span style={{paddingLeft: '1rem'}} >Max: {event.maximumAttendeeCapacity}</span>
                     </div>                                     
                 </CardFooter>
             </Card>

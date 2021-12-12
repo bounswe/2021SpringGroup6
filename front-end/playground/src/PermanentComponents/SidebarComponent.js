@@ -69,7 +69,7 @@ function SidebarComponent(props) {
                             </Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Link to="/event" className="sidebar-link" >
+                            <Link to="/event-settings" className="sidebar-link" >
                                 Event Settings <hr />
                             </Link>
                         </Nav.Item>

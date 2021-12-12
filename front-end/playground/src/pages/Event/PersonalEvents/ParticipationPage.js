@@ -31,26 +31,26 @@ function ParticipationPage(props) {
     const {user_id} = user;
     const [participationRequestedEvents, setParticipationRequestedEvents] = useState(Data.slice(0,3));
     const [acceptedEvents, setAcceptedEvents] = useState(Data.slice(0,3));
-    const [spectatorEvents, setSpectatorEvents] = useState(Data.slice(0,3));
+    const [spectatorEvents, setSpectatorEvents] = useState([]);
     useEffect(() =>{
-        if (true) {//participationRequestedEvents.length === 0) {
+        if (participationRequestedEvents.length === 0) {
             getUserInteresteds()
             .then((response) => {
-                //setParticipationRequestedEvents(response.items)
+                setParticipationRequestedEvents(response.additionalProperty.value)
             })
             .catch((error) => {})
         }
         if (acceptedEvents.length === 0) {
             getUserAccepteds()
             .then((response) => {
-                setAcceptedEvents(response.items)
+                setAcceptedEvents(response.additionalProperty.value)
             })
             .catch((error) => {})
         }
         if (spectatorEvents.length === 0) {
             getUserSpectatings()
             .then((response) => {
-                setSpectatorEvents(response.items)
+                setSpectatorEvents(response.additionalProperty.value)
             })
             .catch((error) => {})
         }
