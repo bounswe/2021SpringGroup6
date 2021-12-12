@@ -97,7 +97,7 @@ def attend_spectator(request, event_id):
         try:
             event = Event.objects.get(event_id=event_id)
 
-            res = event.get_participants()
+            res = event.get_spectators()
             event_dict = dict()
             event_dict['@context'] = "https://schema.org/SportsEvent"
             event_dict['@id'] = event.event_id
