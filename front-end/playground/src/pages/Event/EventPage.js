@@ -29,22 +29,30 @@ function EventPage(props) {
   const changeTab = (name) => {
       setTabName(name)
   }
+  const [isLoading, setIsLoading] = useState(true);
 
   const {id: event_id} = useParams();
 
   const [eventInfo, setEventInfo] = useState(
       // dummy data
       {
-
+        event_id: event_id,
       }
   );
 
   useEffect(() => {
-      getEvent(event_id)
-      .then((response) => {
-          setEventInfo(response)
+      if (!eventInfo.created_on) {
+        setIsLoading(true);
+        getEvent(event_id)
+        .then((response) => {
+            setEventInfo(response);
+            setIsLoading(false);
         })
-        .catch((error) => {})
+        .catch((error) => {
+            alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
+            window.location.href = '/'
+        });
+      }
   }, []);
 
 
@@ -86,7 +94,11 @@ function EventPage(props) {
         {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
         <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}`}>
             <TabPane tabId='Event'>
-                <EventInformation/>
+                {eventInfo.startDate ? 
+                    <EventInformation eventInfo={eventInfo} isLoading={isLoading} /> 
+                    : 
+                    <div>Loading</div>
+                }
             </TabPane>
             <TabPane tabId="Participation">
             </TabPane>

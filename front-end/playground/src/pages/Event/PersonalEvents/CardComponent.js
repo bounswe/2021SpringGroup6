@@ -34,7 +34,7 @@ function CardComponent(props) {
             <Card className="event-card" onClick={() => {}}>
                 <CardImg
                     alt="Card image cap"
-                    src="https://picsum.photos/318/180"
+                    src="https://picsum.photos/250/120"
                     top
                     width="100%"
                 />

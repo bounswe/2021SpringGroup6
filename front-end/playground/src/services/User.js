@@ -12,7 +12,7 @@ export const getUserInfo = async (user_id) => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)
@@ -31,7 +31,7 @@ export const getUserInteresteds = async () => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)
@@ -50,7 +50,7 @@ export const getUserAccepteds = async () => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)
@@ -69,7 +69,7 @@ export const getUserSpectatings = async () => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)

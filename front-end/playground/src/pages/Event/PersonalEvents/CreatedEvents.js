@@ -27,7 +27,7 @@ import {
 import {Data} from './MockData'
 
 function CreatedEvents(props) {
-    const [events, setEvents] = useState(Data);
+    const [events, setEvents] = useState([]);
     useEffect(() =>{
         if (events.length === 0) {
             getCreatedEvents()

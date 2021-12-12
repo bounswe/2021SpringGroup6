@@ -15,7 +15,7 @@ export const getCreatedEvents = async () => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)
@@ -26,7 +26,7 @@ export const getEvent = async (event_id) => {
 
   return axios({
     method: 'GET',
-    url: `events/${event_id}`,
+    url: `/events/${event_id}`,
     headers: {
       Authorization: token,
     },
@@ -34,7 +34,7 @@ export const getEvent = async (event_id) => {
     }
   })
     .then(response => {
-      return response.data.body
+      return response.data
     })
     .catch(error => {
       console.log(error)

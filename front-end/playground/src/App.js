@@ -49,7 +49,7 @@ function App() {
         <Row style={{maxHeight: '8vh'}}>
           <Header />
         </Row>
-        <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
+        <Row style={{minHeight: '92vh', alignItems: 'stretch'}}>
           <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center'}}>
             <Outlet />
           </div>

@@ -33,10 +33,10 @@ function ParticipationPage(props) {
     const [acceptedEvents, setAcceptedEvents] = useState(Data.slice(0,3));
     const [spectatorEvents, setSpectatorEvents] = useState(Data.slice(0,3));
     useEffect(() =>{
-        if (participationRequestedEvents.length === 0) {
+        if (true) {//participationRequestedEvents.length === 0) {
             getUserInteresteds()
             .then((response) => {
-                setParticipationRequestedEvents(response.items)
+                //setParticipationRequestedEvents(response.items)
             })
             .catch((error) => {})
         }
@@ -83,7 +83,7 @@ function ParticipationPage(props) {
                         return (
                             <CardComponent event={event}/>
                         )
-                    }) : <div style={{padding: '50px'}}>You have no pending requests.</div>
+                    }) : <div style={{padding: '50px'}}>You have not been accepted to any event yet.</div>
                     }
                     </CardGroup>
                 </CardBody>
@@ -99,7 +99,7 @@ function ParticipationPage(props) {
                         return (
                             <CardComponent event={event}/>
                         )
-                    }) : <div style={{padding: '50px'}}>You have no pending requests.</div>
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
                     }
                     </CardGroup>
                 </CardBody>
