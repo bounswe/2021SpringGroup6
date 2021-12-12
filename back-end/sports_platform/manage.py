@@ -23,6 +23,21 @@ def sport_records():
     except:
         pass # error from external library so skip
 
+
+def add_badges():
+    from sports_platform_api.data import badges
+    from sports_platform_api.models import Badge
+
+    for badge in badges:
+        try:
+            if 'wikidata' in badge:
+                Badge.objects.create(name=badge['name'], wikidata=badge['wikidata'])
+            else:
+                Badge.objects.create(name=badge['name'])
+        except: # Already exists
+            pass
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sports_platform.settings')
@@ -37,6 +52,7 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
     sport_records()
+    add_badges()
 
 
 if __name__ == '__main__':
