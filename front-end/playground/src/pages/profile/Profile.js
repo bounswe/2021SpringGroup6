@@ -59,6 +59,11 @@ function Profile() {
     }
     
     const [profileInfo, setProfileInfo] = useState(getUserInformation());
+    // useEffect(() => {
+    //     console.log('profileInfo\n', profileInfo)
+    //     console.log(typeof profileInfo)
+    //     console.log(profileInfo.sports, typeof profileInfo.sports)
+    // }, [profileInfo])
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -98,7 +103,7 @@ function Profile() {
         .then(function (response) {
             if(response.status === 200){
                 alert('Saved Successfully!');
-                setUser((prev) => ({...prev, profile: {...toBeSent}}));
+                setUser((prev) => ({...prev, profile: {...toBeSent, sports: toBeSent.sports || []}}));
                 localStorage.setItem("user",
                     JSON.stringify({...JSON.parse(localStorage.getItem('user')), 
                         profile: {...toBeSent}}));
@@ -107,8 +112,8 @@ function Profile() {
             }
         })
         .catch(function (error) {
+            console.log('error\n', error);
             alert("There is an error. Please try again.");
-            console.log(error);
         });
     }
 
@@ -252,6 +257,8 @@ function Profile() {
             </Button>
             <UncontrolledCollapse toggler="#toggler">
                 {SportNames.map((sport, index) => {
+                    console.log('profile info\n', profileInfo)
+                    console.log(profileInfo.sports)
                     let level = profileInfo.sports.filter((usersport, index) => {return (usersport.sport === sport)});
                     level = level.length === 0 ? 0 : Number(level[0].skill_level);
                     return (<div key={sport} className="lowerInput" style={{}}>
