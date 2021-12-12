@@ -31,7 +31,6 @@ function EventPage(props) {
   }
 
   const {id: event_id} = useParams();
-  console.log('event_id\n', event_id)
 
   const [eventInfo, setEventInfo] = useState(
       // dummy data

@@ -3,7 +3,7 @@ const localData = JSON.parse(localStorage.getItem('user'));
 const token = `Token ${localData.token}`;
 
 export const getUserInfo = async (user_id) => {
-    console.log('token\n', token)
+  
   return axios({
     method: 'GET',
     url: `/users/${user_id}`,

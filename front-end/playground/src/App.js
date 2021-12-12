@@ -25,9 +25,6 @@ const EventPage = lazy(() => import('./pages/Event/EventPage'));
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   const [window_width, window_height] = UseWindowSize();
-  // const location = useLocation();
-  // console.log('location\n', location)
-  // let state = location.state as { backgroundLocation?: Location };
 
   function Framework() {
     return (

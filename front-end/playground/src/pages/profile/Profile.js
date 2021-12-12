@@ -59,11 +59,6 @@ function Profile() {
     }
     
     const [profileInfo, setProfileInfo] = useState(getUserInformation());
-    // useEffect(() => {
-    //     console.log('profileInfo\n', profileInfo)
-    //     console.log(typeof profileInfo)
-    //     console.log(profileInfo.sports, typeof profileInfo.sports)
-    // }, [profileInfo])
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -257,8 +252,6 @@ function Profile() {
             </Button>
             <UncontrolledCollapse toggler="#toggler">
                 {SportNames.map((sport, index) => {
-                    console.log('profile info\n', profileInfo)
-                    console.log(profileInfo.sports)
                     let level = profileInfo.sports.filter((usersport, index) => {return (usersport.sport === sport)});
                     level = level.length === 0 ? 0 : Number(level[0].skill_level);
                     return (<div key={sport} className="lowerInput" style={{}}>
