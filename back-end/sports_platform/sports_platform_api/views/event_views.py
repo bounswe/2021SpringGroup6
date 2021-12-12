@@ -69,7 +69,7 @@ def get_event(request, event_id):
             
             with transaction.atomic():
                 event.delete()
-            return Response(status=200)
+            return Response(status=204)
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception:
