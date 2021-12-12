@@ -147,7 +147,7 @@ class Event(models.Model):
         elif 'timeBetweenEnd' in data:
             filters['startDate__date'] = data['timeBetweenEnd']
         
-        if ('dateBetweenStart' in data) and ('timeBetweenEnd' in data):
+        if ('dateBetweenStart' in data) and ('dateBetweenEnd' in data):
             filters['startDate__date__range'] = (data['dateBetweenStart'],data['dateBetweenEnd'])
         elif 'dateBetweenStart' in data:
             filters['startDate__date'] = data['dateBetweenStart']
