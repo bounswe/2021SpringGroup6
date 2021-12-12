@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
 import ListItem from '@mui/material/ListItem';
 import List from '@mui/material/List';
 import Input from '@mui/material/Input';
@@ -11,7 +10,7 @@ import './selectParticipantComponent.css'
 
 
 
-function selectParticipantComponent({selectParticipant, error}) {
+function SelectParticipantComponent({selectParticipant, error}) {
 
     const [details, setDetails] = useState({value:"", selectedParticipant :[]});
 
@@ -38,13 +37,13 @@ function selectParticipantComponent({selectParticipant, error}) {
                         onChange={e => setDetails({...details, identifier: e.target.value})} 
                         value={details.value} 
                     />
-                    <Button type='submit' color='primary'
+                    <Button
                         onClick={e => setDetails({...details, identifier: e.target.selectedParticipant.concat(e.target.value)})} 
                         value={details.selectedParticipant}
                     >
                     Add Participant
                     </Button>
-                    <Button type='submit' color='primary'
+                    <Button
                         onClick={e => setDetails({...details, identifier: e.target.selectedParticipant.splice(0, e.target.selectedParticipant.length)})} 
                     >
                     Clear All Participant
@@ -61,9 +60,7 @@ function selectParticipantComponent({selectParticipant, error}) {
                         </ListItem>
                     ))}
                 </List>
-                <Button type='submit' color='primary'
-                    onClick={e => setDetails({...details, identifier: e.target.selectedParticipant.filter((item, j) => index !== j)})} 
-                >
+                <Button type='submit' color='primary'> Submit
                 </Button>
 
             </Grid>
@@ -72,4 +69,4 @@ function selectParticipantComponent({selectParticipant, error}) {
     )
 }
 
-export default selectParticipantComponent;
+export default SelectParticipantComponent;
