@@ -57,6 +57,23 @@ def get_event(request, event_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
         
         return Response(seralized, status=200)
+    elif request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+        try:
+            event = Event.objects.get(event_id = event_id)   
+
+            if event.organizer.user_id != request.user.user_id:
+                return Response(data={"message": "Only organizers can delete events."}, status=403)
+            
+            with transaction.atomic():
+                event.delete()
+            return Response(status=204)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception:
+            return Response(data={"message": 'Try later.'}, status=500)
     elif request.method == 'PUT':
         if not request.user.is_authenticated:
             return Response({"message": "Login required."},
