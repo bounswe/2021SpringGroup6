@@ -299,7 +299,8 @@ class User(AbstractBaseUser):
                     "name": event.event.name,
                     "sport": event.event.sport.name,
                     "startDate": event.event.startDate,
-                    "location": event.event._scheme_location()
+                    "location": event.event._scheme_location(),
+                    "maximumAttendeeCapacity": event.event.maximumAttendeeCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)
@@ -332,7 +333,8 @@ class User(AbstractBaseUser):
                     "name": event.event.name,
                     "sport": event.event.sport.name,
                     "startDate": event.event.startDate,
-                    "location": event.event._scheme_location()
+                    "location": event.event._scheme_location(),
+                    "maximumAttendeeCapacity": event.event.maximumAttendeeCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)
@@ -365,7 +367,8 @@ class User(AbstractBaseUser):
                     "name": event.event.name,
                     "sport": event.event.sport.name,
                     "startDate": event.event.startDate,
-                    "location": event.event._scheme_location()
+                    "location": event.event._scheme_location(),
+                    "maxSpectatorCapacity": event.event.maxSpectatorCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)

@@ -118,7 +118,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_with_approval.name,
                                                                     "sport": self.event_with_approval.sport.name,
                                                                     "startDate": self.event_with_approval.startDate,
-                                                                    "location": self.event_with_approval._scheme_location()
+                                                                    "location": self.event_with_approval._scheme_location(),
+                                                                    "maximumAttendeeCapacity": self.event_with_approval.maximumAttendeeCapacity
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
@@ -126,7 +127,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_3.name,
                                                                     "sport": self.event_3.sport.name,
                                                                     "startDate": self.event_3.startDate,
-                                                                    "location": self.event_3._scheme_location()
+                                                                    "location": self.event_3._scheme_location(),
+                                                                    "maximumAttendeeCapacity": self.event_3.maximumAttendeeCapacity
                                                                 }
                                                             ]
                                                         }
@@ -145,7 +147,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_with_approval.name,
                                                                     "sport": self.event_with_approval.sport.name,
                                                                     "startDate": self.event_with_approval.startDate,
-                                                                    "location": self.event_with_approval._scheme_location()
+                                                                    "location": self.event_with_approval._scheme_location(),
+                                                                    "maximumAttendeeCapacity": self.event_with_approval.maximumAttendeeCapacity
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
@@ -153,7 +156,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_without_approval.name,
                                                                     "sport": self.event_without_approval.sport.name,
                                                                     "startDate": self.event_without_approval.startDate,
-                                                                    "location": self.event_without_approval._scheme_location()
+                                                                    "location": self.event_without_approval._scheme_location(),
+                                                                    "maximumAttendeeCapacity": self.event_without_approval.maximumAttendeeCapacity
                                                                 },
                                                             ]
                                                         }
@@ -172,7 +176,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_without_approval.name,
                                                                     "sport": self.event_without_approval.sport.name,
                                                                     "startDate": self.event_without_approval.startDate,
-                                                                    "location": self.event_without_approval._scheme_location()
+                                                                    "location": self.event_without_approval._scheme_location(),
+                                                                    "maxSpectatorCapacity": self.event_without_approval.maxSpectatorCapacity
                                                                 },
                                                                 {
                                                                     "type": "https://schema.org/SportsEvent",
@@ -180,7 +185,8 @@ class UserParticipationTest(TestCase):
                                                                     "name": self.event_3.name,
                                                                     "sport": self.event_3.sport.name,
                                                                     "startDate": self.event_3.startDate,
-                                                                    "location": self.event_3._scheme_location()
+                                                                    "location": self.event_3._scheme_location(),
+                                                                    "maxSpectatorCapacity": self.event_3.maxSpectatorCapacity
                                                                 }
                                                             ]
                                                         }
