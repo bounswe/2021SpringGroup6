@@ -290,7 +290,7 @@ def accept_participant(request, event_id):
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             if res == 401:
-                return Response(data={"message": "This event accepts participants without approval."}, status=500)
+                return Response(data={"message": "This event accepts participants without approval."}, status=400)
             else:
                 return Response(data = res, status=201)
         except Event.DoesNotExist:
