@@ -22,8 +22,6 @@ const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 
 
 
-
-
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   const [sidebarToggle, setSidebarToggle] = useState(true)
@@ -116,6 +114,8 @@ function App() {
                 <Suspense fallback={<>...</>}>
                   <SearchPage/>
                 </Suspense>}/>
+
+            
 
 
 

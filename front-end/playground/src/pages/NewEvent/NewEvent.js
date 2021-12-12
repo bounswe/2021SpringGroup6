@@ -64,36 +64,33 @@ class NewEvent extends React.Component {
 
     checkInput() {
 
-        if(this.state.max < this.state.min) {
+        if(parseInt(this.state.max) < parseInt(this.state.min)) {
             alert('Maximum number of players cannot be less than minimum number of players')
             return false;
         }
 
-        if(this.state.maxSkillLevel < this.state.minSkillLevel){
+        if(parseInt(this.state.maxSkillLevel) < parseInt(this.state.minSkillLevel)){
             alert('Maximum skill level cannot be less than minimum skill level')
             return false;
         }
 
 
-        if(this.state.min < 1) {
+        if(parseInt(this.state.min) < 1) {
             alert('Minimum number of players must be greater than 0')
             return false;
         }
 
-        if(this.state.max < 1) {
+        if(parseInt(this.state.max) < 1) {
             alert('Maximum number of players must be greater than 0')
             return false;
         }
 
-        if(this.state.maxSpectator < 0) {
+        if(parseInt(this.state.maxSpectator) < 0) {
             alert('Maximum number of sprectators cannot be negative')
             return false;
         }
 
-        if(this.state.minSkillLevel < 1 || this.state.minSkillLevel >5) {
-            alert('Min skill level must be in the scope of 1-5')
-            return false;
-        }
+        
         
         return true;
 
@@ -116,8 +113,8 @@ class NewEvent extends React.Component {
                 sport : this.state.sporttype,
                 description : this.state.description,
                 startDate : this.state.date + 'T' + this.state.time + '+03:00',
-                latitude : this.state.anchor[0],
-                longitude : this.state.anchor[1],
+                latitude : (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4),
+                longitude : (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4),
                 minimumAttendeeCapacity: this.state.min,
                 maximumAttendeeCapacity : this.state.max,
                 maxSpectatorCapacity : this.state.maxSpectator,
@@ -128,19 +125,25 @@ class NewEvent extends React.Component {
             }       
             
             console.log(info)
+            console.log(`Token ${user}`)
                       
             axios
             .post(baseURL, info,  {headers:{'Authorization': `Token ${user}`}}).then((response) => {
+                console.log(response)
+                console.log(response.data)
+                console.log(response.data["@id"])
+                console.log(`Token ${user}`)
                 if(response.status === 200 || response.status === 201) {
                     alert('The event is now opened.')
-                    window.location.href = '/'
+                    window.location.href = '/event/' + response.data["@id"]
                 } else {
-                    alert(response.message)
+                    alert(response.message.name[0])
                     //alert('Not valid info for an event')
                 }
             }
             ).catch((error) => {
-                alert('There is an error. Try again later')
+                console.log(error)
+                alert('Incorrect input. Try again')
             })
             
         }
@@ -206,45 +209,45 @@ class NewEvent extends React.Component {
                             <Select style={{width: 420}}
                                 labelId="Sport Type"
                                 id="sportType"
-                                
+                                fullWidth required 
                                 label="Sport Type"
                                 onChange={event => { 
                                     const { value } = event.target;
                                     this.setState({ sporttype: value });
                                   }}      
                             >
-                                <MenuItem value={'soccer'}>Soccer</MenuItem>
-                                <MenuItem value={'motorsport'}>motorsport</MenuItem>
-                                <MenuItem value={'fighting'}>fighting</MenuItem>
-                                <MenuItem value={'baseball'}>baseball</MenuItem>
-                                <MenuItem value={'basketball'}>basketball</MenuItem>
-                                <MenuItem value={'american_football'}>american_football</MenuItem>
-                                <MenuItem value={'ice_hockey'}>ice_hockey</MenuItem>
-                                <MenuItem value={'golf'}>golf</MenuItem>
-                                <MenuItem value={'rugby'}>rugby</MenuItem>
-                                <MenuItem value={'tennis'}>tennis</MenuItem>
-                                <MenuItem value={'cricket'}>cricket</MenuItem>
-                                <MenuItem value={'cycling'}>cycling</MenuItem>
-                                <MenuItem value={'australian_football'}>australian_football</MenuItem>
-                                <MenuItem value={'esports'}>esports</MenuItem>
-                                <MenuItem value={'volleyball'}>volleyball</MenuItem>
-                                <MenuItem value={'netball'}>netball</MenuItem>
-                                <MenuItem value={'handball'}>handball</MenuItem>
-                                <MenuItem value={'snooker'}>snooker</MenuItem> 
-                                <MenuItem value={'field_hockey'}>field_hockey</MenuItem>
-                                <MenuItem value={'darts'}>darts</MenuItem>
-                                <MenuItem value={'athletics'}>athletics</MenuItem>
-                                <MenuItem value={'badminton'}>badminton</MenuItem>
-                                <MenuItem value={'climbing'}>climbing</MenuItem>
-                                <MenuItem value={'equestrian'}>equestrian</MenuItem>
-                                <MenuItem value={'gymnastics'}>gymnastics</MenuItem>
-                                <MenuItem value={'shooting'}>shooting</MenuItem>
-                                <MenuItem value={'extreme_sports'}>extreme_sports</MenuItem>
-                                <MenuItem value={'table_tennis'}>table_tennis</MenuItem>
-                                <MenuItem value={'multi-sports'}>multi-sports</MenuItem>
-                                <MenuItem value={'watersports'}>watersports</MenuItem>
-                                <MenuItem value={'weightlifting'}>weightlifting</MenuItem>
-                                
+                                <MenuItem value={'american_football'}>American_football</MenuItem>
+                                <MenuItem value={'athletics'}>Athletics</MenuItem>
+                                <MenuItem value={'australian_football'}>Australian_football</MenuItem>
+                                <MenuItem value={'badminton'}>Badminton</MenuItem>
+                                <MenuItem value={'baseball'}>Baseball</MenuItem>
+                                <MenuItem value={'basketball'}>Basketball</MenuItem>
+                                <MenuItem value={'climbing'}>Climbing</MenuItem>
+                                <MenuItem value={'cricket'}>Cricket</MenuItem>
+                                <MenuItem value={'cycling'}>Cycling</MenuItem>
+                                <MenuItem value={'darts'}>Darts</MenuItem>
+                                <MenuItem value={'esports'}>Esports</MenuItem>
+                                <MenuItem value={'equestrian'}>Equestrian</MenuItem>
+                                <MenuItem value={'extreme_sports'}>Extreme_sports</MenuItem>
+                                <MenuItem value={'field_hockey'}>Field_hockey</MenuItem>
+                                <MenuItem value={'fighting'}>Fighting</MenuItem>
+                                <MenuItem value={'golf'}>Golf</MenuItem>
+                                <MenuItem value={'gymnastics'}>Gymnastics</MenuItem>
+                                <MenuItem value={'handball'}>Handball</MenuItem>
+                                <MenuItem value={'ice_hockey'}>Ice_hockey</MenuItem>
+                                <MenuItem value={'motorsport'}>Motorsport</MenuItem>
+                                <MenuItem value={'multi-sports'}>Multi-sports</MenuItem>
+                                <MenuItem value={'netball'}>Netball</MenuItem>                                                         
+                                <MenuItem value={'rugby'}>Rugby</MenuItem>                                                    
+                                <MenuItem value={'shooting'}>Shooting</MenuItem>
+                                <MenuItem value={'snooker'}>Snooker</MenuItem> 
+                                <MenuItem value={'soccer'}>Soccer</MenuItem>                                                                               
+                                <MenuItem value={'table_tennis'}>Table_tennis</MenuItem>
+                                <MenuItem value={'tennis'}>Tennis</MenuItem>
+                                <MenuItem value={'volleyball'}>Volleyball</MenuItem>
+                                <MenuItem value={'watersports'}>Watersports</MenuItem>
+                                <MenuItem value={'weightlifting'}>Weightlifting</MenuItem>
+                                                                
                             </Select>
 
                             
@@ -293,9 +296,9 @@ class NewEvent extends React.Component {
 
                             <TextField className="lowerInput"
                                 label='Minimum Skill Level' 
-                                placeholder='Enter minimum skill level required (0-5)' 
+                                placeholder='Enter minimum skill level required (1-5)' 
                                 fullWidth required 
-                                InputProps={{ inputProps: { min: 0, max: 5 } }}
+                                InputProps={{ inputProps: { min: 1, max: 5 } }}
                                 type="number" 
                                 name="minSkillLevel" 
                                 id="minSkillLevel"   
@@ -307,9 +310,9 @@ class NewEvent extends React.Component {
 
                             <TextField className="lowerInput"
                                 label='Maximum Skill Level' 
-                                placeholder='Enter maximum skill level required (0-5)' 
+                                placeholder='Enter maximum skill level required (1-5)' 
                                 fullWidth required 
-                                InputProps={{ inputProps: { min: 0, max: 5 } }}
+                                InputProps={{ inputProps: { min: 1, max: 5 } }}
                                 type="number" 
                                 name="maxSkillLevel" 
                                 id="maxSkillLevel"   
@@ -385,7 +388,7 @@ class NewEvent extends React.Component {
                             <Select style={{width: 420}}
                                 labelId="Accept Without Approval"
                                 id="acceptNecessary"
-                                
+                                fullWidth required 
                                 label="Accept Without Approval"
                                 onChange={event => { 
                                     const { value } = event.target;

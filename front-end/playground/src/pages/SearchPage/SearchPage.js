@@ -16,8 +16,11 @@ import { width } from "@mui/system";
 import { Map, Draggable } from "pigeon-maps";
 import { MenuItem } from "@mui/material";
 import { Select } from "@mui/material";
+import axios from 'axios';
 
+import EventInfo from "./EventInfo";
 
+const baseURL = "/events/searches";
 
 class SearchPage extends React.Component {
 
@@ -25,6 +28,7 @@ class SearchPage extends React.Component {
     constructor() {
         super()
         this.state = {
+            identifier: "",
             sporttype: "",
             minSkillLevel: -1,
             maxSkillLevel: -1,
@@ -35,7 +39,9 @@ class SearchPage extends React.Component {
             startTime: "",
             endTime: "",
             country: '', 
-            region: '' 
+            useMap: false,
+            region: '' ,
+            events: []
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -52,13 +58,147 @@ class SearchPage extends React.Component {
       }
     
       selectRegion (val) {
-        console.log(this.state)
+        //console.log(this.state)
         this.setState({ region: val });
       }
 
 
-    handleSubmit() {
+    handleSubmit(event) {
+        event.preventDefault();
+
+
+
+        let info = {}
+
+        if(this.state.identifier !== "") {
+            info.nameContains = this.state.identifier
+        }
+
+        if(this.state.sporttype !== "") {
+            info.sport = this.state.sporttype
+        }
+
+        if(parseInt(this.state.maxSkillLevel) !== -1 && parseInt(this.state.minSkillLevel) !== -1 ) {
+            if( this.state.maxSkillLevel < this.state.minSkillLevel) {
+                alert('Max skill level cannot be less than min skill level')
+                return
+            } else {
+                info.skillLevel = []
+                let minVal = parseInt(this.state.minSkillLevel);
+                while(minVal < parseInt(this.state.maxSkillLevel) + 1) {
+                    info.skillLevel.push(minVal);
+                    minVal += 1;
+                }
+
+            }
+            
+        } else if (parseInt(this.state.maxSkillLevel) !== -1) {
+            info.skillLevel = []
+            let minVal = 1;
+                while(minVal < parseInt(this.state.maxSkillLevel) + 1) {
+                    info.skillLevel.push(minVal);
+                    minVal += 1;
+                }
+        } else if (parseInt(this.state.minSkillLevel) !== -1) {
+            info.skillLevel = []
+            let minVal = parseInt(this.state.minSkillLevel);
+            while(minVal < 6) {
+                info.skillLevel.push(minVal);
+                minVal += 1;
+            }
+        }
+
+
+
         
+
+
+
+        if(this.state.startingDate !== "" && this.state.endingDate!=="") {
+            if(this.state.endingDate < this.state.startingDate) {
+                
+                alert('Starting date cannot be later than the ending date')
+                return
+            } else {
+                info.dateBetweenStart = this.state.startingDate;
+                info.dateBetweenEnd = this.state.endingDate;
+            }
+        } else if (this.state.startingDate !== "") {
+            alert('Date must be given as a 2 sided interval')
+            return
+        } else if (this.state.endingDate !== "") {
+            alert('Date must be given as a 2 sided interval')
+            return
+        }
+
+
+        if(this.state.startTime !== "" && this.state.endTime !== "") {
+            if(this.state.startTime > this.state.endTime) {
+                
+                alert('Start time cannot be later than the end time')
+                return
+            } else {
+                info.timeBetweenStart = this.state.startTime
+                info.timeBetweenEnd = this.state.endTime
+            }
+        } else if (this.state.startTime !== "") {
+            alert('Time must be given as a 2 sided interval')
+            return
+        } else if (this.state.endTime !== "") {
+            alert('Time must be given as a 2 sided interval')
+            return
+        }
+
+        
+
+        if(this.state.useMap ===true) {
+            if(this.state.anchor[0] < this.state.anchor2[0] && this.state.anchor[1] < this.state.anchor2[1]) {
+                info.latitudeBetweenStart = (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4)
+                info.latitudeBetweenEnd = (Math.round(this.state.anchor2[0] * 100) / 100).toFixed(4)
+                info.longitudeBetweenStart = (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
+                info.longitudeBetweenEnd = (Math.round(this.state.anchor2[1] * 100) / 100).toFixed(4)
+            } else {
+                alert('The positions of the markers used to draw rectangle are problematic. Check the description again please')
+                return
+            }
+        } else {
+            const { country, region } = this.state;
+            if(country !== "" && region !=="") {
+                info.country = country
+                info.city = region
+            } else if (country !== "") {
+                info.country = country;
+            }
+        }
+        
+
+
+
+        const user = JSON.parse(localStorage.getItem('user')).token;
+
+        axios
+            .post(baseURL, info,  {headers:{'Authorization': `Token ${user}`}}).then((response) => {
+                
+                if(response.status === 200 || response.status === 201) {
+                    //console.log(response)
+                    console.log(response.data.items)
+                    this.setState({ events: response.data.items });
+                    /*this.props.history.push({
+                        pathname: '/search-results-page',
+                        state: { events: response.data.items }
+                    })*/
+                    //this.context.events = response.data.items
+                    alert('Search is successful')
+
+                    //window.location.href = '/search-results-page'
+                } else {
+                    alert(response.message)
+                    //alert('Not valid info for an event')
+                }
+            }
+            ).catch((error) => {
+                alert('There is an error. Try again later')
+            })
     }
 
     handleChange(event) {
@@ -90,6 +230,15 @@ class SearchPage extends React.Component {
 
 
     render() {
+
+
+        const resultingEvents = this.state.events.map(event => <EventInfo name={event.name} description={event.description} id={event.event_id} /> )
+        let title = "";
+        if(resultingEvents.length < 1) {
+            title = "No event found"
+        } else {
+            title = "Search Results"
+        }
         const { country, region } = this.state;
             
         const paperStyle={padding :30,width:480, margin:"20px auto"}
@@ -102,7 +251,7 @@ class SearchPage extends React.Component {
                 
                 <h1 id="title">Search Event Page <br /></h1>
 
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     <Grid>
                         <Paper elevation={10} style={paperStyle}>
 
@@ -134,35 +283,35 @@ class SearchPage extends React.Component {
                                     this.setState({ sporttype: value });
                                   }}      
                             >
-                                <MenuItem value={'soccer'}>Soccer</MenuItem>
-                                <MenuItem value={'motorsport'}>Motorsport</MenuItem>
-                                <MenuItem value={'fighting'}>Fighting</MenuItem>
+                                <MenuItem value={'american_football'}>American_football</MenuItem>
+                                <MenuItem value={'athletics'}>Athletics</MenuItem>
+                                <MenuItem value={'australian_football'}>Australian_football</MenuItem>
+                                <MenuItem value={'badminton'}>Badminton</MenuItem>
                                 <MenuItem value={'baseball'}>Baseball</MenuItem>
                                 <MenuItem value={'basketball'}>Basketball</MenuItem>
-                                <MenuItem value={'american_football'}>American_football</MenuItem>
-                                <MenuItem value={'ice_hockey'}>Ice_hockey</MenuItem>
-                                <MenuItem value={'golf'}>Golf</MenuItem>
-                                <MenuItem value={'rugby'}>Rugby</MenuItem>
-                                <MenuItem value={'tennis'}>Tennis</MenuItem>
+                                <MenuItem value={'climbing'}>Climbing</MenuItem>
                                 <MenuItem value={'cricket'}>Cricket</MenuItem>
                                 <MenuItem value={'cycling'}>Cycling</MenuItem>
-                                <MenuItem value={'australian_football'}>Australian_football</MenuItem>
-                                <MenuItem value={'esports'}>Esports</MenuItem>
-                                <MenuItem value={'volleyball'}>Volleyball</MenuItem>
-                                <MenuItem value={'netball'}>Netball</MenuItem>
-                                <MenuItem value={'handball'}>Handball</MenuItem>
-                                <MenuItem value={'snooker'}>Snooker</MenuItem> 
-                                <MenuItem value={'field_hockey'}>Field_hockey</MenuItem>
                                 <MenuItem value={'darts'}>Darts</MenuItem>
-                                <MenuItem value={'athletics'}>Athletics</MenuItem>
-                                <MenuItem value={'badminton'}>Badminton</MenuItem>
-                                <MenuItem value={'climbing'}>Climbing</MenuItem>
+                                <MenuItem value={'esports'}>Esports</MenuItem>
                                 <MenuItem value={'equestrian'}>Equestrian</MenuItem>
-                                <MenuItem value={'gymnastics'}>Gymnastics</MenuItem>
-                                <MenuItem value={'shooting'}>Shooting</MenuItem>
                                 <MenuItem value={'extreme_sports'}>Extreme_sports</MenuItem>
-                                <MenuItem value={'table_tennis'}>Table_tennis</MenuItem>
+                                <MenuItem value={'field_hockey'}>Field_hockey</MenuItem>
+                                <MenuItem value={'fighting'}>Fighting</MenuItem>
+                                <MenuItem value={'golf'}>Golf</MenuItem>
+                                <MenuItem value={'gymnastics'}>Gymnastics</MenuItem>
+                                <MenuItem value={'handball'}>Handball</MenuItem>
+                                <MenuItem value={'ice_hockey'}>Ice_hockey</MenuItem>
+                                <MenuItem value={'motorsport'}>Motorsport</MenuItem>
                                 <MenuItem value={'multi-sports'}>Multi-sports</MenuItem>
+                                <MenuItem value={'netball'}>Netball</MenuItem>                                                         
+                                <MenuItem value={'rugby'}>Rugby</MenuItem>                                                    
+                                <MenuItem value={'shooting'}>Shooting</MenuItem>
+                                <MenuItem value={'snooker'}>Snooker</MenuItem> 
+                                <MenuItem value={'soccer'}>Soccer</MenuItem>                                                                               
+                                <MenuItem value={'table_tennis'}>Table_tennis</MenuItem>
+                                <MenuItem value={'tennis'}>Tennis</MenuItem>
+                                <MenuItem value={'volleyball'}>Volleyball</MenuItem>
                                 <MenuItem value={'watersports'}>Watersports</MenuItem>
                                 <MenuItem value={'weightlifting'}>Weightlifting</MenuItem>
                                 
@@ -172,8 +321,8 @@ class SearchPage extends React.Component {
 
                             <TextField style= {{width:420}} className="lowerInput" style= {{width:420}}
                                 label='Minimum Skill Level' 
-                                placeholder='Enter minimum skill level required (0-5)' 
- 
+                                placeholder='Enter minimum skill level required (1-5)' 
+                                InputProps={{ inputProps: { min: 1, max: 5 } }}
                                 type="number" 
                                 name="minSkillLevel" 
                                 id="minSkillLevel"   
@@ -186,8 +335,8 @@ class SearchPage extends React.Component {
 
                             <TextField style= {{width:420}} className="lowerInput" style= {{width:420}}
                                 label='Maximum Skill Level' 
-                                placeholder='Enter maximum skill possible (0-5)' 
- 
+                                placeholder='Enter maximum skill possible (1-5)' 
+                                InputProps={{ inputProps: { min: 1, max: 5 } }}
                                 type="number" 
                                 name="maxSkillLevel" 
                                 id="maxSkillLevel"   
@@ -198,7 +347,8 @@ class SearchPage extends React.Component {
                             />
 
 
-                            
+                            <p><br/>Date interval</p>
+                            <p>Earliest:</p>
 
                             <TextField style= {{width:420}}  className="lowerInput"
                                 
@@ -214,20 +364,7 @@ class SearchPage extends React.Component {
                             />
 
 
-                            <TextField style= {{width:420}}  className="lowerInput"
-                                
-                                
-                                placeholder='Enter starting time info' 
-                                
-                                type="time" 
-                                name="startTime" 
-                                id="startTime"        
-                                onChange={event => {
-                                    const { value } = event.target;
-                                    this.setState({ startTime: value });
-                                  }}                                         
-                            />
-
+                            <p><br />Latest:</p>
 
 
 
@@ -243,6 +380,24 @@ class SearchPage extends React.Component {
                                   }}                                               
                             />
 
+                            <p> <br/>Time interval</p>
+                            <p>Earliest:</p>
+                            <TextField style= {{width:420}}  className="lowerInput"
+                                
+                                
+                                placeholder='Enter starting time info' 
+                                
+                                type="time" 
+                                name="startTime" 
+                                id="startTime"        
+                                onChange={event => {
+                                    const { value } = event.target;
+                                    this.setState({ startTime: value });
+                                  }}                                         
+                            />
+
+                            <p><br />Latest:</p>
+
                             <TextField style= {{width:420}}  className="lowerInput"
                                 
                                 
@@ -256,6 +411,27 @@ class SearchPage extends React.Component {
                                     this.setState({ endTime: value });
                                   }}                                         
                             />
+
+
+                            <p><br />You can use either map or country and city search for the location. Select which one to use please.</p>
+
+
+                            <Select style={{width: 420}}
+                                labelId="Use Map For Search"
+                                id="useMap"
+                                
+                                label="Use Map For Search"
+                                onChange={event => { 
+                                    const { value } = event.target;
+                                    this.setState({ useMap: value });
+                                  }}      
+                            >
+                                <MenuItem value={true}>Map</MenuItem>
+                                <MenuItem value={false}>Country and City</MenuItem>
+                               
+                                
+                            </Select>
+
 
 
                             <br /><br />
@@ -319,7 +495,11 @@ class SearchPage extends React.Component {
                     </Grid>
                 
                 </form>
-
+                
+                <h1 id="title2">{title} <br /></h1>
+               
+                {resultingEvents}
+                <br /><br />
             </div>                
 
         
