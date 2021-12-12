@@ -42,7 +42,6 @@ class Accept_Participant(serializers.Serializer):
             min_value=0, max_value=9223372036854775807)
     )
 
-
 class Search(serializers.Serializer):
     creator = serializers.IntegerField(min_value=1, required=False)
     nameContains = serializers.CharField(required=False)
@@ -85,3 +84,16 @@ class Search(serializers.Serializer):
                 raise serializers.ValidationError({"country": "country and coordinate information must not be given together"})   
 
         return data
+
+class Update(serializers.Serializer):
+    name = serializers.CharField(min_length=2, max_length=100, required=False)
+    description = serializers.CharField(required=False)
+    startDate = serializers.DateTimeField(format='iso-8601', required=False)
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=90, min_value=-90, required=False)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=180, min_value=-180, required=False)
+    minimumAttendeeCapacity = serializers.IntegerField(min_value=0, required=False)
+    maximumAttendeeCapacity = serializers.IntegerField(min_value=1, required=False)
+    maxSpectatorCapacity = serializers.IntegerField(min_value=0, required=False)
+    minSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
+    maxSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
+    duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807,required=False)
