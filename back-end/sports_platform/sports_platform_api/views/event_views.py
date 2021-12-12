@@ -1,4 +1,4 @@
-import requests
+from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..models import Event
@@ -43,19 +43,48 @@ def create_event(request):
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE', 'PUT'])
 def get_event(request, event_id):
-    try:
-        event = Event.objects.get(pk=event_id)
-        seralized = EventSerializer(event).data
-        event_information = event.get_info()
-        seralized.update(event_information)
-    except Event.DoesNotExist:
-        return Response(data={"message": 'Event id does not exist'}, status=400)
-    except Exception:
-        return Response(data={'message': 'An error occured, please try again later.'}, status=500)
-    
-    return Response(seralized, status=200)
+    if request.method == 'GET':
+        try:
+            event = Event.objects.get(pk=event_id)
+            seralized = EventSerializer(event).data
+            event_information = event.get_info()
+            seralized.update(event_information)
+        except Event.DoesNotExist:
+            return Response(data={"message": 'Event id does not exist'}, status=400)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+        
+        return Response(seralized, status=200)
+    elif request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return Response({"message": "Login required."},
+                        status=401)
+
+        validation = event_validation.Update(data=request.data)
+        if not validation.is_valid():
+            return Response(data = {"message": validation.errors}, status=400)
+        try:
+            event = Event.objects.get(event_id=event_id)
+            return_code = event.update(validation.validated_data)
+            if return_code == 400:
+                return Response(data={"message": 'There are more participants than requested maximumAttendeeCapacity.'}, status=400)
+            if return_code == 401:
+                return Response(data={"message": 'There is a participant with lower skill level than requested minSkillLevel.'}, status=400)
+            if return_code == 402:
+                return Response(data={"message": 'There is a participant with higher skill level than requested maxSkillLevel.'}, status=400)
+            if return_code == 403:
+                return Response(data={"message": 'There are more spectators than requested maxSpectatorCapacity.'}, status=400)
+            if return_code == 200:
+                return Response(status=200)
+            else:
+                return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+
+        except Event.DoesNotExist:
+            return Response(data={"message": 'Event id does not exist'}, status=400)
+        except Exception as e:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
 
     
 @api_view(['POST', 'GET', 'DELETE'])

@@ -148,7 +148,6 @@ class Event(models.Model):
         
         return filters
 
-
     def _scheme_location(self):
         return {
             '@context': 'https://schema.org',
@@ -186,7 +185,6 @@ class Event(models.Model):
             "value": self.acceptWithoutApproval
              }
         ]
-
 
     def get_info(self):
         serialized = {}
@@ -470,7 +468,6 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
-
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
@@ -525,3 +522,31 @@ class Event(models.Model):
             spectator_users.append(data_dict)
 
         return spectator_users
+    
+    def update(self, data):
+        participants = EventParticipants.objects.filter(event=self)
+        if 'maximumAttendeeCapacity' in data:
+            if len(participants) > data['maximumAttendeeCapacity']:
+                return 400 # there are more participants already
+        if 'minSkillLevel' in data:
+            for participant in participants:
+                try:
+                    user_skill_level = SportSkillLevel.objects.get(user=participant.user,sport=self.sport)
+                    if user_skill_level.skill_level < data['minSkillLevel']:
+                        return 401 # there is a participant with lower skill
+                except SportSkillLevel.DoesNotExist:
+                    pass
+        if 'maxSkillLevel' in data:
+            for participant in participants:
+                try:
+                    user_skill_level = SportSkillLevel.objects.get(user=participant.user,sport=self.sport)
+                    if user_skill_level.skill_level > data['maxSkillLevel']:
+                        return 402 # there is a participant with higher skill
+                except SportSkillLevel.DoesNotExist:
+                    pass
+        if 'maxSpectatorCapacity' in data:
+            spectators = EventSpectators.objects.filter(event=self)
+            if len(spectators) > data['maxSpectatorCapacity']:
+                return 403 # there are more spectators already
+        Event.objects.filter(pk=self.event_id).update(**data)
+        return 200
