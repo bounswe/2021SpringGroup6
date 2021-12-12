@@ -42,7 +42,7 @@ class DeleteEventTest(TestCase):
 
     def test_success(self):
         response = self.client.delete(self.path, **{'HTTP_AUTHORIZATION': f'Token {self.lion_token}'})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
 
     def test_not_exist_event(self):
         response = self.client.get(self.invalid_path)
