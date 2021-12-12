@@ -1,12 +1,5 @@
-import {React, useState, Fragment, useEffect} from 'react';
-import { useParams } from 'react-router-dom'
-import './EventPage.css';
-
-import {DiscussionPage} from './Discussion/DiscussionPage';
-import {EventInformation} from './EventInformation/EventInformation';
-
-import {getEvent} from '../../services/Events';
-
+import {React, useState, Fragment} from 'react';
+import './EventSettingsPage.css';
 
 import {
   Tabs, 
@@ -24,34 +17,19 @@ import {
   CardText,
 } from 'reactstrap';
 
-function EventPage(props) {
+// import {DiscussionPage} from './Discussion/DiscussionPage';
+import {CreatedEvents} from './PersonalEvents/CreatedEvents';
+import {ParticipationPage} from './PersonalEvents/ParticipationPage';
+
+function EventSettingsPage(props) {
   const [tabName, setTabName] = useState('Event');
   const changeTab = (name) => {
       setTabName(name)
   }
 
-  const {id: event_id} = useParams();
-  console.log('event_id\n', event_id)
-
-  const [eventInfo, setEventInfo] = useState(
-      // dummy data
-      {
-
-      }
-  );
-
-  useEffect(() => {
-      getEvent(event_id)
-      .then((response) => {
-          setEventInfo(response)
-        })
-        .catch((error) => {})
-  }, []);
-
-
   return (
-      <div className="event-container">
-        <Nav tabs justified className="event-nav">
+      <div className="event-settings-container">
+        <Nav tabs justified className="event-settings-nav">
             <NavItem>
                 <NavLink
                 active={tabName === 'Event'}
@@ -59,7 +37,7 @@ function EventPage(props) {
                     changeTab('Event')
                 }}
                 >
-               Event Information
+                Your Events
                 </NavLink>
             </NavItem>
             <NavItem>
@@ -72,7 +50,7 @@ function EventPage(props) {
                 Participation
                 </NavLink>
             </NavItem>
-            <NavItem>
+            {/* <NavItem>
                 <NavLink
                 active={tabName === 'Discussion'}
                 onClick={() => {
@@ -81,22 +59,23 @@ function EventPage(props) {
                 >
                 Discussion
                 </NavLink>
-            </NavItem>
+            </NavItem> */}
         </Nav>
 
         {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
-        <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}`}>
+        <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}-settings`}>
             <TabPane tabId='Event'>
-                <EventInformation/>
+              <CreatedEvents/>
             </TabPane>
             <TabPane tabId="Participation">
+              <ParticipationPage/>
             </TabPane>
-            <TabPane tabId="Discussion">
-                <DiscussionPage/>
-            </TabPane>
+            {/* <TabPane tabId="Discussion">
+              <DiscussionPage/>
+            </TabPane> */}
         </TabContent>
     </div>
   );
 }
 
-export default EventPage;
+export default EventSettingsPage;

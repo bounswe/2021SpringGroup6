@@ -13,15 +13,14 @@ import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
 
-import {EventModal} from './pages/Event/EventModal';
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const CreateEvent = lazy(() => import('./pages/Event/Creation/Create'));
+const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
-// const EventModal = lazy(() => import('./pages/Event/EventModal'));
- 
+
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
@@ -119,20 +118,19 @@ function App() {
               <Route index 
                 element={
                   <Suspense fallback={<>...</>}>
-                    <EventPage/>
+                    <EventSettingsPage/>
                   </Suspense>}/>
               
-              <Route path="modal/:id" 
+              {/* <Route path="modal/:id" 
                 element={
                   <Suspense fallback={<>...</>}>
                     <div>hello</div>
-                    {/* <EventModal/> */}
-                  </Suspense>}/>
+                  </Suspense>}/> */}
               
               <Route path=":id" 
                 element={
                   <Suspense fallback={<>...</>}>
-                    <div className="default-body"><div>In maintanence...</div></div>
+                    <EventPage/>
                   </Suspense>}/>
             </Route>
             

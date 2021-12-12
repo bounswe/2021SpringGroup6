@@ -6,14 +6,15 @@ import axios from 'axios';
 import SportNames from '../../PermanentComponents/SportNames.js';
 import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
 
+import {getUserInfo} from '../../services/User';
+
 function Profile() {
     const {user, setUser} = useContext(UserContext);
-
-    const getUserInfo = () => {
+    const getUserInformation = () => {
         if(user.profile) {
             return {...user.profile}
         }
-        axios.get(`/users/${user.user_id}`)
+        getUserInfo(user.user_id)
         .then(function (response) {
             if(response.status === 200){
                 // setUser(prevState => ({
@@ -57,7 +58,7 @@ function Profile() {
         });
     }
     
-    const [profileInfo, setProfileInfo] = useState(getUserInfo());
+    const [profileInfo, setProfileInfo] = useState(getUserInformation());
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

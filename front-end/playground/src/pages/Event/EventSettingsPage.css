@@ -1,4 +1,4 @@
-.event-container {
+.event-settings-container {
     flex-grow: 1;
     display: flex;
     flex-wrap: wrap;
@@ -7,24 +7,32 @@
     align-items: flex-start;
 }
 
-.event-nav {
+.event-settings-nav {
     width: 100%;
     justify-content: center;
     
 }
-.event-nav a{
+.event-settings-nav a{
     color: black !important;
     cursor: pointer !important;
 }
-.event-nav a:hover{
+.event-settings-nav a:hover{
     color: #ed1b76 !important;
 }
-.event-nav .active{
+.event-settings-nav .active{
     color: #ed1b76 !important;
     border-bottom: 2px solid
 }
 
-.custom-tab-content-Event {
+.custom-tab-content-Event-settings {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.custom-tab-content-Participation-settings {
     width: 100%;
     flex-grow: 1;
     display: flex;
@@ -33,16 +41,7 @@
     align-items: center;
 }
 
-.custom-tab-content-Participation {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.custom-tab-content-Discussion {
+.custom-tab-content-Discussion-settings {
     width: 100%;
     flex-grow: 1;
     display: flex;

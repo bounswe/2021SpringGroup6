@@ -24,7 +24,7 @@ function SidebarComponent(props) {
         }
     }, [window_width]);
 
-    const sidebarWidth = (sidebarRef.current && sidebarRef.current.clientWidth) || '140px';
+    const sidebarWidth = (sidebarRef.current && sidebarRef.current.clientWidth) || '155px';
     const transitionDuration = 300;
     const linkStyle = {
         transition: `width ${transitionDuration}ms linear`,
@@ -63,14 +63,14 @@ function SidebarComponent(props) {
                             }
                         }}
                     >
-                        <Nav.Item>
+                        <Nav.Item style={{marginTop: '1rem'}}>
                             <Link to="/profile" className="sidebar-link">
                                     Profile <hr />
                             </Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Link to="/event" className="sidebar-link" >
-                                Events <hr />
+                                Event Settings <hr />
                             </Link>
                         </Nav.Item>
                         <Nav.Item>
@@ -93,7 +93,7 @@ function SidebarComponent(props) {
                         </Nav.Item>
                         <Nav.Item>
                             <Link to="/" className="sidebar-link redundant" >
-                                Equipmentsssssss <hr />
+                                EventSettingsEventSet<hr />
                             </Link>
                         </Nav.Item>
                     </Nav>
