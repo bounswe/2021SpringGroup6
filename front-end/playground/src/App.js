@@ -13,12 +13,16 @@ import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
 
+
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
+const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
+const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
+
 
 
 function App() {
@@ -84,19 +88,20 @@ function App() {
         {user.token ? 
           <Route path="/" element={<Framework/>}>
           
-            <Route index element={<HomePage/>} />
-
-            {/* <Route path="login" 
+            <Route index element={<HomePage/>} />            
+            	    
+	          <Route path="new-event" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <Login/>
+                  <div className="default-body"><NewEvent/></div>
                 </Suspense>}/>
 
-            <Route path="forgot-password" 
+            	    
+	          <Route path="search-page" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <PasswordReset/>
-                </Suspense>}/> */}
+                  <div className="default-body"><SearchPage/></div>
+                </Suspense>}/>
 
             <Route path="profile">
                 <Route index 
@@ -163,6 +168,8 @@ function App() {
                   <Register/>
                 </Suspense>}/>
 
+          
+                      
             <Route path="forgot-password" 
               element={
                 <Suspense fallback={<>...</>}>
