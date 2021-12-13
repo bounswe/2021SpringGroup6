@@ -1,20 +1,21 @@
-package com.example.sportsplatform
+package com.example.sportsplatform.viewmodels
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.data.Repository
+import com.example.sportsplatform.AuthListener
+import com.example.sportsplatform.ProfileActivity
+import com.example.sportsplatform.RegisterActivity
+import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.data.models.UserRequest
 import com.example.sportsplatform.util.Coroutines
+import com.example.sportsplatform.util.closeSoftKeyboard
 import com.example.sportsplatform.util.toast
 
 
-class AuthViewModel(private val repo: Repository) : ViewModel() {
+class AuthViewModel(private val repo: UserRepository) : ViewModel() {
 
     var authListener: AuthListener? = null
     val userLiveData = MutableLiveData<String>()
@@ -31,10 +32,7 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
     var registerPassword: String? = null
     var sports: String? = null
 
-    fun onSearchButtonClick(view: View){
-        //weatherListener?.onStarted()
-        //closeSoftKeyboard(view.context, view)
-
+    fun onLoginButtonClick(view: View){
         closeSoftKeyboard(view.context, view)
 
         if(identifier.isNullOrEmpty() || pass.isNullOrEmpty()){
@@ -97,12 +95,6 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
                 view.context.toast("Fail")
             }
         }
-    }
-
-    private fun closeSoftKeyboard(context: Context, v: View) {
-        val iMm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        iMm.hideSoftInputFromWindow(v.windowToken, 0)
-        v.clearFocus()
     }
 
 }

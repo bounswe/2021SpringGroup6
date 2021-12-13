@@ -1,9 +1,6 @@
 package com.example.sportsplatform.data
 
-import com.example.sportsplatform.data.models.TokenResponse
-import com.example.sportsplatform.data.models.UserRegisterRequest
-import com.example.sportsplatform.data.models.UserRegisterResponse
-import com.example.sportsplatform.data.models.UserRequest
+import com.example.sportsplatform.data.models.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -11,7 +8,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface UserApi {
 
@@ -24,6 +23,11 @@ interface UserApi {
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
     ): Response<UserRegisterResponse>
+
+    @GET("users/{user_id}")
+    suspend fun searchProfile(
+        @Path("user_id") postId: Int
+    ): Response<UserSearchResponse>
 
     companion object{
         operator fun invoke() : UserApi {
