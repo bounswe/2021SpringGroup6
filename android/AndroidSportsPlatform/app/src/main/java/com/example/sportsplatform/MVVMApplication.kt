@@ -1,7 +1,7 @@
 package com.example.sportsplatform
 
 import android.app.Application
-import com.example.sportsplatform.data.Repository
+import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.UserApi
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -18,7 +18,7 @@ class MVVMApplication : Application(), KodeinAware {
         import(androidXModule(this@MVVMApplication))
 
         bind() from singleton { UserApi() }
-        bind() from singleton { Repository(instance()) }
+        bind() from singleton { UserRepository(instance()) }
         bind() from provider { AuthViewModelFactory(instance()) }
     }
 }

@@ -7,14 +7,14 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.data.Repository
+import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.data.models.UserRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
 
 
-class AuthViewModel(private val repo: Repository) : ViewModel() {
+class AuthViewModel(private val repo: UserRepository) : ViewModel() {
 
     var authListener: AuthListener? = null
     val userLiveData = MutableLiveData<String>()
