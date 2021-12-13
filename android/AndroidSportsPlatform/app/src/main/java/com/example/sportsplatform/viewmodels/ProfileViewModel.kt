@@ -6,12 +6,17 @@ import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.ProfileActivity
 import com.example.sportsplatform.RegisterActivity
 import com.example.sportsplatform.activities.SearchOperationsActivity
+import com.example.sportsplatform.data.EventRepository
 import com.example.sportsplatform.data.UserRepository
+import com.example.sportsplatform.data.models.EventFilterRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.closeSoftKeyboard
 import com.example.sportsplatform.util.toast
 
-class ProfileViewModel(private val repo: UserRepository) : ViewModel() {
+class ProfileViewModel(
+        private val userRepo: UserRepository,
+        private val eventRepo: EventRepository
+) : ViewModel() {
 
     var userId: String? = null
     var event: String? = null
@@ -26,7 +31,7 @@ class ProfileViewModel(private val repo: UserRepository) : ViewModel() {
 
             if(!userId.isNullOrEmpty() || !event.isNullOrEmpty()){
                 if(!userId.isNullOrEmpty()){
-                    val currResponse = repo.searchUserProfile(Integer.parseInt(userId!!))
+                    val currResponse = userRepo.searchUserProfile(Integer.parseInt(userId!!))
                     view.context.toast(currResponse.toString())
                     if (currResponse.isSuccessful) {
                         val userName = currResponse.body()?.name
@@ -38,24 +43,18 @@ class ProfileViewModel(private val repo: UserRepository) : ViewModel() {
                     }
                 }
                 else{
-                    val currResponse = repo.searchUserProfile(Integer.parseInt(userId!!))
+                    val eventFilterRequest = EventFilterRequest (event!!, "", "")
+                    val currResponse = eventRepo.findFilterEvents(eventFilterRequest)
                     view.context.toast(currResponse.toString())
                     if (currResponse.isSuccessful) {
-                        val userName = currResponse.body()?.name
-                        if (userName != null) {
-                            view.context.toast(userName)
-                        }
-                    } else {
+                        view.context.toast(currResponse.toString())
+                    }
+                    else {
                         view.context.toast("Fail")
                     }
-
                 }
-
             }
-
-
         }
-
     }
 
     fun onProfileButtonClick(view: View) {
