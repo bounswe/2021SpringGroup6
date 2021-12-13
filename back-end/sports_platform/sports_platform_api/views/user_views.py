@@ -464,3 +464,35 @@ def get_badges(request, user_id):
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
 
+    elif request.method == 'POST':
+
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        try:
+
+            validation = user_validation.Badge(data=request.data)
+            if not validation.is_valid():
+                return Response(validation.errors, status=400)
+
+            badge = validation.validated_data['badge']
+
+            if user_id == current_user.user_id:
+                return Response(data={"message": "Users cannot give badge to themselves."}, status=400)
+
+            badges = current_user.give_badge(user_id, badge)
+
+            if badges == 401:
+                return Response(data={"message": "Enter a valid badge."}, status=400)
+            elif badges == 402:
+                return Response(data={"message": "Enter a valid user."}, status=400)
+            elif badges == 403:
+                return Response(data={"message": "Already gave this badge to this user."}, status=400)
+            elif badges == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(status=201)
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
