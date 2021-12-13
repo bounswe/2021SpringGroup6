@@ -1,11 +1,27 @@
-.page {
-    
+.page .navbar-light .navbar-nav .nav-link{
+    color: white;
+}
+
+.page .navbar-light .navbar-nav .nav-link:hover{
+    color: white;
 }
 
 .header-container {
     background-color: black;
+    z-index: 2;
 }
 
 .navbar-collapse-custom {
     background-color: #ed1b76 !important;
+}
+
+.header-link {
+    color: inherit !important;
+    text-decoration: inherit !important;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.header-link:hover {
+    background-color: #ed1b76;
 }

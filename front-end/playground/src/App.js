@@ -2,14 +2,15 @@ import {React, Fragment, useEffect, lazy, Suspense, useState} from 'react'
 // import logo from './logo.svg';
 import './App.css';
 import {Row} from 'react-bootstrap'
-import { Routes, Route, Outlet, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Outlet, Link, Navigate, useLocation } from 'react-router-dom';
 import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
 import ActivityStream from './pages/ActivityStream/ActivityStream'
 
-import {UserContext} from './UserContext'
+import {UserContext} from './UserContext';
+import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
 
@@ -18,6 +19,8 @@ const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
+const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
+const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 
@@ -25,29 +28,21 @@ const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
-  const [sidebarToggle, setSidebarToggle] = useState(true)
-
-  useEffect(() => {console.log('\nuser\n', user)}, [user])
+  const [window_width, window_height] = UseWindowSize();
 
   function Framework() {
     return (
     <Fragment>
-      <div style={{minHeight: '98vh'}}>
-        <Row style={{maxHeight: '8vh'}}>
-          <Header />
-        </Row>
-        <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
-          <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'stretch'}}>
-            <SidebarComponent toggle={sidebarToggle} setToggle={setSidebarToggle} />
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 5, flexDirection: 'column'}}>
-              <Outlet />
-            </div>
-          </div>
-        </Row>
+      <div style={{maxHeight: '8vh'}}>
+        <Header />
       </div>
-      <Row>
+      <div className="body-part" style={{minHeight: '92vh'}}>
+        <SidebarComponent />
+        <Outlet />
+      </div>
+      <div>
         <Footer />
-      </Row>
+      </div>
     </Fragment>)
   }
 
@@ -58,7 +53,7 @@ function App() {
         <Row style={{maxHeight: '8vh'}}>
           <Header />
         </Row>
-        <Row style={{minHeight: '92vh',  alignItems: 'stretch'}}>
+        <Row style={{minHeight: '92vh', alignItems: 'stretch'}}>
           <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center'}}>
             <Outlet />
           </div>
@@ -74,7 +69,7 @@ function App() {
     return (
     <Fragment>
       {user.token ? 
-          <ActivityStream token={user.token}/>
+          <div className="default-body"><ActivityStream token={user.token}/></div>
           :
           <div id="deneme" 
             style={{height: '100%', display: 'flex', flexDirection: 'column', 
@@ -93,50 +88,65 @@ function App() {
 
   return (
     <UserContext.Provider value={{user, setUser}}>
-      <Routes>
+      <Routes //location={(location.state && location.state.backgroundLocation) || location}
+      >
         {user.token ? 
           <Route path="/" element={<Framework/>}>
           
-            <Route index element={<HomePage/>} />
-
-            <Route path="login" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <Login/>
-                </Suspense>}/>
-
-            
+            <Route index element={<HomePage/>} />            
             	    
 	          <Route path="new-event" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <NewEvent/>
+                  <div className="default-body"><NewEvent/></div>
                 </Suspense>}/>
 
             	    
 	          <Route path="search-page" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <SearchPage/>
+                  <div className="default-body"><SearchPage/></div>
                 </Suspense>}/>
 
-            
+            <Route path="profile">
+                <Route index 
+                  element={
+                    <Suspense fallback={<>...</>}>
+                      <div className="default-body"><Profile/></div>
+                    </Suspense>}/>
+                <Route path=":id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <div className="default-body"><Profile/></div>
+                  </Suspense>}/>
 
+            </Route>
 
+            <Route path="event">
+              <Route index 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <EventSettingsPage/>
+                  </Suspense>}/>
+              
+              {/* <Route path="modal/:id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <div>hello</div>
+                  </Suspense>}/> */}
+              
+              <Route path=":id" 
+                element={
+                  <Suspense fallback={<>...</>}>
+                    <EventPage/>
+                  </Suspense>}/>
+            </Route>
 
-
-	          <Route path="forgot-password" 
+            <Route path="event-settings" 
               element={
                 <Suspense fallback={<>...</>}>
-                  <PasswordReset/>
+                  <EventSettingsPage/>
                 </Suspense>}/>
-
-            <Route path="profile" 
-              element={
-                <Suspense fallback={<>...</>}>
-                  <Profile/>
-                </Suspense>}/>
-
             
 
             {/* Using path="*"" means "match anything", so this route
@@ -170,7 +180,6 @@ function App() {
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
                 </Suspense>}/>
-            
 
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit

@@ -4,3 +4,19 @@
     padding-top: 1rem;
     color: #ed1b76;
 }
+
+.body-part {
+    display: flex;
+    flex-direction: row;
+    /* flex-wrap: wrap; */
+    align-items: stretch;
+}
+
+.default-body {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}

@@ -21,14 +21,16 @@ function Header() {
                     <Navbar.Toggle className="navbar-collapse-custom" aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" style={{color: 'white'}}>
                         <Nav className="me-auto">
-                            <Nav.Link>
-                                <Link to="/home" 
+                            <Link to="/" className="header-link">
+                                {/* <Link to="/home" 
                                     style={{color: 'white', textDecoration: 'unset'}}
                                 >
                                     Home
-                                </Link>
-                            </Nav.Link>
-                            <Nav.Link href="">Events</Nav.Link>
+                                </Link> */}
+                                Home
+                            </Link>
+                            <Link to="/new-event" className="header-link">Create Event</Link>
+                            <Link to="/search-page" className="header-link">Find an Event</Link>
                             <NavDropdown title="Additional Features" id="basic-nav-dropdown">
                             <NavDropdown.Item href="">Equipments</NavDropdown.Item>
                             <NavDropdown.Divider />

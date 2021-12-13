@@ -1,23 +1,32 @@
 .sidebar{
     padding-top: 1rem;
-    float: left;
     font-size: 16px;
     background-color: #ed1b76;
-    height: 100%;
     color: white;
     font-size: 20px;
+    align-items: space-between;
     /* width: 170px; */
 }
 
-.nav-link {
+.sidebar-link {
     color: white !important;
+    text-decoration: inherit;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.redundant {
+    visibility: hidden;
 }
 
 .sidebar-toggle {
     background-color: transparent;
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start; */
+    position: absolute;
+    top: 8vh;
+    z-index: 1;
 }
 
 .sidebar-toggle-icon-wrapper {
@@ -43,4 +52,11 @@
     padding: 0 0.32rem;
 }
 
+.toggle-position-left {
+    left: 0;
+}
+
+.toggle-position-right {
+    left: 170px;
+}
 

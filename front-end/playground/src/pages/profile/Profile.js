@@ -6,14 +6,15 @@ import axios from 'axios';
 import SportNames from '../../PermanentComponents/SportNames.js';
 import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
 
+import {getUserInfo} from '../../services/User';
+
 function Profile() {
     const {user, setUser} = useContext(UserContext);
-
-    const getUserInfo = () => {
+    const getUserInformation = () => {
         if(user.profile) {
             return {...user.profile}
         }
-        axios.get(`/users/${user.user_id}`)
+        getUserInfo(user.user_id)
         .then(function (response) {
             if(response.status === 200){
                 // setUser(prevState => ({
@@ -57,9 +58,7 @@ function Profile() {
         });
     }
     
-    const [profileInfo, setProfileInfo] = useState(getUserInfo());
-
-    useEffect(() => {console.log('\nprofile info\n', profileInfo);}, [profileInfo])
+    const [profileInfo, setProfileInfo] = useState(getUserInformation());
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -95,23 +94,21 @@ function Profile() {
                     toBeSent[key] = profileInfo[key]
             }
         }
-        console.log('\nprofile info to be sent\n', toBeSent);
         axios.put(`/users/${user.user_id}`, toBeSent, {headers:{'Authorization': `Token ${user.token}`}})
         .then(function (response) {
             if(response.status === 200){
                 alert('Saved Successfully!');
-                setUser((prev) => ({...prev, profile: {...toBeSent}}));
+                setUser((prev) => ({...prev, profile: {...toBeSent, sports: toBeSent.sports || []}}));
                 localStorage.setItem("user",
                     JSON.stringify({...JSON.parse(localStorage.getItem('user')), 
                         profile: {...toBeSent}}));
-                console.log('reach here\n')
             } else{
                 alert("Please try again.");
             }
         })
         .catch(function (error) {
+            console.log('error\n', error);
             alert("There is an error. Please try again.");
-            console.log(error);
         });
     }
 
