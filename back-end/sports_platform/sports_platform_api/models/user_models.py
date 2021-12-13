@@ -451,6 +451,24 @@ class User(AbstractBaseUser):
         except Exception as e:
             return 500
 
+    def give_badge(self, user_id, badge):
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            badge = Badge.objects.get(name = badge)
+            user = User.objects.get(user_id = user_id)
+            UserBadges.objects.create(user = user, from_user = self, badge = badge, date=dt )
+            return True
+        except Badge.DoesNotExist:
+            return 401
+        except User.DoesNotExist:
+            return 402
+        except IntegrityError:
+            return 403
+        except:
+            return 500
 
 
 class SportSkillLevel(models.Model):
