@@ -560,3 +560,18 @@ class Event(models.Model):
         except Exception as e:
             return 500
 
+    def add_badge(self, badge):
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            badge = Badge.objects.get(name=badge)
+            EventBadges.objects.create(event=self, badge=badge, date=dt)
+
+        except Badge.DoesNotExist:
+            return 401
+        except IntegrityError:
+            return 402
+        except:
+            return 500
