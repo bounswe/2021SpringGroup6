@@ -13,11 +13,15 @@ import {UserContext} from './UserContext'
 
 import gif from './images/squadgamegif.gif'
 
+
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
- 
+const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
+const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
+
+
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
@@ -101,7 +105,27 @@ function App() {
                   <Login/>
                 </Suspense>}/>
 
-            <Route path="forgot-password" 
+            
+            	    
+	          <Route path="new-event" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <NewEvent/>
+                </Suspense>}/>
+
+            	    
+	          <Route path="search-page" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <SearchPage/>
+                </Suspense>}/>
+
+            
+
+
+
+
+	          <Route path="forgot-password" 
               element={
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
@@ -139,6 +163,8 @@ function App() {
                   <Register/>
                 </Suspense>}/>
 
+          
+                      
             <Route path="forgot-password" 
               element={
                 <Suspense fallback={<>...</>}>
