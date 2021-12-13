@@ -444,3 +444,23 @@ def get_spectating_events(request, user_id):
         return Response(data={"message": "User does not exist."}, status=400)
     except Exception as e:
         return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['GET','POST'])
+def get_badges(request, user_id):
+
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(user_id=user_id)
+
+            badges = user.get_badges()
+
+            if badges == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=badges, status=200)
+        except User.DoesNotExist:
+            return Response(data={"message": "User does not exist."}, status=400)
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
+
