@@ -3,6 +3,7 @@ package com.example.sportsplatform
 import android.app.Application
 import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.UserApi
+import com.example.sportsplatform.viewmodels.AuthViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule

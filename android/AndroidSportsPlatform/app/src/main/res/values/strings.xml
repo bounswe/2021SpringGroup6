@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Squad Game</string>
     <string name="title">Squad Game</string>
-    <string name="paragraph"></string>
+    <string name="paragraph">Paragraph</string>
     <string name="login">Login</string>
     <string name="Identifier">Identifier</string>
     <string name="Pass">Password</string>
@@ -19,4 +19,6 @@
     <string name="gender">gender</string>
     <string name="name">name</string>
     <string name="sports">sports</string>
+    <string name="searchButton">search</string>
+    <string name="event">event</string>
 </resources>
