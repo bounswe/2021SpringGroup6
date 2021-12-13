@@ -65,7 +65,13 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
             Intent(view.context, RegisterActivity::class.java).also{
                 view.context.startActivity(it)
             }
+        }
+    }
 
+
+    fun onSignUpButtonClick(view: View){
+
+        Coroutines.main {
             val userRegisterRequest = UserRegisterRequest(
                     email = email!!,
                     password = registerPassword!!,
@@ -88,7 +94,6 @@ class AuthViewModel(private val repo: Repository) : ViewModel() {
             } else {
                 view.context.toast("Fail")
             }
-
         }
     }
 

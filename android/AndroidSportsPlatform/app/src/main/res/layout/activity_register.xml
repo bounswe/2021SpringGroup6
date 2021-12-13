@@ -182,7 +182,7 @@
             android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{registerViewModel::onRegisterButtonClick}"
+            android:onClick="@{registerViewModel::onSignUpButtonClick}"
             android:text="@string/register"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
