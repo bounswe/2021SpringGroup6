@@ -1,0 +1,12 @@
+.personal-events-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.personal-events-container a {
+    margin: 1rem;
+    color: black;
+    text-decoration: none;
+}

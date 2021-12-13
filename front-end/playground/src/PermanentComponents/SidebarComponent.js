@@ -1,76 +1,117 @@
-import {React, Fragment, useContext, useState} from 'react';
+import {React, Fragment, useContext, useState, useEffect, useRef} from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 import {Transition} from 'react-transition-group';
 import './SidebarComponent.css';
 import {UserContext} from '../UserContext'
 import {MdArrowForwardIos, MdArrowBackIos} from 'react-icons/md'
+import UseWindowSize from './WindowSizing'
 
 
 function SidebarComponent(props) {
     const {user, setUser} = useContext(UserContext);
-    const [toggle, setToggle] = useState(true);
+    const sidebarRef = useRef(null);
+    const [window_width, window_height] = UseWindowSize();
+    const [toggle, setToggle] = useState(window_width > 480);
+
+    useEffect(() => {
+        if (window_width < 480) {
+            setToggle(false)
+        } else if (window_width < 720) {
+
+        } else {
+            setToggle(true);
+        }
+    }, [window_width]);
+
+    const sidebarWidth = (sidebarRef.current && sidebarRef.current.clientWidth) || '155px';
+    const transitionDuration = 300;
     const linkStyle = {
-        transition: `width 350ms linear`,
+        transition: `width ${transitionDuration}ms linear`,
         width: '0'
     }
     const transitionStyles = {
         entering: { width: '0' },
-        exiting:  { width: '170px' },
-        entered:  { width: '170px' },
+        entered:  { width: sidebarWidth },
+        exiting:  { width: sidebarWidth },
         exited:   { width: '0' },
     };
+    const linkToggleStyle = {
+        transition: `left ${transitionDuration}ms linear`,
+    }
+    const transitionToggleStyles = {
+        entering: {left: '0'},
+        exiting: {left: sidebarWidth},
+        entered: {left: sidebarWidth},
+        exited: {left: '0'},
+    }
+
     return(
         <Fragment>
             {/* From https://stackoverflow.com/questions/60482018/make-a-sidebar-from-react-bootstrap */}
             <Transition in={toggle} timeout={0}>
             {(state) => (
-                <Nav id="sidebar"
-                    style={{...linkStyle, ...transitionStyles[state]}}
-                    className={`d-md-block sidebar`}
-                    activeKey="/home"
-                    onSelect={selectedKey => {
-                        if (selectedKey === "logout") {
-                            setUser({identifier: ""});
-                            localStorage.setItem("user",JSON.stringify({identifier: ""}));
-                        } else
-                            alert(`selected ${selectedKey}`)
-                    }}
-                >
-                    <Nav.Item>
-                        <Nav.Link>
-                            <Link to="profile" style={{color: 'inherit', textDecoration: 'inherit'}}>
-                                My Profile <hr />
+            <>
+                    <Nav id="sidebar"                        
+                        className={`d-md-block sidebar`}
+                        activeKey="/home"
+                        style={{...linkStyle, ...transitionStyles[state]}}
+                        onSelect={selectedKey => {
+                            if (selectedKey === "logout") {
+                                setUser({identifier: ""});
+                                localStorage.setItem("user",JSON.stringify({identifier: ""}));
+                            }
+                        }}
+                    >
+                        <Nav.Item style={{marginTop: '1rem'}}>
+                            <Link to="/profile" className="sidebar-link">
+                                    Profile <hr />
                             </Link>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="Events">My Events <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="Badges">My Badges <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="Equipments">My Equipments <hr /></Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="logout">Logout <hr /></Nav.Link>
-                    </Nav.Item>
-                </Nav>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="/event-settings" className="sidebar-link" >
+                                Event Settings <hr />
+                            </Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="/" className="sidebar-link" >
+                                Badges <hr />
+                            </Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="/" className="sidebar-link" >
+                                Equipments <hr />
+                            </Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="" className="sidebar-link" onClick={() => {
+                                setUser({identifier: ""});
+                                localStorage.setItem("user",JSON.stringify({identifier: ""}));
+                            }} >
+                                Logout <hr />
+                            </Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Link to="/" className="sidebar-link redundant" >
+                                EventSettingsEventSet<hr />
+                            </Link>
+                        </Nav.Item>
+                    </Nav>
+                <div className={`sidebar-toggle`} style={{...linkToggleStyle, ...transitionToggleStyles[state]}}>
+                    <div 
+                        className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}
+                        onClick={() => {setToggle((prev) => (!prev))}}    
+                    >
+                        {/* <MdArrowBackIos className="sidebar-toggle-icon" onClick={() => {setToggle((prev) => (!prev))}} /> */}
+                        { toggle ? 
+                            <MdArrowBackIos className="sidebar-toggle-icon" /> 
+                            : 
+                            <MdArrowForwardIos className="sidebar-toggle-icon" />}
+                    </div>
+                </div>
+            </>
             )}
             </Transition>
-            <div className={`sidebar-toggle`}>
-                <div 
-                    className={`sidebar-toggle-icon-wrapper sidebar-toggle-icon-${toggle ? 'left' : 'right'}`}
-                    onClick={() => {setToggle((prev) => (!prev))}}    
-                >
-                    {/* <MdArrowBackIos className="sidebar-toggle-icon" onClick={() => {setToggle((prev) => (!prev))}} /> */}
-                    { toggle ? 
-                        <MdArrowBackIos className="sidebar-toggle-icon" /> 
-                        : 
-                        <MdArrowForwardIos className="sidebar-toggle-icon" />}
-                </div>
-            </div>
         </Fragment>
     )
 }
