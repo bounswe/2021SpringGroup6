@@ -333,3 +333,24 @@ def search_event(request):
         response['items'].append(seralized)
 
     return Response(response, status=200)
+
+@api_view(['GET','POST'])
+def get_badges(request, event_id):
+
+    if request.method == 'GET':
+        try:
+            event = Event.objects.get(event_id=event_id)
+
+            badges = event.get_badges()
+
+            if badges == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=badges, status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "User does not exist."}, status=400)
+        except Exception as e:
+            print(e)
+            return Response(data={"message": "Try later."}, status=500)
+
+    elif request.method == 'POST':
