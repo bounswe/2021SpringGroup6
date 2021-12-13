@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.ActivityMainBinding
 import com.example.sportsplatform.util.hide
 import com.example.sportsplatform.util.show
+import com.example.sportsplatform.viewmodels.AuthViewModel
+import com.example.sportsplatform.viewmodels.AuthViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein

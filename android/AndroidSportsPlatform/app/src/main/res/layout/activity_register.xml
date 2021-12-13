@@ -9,7 +9,7 @@
 
         <variable
             name="registerViewModel"
-            type="com.example.sportsplatform.AuthViewModel" />
+            type="com.example.sportsplatform.viewmodels.AuthViewModel" />
 
     </data>
 

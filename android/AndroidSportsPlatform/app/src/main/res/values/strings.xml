@@ -19,5 +19,6 @@
     <string name="gender">gender</string>
     <string name="name">name</string>
     <string name="sports">sports</string>
-    <string name="searchButton">searchButton</string>
+    <string name="searchButton">search</string>
+    <string name="event">event</string>
 </resources>

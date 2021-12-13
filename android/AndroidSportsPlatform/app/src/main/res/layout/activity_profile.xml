@@ -8,11 +8,11 @@
 
         <variable
             name="viewmodel2"
-            type="com.example.sportsplatform.AuthViewModel" />
+            type="com.example.sportsplatform.viewmodels.AuthViewModel" />
 
         <variable
             name="profileviewmodel"
-            type="com.example.sportsplatform.ProfileViewModel" />
+            type="com.example.sportsplatform.viewmodels.ProfileViewModel" />
 
     </data>
 
