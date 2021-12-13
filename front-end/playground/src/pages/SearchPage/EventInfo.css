@@ -3,7 +3,26 @@
     
 }
 
-
+/*
 .whole{
     background-color:snow;
+    width: 8 px !important;
+    
+ 
+    float: left !important;
+    margin-right: 2rem !important;
+    margin-left: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+*/
+
+.wholeComponent{
+    
+    width: 8 px !important;
+    
+    
+    float: left !important;
+    margin-right: 4rem !important;
+    margin-left: 4rem !important;
+    margin-bottom: 2rem !important;
 }

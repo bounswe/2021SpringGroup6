@@ -182,7 +182,7 @@ class NewEvent extends React.Component {
 
                 <form onSubmit={this.handleSubmit}>
                     <Grid>
-                        <Paper elevation={10} style={paperStyle}>
+                        <Paper elevation={10} style={paperStyle} >
 
                             
                             
