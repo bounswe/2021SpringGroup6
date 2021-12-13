@@ -276,9 +276,9 @@ class SearchPage extends React.Component {
                             <p style = {{fontSize: 30}}><br /><br /><hr className='hrElements'/>Sport Type: 
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-                            Max Skill Level: &ensp;&ensp;&ensp;&ensp;
+                            Min Skill Level: &ensp;&ensp;&ensp;&ensp;
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-                            Min Skill Level:</p>
+                            Max Skill Level:</p>
 
                             <Select style={{width: 420}} className="lowerInput"
                                 labelId="Sport Type"
