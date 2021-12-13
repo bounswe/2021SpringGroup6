@@ -298,7 +298,11 @@ class User(AbstractBaseUser):
                 event_dict = {
                     "type": "https://schema.org/SportsEvent",
                     "@id":  event.event.event_id,
-                    "name": event.event.name
+                    "name": event.event.name,
+                    "sport": event.event.sport.name,
+                    "startDate": event.event.startDate,
+                    "location": event.event._scheme_location(),
+                    "maximumAttendeeCapacity": event.event.maximumAttendeeCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)
@@ -328,7 +332,11 @@ class User(AbstractBaseUser):
                 event_dict = {
                     "type": "https://schema.org/SportsEvent",
                     "@id":  event.event.event_id,
-                    "name": event.event.name
+                    "name": event.event.name,
+                    "sport": event.event.sport.name,
+                    "startDate": event.event.startDate,
+                    "location": event.event._scheme_location(),
+                    "maximumAttendeeCapacity": event.event.maximumAttendeeCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)
@@ -358,7 +366,11 @@ class User(AbstractBaseUser):
                 event_dict = {
                     "type": "https://schema.org/SportsEvent",
                     "@id":  event.event.event_id,
-                    "name": event.event.name
+                    "name": event.event.name,
+                    "sport": event.event.sport.name,
+                    "startDate": event.event.startDate,
+                    "location": event.event._scheme_location(),
+                    "maxSpectatorCapacity": event.event.maxSpectatorCapacity
                 }
 
                 data_dict['additionalProperty']['value'].append(event_dict)
