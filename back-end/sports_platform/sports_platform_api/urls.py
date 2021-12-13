@@ -25,5 +25,7 @@ urlpatterns = [
     path('users/<int:user_id>/participating', get_participating_events),
     path('users/<int:user_id>/spectating', get_spectating_events),
     path('users/<int:user_id>/interested', get_interested_events),
+    path('events/<int:event_id>/badges', event_views.get_badges),
+    path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
 ]
