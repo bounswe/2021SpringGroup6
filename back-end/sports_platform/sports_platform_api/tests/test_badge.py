@@ -3,7 +3,7 @@ from ..models import Event, Badge, UserBadges, EventBadges, EventParticipants, S
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .test_helper_functions import create_mock_user
-from datetime import datetime, timezone, timedelta
+from datetime import timezone, timedelta
 
 
 class BadgeTest(TestCase):

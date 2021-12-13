@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import datetime
 from django.db import IntegrityError
-from datetime import datetime, timezone
+from datetime import timezone
 
 from .activity_stream_models import ActivityStream
 from .badge_models import Badge, UserBadges
