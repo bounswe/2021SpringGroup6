@@ -17,6 +17,7 @@ import gif from './images/squadgamegif.gif'
 
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
+const ProfileView = lazy(() => import('./pages/profile/ProfileView'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
@@ -117,7 +118,7 @@ function App() {
                 <Route path=":id" 
                 element={
                   <Suspense fallback={<>...</>}>
-                    <div className="default-body"><Profile/></div>
+                    <div className="default-body"><ProfileView/></div>
                   </Suspense>}/>
 
             </Route>
