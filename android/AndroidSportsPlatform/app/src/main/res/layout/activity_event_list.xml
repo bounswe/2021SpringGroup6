@@ -19,6 +19,11 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/event_recycler_view"
+            android:clipToPadding="false"
+            android:fadeScrollbars="true"
+            android:filterTouchesWhenObscured="true"
+            android:padding="4dp"
+            android:scrollbars="horizontal"
             android:layout_width="268dp"
             android:layout_height="492dp"
             android:scrollbarAlwaysDrawHorizontalTrack="true"

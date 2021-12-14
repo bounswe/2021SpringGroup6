@@ -25,7 +25,7 @@ class EventSearchViewModel(private val eventRepo: EventRepository) : ViewModel()
 
         Coroutines.main {
             if(!event.isNullOrEmpty()){
-                val eventFilterRequest = EventFilterRequest (event!!, "", "")
+                val eventFilterRequest = EventFilterRequest (event!!)
                 view.context.toast(eventFilterRequest.toString())
                 val currResponse = eventRepo.findFilterEvents(eventFilterRequest)
                 view.context.toast(currResponse.toString())
