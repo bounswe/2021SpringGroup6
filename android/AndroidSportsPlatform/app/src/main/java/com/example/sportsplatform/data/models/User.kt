@@ -1,8 +1,8 @@
 package com.example.sportsplatform.data.models
 
-data class EventFilterResponse(
+data class User(
     val context: String,
     val type: String,
-    val total_items: Int,
-    val items: List<EventResponse>
+    val id: Int,
+    val identifier: String
 )

@@ -41,12 +41,12 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
-            view.context.toast(currResponse.toString())
+            //view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
 
                 val userToken = currResponse.body()?.token
                 userLiveData.postValue(userToken)
-                view.context.toast("Success")
+                //view.context.toast("Success")
                 Intent(view.context, ProfileActivity::class.java).also{
                     view.context.startActivity(it)
                 }

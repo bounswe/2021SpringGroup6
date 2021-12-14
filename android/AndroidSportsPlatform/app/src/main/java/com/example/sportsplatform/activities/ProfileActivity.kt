@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityProfileBinding
 import com.example.sportsplatform.databinding.ActivityRegisterBinding
+import com.example.sportsplatform.databinding.ActivitySearchOperationsBinding
 import com.example.sportsplatform.viewmodels.ProfileViewModel
 import com.example.sportsplatform.viewmodels.ProfileViewModelFactory
 import com.example.sportsplatform.viewmodels.RegisterViewModel
@@ -30,5 +31,6 @@ class ProfileActivity : AppCompatActivity(), KodeinAware {
 
         profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
         binding.profileviewmodel = profileViewModel
+
     }
 }

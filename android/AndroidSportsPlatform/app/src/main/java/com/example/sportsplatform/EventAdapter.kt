@@ -15,10 +15,10 @@ import java.time.ZoneId
 class EventAdapter(private val itemList: List<EventResponse>) : RecyclerView.Adapter<EventAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val eventName: TextView = itemView.eventName
+        val eventName: TextView = itemView.event_name
         val eventImageView: ImageView = itemView.image_view
-        val eventTextView: TextView = itemView.eventDesc
-        val date: TextView = itemView.date
+        val eventTextView: TextView = itemView.event_desc
+        val date: TextView = itemView.days
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : MyViewHolder {
@@ -29,8 +29,8 @@ class EventAdapter(private val itemList: List<EventResponse>) : RecyclerView.Ada
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = itemList[position]
         holder.eventImageView.setImageResource(R.drawable.football)
-        holder.eventTextView.text = currentItem.event.toString()
-        holder.eventName.text = currentItem.event.toString()
+        holder.eventTextView.text = currentItem.description
+        holder.eventName.text = currentItem.name
         holder.date.text = getDateTime(currentItem.created_on.toString())
     }
 

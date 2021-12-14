@@ -17,9 +17,6 @@ class ProfileViewModel(
         private val eventRepo: EventRepository
 ) : ViewModel() {
 
-    var userId: String? = null
-    var event: String? = null
-
     fun onSearchImageButtonClick(view: View) {
         closeSoftKeyboard(view.context, view)
 
@@ -27,34 +24,9 @@ class ProfileViewModel(
             Intent(view.context, SearchOperationsActivity::class.java).also {
                 view.context.startActivity(it)
             }
-
-            if(!userId.isNullOrEmpty() || !event.isNullOrEmpty()){
-                if(!userId.isNullOrEmpty()){
-                    val currResponse = userRepo.searchUserProfile(Integer.parseInt(userId!!))
-                    view.context.toast(currResponse.toString())
-                    if (currResponse.isSuccessful) {
-                        val userName = currResponse.body()?.name
-                        if (userName != null) {
-                            view.context.toast(userName)
-                        }
-                    } else {
-                        view.context.toast("Fail")
-                    }
-                }
-                else{
-                    val eventFilterRequest = EventFilterRequest (event!!, "", "")
-                    val currResponse = eventRepo.findFilterEvents(eventFilterRequest)
-                    view.context.toast(currResponse.toString())
-                    if (currResponse.isSuccessful) {
-                        view.context.toast(currResponse.toString())
-                    }
-                    else {
-                        view.context.toast("Fail")
-                    }
-                }
-            }
         }
     }
+
 
     fun onProfileButtonClick(view: View) {
         closeSoftKeyboard(view.context, view)
