@@ -29,8 +29,8 @@ import {Data} from './MockData';
 function ParticipationPage(props) {
     const {user, setUser} = useContext(UserContext);
     const {user_id} = user;
-    const [participationRequestedEvents, setParticipationRequestedEvents] = useState(Data.slice(0,3));
-    const [acceptedEvents, setAcceptedEvents] = useState(Data.slice(0,3));
+    const [participationRequestedEvents, setParticipationRequestedEvents] = useState([]);
+    const [acceptedEvents, setAcceptedEvents] = useState([]);
     const [spectatorEvents, setSpectatorEvents] = useState([]);
     useEffect(() =>{
         if (participationRequestedEvents.length === 0) {
@@ -66,7 +66,7 @@ function ParticipationPage(props) {
                     <CardGroup className="participation-groups">
                     {participationRequestedEvents.length > 0 ? participationRequestedEvents.map(event => {
                         return (
-                            <CardComponent event={event}/>
+                            <CardComponent event={event} key={event.event_id || event['@id']} />
                         )
                     }) : <div style={{padding: '50px'}}>You have no pending requests.</div>
                     }
