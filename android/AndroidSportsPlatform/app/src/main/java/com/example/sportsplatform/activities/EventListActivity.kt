@@ -10,7 +10,6 @@ import com.example.sportsplatform.EventAdapter
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityEventListBinding
 import com.example.sportsplatform.databinding.ActivityEventListBinding.*
-import com.example.sportsplatform.databinding.ActivityMainBinding
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
 import com.example.sportsplatform.viewmodels.EventSearchViewModelFactory
 import kotlinx.android.synthetic.main.activity_event_list.*
@@ -27,7 +26,8 @@ class EventListActivity : AppCompatActivity(), KodeinAware {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = inflate(layoutInflater)
+        val binding: ActivityEventListBinding = DataBindingUtil.setContentView(
+                this, R.layout.activity_event_list)
         val view = binding.root
         setContentView(view)
 

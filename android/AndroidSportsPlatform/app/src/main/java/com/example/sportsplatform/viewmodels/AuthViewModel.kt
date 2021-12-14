@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.AuthListener
-import com.example.sportsplatform.ProfileActivity
+import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.models.UserRequest

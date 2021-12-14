@@ -17,7 +17,6 @@ class RegisterActivity : AppCompatActivity(), KodeinAware {
     private lateinit var registerViewModel: RegisterViewModel
     override val kodein by kodein()
     private val factory : RegisterViewModelFactory by instance()
-    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +29,6 @@ class RegisterActivity : AppCompatActivity(), KodeinAware {
 
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
         binding.registerViewModel = registerViewModel
-
 
     }
 }

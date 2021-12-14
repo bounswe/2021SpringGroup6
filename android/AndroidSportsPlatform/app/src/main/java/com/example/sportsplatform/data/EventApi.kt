@@ -23,7 +23,7 @@ interface EventApi {
     ): Response<EventFilterResponse>
 
     companion object{
-        operator fun invoke() : UserApi {
+        operator fun invoke() : EventApi {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
@@ -47,7 +47,7 @@ interface EventApi {
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(UserApi::class.java)
+                .create(EventApi::class.java)
         }
     }
 }

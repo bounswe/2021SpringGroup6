@@ -17,7 +17,7 @@
         <activity android:name=".activities.EventListActivity" />
         <activity android:name=".activities.SearchOperationsActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

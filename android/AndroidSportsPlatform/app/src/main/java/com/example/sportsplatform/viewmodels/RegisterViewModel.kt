@@ -3,7 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.ProfileActivity
+import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.data .UserRepository
 import com.example.sportsplatform.data .models.UserRegisterRequest
 import com.example.sportsplatform.util.Coroutines
@@ -12,8 +12,6 @@ import com.example.sportsplatform.util.toast
 
 class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
 
-    var identifier: String? = null
-    var pass: String? = null
     var registerName: String? = null
     var username: String? = null
     var gender: String? = null

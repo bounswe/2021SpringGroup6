@@ -73,12 +73,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.941" />
 
-        <Button
+        <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="67dp"
             android:layout_height="67dp"
             android:contentDescription="@string/searchButton"
             android:onClick="@{profileviewmodel::onSearchImageButtonClick}"
+            android:src="@drawable/search_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button2"
             app:layout_constraintHorizontal_bias="0.574"
