@@ -22,7 +22,7 @@ interface UserApi {
     @POST("users")
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
-    ): Response<UserRegisterResponse>
+    ): Response<String>
 
     @GET("users/{user_id}")
     suspend fun searchProfile(
