@@ -76,7 +76,7 @@ function EventInformation(props) {
                                 <b>Description:</b> {eventInfo.description}
                             </div>
                             <div>
-                                Creator: <Link to="/profile/">{eventInfo.organizer.identifier}</Link>
+                                Creator: <Link to={`/profile/${eventInfo.organizer['@id']}`}>{eventInfo.organizer.identifier}</Link>
                             </div>
                         </CardBody>
                     </Card>
