@@ -28,8 +28,6 @@ function EventParticipationInfoPage(props) {
     const {eventInfo, isLoading} = props;
     const localData = JSON.parse(localStorage.getItem('user'));
 
-    console.log('audience', eventInfo.audience.length);
-
     let buttonActive = (() => {
         if (eventInfo.organizer.identifier === localData.identifier)
             return false;

@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.6.0",
     "@googlemaps/react-wrapper": "^1.1.16",
     "@googlemaps/typescript-guards": "^1.0.4",
+    "@mui/lab": "^5.0.0-alpha.59",
     "@mui/material": "^5.1.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

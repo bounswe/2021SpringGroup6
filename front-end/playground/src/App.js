@@ -7,6 +7,7 @@ import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
+import ActivityStream from './pages/ActivityStream/ActivityStream'
 
 import {UserContext} from './UserContext';
 import UseWindowSize from './PermanentComponents/WindowSizing';
@@ -65,20 +66,24 @@ function App() {
   }
 
   function HomePage() {
-    return (<div className="default-body">
-      <div
-        style={{height: '100%', display: 'flex', flexDirection: 'column', 
-          justifyContent: user.token ? 'center' : 'space-around' , alignItems: 'center'}}>
-        <img src={gif} width="250" alt="logo" />
-        {user.token ? 
-          <span className="main-logo">Squad Game</span> 
-          : 
-          <span>
-            Welcome <Link to="/login">Login Here</Link>
-            </span>}
-      </div>
-      
-    </div>)
+    return (
+    <Fragment>
+      {user.token ? 
+          <ActivityStream token={user.token}/>
+          :
+          <div id="deneme" 
+            style={{height: '100%', display: 'flex', flexDirection: 'column', 
+              justifyContent: 'space-around' , alignItems: 'center'}}>
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+              <img src={gif} width="250" alt="logo" />
+              <span className="main-logo">Squad Game</span>
+            </div>
+            <span>
+              Welcome <Link to="/login">Login Here</Link>
+            </span>
+          </div>
+      }
+    </Fragment>)
   }
 
   return (

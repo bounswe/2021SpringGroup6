@@ -3,6 +3,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    flex-direction: row;
+}
+
+.personal-events-container div {
+    flex-basis: 100%;
 }
 
 .personal-events-container a {
