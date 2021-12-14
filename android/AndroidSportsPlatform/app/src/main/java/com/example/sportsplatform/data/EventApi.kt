@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface EventApi {
@@ -17,7 +18,7 @@ interface EventApi {
     suspend fun searchEvent(
         @Path("event_id") eventId: Int): Response<EventResponse>
 
-    @GET("events/searches")
+    @POST("events/searches")
     suspend fun filterEvents(
         @Body eventFilterRequest: EventFilterRequest
     ): Response<EventFilterResponse>
