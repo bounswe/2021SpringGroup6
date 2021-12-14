@@ -8,7 +8,7 @@ import './EventInfo.css'
 
 function EventInfo(props) {
     return (
-        <div >
+        <div class='wholeComponent'>
             <Card class='whole'>
                 <Card.Body><h3 id="title">{props.name}</h3><br/><p>{props.description ? props.description : 'No description available'}</p></Card.Body>
                 <Link to={"/event/" + props.id} >

@@ -246,18 +246,20 @@ class SearchPage extends React.Component {
 
         return (
             
-            <div>
+            <div style = {{marginLeft: 145, marginRight: 65}}>
 
                 
                 <h1 id="title">Search Event Page <br /></h1>
 
                 <form onSubmit={this.handleSubmit}>
-                    <Grid>
-                        <Paper elevation={10} style={paperStyle}>
+                    <Grid >
+                        
+
+                            <p style = {{fontSize: 30}}><hr className='hrElements' />Name:</p>
 
                             
                             
-                            <TextField style= {{width:420}}
+                            <TextField style= {{width:420}} className="lowerInput"
                                 label='Event Name' 
                                 placeholder='Enter event name' 
 
@@ -270,10 +272,15 @@ class SearchPage extends React.Component {
                                   }}      
                             />
 
-                            <br /><br />
-                            <p>Sport Type: </p>
+                            
+                            <p style = {{fontSize: 30}}><br /><br /><hr className='hrElements'/>Sport Type: 
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            Min Skill Level: &ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            Max Skill Level:</p>
 
-                            <Select style={{width: 420}}
+                            <Select style={{width: 420}} className="lowerInput"
                                 labelId="Sport Type"
                                 id="sportType"
                                 
@@ -347,8 +354,12 @@ class SearchPage extends React.Component {
                             />
 
 
-                            <p><br/>Date interval</p>
-                            <p>Earliest:</p>
+                            <p style = {{fontSize: 30}}><br/><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            <hr className='hrElements'/>Date interval<br/>Earliest:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            
+                                Latest:</p>
+                            
 
                             <TextField style= {{width:420}}  className="lowerInput"
                                 
@@ -364,7 +375,7 @@ class SearchPage extends React.Component {
                             />
 
 
-                            <p><br />Latest:</p>
+                            
 
 
 
@@ -380,8 +391,12 @@ class SearchPage extends React.Component {
                                   }}                                               
                             />
 
-                            <p> <br/>Time interval</p>
-                            <p>Earliest:</p>
+                            <p style = {{fontSize: 30}}> <br/><br/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;<hr className='hrElements'/>
+                            Time interval  <br/>Earliest:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            
+                            Latest:</p>
+                            
                             <TextField style= {{width:420}}  className="lowerInput"
                                 
                                 
@@ -396,7 +411,7 @@ class SearchPage extends React.Component {
                                   }}                                         
                             />
 
-                            <p><br />Latest:</p>
+                            
 
                             <TextField style= {{width:420}}  className="lowerInput"
                                 
@@ -413,7 +428,7 @@ class SearchPage extends React.Component {
                             />
 
 
-                            <p><br />You can use either map or country and city search for the location. Select which one to use please.</p>
+                            <p style = {{alignContent: 'center', fontSize: 20}}><br /><br /><br /><hr className='hrElements'/>You can use either map or country and city search for the location. Select which one to use please.</p>
 
 
                             <Select style={{width: 420}}
@@ -435,7 +450,7 @@ class SearchPage extends React.Component {
 
 
                             <br /><br />
-                            <p>Draw the rectangle by putting the red marker to the top right corner of the area in which you are interested in and green marker to the bottom left corner. </p>
+                            <p style = {{fontSize: 20}}>Draw the rectangle by putting the red marker to the top right corner of the area in which you are interested in and green marker to the bottom left corner. </p>
                             
 
                             {/* From https://static3.depositphotos.com/1000868/261/v/950/depositphotos_2614173-stock-illustration-beach-ball.jpg */}
@@ -470,13 +485,13 @@ class SearchPage extends React.Component {
 
                             <br />
 
-                            <CountryDropdown style = {{width: 420}}
+                            <CountryDropdown class = 'lowerInput' style = {{width: 420}} 
                             value={country}
                             onChange={this.selectCountry} />
 
-                            <br /><br />
+                            
 
-                            <RegionDropdown  style = {{width: 420}}
+                            <RegionDropdown class = 'lowerInput'  style = {{width: 420}}
                             country={country}
                             value={region}
                             onChange={this.selectRegion} />
@@ -491,13 +506,13 @@ class SearchPage extends React.Component {
                             </Typography>
                                 
                         
-                        </Paper>
+                        
                     </Grid>
                 
                 </form>
                 
-                <h1 id="title2">{title} <br /></h1>
-               
+                <h1 id="title2" >{title} <br /></h1>
+                <br /><br />
                 {resultingEvents}
                 <br /><br />
             </div>                
