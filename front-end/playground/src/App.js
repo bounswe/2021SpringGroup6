@@ -22,7 +22,7 @@ const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
-
+const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
 
 
 function App() {
@@ -136,6 +136,12 @@ function App() {
                     <EventPage/>
                   </Suspense>}/>
             </Route>
+
+            <Route path="modify-event/:id" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><ModifyEvent/></div>
+                </Suspense>}/>
 
             <Route path="event-settings" 
               element={
