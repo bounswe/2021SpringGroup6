@@ -3,6 +3,7 @@ from ..models import Event, Badge, UserBadges, EventBadges, EventParticipants, S
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .test_helper_functions import create_mock_user
+import datetime
 from datetime import timezone, timedelta
 
 
@@ -26,7 +27,7 @@ class BadgeTest(TestCase):
         authenticate(identifier=self.dog_user.identifier,
                      password=self.dog_user.password)
 
-        utc_dt = datetime.now(timezone.utc)  # UTC time
+        utc_dt = datetime.datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
 
         event_data_1 = {

@@ -5,7 +5,6 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import datetime
 from django.db import IntegrityError
-from datetime import timezone
 
 from .activity_stream_models import ActivityStream
 from .badge_models import Badge, UserBadges
@@ -134,6 +133,7 @@ class User(AbstractBaseUser):
         except IntegrityError as e:
             return 402
         except Exception as e:
+            print(e)
             return 500
 
     def unfollow(self, user_id):
@@ -416,7 +416,7 @@ class User(AbstractBaseUser):
 
             participating_events = self.participating_events.all()
 
-            utc_dt = datetime.now(timezone.utc)  # UTC time
+            utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
             dt = utc_dt.astimezone()
 
             event_given_badge_list = []
@@ -465,7 +465,7 @@ class User(AbstractBaseUser):
 
     def give_badge(self, user_id, badge):
 
-        utc_dt = datetime.now(timezone.utc)  # UTC time
+        utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
 
         try:
