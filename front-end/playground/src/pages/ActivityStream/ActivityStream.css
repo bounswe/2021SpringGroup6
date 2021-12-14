@@ -36,6 +36,8 @@
 
 .activity-stream-timeline {
     padding-top: 2rem !important;
+    max-width: 900px;
+    margin: auto;
 }
 
 .activity-timeline-dot {

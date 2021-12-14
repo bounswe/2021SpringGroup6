@@ -1,5 +1,5 @@
 import axios from 'axios';
-const localData = JSON.parse(localStorage.getItem('user'));
+const localData = JSON.parse(localStorage.getItem('user')) || {};
 const token = `Token ${localData.token}`;
 
 export const getCreatedEvents = async () => {

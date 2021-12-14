@@ -28,6 +28,8 @@ const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
 
 
 function App() {
+  console.log('hellooooo')
+  // localStorage.setItem("user",localStorage.getItem('user') || JSON.stringify({identifier: ""}));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   const [window_width, window_height] = UseWindowSize();
 
