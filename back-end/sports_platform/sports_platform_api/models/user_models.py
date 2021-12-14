@@ -407,7 +407,7 @@ class User(AbstractBaseUser):
                         "name": "givenBy",
                         "value": {
                             "@context": "https://schema.org/Person",
-                            "@id": badge.user.user_id
+                            "@id": badge.from_user.user_id
                         }
                     }
 
