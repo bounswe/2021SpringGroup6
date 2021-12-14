@@ -133,7 +133,6 @@ class User(AbstractBaseUser):
         except IntegrityError as e:
             return 402
         except Exception as e:
-            print(e)
             return 500
 
     def unfollow(self, user_id):

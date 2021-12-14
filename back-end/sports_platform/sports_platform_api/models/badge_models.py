@@ -16,7 +16,7 @@ class Badge(models.Model):
             for badge in badges:
                 item = {}
                 if badge.wikidata:
-                    item['@context'] = "https://www.wikidata.org/entity" + badge.wikidata
+                    item['@context'] = "https://www.wikidata.org/entity/" + badge.wikidata
                     item['name'] = badge.name
                 else:
                     item['name'] = badge.name
@@ -25,7 +25,6 @@ class Badge(models.Model):
             
             return badges_res
         except Exception as e:
-            print(e)
             return 500
 
 class UserBadges(models.Model):

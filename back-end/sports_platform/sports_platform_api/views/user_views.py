@@ -170,6 +170,7 @@ def follow_user(request, user_id):
                 return Response(status=200)
 
         except Exception as e:
+            print(e)
             return Response(data={"message": "Try later."}, status=500)
 
     elif request.method == 'DELETE':
