@@ -3,8 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.ProfileActivity
-import com.example.sportsplatform.RegisterActivity
+import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.activities.SearchOperationsActivity
 import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.util.Coroutines
