@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from .generic_validators import english_dot_number
+
 
 class Event(serializers.Serializer):
 
@@ -85,6 +87,10 @@ class Search(serializers.Serializer):
 
         return data
 
+
+class Badge(serializers.Serializer):
+    badge = serializers.CharField(min_length=3, max_length=100, validators=[
+                                       english_dot_number], required=True)
 class Update(serializers.Serializer):
     name = serializers.CharField(min_length=2, max_length=100, required=False)
     description = serializers.CharField(required=False)

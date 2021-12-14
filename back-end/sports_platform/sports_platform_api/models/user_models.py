@@ -7,6 +7,7 @@ import datetime
 from django.db import IntegrityError
 
 from .activity_stream_models import ActivityStream
+from .badge_models import Badge, UserBadges
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -377,6 +378,108 @@ class User(AbstractBaseUser):
         except Exception as e:
             return 500
 
+    def get_badges(self):
+        
+        data = dict()
+
+        try:
+            user_given_badges = self.badges_by_users.all()
+
+            user_given_badges_list = []
+
+            for badge in user_given_badges:
+                item = dict()
+                if badge.badge.wikidata:
+                    item['@context'] = "https://www.wikidata.org/entity/" + badge.badge.wikidata
+                    item['name'] = badge.badge.name
+                    item['additionalProperty'] = {
+                        "@type": "PropertyValue",
+                        "name": "givenBy",
+                        "value": {
+                            "@context": "https://schema.org/Person",
+                            "@id": badge.from_user.user_id
+                        }
+                    }
+                else:
+                    item['name'] = badge.badge.name
+                    item['additionalProperty'] = {
+                        "@type": "PropertyValue",
+                        "name": "givenBy",
+                        "value": {
+                            "@context": "https://schema.org/Person",
+                            "@id": badge.from_user.user_id
+                        }
+                    }
+
+                user_given_badges_list.append(item)
+
+            participating_events = self.participating_events.all()
+
+            utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
+            dt = utc_dt.astimezone()
+
+            event_given_badge_list = []
+
+            for event in participating_events:
+
+                if event.event.startDate > dt:
+                    continue
+                
+                for badge in event.event.event_badges.all():
+                    item = dict()
+                    if badge.badge.wikidata:
+                        item['@context'] = "https://www.wikidata.org/entity/" + badge.badge.wikidata
+                        item['name'] = badge.badge.name
+                    else:
+                        item['name'] = badge.badge.name
+                    item['additionalProperty'] = {
+                        "@type": "PropertyValue",
+                        "name": "event",
+                        "value": {
+                            "@context": "https://schema.org/SportsEvent",
+                            "@id": event.event.event_id
+                        }
+                    }
+
+                    event_given_badge_list.append(item)
+
+            data["@context"] =  "https://schema.org/Person"
+            data["@id"] = self.user_id
+            data["additionalProperty"] = [
+                {
+                    "@type": "PropertyValue",
+                    "name": "event_badges",
+                    "value": event_given_badge_list
+                },
+                {
+                    "@type": "PropertyValue",
+                    "name": "user_badges",
+                    "value": user_given_badges_list
+                }
+            ]
+
+            return data
+        except Exception as e:
+            return 500
+
+    def give_badge(self, user_id, badge):
+
+        utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            badge = Badge.objects.get(name = badge)
+            user = User.objects.get(user_id = user_id)
+            UserBadges.objects.create(user = user, from_user = self, badge = badge, date=dt )
+            return True
+        except Badge.DoesNotExist:
+            return 401
+        except User.DoesNotExist:
+            return 402
+        except IntegrityError:
+            return 403
+        except:
+            return 500
 
 
 class SportSkillLevel(models.Model):

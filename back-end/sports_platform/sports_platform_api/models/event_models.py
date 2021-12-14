@@ -6,6 +6,8 @@ from django.db.models import Q
 from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User, SportSkillLevel
 from datetime import datetime, timezone
+from .badge_models import Badge, UserBadges, EventBadges
+
 
 class EventParticipants(models.Model):
     class Meta:
@@ -544,6 +546,55 @@ class Event(models.Model):
             spectator_users.append(data_dict)
 
         return spectator_users
+        
+    def get_badges(self):
+
+        data = dict()
+
+        try:
+            event_badges = self.event_badges.all()
+
+            badges_list = []
+
+            for badge in event_badges:
+                item = dict()
+                if badge.badge.wikidata:
+                    item['@context'] = "https://www.wikidata.org/entity/" + badge.badge.wikidata
+                    item['name'] = badge.badge.name
+                else:
+                    item['name'] = badge.badge.name
+
+                badges_list.append(item)
+
+
+            data["@context"] = "https://schema.org/SportsEvent"
+            data["@id"] = self.event_id
+            data["additionalProperty"] = {
+                    "@type": "PropertyValue",
+                    "name": "event_badges",
+                    "value": badges_list
+                }
+        
+
+            return data
+        except Exception as e:
+            return 500
+
+    def add_badge(self, badge):
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        try:
+            badge = Badge.objects.get(name=badge)
+            EventBadges.objects.create(event=self, badge=badge, date=dt)
+
+        except Badge.DoesNotExist:
+            return 401
+        except IntegrityError:
+            return 402
+        except:
+            return 500
     
     def update(self, data):
         participants = EventParticipants.objects.filter(event=self)

@@ -6,3 +6,4 @@ and adding to urls.py
 from .user_views import *
 from .sport_views import *
 from .event_views import *
+from .badge_views import *
