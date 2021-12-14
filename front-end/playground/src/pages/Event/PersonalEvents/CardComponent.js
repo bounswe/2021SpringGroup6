@@ -2,6 +2,7 @@ import {React, useState, Fragment, useEffect} from 'react';
 import './CardComponent.css';
 
 import { Link, useLocation, Routes, Route } from "react-router-dom";
+import { Map, Marker } from "pigeon-maps";
 
 import {
   Tabs, 
@@ -24,21 +25,24 @@ import {
 
 function CardComponent(props) {
     const {event} = props;
+    const {latitude, longitude} = event.location.geo;
 
     return (
-        <Link 
-            key={event.event_id}
-            to={`/event/${event.event_id || event['@id'] || ''}`} 
-            style={{flexBasis: '28%'}}
-            // state={{ backgroundLocation: location }}
-        >
+        // <Link 
+        //     key={event.event_id}
+        //     to={`/event/${event.event_id || event['@id'] || ''}`} 
+        //     // state={{ backgroundLocation: location }}
+        // >
             <Card className="event-card" onClick={() => {}}>
-                <CardImg
-                    alt="Card image cap"
-                    src="https://picsum.photos/250/120"
-                    top
-                    width="100%"
-                />
+                <Map height={250} defaultCenter={[latitude, longitude]} defaultZoom={17}>
+                    <Marker width={50} anchor={[latitude, longitude]}>
+                        <img src="https://static3.depositphotos.com/1000868/261/v/950/depositphotos_2614173-stock-illustration-beach-ball.jpg" width={40} height={37} alt="Pigeon!" />
+                    </Marker>
+                </Map>
+                <Link 
+                    to={`/event/${event.event_id || event['@id'] || ''}`}
+                    className="card-body-hover"
+                >
                 <CardBody>
                     <CardTitle tag="h5">
                         {event.name}
@@ -56,11 +60,18 @@ function CardComponent(props) {
                 <CardFooter>
                     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <span>{(new Date(event.startDate).toString()).split(' GMT')[0]}</span>
-                        <span style={{paddingLeft: '1rem'}} >Max: {event.maximumAttendeeCapacity}</span>
+                        {/* {event.maximumAttendeeCapacity ? 
+                            <span style={{paddingLeft: '1rem'}} >
+                                Max: {event.maximumAttendeeCapacity}
+                            </span> 
+                            : 
+                            null
+                        } */}
                     </div>                                     
                 </CardFooter>
+                </Link>
             </Card>
-        </Link>
+        // </Link>
     )
 }
 

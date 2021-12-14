@@ -1,7 +1,15 @@
-.event-card {
+.event-card{
+    margin: 1rem;
+    color: black;
+    text-decoration: none;
+    flex-basis: 28%;
     height: 100%;
 }
 
-.event-card:hover {
+.card-body-hover:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+/* .event-card:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} */

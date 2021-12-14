@@ -1,3 +1,14 @@
 .participation-groups {
     justify-content: center;
 }
+
+.participation-group-container{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.paticipations-events-element{
+    flex-basis: 100%;
+}

@@ -29,8 +29,8 @@ import {Data} from './MockData';
 function ParticipationPage(props) {
     const {user, setUser} = useContext(UserContext);
     const {user_id} = user;
-    const [participationRequestedEvents, setParticipationRequestedEvents] = useState(Data.slice(0,3));
-    const [acceptedEvents, setAcceptedEvents] = useState(Data.slice(0,3));
+    const [participationRequestedEvents, setParticipationRequestedEvents] = useState([]);
+    const [acceptedEvents, setAcceptedEvents] = useState([]);
     const [spectatorEvents, setSpectatorEvents] = useState([]);
     useEffect(() =>{
         if (participationRequestedEvents.length === 0) {
@@ -58,50 +58,50 @@ function ParticipationPage(props) {
 
     return (
         <div className="personal-events-container">
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Sent Participation Request
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {participationRequestedEvents.length > 0 ? participationRequestedEvents.map(event => {
                         return (
-                            <CardComponent event={event}/>
+                            <CardComponent event={event} key={event.event_id || event['@id']} />
                         )
                     }) : <div style={{padding: '50px'}}>You have no pending requests.</div>
                     }
-                    </CardGroup>
+                    </div>
                 </CardBody>
             </Card>
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Accepted
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {acceptedEvents.length > 0 ? acceptedEvents.map(event => {
                         return (
                             <CardComponent event={event}/>
                         )
                     }) : <div style={{padding: '50px'}}>You have not been accepted to any event yet.</div>
                     }
-                    </CardGroup>
+                    </div>
                 </CardBody>
             </Card>
             
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Are a Spectator
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
                         return (
                             <CardComponent event={event}/>
                         )
                     }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
                     }
-                    </CardGroup>
+                    </div>
                 </CardBody>
             </Card>
         </div>
