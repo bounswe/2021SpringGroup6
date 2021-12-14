@@ -1,0 +1,30 @@
+/* .stream-cards:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+} */
+.activity-timeline-dot {
+    background: transparent;
+    box-shadow: none !important;
+    border-width: 0 !important;
+    padding: 0 !important;
+    margin: 0.35rem 0 !important;
+}
+
+.activity-timeline-opposite {
+    margin-top: 0.45rem !important;
+    font-size: 0.75rem !important;
+    color: #ed1b76 !important;
+    opacity: 0.7 !important;
+}
+
+.activity-timeline-opposite:hover {
+    opacity: 1 !important;
+}
+
+.activity-hover-shadow {
+    border-radius: 0.5rem;
+    padding-bottom: 1rem !important;
+}
+
+.activity-hover-shadow:hover {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.09);
+}

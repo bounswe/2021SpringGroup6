@@ -61,6 +61,7 @@ function EventInformation(props) {
                             {eventInfo.organizer.identifier === localData.identifier ?
                                 <Button
                                     color="secondary"
+                                    onClick={() => {window.location.href=`/modify-event/${eventInfo.event_id}`}}
                                 >
                                     Modify Event
                                 </Button>
@@ -76,7 +77,7 @@ function EventInformation(props) {
                                 <b>Description:</b> {eventInfo.description}
                             </div>
                             <div>
-                                Creator: <Link to="/profile/">{eventInfo.organizer.identifier}</Link>
+                                Creator: <Link to={`/profile/${eventInfo.organizer['@id']}`}>{eventInfo.organizer.identifier}</Link>
                             </div>
                         </CardBody>
                     </Card>

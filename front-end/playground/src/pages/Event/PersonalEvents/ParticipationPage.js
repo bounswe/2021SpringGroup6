@@ -58,7 +58,7 @@ function ParticipationPage(props) {
 
     return (
         <div className="personal-events-container">
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Sent Participation Request
@@ -73,7 +73,7 @@ function ParticipationPage(props) {
                     </CardGroup>
                 </CardBody>
             </Card>
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Accepted
@@ -89,19 +89,49 @@ function ParticipationPage(props) {
                 </CardBody>
             </Card>
             
-            <Card style={{margin: '1rem'}}>
+            <Card style={{margin: '1rem'}} className="paticipations-events-element">
                 <CardBody>
                     <CardTitle tag="h5">
                         Events You Are a Spectator
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
                         return (
                             <CardComponent event={event}/>
                         )
                     }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
                     }
-                    </CardGroup>
+                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
+                        return (
+                            <CardComponent event={event}/>
+                        )
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
+                    }
+                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
+                        return (
+                            <CardComponent event={event}/>
+                        )
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
+                    }
+                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
+                        return (
+                            <CardComponent event={event}/>
+                        )
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
+                    }
+                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
+                        return (
+                            <CardComponent event={event}/>
+                        )
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
+                    }
+                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
+                        return (
+                            <CardComponent event={event}/>
+                        )
+                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
+                    }
+                    </div>
                 </CardBody>
             </Card>
         </div>

@@ -7,6 +7,7 @@ import Header from './PermanentComponents/Header';
 import SidebarComponent from './PermanentComponents/SidebarComponent';
 // import PasswordChange from './PasswordChange';
 import Footer from './PermanentComponents/Footer';
+import ActivityStream from './pages/ActivityStream/ActivityStream'
 
 import {UserContext} from './UserContext';
 import UseWindowSize from './PermanentComponents/WindowSizing';
@@ -16,13 +17,14 @@ import gif from './images/squadgamegif.gif'
 
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
+const ProfileView = lazy(() => import('./pages/profile/ProfileView'));
 const Login = lazy(() => import('./pages/Login/Login'));
 const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
-
+const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
 
 
 function App() {
@@ -65,20 +67,24 @@ function App() {
   }
 
   function HomePage() {
-    return (<div className="default-body">
-      <div
-        style={{height: '100%', display: 'flex', flexDirection: 'column', 
-          justifyContent: user.token ? 'center' : 'space-around' , alignItems: 'center'}}>
-        <img src={gif} width="250" alt="logo" />
-        {user.token ? 
-          <span className="main-logo">Squad Game</span> 
-          : 
-          <span>
-            Welcome <Link to="/login">Login Here</Link>
-            </span>}
-      </div>
-      
-    </div>)
+    return (
+    <Fragment>
+      {user.token ? 
+          <ActivityStream token={user.token}/>
+          :
+          <div id="deneme" 
+            style={{height: '100%', display: 'flex', flexDirection: 'column', 
+              justifyContent: 'space-around' , alignItems: 'center'}}>
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+              <img src={gif} width="250" alt="logo" />
+              <span className="main-logo">Squad Game</span>
+            </div>
+            <span>
+              Welcome <Link to="/login">Login Here</Link>
+            </span>
+          </div>
+      }
+    </Fragment>)
   }
 
   return (
@@ -112,7 +118,7 @@ function App() {
                 <Route path=":id" 
                 element={
                   <Suspense fallback={<>...</>}>
-                    <div className="default-body"><Profile/></div>
+                    <div className="default-body"><ProfileView/></div>
                   </Suspense>}/>
 
             </Route>
@@ -136,6 +142,12 @@ function App() {
                     <EventPage/>
                   </Suspense>}/>
             </Route>
+
+            <Route path="modify-event/:id" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><ModifyEvent/></div>
+                </Suspense>}/>
 
             <Route path="event-settings" 
               element={

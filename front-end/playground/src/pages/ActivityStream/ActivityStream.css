@@ -1,0 +1,47 @@
+.activity-stream-empty{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;    
+}
+
+.activity-stream-continer {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 1rem;
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center;     */
+}
+
+/* .activity-stream-continer::after {
+    background-image: 
+    url(https://raw.githubusercontent.com/bounswe/2021SpringGroup6/master/front-end/playground/src/images/squadgamegif.gif);
+    background-repeat: no-repeat; 
+    background-attachment: fixed;
+    background-origin: border-box;
+    background-position: center;
+    opacity: 0.25;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -1;
+    content: "";
+
+} */
+
+.activity-stream-timeline {
+    padding-top: 2rem !important;
+}
+
+.activity-timeline-dot {
+    background: transparent;
+    box-shadow: none !important;
+    border-width: 0 !important;
+    padding: 0 !important;
+    margin: 0.35rem 0 !important;
+}

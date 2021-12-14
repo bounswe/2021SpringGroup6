@@ -1,6 +1,5 @@
 import {React, useState, Fragment, useEffect} from 'react';
 import './CardComponent.css';
-import {getCreatedEvents} from '../../../services/Events';
 
 import { Link, useLocation, Routes, Route } from "react-router-dom";
 import { Map, Marker } from "pigeon-maps";
@@ -35,7 +34,7 @@ function CardComponent(props) {
         //     // state={{ backgroundLocation: location }}
         // >
             <Card className="event-card" onClick={() => {}}>
-                <Map height={300} defaultCenter={[latitude, longitude]} defaultZoom={17}>
+                <Map height={250} defaultCenter={[latitude, longitude]} defaultZoom={17}>
                     <Marker width={50} anchor={[latitude, longitude]}>
                         <img src="https://static3.depositphotos.com/1000868/261/v/950/depositphotos_2614173-stock-illustration-beach-ball.jpg" width={40} height={37} alt="Pigeon!" />
                     </Marker>
