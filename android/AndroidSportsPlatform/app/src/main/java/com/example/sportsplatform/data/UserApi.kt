@@ -22,7 +22,7 @@ interface UserApi {
     @POST("users")
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
-    ): Response<UserRegisterResponse>
+    ): Response<String>
 
     @GET("users/{user_id}")
     suspend fun searchProfile(
@@ -50,7 +50,7 @@ interface UserApi {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("http://13.59.0.178:8080")
+                .baseUrl("http://3.20.232.108:8080")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

@@ -15,7 +15,7 @@
         android:theme="@style/Theme.SportsPlatform"
         android:usesCleartextTraffic="true">
         <activity android:name=".activities.SearchOperationsActivity" />
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
