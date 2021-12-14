@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import './Header.css';
 import { Link } from "react-router-dom";
 
+import gif from '../images/squadgamegif_circle_black.gif'
 
 function Header() {
     return (
@@ -16,6 +17,7 @@ function Header() {
                     <Link to="/" 
                         style={{color: '#ed1b76', textDecoration: 'unset', fontSize: '20px', marginRight: '10px'}}
                     >
+                        <img src={gif} width="30" alt="logo" style={{marginRight: '0.3rem'}} />
                         Squad Game
                     </Link>
                     <Navbar.Toggle className="navbar-collapse-custom" aria-controls="basic-navbar-nav" />

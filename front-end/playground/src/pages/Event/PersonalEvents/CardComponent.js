@@ -1,6 +1,5 @@
 import {React, useState, Fragment, useEffect} from 'react';
 import './CardComponent.css';
-import {getCreatedEvents} from '../../../services/Events';
 
 import { Link, useLocation, Routes, Route } from "react-router-dom";
 
@@ -30,6 +29,7 @@ function CardComponent(props) {
         <Link 
             key={event.event_id}
             to={`/event/${event.event_id || event['@id'] || ''}`} 
+            style={{flexBasis: '28%'}}
             // state={{ backgroundLocation: location }}
         >
             <Card className="event-card" onClick={() => {}}>

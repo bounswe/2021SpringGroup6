@@ -10,21 +10,20 @@ import UseWindowSize from './WindowSizing'
 
 function SidebarComponent(props) {
     const {user, setUser} = useContext(UserContext);
-    const sidebarRef = useRef(null);
-    const [window_width, window_height] = UseWindowSize();
-    const [toggle, setToggle] = useState(window_width > 480);
+    // const sidebarRef = useRef(null);
+    const [toggle, setToggle] = useState(true);
 
-    useEffect(() => {
-        if (window_width < 480) {
-            setToggle(false)
-        } else if (window_width < 720) {
+    // useEffect(() => {
+    //     if (window_width < 480) {
+    //         setToggle(false)
+    //     } else if (window_width < 720) {
 
-        } else {
-            setToggle(true);
-        }
-    }, [window_width]);
+    //     } else {
+    //         setToggle(true);
+    //     }
+    // }, [window_width]);
 
-    const sidebarWidth = (sidebarRef.current && sidebarRef.current.clientWidth) || '155px';
+    const sidebarWidth = '155px' //(sidebarRef.current && sidebarRef.current.clientWidth) || '155px';
     const transitionDuration = 300;
     const linkStyle = {
         transition: `width ${transitionDuration}ms linear`,

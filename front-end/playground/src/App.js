@@ -69,7 +69,7 @@ function App() {
     return (
     <Fragment>
       {user.token ? 
-          <div className="default-body"><ActivityStream token={user.token}/></div>
+          <ActivityStream token={user.token}/>
           :
           <div id="deneme" 
             style={{height: '100%', display: 'flex', flexDirection: 'column', 
