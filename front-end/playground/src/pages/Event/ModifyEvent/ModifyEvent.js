@@ -168,7 +168,7 @@ class NewEvent extends React.Component {
             <div>
 
                 
-                <h1 id="title"> <br />New Event Page</h1>
+                <h1 id="title"> <br />Modify Event Page</h1>
 
                 <form onSubmit={this.handleSubmit}>
                     <Grid>
