@@ -63,14 +63,14 @@ function ParticipationPage(props) {
                     <CardTitle tag="h5">
                         Events You Sent Participation Request
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {participationRequestedEvents.length > 0 ? participationRequestedEvents.map(event => {
                         return (
                             <CardComponent event={event} key={event.event_id || event['@id']} />
                         )
                     }) : <div style={{padding: '50px'}}>You have no pending requests.</div>
                     }
-                    </CardGroup>
+                    </div>
                 </CardBody>
             </Card>
             <Card style={{margin: '1rem'}} className="paticipations-events-element">
@@ -78,14 +78,14 @@ function ParticipationPage(props) {
                     <CardTitle tag="h5">
                         Events You Accepted
                     </CardTitle>
-                    <CardGroup className="participation-groups">
+                    <div className="participation-group-container">
                     {acceptedEvents.length > 0 ? acceptedEvents.map(event => {
                         return (
                             <CardComponent event={event}/>
                         )
                     }) : <div style={{padding: '50px'}}>You have not been accepted to any event yet.</div>
                     }
-                    </CardGroup>
+                    </div>
                 </CardBody>
             </Card>
             
@@ -95,36 +95,6 @@ function ParticipationPage(props) {
                         Events You Are a Spectator
                     </CardTitle>
                     <div className="participation-group-container">
-                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
-                        return (
-                            <CardComponent event={event}/>
-                        )
-                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
-                    }
-                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
-                        return (
-                            <CardComponent event={event}/>
-                        )
-                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
-                    }
-                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
-                        return (
-                            <CardComponent event={event}/>
-                        )
-                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
-                    }
-                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
-                        return (
-                            <CardComponent event={event}/>
-                        )
-                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
-                    }
-                    {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
-                        return (
-                            <CardComponent event={event}/>
-                        )
-                    }) : <div style={{padding: '50px'}}>You have not decide to watch any event yet.</div>
-                    }
                     {spectatorEvents.length > 0 ? spectatorEvents.map(event => {
                         return (
                             <CardComponent event={event}/>
