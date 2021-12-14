@@ -19,6 +19,23 @@ export const getUserInfo = async (user_id) => {
     })
 }
 
+export const getOneUserInfo = async (user_id) => {
+  
+  return axios({
+    method: 'GET',
+    url: `/users/${user_id}`,
+    headers: {
+      Authorization: token,
+    }
+  })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 export const getUserInteresteds = async () => {
 
   return axios({
