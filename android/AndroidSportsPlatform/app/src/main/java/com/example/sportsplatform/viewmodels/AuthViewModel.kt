@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.ProfileActivity
-import com.example.sportsplatform.RegisterActivity
+import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.data.UserRepository
-import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.data.models.UserRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.closeSoftKeyboard
@@ -39,7 +38,6 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
             return
         }
 
-
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
@@ -69,32 +67,6 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
     }
 
 
-    fun onSignUpButtonClick(view: View){
 
-        Coroutines.main {
-            val userRegisterRequest = UserRegisterRequest(
-                    email = email!!,
-                    password = registerPassword!!,
-                    identifier = username!!,
-                    name = registerName!!,
-                    familyName = surname!!,
-                    birthDate = age!!,
-                    gender = gender!!,
-                    sports = sports!!
-            )
-
-            val currResponse = repo.signUser(userRegisterRequest)
-            view.context.toast(currResponse.toString())
-            if (currResponse.isSuccessful) {
-
-                Intent(view.context, ProfileActivity::class.java).also{
-                    view.context.startActivity(it)
-                }
-
-            } else {
-                view.context.toast("Fail")
-            }
-        }
-    }
 
 }
