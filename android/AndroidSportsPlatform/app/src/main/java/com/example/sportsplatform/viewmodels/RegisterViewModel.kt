@@ -20,11 +20,19 @@ class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
     var etFamilyName: String? = null
     var etBirthDate: String? = null
     var etGender: String? = null
-    var etSports: List<Sport>? = null
+    var etSportName: String? = null
+    var etSportSkill: String? = null
 
     fun onSignUpButtonClick(view: View){
 
         Coroutines.main {
+            val sports = Sport(
+                sport = etSportName!!,
+                skill_level = Integer.parseInt(etSportSkill!!)
+            )
+
+            val userSports = listOf(sports)
+
             val userRegisterRequest = UserRegisterRequest(
                 email = etEmail!!,
                 password = etPassword!!,
@@ -33,7 +41,7 @@ class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
                 familyName = etFamilyName!!,
                 birthDate = etBirthDate!!,
                 gender = etGender!!,
-                sports = etSports!!
+                sports = userSports
             )
 
             val currResponse = userRepo.signUser(userRegisterRequest)

@@ -21,15 +21,6 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
 
     var identifier: String? = null
     var pass: String? = null
-    var registerName: String? = null
-    var username: String? = null
-    var gender: String? = null
-    var email: String? = null
-    var surname: String? = null
-    var location: String? = null
-    var age: String? = null
-    var registerPassword: String? = null
-    var sports: String? = null
 
     fun onLoginButtonClick(view: View){
         closeSoftKeyboard(view.context, view)

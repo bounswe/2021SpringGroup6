@@ -29,5 +29,6 @@ class RegisterActivity : AppCompatActivity(), KodeinAware {
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
         binding.registerviewmodel = registerViewModel
 
+
     }
 }

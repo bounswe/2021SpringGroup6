@@ -18,10 +18,11 @@
     <string name="age">age</string>
     <string name="gender">gender</string>
     <string name="name">name</string>
-    <string name="sports">sports</string>
+    <string name="sports">sport</string>
     <string name="searchButton">search</string>
     <string name="event">event</string>
     <string name="button">Button</string>
     <string name="description">image</string>
     <string name="birthDay">Birthday</string>
+    <string name="skill">skill level(1–5)</string>
 </resources>
