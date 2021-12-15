@@ -11,7 +11,6 @@ import com.example.sportsplatform.viewmodels.RegisterViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
-import com.example.sportsplatform.databinding.ActivityRegisterBinding.*
 
 class RegisterActivity : AppCompatActivity(), KodeinAware {
     private lateinit var registerViewModel: RegisterViewModel
@@ -23,12 +22,12 @@ class RegisterActivity : AppCompatActivity(), KodeinAware {
 
         val binding: ActivityRegisterBinding = DataBindingUtil.setContentView(
             this, R.layout.activity_register)
-        //binding = ActivityRegisterBinding.inflate(layoutInflater)
+
         val view = binding.root
         setContentView(view)
 
         registerViewModel = ViewModelProvider(this, factory).get(RegisterViewModel::class.java)
-        binding.registerViewModel = registerViewModel
+        binding.registerviewmodel = registerViewModel
 
     }
 }

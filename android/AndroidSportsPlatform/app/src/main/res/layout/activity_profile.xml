@@ -15,10 +15,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".HomeActivity">
+        tools:context=".activities.ProfileActivity">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvProfileTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title"
@@ -33,7 +33,7 @@
             app:layout_constraintVertical_bias="0.124" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvProfileParagraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/paragraph"
@@ -42,12 +42,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/tvProfileTitle"
             app:layout_constraintVertical_bias="0.159" />
 
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnProfilePage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{profileviewmodel::onProfileButtonClick}"
@@ -60,7 +60,7 @@
             app:layout_constraintVertical_bias="0.941" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="84dp"
@@ -69,7 +69,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.404"
-            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintStart_toEndOf="@+id/btnProfilePage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.941" />
 
@@ -81,9 +81,9 @@
             android:onClick="@{profileviewmodel::onSearchImageButtonClick}"
             android:src="@drawable/search_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button2"
+            app:layout_constraintEnd_toStartOf="@+id/btnMenu"
             app:layout_constraintHorizontal_bias="0.574"
-            app:layout_constraintStart_toEndOf="@+id/button"
+            app:layout_constraintStart_toEndOf="@+id/btnProfilePage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.941"/>
 

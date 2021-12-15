@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.data .UserRepository
+import com.example.sportsplatform.data.models.Sport
 import com.example.sportsplatform.data .models.UserRegisterRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
@@ -12,23 +13,27 @@ import com.example.sportsplatform.util.toast
 
 class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
 
-    var registerName: String? = null
-    var username: String? = null
-    var gender: String? = null
-    var email: String? = null
-    var surname: String? = null
-    var location: String? = null
-    var age: String? = null
-    var registerPassword: String? = null
-    var sports: String? = null
+    var etEmail: String? = null
+    var etPassword: String? = null
+    var etIdentifier: String? = null
+    var etName: String? = null
+    var etFamilyName: String? = null
+    var etBirthDate: String? = null
+    var etGender: String? = null
+    var etSports: List<Sport>? = null
 
     fun onSignUpButtonClick(view: View){
 
         Coroutines.main {
             val userRegisterRequest = UserRegisterRequest(
-                email = email!!,
-                password = registerPassword!!,
-                identifier = username!!
+                email = etEmail!!,
+                password = etPassword!!,
+                identifier = etIdentifier!!,
+                name = etName!!,
+                familyName = etFamilyName!!,
+                birthDate = etBirthDate!!,
+                gender = etGender!!,
+                sports = etSports!!
             )
 
             val currResponse = userRepo.signUser(userRegisterRequest)
