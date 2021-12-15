@@ -3,6 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.activities.SearchOperationsActivity
 import com.example.sportsplatform.data.EventRepository
@@ -32,11 +33,10 @@ class ProfileViewModel(
         closeSoftKeyboard(view.context, view)
 
         Coroutines.main {
-            Intent(view.context, RegisterActivity::class.java).also {
+            Intent(view.context, ProfileActivity::class.java).also {
                 view.context.startActivity(it)
             }
         }
-
     }
 
 
@@ -44,10 +44,9 @@ class ProfileViewModel(
         closeSoftKeyboard(view.context, view)
 
         Coroutines.main {
-            Intent(view.context, RegisterActivity::class.java).also {
+            Intent(view.context, ProfileActivity::class.java).also {
                 view.context.startActivity(it)
             }
         }
-
     }
 }

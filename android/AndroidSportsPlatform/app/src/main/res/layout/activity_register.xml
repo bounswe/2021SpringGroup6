@@ -43,8 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
             app:layout_constraintVertical_bias="0.05"
-            tools:ignore="DuplicateSpeakableTextCheck"
-            android:autofillHints="" />
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -59,8 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.15"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.15" />
 
         <EditText
             android:id="@+id/etIdentifier"
@@ -75,8 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.25"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.25" />
 
         <EditText
             android:id="@+id/etName"
@@ -91,8 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.35"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.35" />
 
         <EditText
             android:id="@+id/etFamilyName"
@@ -107,8 +103,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.45"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.45" />
 
         <EditText
             android:id="@+id/etBirthDate"
@@ -123,8 +118,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.55"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.55" />
 
         <EditText
             android:id="@+id/etGender"
@@ -139,8 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.65"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.65" />
 
         <EditText
             android:id="@+id/etSports"
@@ -155,8 +148,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.75"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.75" />
 
         <EditText
             android:id="@+id/etSportSkill"
@@ -171,8 +163,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSquad"
-            app:layout_constraintVertical_bias="0.75"
-            android:autofillHints="" />
+            app:layout_constraintVertical_bias="0.75" />
 
         <Button
             android:id="@+id/btnRegister"

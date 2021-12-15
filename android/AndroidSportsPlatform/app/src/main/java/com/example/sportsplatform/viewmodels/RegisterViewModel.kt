@@ -4,9 +4,9 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.activities.ProfileActivity
-import com.example.sportsplatform.data .UserRepository
+import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.models.Sport
-import com.example.sportsplatform.data .models.UserRegisterRequest
+import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
 
@@ -43,6 +43,8 @@ class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
                 gender = etGender!!,
                 sports = userSports
             )
+
+            view.context.toast(userRegisterRequest.toString())
 
             val currResponse = userRepo.signUser(userRegisterRequest)
             view.context.toast(currResponse.toString())
