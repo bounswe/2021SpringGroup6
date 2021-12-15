@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".activities.MainActivity">
 
         <TextView
             android:id="@+id/textView2"
@@ -63,7 +63,7 @@
         <EditText
             android:id="@+id/editText"
             android:layout_width="217dp"
-            android:layout_height="43dp"
+            android:layout_height="48dp"
             android:layout_margin="16dp"
             android:hint="@string/Identifier"
             android:importantForAutofill="no"
@@ -79,7 +79,7 @@
         <EditText
             android:id="@+id/editText1"
             android:layout_width="217dp"
-            android:layout_height="43dp"
+            android:layout_height="48dp"
             android:layout_margin="16dp"
             android:hint="@string/Pass"
             android:importantForAutofill="no"

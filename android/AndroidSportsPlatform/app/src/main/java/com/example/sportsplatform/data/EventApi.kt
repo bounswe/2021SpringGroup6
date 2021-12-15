@@ -25,6 +25,9 @@ interface EventApi {
                     .build()
                 val request = chain.request()
                     .newBuilder()
+                    //.also {
+                    //    it.addHeader("Authorization", "Bearer $authToken")
+                    //}
                     .url(url)
                     .build()
 

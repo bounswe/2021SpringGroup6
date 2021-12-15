@@ -45,6 +45,8 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
             if (currResponse.isSuccessful) {
 
                 val userToken = currResponse.body()?.token
+                val userId = currResponse.body()?.user_id
+                
                 userLiveData.postValue(userToken)
                 view.context.toast("Success")
                 Intent(view.context, ProfileActivity::class.java).also{
