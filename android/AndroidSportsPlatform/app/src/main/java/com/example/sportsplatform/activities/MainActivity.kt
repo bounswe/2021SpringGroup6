@@ -1,10 +1,12 @@
-package com.example.sportsplatform
+package com.example.sportsplatform.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.sportsplatform.AuthListener
+import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityMainBinding
 import com.example.sportsplatform.util.hide
 import com.example.sportsplatform.util.show
@@ -24,7 +26,9 @@ class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
+            R.layout.activity_main
+        )
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         binding.viewmodel = viewModel
         viewModel.authListener = this
@@ -34,7 +38,7 @@ class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
     }
     private fun initObservers(){
         viewModel.userLiveData.observe(this, Observer {
-            textView.text = it
+            //etLoginIdentifier.text = it
         })
     }
 

@@ -22,12 +22,17 @@ interface UserApi {
     @POST("users")
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
-    ): Response<String>
+    ): Response<Void>
 
     @GET("users/{user_id}")
     suspend fun searchProfile(
-        @Path("user_id") postId: Int
+        @Path("user_id") userId: Int
     ): Response<UserSearchResponse>
+
+    @GET("/users/{user_id}/following")
+    suspend fun searchFollowingProfile(
+        @Path("user_id") userId: Int
+    ): Response<UserFollowingResponse>
 
     companion object{
         operator fun invoke() : UserApi {

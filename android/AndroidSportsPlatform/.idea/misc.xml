@@ -3,14 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/Android - SportsPlatform/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_main.xml" value="0.11775362318840579" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/Android - SportsPlatform/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_profile.xml" value="0.11775362318840579" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/Android - SportsPlatform/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_register.xml" value="0.152" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/Android - SportsPlatform/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_search_operations.xml" value="0.11775362318840579" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/SportsPlatformAndroid/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/SportsPlatformAndroid/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/SportsPlatformAndroid/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/Users/Lenovo/AndroidStudioProjects/SportsPlatformAndroid/2021SpringGroup6/android/AndroidSportsPlatform/app/src/main/res/layout/item_layout.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_event_list.xml" value="0.1265625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2753623188405797" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.2753623188405797" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.19427083333333334" />
         <entry key="app/src/main/res/layout/activity_search_operations.xml" value="0.19427083333333334" />
+        <entry key="app/src/main/res/layout/item_layout.xml" value="0.1265625" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

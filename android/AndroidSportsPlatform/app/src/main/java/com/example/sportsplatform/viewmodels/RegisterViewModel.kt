@@ -3,35 +3,48 @@ package com.example.sportsplatform.viewmodels
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.ProfileActivity
-import com.example.sportsplatform.data .UserRepository
-import com.example.sportsplatform.data .models.UserRegisterRequest
+import com.example.sportsplatform.activities.ProfileActivity
+import com.example.sportsplatform.data.UserRepository
+import com.example.sportsplatform.data.models.Sport
+import com.example.sportsplatform.data.models.UserRegisterRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
 
 
 class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
 
-    var identifier: String? = null
-    var pass: String? = null
-    var registerName: String? = null
-    var username: String? = null
-    var gender: String? = null
-    var email: String? = null
-    var surname: String? = null
-    var location: String? = null
-    var age: String? = null
-    var registerPassword: String? = null
-    var sports: String? = null
+    var etEmail: String? = null
+    var etPassword: String? = null
+    var etIdentifier: String? = null
+    var etName: String? = null
+    var etFamilyName: String? = null
+    var etBirthDate: String? = null
+    var etGender: String? = null
+    var etSportName: String? = null
+    var etSportSkill: String? = null
 
     fun onSignUpButtonClick(view: View){
 
         Coroutines.main {
-            val userRegisterRequest = UserRegisterRequest(
-                email = email!!,
-                password = registerPassword!!,
-                identifier = username!!
+            val sports = Sport(
+                sport = etSportName!!,
+                skill_level = Integer.parseInt(etSportSkill!!)
             )
+
+            val userSports = listOf(sports)
+
+            val userRegisterRequest = UserRegisterRequest(
+                email = etEmail!!,
+                password = etPassword!!,
+                identifier = etIdentifier!!,
+                name = etName!!,
+                familyName = etFamilyName!!,
+                birthDate = etBirthDate!!,
+                gender = etGender!!,
+                sports = userSports
+            )
+
+            view.context.toast(userRegisterRequest.toString())
 
             val currResponse = userRepo.signUser(userRegisterRequest)
             view.context.toast(currResponse.toString())

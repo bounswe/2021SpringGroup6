@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.AuthListener
-import com.example.sportsplatform.ProfileActivity
+import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.data.UserRepository
 import com.example.sportsplatform.data.models.UserRequest
@@ -21,15 +21,6 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
 
     var identifier: String? = null
     var pass: String? = null
-    var registerName: String? = null
-    var username: String? = null
-    var gender: String? = null
-    var email: String? = null
-    var surname: String? = null
-    var location: String? = null
-    var age: String? = null
-    var registerPassword: String? = null
-    var sports: String? = null
 
     fun onLoginButtonClick(view: View){
         closeSoftKeyboard(view.context, view)
@@ -41,12 +32,12 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
-            view.context.toast(currResponse.toString())
+            //view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
 
                 val userToken = currResponse.body()?.token
                 userLiveData.postValue(userToken)
-                view.context.toast("Success")
+                //view.context.toast("Success")
                 Intent(view.context, ProfileActivity::class.java).also{
                     view.context.startActivity(it)
                 }

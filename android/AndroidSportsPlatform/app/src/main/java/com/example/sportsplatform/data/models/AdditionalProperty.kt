@@ -1,6 +1,7 @@
 package com.example.sportsplatform.data.models
 
-data class UserResponse(
+data class AdditionalProperty(
+    val type: String,
     val name: String,
-    val created_on: Int
+    val value: Any
 )
