@@ -1,4 +1,6 @@
-package com.example.sportsplatform.data.models
+package com.example.sportsplatform.data.models.requests
+
+import com.example.sportsplatform.data.models.Sport
 
 data class UserRegisterRequest(
         val email : String,

@@ -1,6 +1,9 @@
-package com.example.sportsplatform.data
+package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
+import com.example.sportsplatform.data.models.responses.EventFilterResponse
+import com.example.sportsplatform.data.models.responses.EventResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,30 +15,19 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface UserApi {
+interface EventApi {
 
-    @POST("users/login")
-    suspend fun searchUser(
-        @Body userRequest: UserRequest
-    ): Response<TokenResponse>
+    @GET("events/{event_id}")
+    suspend fun searchEvent(
+        @Path("event_id") eventId: Int): Response<EventResponse>
 
-    @POST("users")
-    suspend fun registerUser(
-        @Body userRegisterRequest: UserRegisterRequest
-    ): Response<Void>
-
-    @GET("users/{user_id}")
-    suspend fun searchProfile(
-        @Path("user_id") userId: Int
-    ): Response<UserSearchResponse>
-
-    @GET("/users/{user_id}/following")
-    suspend fun searchFollowingProfile(
-        @Path("user_id") userId: Int
-    ): Response<UserFollowingResponse>
+    @POST("events/searches")
+    suspend fun filterEvents(
+        @Body eventFilterRequest: EventFilterRequest
+    ): Response<EventFilterResponse>
 
     companion object{
-        operator fun invoke() : UserApi {
+        operator fun invoke() : EventApi {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
@@ -59,8 +51,7 @@ interface UserApi {
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(UserApi::class.java)
+                .create(EventApi::class.java)
         }
     }
-
 }

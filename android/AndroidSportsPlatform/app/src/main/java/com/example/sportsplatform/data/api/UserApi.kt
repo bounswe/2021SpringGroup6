@@ -1,6 +1,11 @@
-package com.example.sportsplatform.data
+package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
+import com.example.sportsplatform.data.models.requests.UserRegisterRequest
+import com.example.sportsplatform.data.models.requests.UserRequest
+import com.example.sportsplatform.data.models.responses.TokenResponse
+import com.example.sportsplatform.data.models.responses.UserFollowingResponse
+import com.example.sportsplatform.data.models.responses.UserSearchResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,19 +17,30 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface EventApi {
+interface UserApi {
 
-    @GET("events/{event_id}")
-    suspend fun searchEvent(
-        @Path("event_id") eventId: Int): Response<EventResponse>
+    @POST("users/login")
+    suspend fun searchUser(
+        @Body userRequest: UserRequest
+    ): Response<TokenResponse>
 
-    @POST("events/searches")
-    suspend fun filterEvents(
-        @Body eventFilterRequest: EventFilterRequest
-    ): Response<EventFilterResponse>
+    @POST("users")
+    suspend fun registerUser(
+        @Body userRegisterRequest: UserRegisterRequest
+    ): Response<Void>
+
+    @GET("users/{user_id}")
+    suspend fun searchProfile(
+        @Path("user_id") userId: Int
+    ): Response<UserSearchResponse>
+
+    @GET("/users/{user_id}/following")
+    suspend fun searchFollowingProfile(
+        @Path("user_id") userId: Int
+    ): Response<UserFollowingResponse>
 
     companion object{
-        operator fun invoke() : EventApi {
+        operator fun invoke() : UserApi {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
@@ -48,7 +64,8 @@ interface EventApi {
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(EventApi::class.java)
+                .create(UserApi::class.java)
         }
     }
+
 }

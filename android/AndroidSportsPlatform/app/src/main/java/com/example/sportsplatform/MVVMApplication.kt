@@ -1,10 +1,10 @@
 package com.example.sportsplatform
 
 import android.app.Application
-import com.example.sportsplatform.data.EventApi
-import com.example.sportsplatform.data.EventRepository
-import com.example.sportsplatform.data.UserRepository
-import com.example.sportsplatform.data.UserApi
+import com.example.sportsplatform.data.api.EventApi
+import com.example.sportsplatform.data.repository.EventRepository
+import com.example.sportsplatform.data.repository.UserRepository
+import com.example.sportsplatform.data.api.UserApi
 import com.example.sportsplatform.viewmodels.AuthViewModelFactory
 import com.example.sportsplatform.viewmodels.EventSearchViewModelFactory
 import com.example.sportsplatform.viewmodels.ProfileViewModelFactory

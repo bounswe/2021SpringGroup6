@@ -2,7 +2,7 @@ package com.example.sportsplatform.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.sportsplatform.data.UserRepository
+import com.example.sportsplatform.data.repository.UserRepository
 
 class AuthViewModelFactory(
     private val repository: UserRepository

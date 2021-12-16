@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.activities.RegisterActivity
-import com.example.sportsplatform.data.UserRepository
-import com.example.sportsplatform.data.models.UserRequest
+import com.example.sportsplatform.data.repository.UserRepository
+import com.example.sportsplatform.data.models.requests.UserRequest
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.closeSoftKeyboard
 import com.example.sportsplatform.util.toast

@@ -1,13 +1,12 @@
 package com.example.sportsplatform
 
-import android.util.EventLog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sportsplatform.data.models.EventResponse
+import com.example.sportsplatform.data.models.responses.EventResponse
 import kotlinx.android.synthetic.main.item_layout.view.*
 import java.time.Instant
 import java.time.ZoneId

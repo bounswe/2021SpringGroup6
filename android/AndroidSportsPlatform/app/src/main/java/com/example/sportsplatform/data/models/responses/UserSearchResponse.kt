@@ -1,4 +1,4 @@
-package com.example.sportsplatform.data.models
+package com.example.sportsplatform.data.models.responses
 
 data class UserSearchResponse(
     val name: String,

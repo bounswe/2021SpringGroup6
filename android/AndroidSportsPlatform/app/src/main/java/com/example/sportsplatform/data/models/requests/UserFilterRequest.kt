@@ -1,4 +1,4 @@
-package com.example.sportsplatform.data.models
+package com.example.sportsplatform.data.models.requests
 
 data class UserFilterRequest(
     val nameContains: String,

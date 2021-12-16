@@ -5,12 +5,9 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.activities.EventListActivity
-import com.example.sportsplatform.activities.ProfileActivity
-import com.example.sportsplatform.activities.SearchOperationsActivity
-import com.example.sportsplatform.data.EventRepository
-import com.example.sportsplatform.data.UserRepository
-import com.example.sportsplatform.data.models.EventFilterRequest
-import com.example.sportsplatform.data.models.EventFilterResponse
+import com.example.sportsplatform.data.repository.EventRepository
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
+import com.example.sportsplatform.data.models.responses.EventFilterResponse
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.closeSoftKeyboard
 import com.example.sportsplatform.util.toast
