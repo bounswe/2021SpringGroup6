@@ -8,13 +8,9 @@ import com.example.sportsplatform.data.models.responses.UserFollowingResponse
 import com.example.sportsplatform.data.models.responses.UserSearchResponse
 import retrofit2.Response
 
-class UserRepository(
-    private val api: UserApi
-) : BaseRepository() {
+class UserRepository(private val api: UserApi) {
 
-    suspend fun findUser(
-        userRequest: UserRequest
-    ) : Response<TokenResponse> {
+    suspend fun findUser(userRequest: UserRequest) : Response<TokenResponse> {
         return api.searchUser(userRequest)
     }
     suspend fun signUser(userRegisterRequest: UserRegisterRequest) : Response<Void>{
