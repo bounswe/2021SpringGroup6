@@ -14,10 +14,9 @@ class UserRepository(
 
     suspend fun findUser(
         userRequest: UserRequest
-    ) = safeApiCall {
-        api.searchUser(userRequest)
+    ) : Response<TokenResponse> {
+        return api.searchUser(userRequest)
     }
-
     suspend fun signUser(userRegisterRequest: UserRegisterRequest) : Response<Void>{
         return api.registerUser(userRegisterRequest)
     }
