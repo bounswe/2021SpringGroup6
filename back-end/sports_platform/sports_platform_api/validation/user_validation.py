@@ -55,3 +55,12 @@ class Set_Visibility(serializers.Serializer):
 class Badge(serializers.Serializer):
     badge = serializers.CharField(min_length=3, max_length=100, validators=[
                                   english_dot_number], required=True)
+
+class Search(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    familyName = serializers.CharField(required=False)
+    identifier = serializers.CharField(required=False)
+
+    def validate(self, data):
+        if len(data) != 1:
+            raise serializers.ValidationError({"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"})

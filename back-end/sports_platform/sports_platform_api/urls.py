@@ -28,4 +28,5 @@ urlpatterns = [
     path('events/<int:event_id>/badges', event_views.get_badges),
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
+    path('users/searches', user_views.search_user)
 ]
