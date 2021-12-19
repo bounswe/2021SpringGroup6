@@ -31,7 +31,7 @@ def get_user(request, user_id):
         
         if (request.user.is_authenticated) and (user_id == request.user.user_id):
             return Response(serialized_user,status=200)
-        elif request.user.isauthenticated:
+        elif request.user.is_authenticated:
             blocks = Block.objects.filter(blocker=user, blocked=request.user)
             if not blocks.exists():
                 return Response(serialized_user,status=200)
