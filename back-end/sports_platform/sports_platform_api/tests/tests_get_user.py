@@ -17,7 +17,6 @@ class GetUserTest(TestCase):
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.user_token}'}
 
         self.serialized_retrieved_user = UserSerializer(retrieved_user).data
-        self.serialized_retrieved_user.pop('last_login')
         self.serialized_retrieved_user['@context'] = 'https://schema.org/Person'
         self.serialized_retrieved_user['@id'] = self.serialized_retrieved_user['user_id']
         self.serialized_retrieved_user['@type'] = 'Person'

@@ -33,8 +33,8 @@ class SearchUserTest(TestCase):
         user_res['knowsAbout'] = []
         success_response =  {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
                           'total_items':1,'items':[user_res]}
-        self.response_bodies = {'no_filter': {"message": {{"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}}},
-                                'multiple_filters': {"message": {{"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}}},
+        self.response_bodies = {'no_filter': {"message": {"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}},
+                                'multiple_filters': {"message": {"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}},
                                 'name': success_response,
                                 'identifier': success_response,
                                 'block':{'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
