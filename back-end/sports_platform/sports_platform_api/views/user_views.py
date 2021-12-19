@@ -23,8 +23,6 @@ def get_user(request, user_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
         
         serialized_user = UserSerializer(user).data
-        # drop last_login field that we  do not use
-        serialized_user.pop('last_login')
         # add activity stream data
         serialized_user['@context'] = 'https://schema.org/Person'
         serialized_user['@id'] = user.user_id
