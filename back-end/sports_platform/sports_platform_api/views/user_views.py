@@ -497,3 +497,35 @@ def get_badges(request, user_id):
                 return Response(status=201)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
+
+@api_view(['POST'])
+def search_user(request):
+    validation = user_validation.Search(data=request.data)
+
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    validated_body = validation.validated_data
+    block_check = False
+    user = None
+    if (request.user.is_authenticated):
+        block_check = True
+        user = request.user
+    try:
+        users = User.search_user(validated_body, block_check, user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
+    'total_items':len(users),'items':[]}
+    try:
+        for returned_user in users:
+            serialized_user = UserSerializer(returned_user).data
+            sports = returned_user.get_sport_skills()
+            serialized_user['@context'] = 'https://schema.org/Person'
+            serialized_user['@id'] = returned_user.user_id
+            serialized_user['@type'] = 'Person'
+            serialized_user['knowsAbout'] = sports
+            response['items'].append(serialized_user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    return Response(response, status=200)
