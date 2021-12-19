@@ -33,8 +33,8 @@ class SearchUserTest(TestCase):
         user_res['knowsAbout'] = []
         success_response =  {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
                           'total_items':1,'items':[user_res]}
-        self.response_bodies = {'no_filter': {"message": {"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}},
-                                'multiple_filters': {"message": {"nameContains": "Exactly 1 filter should be provided. Options are name, familyName and identifier"}},
+        self.response_bodies = {'no_filter': {"message": {"name": ["Exactly 1 filter should be provided. Options are name, familyName and identifier"]}},
+                                'multiple_filters': {"message": {"name": ["Exactly 1 filter should be provided. Options are name, familyName and identifier"]}},
                                 'name': success_response,
                                 'identifier': success_response,
                                 'block':{'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
@@ -47,7 +47,6 @@ class SearchUserTest(TestCase):
         test_type = 'no_filter'
         request_body = self.request_bodies[test_type]
         response = self.client.post(self.path, request_body, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {self.lion_token}'})
-
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data, self.response_bodies[test_type])
     
