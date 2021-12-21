@@ -26,6 +26,7 @@ const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
 const NewEquipment = lazy(() => import('./pages/NewEquipment/NewEquipment')); 
 const NewField = lazy(() => import('./pages/NewField/NewField'));  
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
+const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
 const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
 
 
@@ -125,6 +126,13 @@ function App() {
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchPage/></div>
+                </Suspense>}/>
+
+
+            <Route path="search-equipment-page" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><SearchEquipmentPage/></div>
                 </Suspense>}/>
 
             <Route path="profile">
