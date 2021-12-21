@@ -25,4 +25,7 @@
     <string name="description">image</string>
     <string name="birthDay">Birthday</string>
     <string name="skill">skill level(1–5)</string>
+    <string name="tabBarHome">Home</string>
+    <string name="tabBarSearch">Search</string>
+    <string name="tabBarProfile">Profile</string>
 </resources>
