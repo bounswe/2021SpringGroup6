@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.AuthListener
-import com.example.sportsplatform.activities.ProfileActivity
+import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.data.models.requests.UserRequest
@@ -38,7 +38,7 @@ class AuthViewModel(private val repo: UserRepository) : ViewModel() {
                 val userToken = currResponse.body()?.token
                 userLiveData.postValue(userToken)
                 //view.context.toast("Success")
-                Intent(view.context, ProfileActivity::class.java).also{
+                Intent(view.context, MainActivity::class.java).also{
                     view.context.startActivity(it)
                 }
             } else {
