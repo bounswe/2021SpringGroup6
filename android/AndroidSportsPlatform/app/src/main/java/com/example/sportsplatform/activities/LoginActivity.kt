@@ -7,17 +7,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.R
-import com.example.sportsplatform.databinding.ActivityMainBinding
+import com.example.sportsplatform.databinding.ActivityLoginBinding
 import com.example.sportsplatform.util.hide
 import com.example.sportsplatform.util.show
 import com.example.sportsplatform.viewmodels.AuthViewModel
 import com.example.sportsplatform.viewmodels.AuthViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
+class LoginActivity : AppCompatActivity(), AuthListener, KodeinAware {
 
     private lateinit var viewModel: AuthViewModel
     override val kodein by kodein()
@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
-            R.layout.activity_main
+        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(this,
+            R.layout.activity_login
         )
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         binding.viewmodel = viewModel
