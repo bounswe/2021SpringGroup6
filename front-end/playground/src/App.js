@@ -23,6 +23,7 @@ const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
+const NewEquipment = lazy(() => import('./pages/NewEquipment/NewEquipment')); 
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
 
@@ -104,7 +105,14 @@ function App() {
                   <div className="default-body"><NewEvent/></div>
                 </Suspense>}/>
 
-            	    
+
+            <Route path="new-equipment" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><NewEquipment/></div>
+                </Suspense>}/>
+
+
 	          <Route path="search-page" 
               element={
                 <Suspense fallback={<>...</>}>
