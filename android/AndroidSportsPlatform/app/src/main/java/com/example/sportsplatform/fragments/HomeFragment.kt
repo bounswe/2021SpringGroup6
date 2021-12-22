@@ -33,4 +33,9 @@ class HomeFragment : Fragment(), KodeinAware {
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchUsersParticipatingEvents()
+    }
 }

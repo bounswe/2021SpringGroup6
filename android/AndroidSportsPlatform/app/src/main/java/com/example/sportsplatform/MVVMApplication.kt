@@ -24,10 +24,10 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from singleton { EventApi() }
         bind() from singleton { UserRepository(instance()) }
         bind() from singleton { EventRepository(instance()) }
-        bind() from provider { AuthViewModelFactory(instance()) }
+        bind() from provider { AuthViewModelFactory(instance(), instance()) }
         bind() from provider { ProfileViewModelFactory(instance(), instance()) }
         bind() from provider { EventSearchViewModelFactory(instance()) }
         bind() from provider { RegisterViewModelFactory(instance()) }
-        bind() from provider { HomeViewModelFactory() }
+        bind() from provider { HomeViewModelFactory(instance(), instance()) }
     }
 }
