@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/eventsAttending"
+                    android:textColor="#00838F"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_12"
                     android:text="@string/eventsCreated"
+                    android:textColor="#00838F"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvEventsAttending" />
 
@@ -67,9 +70,11 @@
                     android:backgroundTint="@color/teal_700"
                     android:text="@string/createNewEvent"
                     android:textAllCaps="false"
+                    android:textColor="#000000"
                     app:layout_constraintBottom_toTopOf="@+id/rvEventsCreated"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rvEventsAttending" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvEventsAttending"
+                    tools:ignore="TextContrastCheck" />
 
                 <Button
                     android:id="@+id/btnLogout"
@@ -79,9 +84,11 @@
                     android:backgroundTint="@color/teal_700"
                     android:text="@string/logout"
                     android:textAllCaps="false"
+                    android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rvEventsCreated" />
+                    app:layout_constraintTop_toBottomOf="@+id/rvEventsCreated"
+                    tools:ignore="TextContrastCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
