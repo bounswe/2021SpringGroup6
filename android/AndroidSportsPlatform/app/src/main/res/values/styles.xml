@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabIndicatorColor">@color/purple_700</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabBackground">@color/teal_200</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+    </style>
+
+    <style name="SubTitle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/teal_200</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

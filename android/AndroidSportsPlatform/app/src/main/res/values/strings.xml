@@ -3,6 +3,7 @@
     <string name="title">Squad Game</string>
     <string name="paragraph">Paragraph</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="Identifier">Identifier</string>
     <string name="Pass">Password</string>
     <string name="register">REGISTER</string>
@@ -25,4 +26,10 @@
     <string name="description">image</string>
     <string name="birthDay">Birthday</string>
     <string name="skill">skill level(1–5)</string>
+    <string name="tabBarHome">Home</string>
+    <string name="tabBarSearch">Search</string>
+    <string name="tabBarProfile">Profile</string>
+    <string name="createNewEvent">Create New Event</string>
+    <string name="eventsAttending">Events Attending</string>
+    <string name="eventsCreated">Events Created</string>
 </resources>

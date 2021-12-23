@@ -3,54 +3,29 @@ package com.example.sportsplatform.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityMainBinding
-import com.example.sportsplatform.util.hide
-import com.example.sportsplatform.util.show
-import com.example.sportsplatform.viewmodels.AuthViewModel
-import com.example.sportsplatform.viewmodels.AuthViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.sportsplatform.fragments.TabBarFragment
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
-import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity(), AuthListener, KodeinAware {
+class MainActivity : AppCompatActivity(), KodeinAware {
 
-    private lateinit var viewModel: AuthViewModel
     override val kodein by kodein()
-    private val factory : AuthViewModelFactory by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main)
+        val view = binding.root
+        setContentView(view)
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this,
-            R.layout.activity_main
-        )
-        viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
-        binding.viewmodel = viewModel
-        viewModel.authListener = this
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragmentToGo = TabBarFragment()
+        if (savedInstanceState == null) {
+            transaction.replace(R.id.mainContainer, fragmentToGo)
+            transaction.commitAllowingStateLoss()
+        }
 
-        initObservers()
-
-    }
-    private fun initObservers(){
-        viewModel.userLiveData.observe(this, Observer {
-            //etLoginIdentifier.text = it
-        })
-    }
-
-    override fun onStarted(){
-        progressBar.show()
-    }
-
-    override fun onSuccess() {
-        progressBar.hide()
-    }
-
-    override fun onFailure() {
-        progressBar.hide()
     }
 }

@@ -3,19 +3,14 @@ package com.example.sportsplatform.data.api
 import com.example.sportsplatform.data.models.*
 import com.example.sportsplatform.data.models.requests.UserRegisterRequest
 import com.example.sportsplatform.data.models.requests.UserRequest
-import com.example.sportsplatform.data.models.responses.TokenResponse
-import com.example.sportsplatform.data.models.responses.UserFollowingResponse
-import com.example.sportsplatform.data.models.responses.UserSearchResponse
+import com.example.sportsplatform.data.models.responses.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface UserApi {
 
@@ -39,8 +34,14 @@ interface UserApi {
         @Path("user_id") userId: Int
     ): Response<UserFollowingResponse>
 
-    companion object{
-        operator fun invoke() : UserApi {
+    @GET("/users/{user_id}/participating")
+    suspend fun getUsersParticipatingEvents(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int
+    ): Response<UsersParticipatingEvents>
+
+    companion object {
+        operator fun invoke(): UserApi {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
