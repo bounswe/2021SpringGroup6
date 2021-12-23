@@ -84,6 +84,8 @@ def get_event(request, event_id):
             return Response(data = {"message": validation.errors}, status=400)
         try:
             event = Event.objects.get(event_id=event_id)
+            if event.organizer.user_id != request.user.user_id:
+                return Response(data={"message": 'Only organizers can update the event.'}, status=403)
             return_code = event.update(validation.validated_data)
             if return_code == 400:
                 return Response(data={"message": 'There are more participants than requested maximumAttendeeCapacity.'}, status=400)
