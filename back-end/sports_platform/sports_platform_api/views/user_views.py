@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from ..controllers import Guest
 from ..helpers import filter_visibility
-from ..models import User
+from ..models import User,Block
 from ..serializers.user_serializer import UserSerializer
 from ..validation import user_validation
 
@@ -23,8 +23,6 @@ def get_user(request, user_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
         
         serialized_user = UserSerializer(user).data
-        # drop last_login field that we  do not use
-        serialized_user.pop('last_login')
         # add activity stream data
         serialized_user['@context'] = 'https://schema.org/Person'
         serialized_user['@id'] = user.user_id
@@ -33,6 +31,12 @@ def get_user(request, user_id):
         
         if (request.user.is_authenticated) and (user_id == request.user.user_id):
             return Response(serialized_user,status=200)
+        elif request.user.is_authenticated:
+            blocks = Block.objects.filter(blocker=user, blocked=request.user)
+            if not blocks.exists():
+                return Response(serialized_user,status=200)
+            else:
+                return Response({"message": "This user cannot see requested user."},status=403)
         else:
             serialized_user = filter_visibility(user.__dict__, serialized_user)
             return Response(serialized_user,status=200)  
@@ -170,7 +174,6 @@ def follow_user(request, user_id):
                 return Response(status=200)
 
         except Exception as e:
-            print(e)
             return Response(data={"message": "Try later."}, status=500)
 
     elif request.method == 'DELETE':
@@ -496,4 +499,4 @@ def get_badges(request, user_id):
             else:
                 return Response(status=201)
         except Exception as e:
-            return Response(data={"message": "Try later."}, status=500)
+            return Response(data={"message": "Try later."}, status=500)    
