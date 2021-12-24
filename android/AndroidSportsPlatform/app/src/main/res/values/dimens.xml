@@ -2,4 +2,6 @@
 <resources>
     <dimen name="margin_6">6dp</dimen>
     <dimen name="margin_12">12dp</dimen>
+
+    <dimen name="size_search_bar">50dp</dimen>
 </resources>
