@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.sportsplatform.R
 import com.example.sportsplatform.fragments.HomeFragment
+import com.example.sportsplatform.fragments.SearchFragment
 import com.example.sportsplatform.util.Constants.TABBAR_COUNT
 
 class TabBarPagerAdapter(
@@ -20,8 +21,8 @@ class TabBarPagerAdapter(
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> HomeFragment()
-//            1 -> ProfileFragment()
-//            2 -> SearchFragment()
+            1 -> SearchFragment()
+//            2 -> ProfileFragment()
             else -> HomeFragment()
         }
     }
