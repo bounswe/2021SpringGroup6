@@ -38,13 +38,14 @@ class AuthViewModel(
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
+            currResponse.body()?.fetchUserId()
             //view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
 
                 val userToken = currResponse.body()?.token
-                val userId = currResponse.body()?.user_id
+                val user = currResponse.body()?.userId
                 userLiveData.postValue(userToken)
-                userId?.let { sharedPreferences.edit()?.putInt(SHARED_PREFS_USER_ID, it)?.apply() }
+                user?.let { sharedPreferences.edit()?.putInt(SHARED_PREFS_USER_ID, it)?.apply() }
                 userToken?.let {
                     sharedPreferences.edit()?.putString(SHARED_PREFS_USER_TOKEN, it)?.apply()
                 }

@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
 import com.example.sportsplatform.databinding.FragmentHomeBinding
 import com.example.sportsplatform.viewmodels.HomeViewModel
 import com.example.sportsplatform.viewmodels.HomeViewModelFactory
@@ -31,11 +34,22 @@ class HomeFragment : Fragment(), KodeinAware {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+        viewModel.fetchUsersParticipatingEvents()
+
+        initializeRecyclerview()
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchUsersParticipatingEvents()
+    private fun initializeRecyclerview() {
+        viewModel.usersParticipatingEvents.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.rvEventsAttending.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = UsersParticipatingEventsAdapter(it.items)
+                }
+            }
+        )
     }
 }
