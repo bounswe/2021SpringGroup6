@@ -26,6 +26,12 @@ class User(serializers.Serializer):
    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=180, min_value=-180, required=False)
    location_visibility = serializers.BooleanField(required=False)
 
+   def validate(self, data):
+        if ("latitude" in data and "longitude" not in data) or ("latitude" not in data and "longitude" in data):
+           raise serializers.ValidationError(
+               {"location": "latitude and longitude must be given together."})
+        return data
+
 class Update(serializers.Serializer):
    email = serializers.EmailField(required=False)
    familyName = serializers.CharField(required=False,min_length = 2, max_length = 30, validators = [english_dot])
@@ -67,4 +73,4 @@ class Set_Visibility(serializers.Serializer):
 class Badge(serializers.Serializer):
     badge = serializers.CharField(min_length=3, max_length=100, validators=[
                                   english_dot_number], required=True)
-                                  
+
