@@ -65,6 +65,8 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     acceptWithoutApproval = models.BooleanField()
+    canEveryoneSeePosts = models.BooleanField() # if false, only participants and spectators can see
+    canEveryonePostPosts = models.BooleanField() # if false, only participants and spectators can post
     duration = models.IntegerField()
 
     created_on = models.DateTimeField()

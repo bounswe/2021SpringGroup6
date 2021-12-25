@@ -21,6 +21,9 @@ class Event(serializers.Serializer):
     acceptWithoutApproval = serializers.BooleanField(required=True)
     duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807)
 
+    canEveryoneSeePosts = serializers.BooleanField(required=True)
+    canEveryonePostPosts = serializers.BooleanField(required=True)
+
     def validate(self, data):
 
         if data['minSkillLevel'] > data['maxSkillLevel']:
@@ -103,3 +106,6 @@ class Update(serializers.Serializer):
     minSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
     maxSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
     duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807,required=False)
+    canEveryoneSeePosts = serializers.BooleanField(required=True)
+    canEveryonePostPosts = serializers.BooleanField(required=True)
+
