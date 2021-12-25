@@ -5,6 +5,10 @@ import com.example.sportsplatform.data.api.EventApi
 import com.example.sportsplatform.data.repository.EventRepository
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.data.api.UserApi
+import com.example.sportsplatform.viewmodels.AuthViewModelFactory
+import com.example.sportsplatform.viewmodels.EventSearchViewModelFactory
+import com.example.sportsplatform.viewmodels.ProfileViewModelFactory
+import com.example.sportsplatform.viewmodels.RegisterViewModelFactory
 import com.example.sportsplatform.viewmodels.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -28,6 +32,7 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from provider { ProfileViewModelFactory(instance(), instance()) }
         bind() from provider { EventSearchViewModelFactory(instance()) }
         bind() from provider { RegisterViewModelFactory(instance()) }
+        bind() from provider { SearchViewModelFactory()}
         bind() from provider { HomeViewModelFactory(instance(), instance()) }
     }
 }
