@@ -18,7 +18,6 @@ data class EventResponse(
     val context: String,
     val type: String,
     val location: Location,
-        //val address: String,
     val organizer: User,
     val attendee: List<User>,
     val audience: List<User>,

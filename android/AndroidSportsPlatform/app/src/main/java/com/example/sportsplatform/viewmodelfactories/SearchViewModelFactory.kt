@@ -1,7 +1,8 @@
-package com.example.sportsplatform.viewmodels
+package com.example.sportsplatform.viewmodelfactories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.sportsplatform.viewmodels.SearchViewModel
 
 class SearchViewModelFactory: ViewModelProvider.NewInstanceFactory() {
 

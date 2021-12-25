@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityRegisterBinding
 import com.example.sportsplatform.viewmodels.RegisterViewModel
-import com.example.sportsplatform.viewmodels.RegisterViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.RegisterViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance

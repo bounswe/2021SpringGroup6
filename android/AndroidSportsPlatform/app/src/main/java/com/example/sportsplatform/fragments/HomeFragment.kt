@@ -15,7 +15,7 @@ import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
 import com.example.sportsplatform.databinding.FragmentHomeBinding
 import com.example.sportsplatform.util.toast
 import com.example.sportsplatform.viewmodels.HomeViewModel
-import com.example.sportsplatform.viewmodels.HomeViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.HomeViewModelFactory
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware

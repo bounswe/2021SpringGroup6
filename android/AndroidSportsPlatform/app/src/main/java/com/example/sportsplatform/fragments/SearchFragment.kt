@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.viewmodels.SearchViewModel
-import com.example.sportsplatform.viewmodels.SearchViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
