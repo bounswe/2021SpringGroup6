@@ -67,3 +67,4 @@ class Set_Visibility(serializers.Serializer):
 class Badge(serializers.Serializer):
     badge = serializers.CharField(min_length=3, max_length=100, validators=[
                                   english_dot_number], required=True)
+                                  
