@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.EventAdapter
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodels.SearchViewModelFactory
@@ -52,5 +55,16 @@ class SearchFragment : Fragment(), KodeinAware {
                 viewModel.eventSearchKey.postValue(s)
             }
         })
+
+        viewModel.eventsFiltered.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.rvEventsFiltered.apply {
+                    layoutManager =
+                        LinearLayoutManager(context)
+                    adapter = it?.items?.let { filteredEventItems -> EventAdapter(filteredEventItems) }
+                }
+            }
+        )
     }
 }
