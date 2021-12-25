@@ -11,6 +11,11 @@ class UserRepository(private val api: UserApi) {
     suspend fun findUser(userRequest: UserRequest) : Response<TokenResponse> {
         return api.searchUser(userRequest)
     }
+
+    suspend fun logout(token: String) : Response<ResponseMessage> {
+        return api.logoutUser(token)
+    }
+
     suspend fun signUser(userRegisterRequest: UserRegisterRequest) : Response<Void>{
         return api.registerUser(userRegisterRequest)
     }

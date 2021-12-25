@@ -19,6 +19,11 @@ interface UserApi {
         @Body userRequest: UserRequest
     ): Response<TokenResponse>
 
+    @POST("users/logout")
+    suspend fun logoutUser(
+        @Header("Authorization") token: String
+    ): Response<ResponseMessage>
+
     @POST("users")
     suspend fun registerUser(
         @Body userRegisterRequest: UserRegisterRequest
