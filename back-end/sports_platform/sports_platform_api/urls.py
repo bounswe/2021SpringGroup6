@@ -29,5 +29,6 @@ urlpatterns = [
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
     path('notifications',user_views.notification),
-    path('notifications/<int:notification_id>',user_views.read_notification)
+    path('notifications/<int:notification_id>',user_views.read_notification),
+    path('users/searches', user_views.search_user)
 ]

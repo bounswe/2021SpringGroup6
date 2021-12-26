@@ -111,6 +111,10 @@ class User(AbstractBaseUser):
     gender = models.CharField(max_length=40,blank=True, null=True)
     gender_visibility = models.BooleanField(default=True)
 
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    location_visibility = models.BooleanField(default=True)
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
@@ -518,11 +522,14 @@ class User(AbstractBaseUser):
             filters['identifier__contains'] = data['identifier']
         
         return filters
+<<<<<<< HEAD
 
     def get_notifications(self):
         notifications = Notification.objects.filter(user_id=self, read=False).order_by('date')
         return prepare_notifications(notifications)
 
+=======
+>>>>>>> 7f5e2bd946cc76c354461c11b6dd4227e195deb0
 
 class SportSkillLevel(models.Model):
     class Meta:
