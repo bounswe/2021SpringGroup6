@@ -520,6 +520,38 @@ def delete_post_post(request, event_id, post_id):
             return Response(data={"message": "Try with a valid discussion post."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
+
+    if request.method == 'POST':
+
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = event_validation.DiscussionComment(data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            post = DiscussionPost.objects.get(post_id=post_id)
+            res = post.comment_post(validation.validated_data, user)
+
+            if post.event.event_id != event_id:
+                return Response(data={"message": "This post does not belong to that event_id."}, status=400)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can post posts."}, status=400)
+            else:
+                return Response(status=201)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+    
+
 @api_view(['DELETE'])
 def delete_comment(request, event_id, post_id, comment_id):
 
