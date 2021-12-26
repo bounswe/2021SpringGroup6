@@ -436,7 +436,7 @@ def get_badges(request, event_id):
             return Response(data={"message": "Try later."}, status=500)
 
 
-@api_view(['POST', 'GET', 'DELETE'])
+@api_view(['POST', 'GET'])
 def post_post(request, event_id):
 
     if request.method == 'POST':
