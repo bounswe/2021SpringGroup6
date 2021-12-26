@@ -522,14 +522,10 @@ class User(AbstractBaseUser):
             filters['identifier__contains'] = data['identifier']
         
         return filters
-<<<<<<< HEAD
-
+        
     def get_notifications(self):
         notifications = Notification.objects.filter(user_id=self, read=False).order_by('date')
         return prepare_notifications(notifications)
-
-=======
->>>>>>> 7f5e2bd946cc76c354461c11b6dd4227e195deb0
 
 class SportSkillLevel(models.Model):
     class Meta:
