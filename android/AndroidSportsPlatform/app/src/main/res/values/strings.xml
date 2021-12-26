@@ -33,4 +33,5 @@
     <string name="createNewEvent">Create New Event</string>
     <string name="eventsAttending">Events Attending</string>
     <string name="eventsCreated">Events Created</string>
+    <string name="usersSearched">Users Searched</string>
 </resources>
