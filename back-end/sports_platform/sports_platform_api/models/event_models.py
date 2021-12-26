@@ -40,6 +40,25 @@ class EventParticipationRequesters(models.Model):
     requested_on = models.DateTimeField()
 
 
+class DiscussionPost(models.Model):
+    class Meta:
+        db_table = 'discussion_post'
+
+    post_id = models.BigAutoField(primary_key=True)
+    author = models.ForeignKey('User', related_name='posts', on_delete=models.CASCADE)
+    sharedContent = models.TextField()
+    event = models.ForeignKey('Event', related_name='posts', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
+class DiscussionComment(models.Model):
+    class Meta:
+        db_table = 'comment'
+
+    comment_id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey('DiscussionPost', related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey('User', related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
 class Event(models.Model):
     class Meta:
         db_table = 'event'
