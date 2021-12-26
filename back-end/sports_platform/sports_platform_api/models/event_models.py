@@ -50,6 +50,47 @@ class DiscussionPost(models.Model):
     event = models.ForeignKey('Event', related_name='posts', on_delete=models.CASCADE)
     text = models.TextField()
     dateCreated = models.DateTimeField()
+
+    @staticmethod
+    def create_post(post_data, user, event_id):
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+        except EventParticipants.DoesNotExist:
+            return 402
+
+        if not event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != event.organizer.user_id:
+                        return 401
+
+                except Exception as e:
+                    print(e)
+                    return 500
+            except Exception as e:
+                print(e)
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            if "sharedContent" in post_data.keys():
+                DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'], sharedContent=post_data['sharedContent'])
+            else:
+                DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'])
+
+            return 201
+        except Exception as e:
+            print(e)
+            return 500
 class DiscussionComment(models.Model):
     class Meta:
         db_table = 'comment'
