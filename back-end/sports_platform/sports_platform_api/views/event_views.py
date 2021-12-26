@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event
+from ..models import Event, DiscussionPost, DiscussionComment
 from ..validation import event_validation
 from ..serializers.event_seralizer import EventSerializer
 
@@ -434,3 +434,33 @@ def get_badges(request, event_id):
                 return Response(status=201)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['POST', 'GET', 'DELETE'])
+def post_post(request, event_id):
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = event_validation.DiscussionPost(data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            res = DiscussionPost.create_post(validation.validated_data, user, event_id)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can post posts."}, status=400)
+            if res == 402:
+                return Response(data={"message": "Enter a valid event."}, status=400)
+            else:
+                return Response(status=201)
+        except Exception as e:
+            print(e)
+            return Response(data={"message": 'Try later.'}, status=500)
