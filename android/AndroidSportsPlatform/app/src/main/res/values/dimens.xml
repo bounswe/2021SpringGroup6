@@ -4,4 +4,5 @@
     <dimen name="margin_12">12dp</dimen>
 
     <dimen name="size_search_bar">50dp</dimen>
+    <dimen name="tab_bar_height">40dp</dimen>
 </resources>
