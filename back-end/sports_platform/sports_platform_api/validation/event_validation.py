@@ -109,3 +109,10 @@ class Update(serializers.Serializer):
     canEveryoneSeePosts = serializers.BooleanField(required=False)
     canEveryonePostPosts = serializers.BooleanField(required=False)
 
+
+class DiscussionPost(serializers.Serializer):
+    sharedContent = serializers.URLField(required = False)
+    text = serializers.CharField(required=True)
+
+class DiscussionComment(serializers.Serializer):
+    text = serializers.CharField(required=False)
