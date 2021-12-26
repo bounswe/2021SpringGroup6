@@ -7,7 +7,7 @@ from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User, SportSkillLevel
 from datetime import datetime, timezone
 from .badge_models import Badge, UserBadges, EventBadges
-
+from ..models.user_models import Notification
 
 class EventParticipants(models.Model):
     class Meta:
@@ -121,15 +121,39 @@ class Event(models.Model):
             return 500
     
     @staticmethod
+    def get_results_sorting(data, filter_dict, or_filter=None):
+        if data['sortBy'] == 'startDate': order_by = 'startDate'
+        elif data['sortBy'] == 'skillLevel': order_by = 'minSkillLevel'
+        else: # distance, TODO implement it after user has location data
+            pass
+        if data['order'] == 'ascending':
+            if or_filter:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'{order_by}')
+            else:
+                results = Event.objects.filter(**filter_dict).order_by(f'{order_by}')
+        else:
+            if or_filter:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'~{order_by}')
+            else:
+                results = Event.objects.filter(**filter_dict).order_by(f'~{order_by}')
+        return results
+
+    @staticmethod
     def search_event(data):
         filter_dict = Event._create_filter_dict(data)
         if 'skillLevel' in data:
             or_filter = Q()
             for skill in data['skillLevel']:
                 or_filter |= Q(**{'minSkillLevel__lte':skill, 'maxSkillLevel__gte':skill })
-            results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
+            if 'sortBy' in data:
+                results = Event.get_results_sorting(data, filter_dict, or_filter)
+            else:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
         else:
-            results = Event.objects.filter(**filter_dict).order_by('-startDate')
+            if 'sortBy' in data:
+                results = Event.get_results_sorting(data, filter_dict)
+            else:
+                results = Event.objects.filter(**filter_dict).order_by('-startDate')
         return results
 
     
@@ -314,7 +338,7 @@ class Event(models.Model):
 
         num_remaining_places = self.maximumAttendeeCapacity - \
             len(self.participant_users.all())
-
+        
         data_dict = dict()
         data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
         data_dict['summary'] = f"{self.organizer.identifier} accepted and rejected users to '{self.name}' event"
@@ -324,10 +348,21 @@ class Event(models.Model):
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
+
+        limit_for_notification = int(self.maximumAttendeeCapacity*0.1)
+        if num_remaining_places in [limit_for_notification, limit_for_notification+1, limit_for_notification-1]:
+            interesteds = self.interested_users.all()
+            for interested in interesteds:
+                Notification.objects.create(event_id=self, user_id=interested.user, date=dt,notification_type=f'{num_remaining_places} Spots Left')
+
         try:
             with transaction.atomic():
                 for user in accept_user_id_list:
                     if num_remaining_places <= 0:
+                        participants = self.participant_users.all()
+                        for participant in participants:
+                            Notification.objects.create(event_id=self, user_id=participant.user, date=dt,notification_type=f'Event Full')
+
                         break
 
                     try:
@@ -350,7 +385,7 @@ class Event(models.Model):
                     EventParticipants.objects.create(
                         event=self, user=request_object.user, accepted_on=dt)
                     ActivityStream.objects.create(type='Accept', actor=self.organizer, target=self, object=request_object.user, date=dt)
-
+                    Notification.objects.create(event_id=self, user_id=request_object.user, date=dt,notification_type='Event Acceptance')
                     request_object.delete()
 
                     acception = dict()
@@ -404,9 +439,8 @@ class Event(models.Model):
                         continue  # already a spectator
                     except EventSpectators.DoesNotExist:
                         pass
-
+                    Notification.objects.create(event_id=self, user_id=request_object.user, date=dt,notification_type='Event Rejection')
                     request_object.delete()
-
                     rejected = dict()
                     rejected['@context'] = "https://www.w3.org/ns/activitystreams"
                     rejected['summary'] = f"{self.organizer.identifier} rejected {request_object.user.identifier}'s request to join the event '{self.name}'."
@@ -622,4 +656,9 @@ class Event(models.Model):
             if len(spectators) > data['maxSpectatorCapacity']:
                 return 403 # there are more spectators already
         Event.objects.filter(pk=self.event_id).update(**data)
+        participants = self.participant_users.all()
+        utc_dt = datetime.now(timezone.utc)
+        dt = utc_dt.astimezone()
+        for participant in participants:
+            Notification.objects.create(event_id=self, user_id=participant.user, date=dt,notification_type=f'Event Update')
         return 200
