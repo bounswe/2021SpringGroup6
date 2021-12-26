@@ -464,3 +464,27 @@ def post_post(request, event_id):
         except Exception as e:
             print(e)
             return Response(data={"message": 'Try later.'}, status=500)
+    
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+
+            res = event.get_posts(user)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can see posts."}, status=400)
+            else:
+                return Response(data=res, status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            print(e)
+            return Response(data={"message": 'Try later.'}, status=500)
