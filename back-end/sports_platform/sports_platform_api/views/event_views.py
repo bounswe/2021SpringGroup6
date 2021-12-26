@@ -370,7 +370,7 @@ def search_event(request):
         return Response(data={"message": validation.errors}, status=400)
 
     validated_body = validation.validated_data
-    events = Event.search_event(validated_body)
+    events = Event.search_event(validated_body, request.user)
     response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'OrderedCollection',
                 'total_items':len(events),'items':[]}
     
