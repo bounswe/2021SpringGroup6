@@ -6,11 +6,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.EventAdapter
+import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodels.SearchViewModelFactory
@@ -19,7 +22,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class SearchFragment : Fragment(), KodeinAware {
+class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +40,7 @@ class SearchFragment : Fragment(), KodeinAware {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(SearchViewModel::class.java)
+        initializeSpinner()
         binding.searchViewModel = viewModel
         return binding.root
     }
@@ -62,9 +66,42 @@ class SearchFragment : Fragment(), KodeinAware {
                 binding.rvEventsFiltered.apply {
                     layoutManager =
                         LinearLayoutManager(context)
-                    adapter = it?.items?.let { filteredEventItems -> EventAdapter(filteredEventItems) }
+                    adapter =
+                        it?.items?.let { filteredEventItems -> EventAdapter(filteredEventItems) }
                 }
             }
         )
+
+        viewModel.searchOption.observe(
+            viewLifecycleOwner,
+            Observer {
+                viewModel.setSearchOption(binding.spinner, it)
+            }
+        )
+
+        viewModel.searchBarHint.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.searchViewModel = viewModel
+            }
+        )
     }
+
+    private fun initializeSpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.searchOptions,
+            R.layout.item_spinner
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinner.adapter = adapter
+        }
+        binding.spinner.onItemSelectedListener = this
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        viewModel.searchOption.postValue(position)
+    }
+
+    override fun onNothingSelected(position: AdapterView<*>?) {}
 }

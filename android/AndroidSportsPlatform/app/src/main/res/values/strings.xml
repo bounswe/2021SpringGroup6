@@ -29,7 +29,15 @@
     <string name="tabBarHome">Home</string>
     <string name="tabBarSearch">Search</string>
     <string name="tabBarProfile">Profile</string>
-    <string name="hintSearchBar">Search User, Event or Equipment</string>
+    <string name="selectSearchType">Select Search Type</string>
+    <string-array name="searchOptions">
+        <item>User</item>
+        <item>Event</item>
+        <item>Equipment</item>
+    </string-array>
+    <string name="searchUser">Search User</string>
+    <string name="searchEvent">Search Event</string>
+    <string name="searchEquipment">Search Equipment</string>
     <string name="createNewEvent">Create New Event</string>
     <string name="eventsAttending">Events Attending</string>
     <string name="eventsCreated">Events Created</string>
