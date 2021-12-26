@@ -66,7 +66,7 @@ class UserManager(BaseUserManager):
 class Notification(models.Model):
     class Meta:
         db_table = 'notifications'
-        unique_together = (('event_id','user_id','type'))
+        unique_together = (('event_id','user_id','notification_type'))
     
     event_id = models.ForeignKey('Event', related_name='not_event', on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
@@ -520,7 +520,7 @@ class User(AbstractBaseUser):
         return filters
 
     def get_notifications(self):
-        notifications = Notification.objects.get(user_id=self, read=False)
+        notifications = Notification.objects.filter(user_id=self, read=False).order_by('date')
         return prepare_notifications(notifications)
 
 

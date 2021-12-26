@@ -4,7 +4,7 @@ def _event_full(notification):
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": notification.type
+            "type": notification.notification_type
     }
 
 def _event_accept(notification):
@@ -13,7 +13,7 @@ def _event_accept(notification):
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": notification.type
+            "type": notification.notification_type
     }
 
 def _event_reject(notification):
@@ -22,7 +22,7 @@ def _event_reject(notification):
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": notification.type
+            "type": notification.notification_type
     }
 
 def _event_cancel(notification):
@@ -31,7 +31,7 @@ def _event_cancel(notification):
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": notification.type
+            "type": notification.notification_type
     }
 
 def _event_update(notification):
@@ -40,17 +40,17 @@ def _event_update(notification):
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": notification.type
+            "type": notification.notification_type
     }
 
 def _few_spot(notification):
-    spot = notification.type.split(' ')[0]
+    spot = notification.notification_type.split(' ')[0]
     return {
             "description": f"only {spot} spots left for the event with name {notification.event_id.name}",
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,
-            "type": "Few Spot Left for an Event"
+            "type": "Few Spots Left for an Event"
     }
 
 def prepare_notifications(notifications):
@@ -62,9 +62,9 @@ def prepare_notifications(notifications):
             "total_items": len(notifications)} 
     items = []
     for notification in notifications:
-        if notification.type not in functions:
+        if notification.notification_type not in functions:
             items.append(_few_spot(notification))
         else:
-            items.append(functions[notification.type](notification))
+            items.append(functions[notification.notification_type](notification))
     response['Items'] = items
     return response

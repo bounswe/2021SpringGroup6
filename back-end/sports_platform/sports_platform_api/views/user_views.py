@@ -527,6 +527,7 @@ def read_notification(request, notification_id):
             return Response(data={"message": "Not allowed to read notifications of another user."}, status=403)
         notification.read = True
         notification.save()
+        return Response(status=200)
     except Notification.DoesNotExist:
         return Response(data={"message": "Notification does not exist."}, status=400)
     except Exception:
