@@ -91,6 +91,34 @@ class DiscussionPost(models.Model):
         except Exception as e:
             print(e)
             return 500
+
+    def comment_post(self, comment_data, user):
+
+        if not self.event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=self.event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=self.event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != self.event.organizer.user_id:
+                        return 401
+
+                except:
+                    return 500
+            except:
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            DiscussionComment.objects.create(
+                post=self, author=user, text=comment_data['text'], dateCreated=dt)
+
+            return 201
+        except:
+            return 500
 class DiscussionComment(models.Model):
     class Meta:
         db_table = 'comment'
