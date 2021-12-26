@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.R
+import com.example.sportsplatform.adapter.EventSearchAdapter
 import com.example.sportsplatform.databinding.ActivityEventListBinding
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
@@ -38,6 +39,7 @@ class EventListActivity : AppCompatActivity(), KodeinAware {
         eventSearchViewModel.eventLiveData.observe(this, Observer {
             event_recycler_view.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = EventSearchAdapter(it.items)
             }
         })
     }
