@@ -1,9 +1,10 @@
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event
+from ..models import Event, Notification
 from ..validation import event_validation
 from ..serializers.event_seralizer import EventSerializer
+from datetime import datetime, timezone
 
 @api_view(['POST'])
 def create_event(request):
@@ -68,6 +69,11 @@ def get_event(request, event_id):
                 return Response(data={"message": "Only organizers can delete events."}, status=403)
             
             with transaction.atomic():
+                participants = event.participant_users.all()
+                utc_dt = datetime.now(timezone.utc)
+                dt = utc_dt.astimezone()
+                for participant in participants:
+                    Notification.objects.create(event_id=event, user_id=participant.user, date=dt,notification_type=f'Event Cancellation')
                 event.delete()
             return Response(status=204)
         except Event.DoesNotExist:

@@ -119,24 +119,6 @@ class Event(models.Model):
             return {"@id": event.event_id}
         except Exception as e:
             return 500
-    
-    @staticmethod
-    def get_results_sorting(data, filter_dict, or_filter=None):
-        if data['sortBy'] == 'startDate': order_by = 'startDate'
-        elif data['sortBy'] == 'skillLevel': order_by = 'minSkillLevel'
-        else: # distance, TODO implement it after user has location data
-            pass
-        if data['order'] == 'ascending':
-            if or_filter:
-                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'{order_by}')
-            else:
-                results = Event.objects.filter(**filter_dict).order_by(f'{order_by}')
-        else:
-            if or_filter:
-                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'~{order_by}')
-            else:
-                results = Event.objects.filter(**filter_dict).order_by(f'~{order_by}')
-        return results
 
     @staticmethod
     def search_event(data):
@@ -145,15 +127,9 @@ class Event(models.Model):
             or_filter = Q()
             for skill in data['skillLevel']:
                 or_filter |= Q(**{'minSkillLevel__lte':skill, 'maxSkillLevel__gte':skill })
-            if 'sortBy' in data:
-                results = Event.get_results_sorting(data, filter_dict, or_filter)
-            else:
-                results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
+            results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
         else:
-            if 'sortBy' in data:
-                results = Event.get_results_sorting(data, filter_dict)
-            else:
-                results = Event.objects.filter(**filter_dict).order_by('-startDate')
+            results = Event.objects.filter(**filter_dict).order_by('-startDate')
         return results
 
     
