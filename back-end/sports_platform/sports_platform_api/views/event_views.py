@@ -488,6 +488,38 @@ def post_post(request, event_id):
         except Exception as e:
             print(e)
             return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['DELETE','POST'])
+def delete_post_post(request, event_id, post_id):
+
+    if request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            post = DiscussionPost.objects.get(post_id = post_id)
+
+            if post.event.event_id != event_id:
+                return Response(data={"message": "This post does not belong to that event_id."}, status=400)
+
+            if user.user_id != post.event.organizer.user_id and user.user_id != post.author.user_id :
+                return Response(data={"message": "Only post authors and event creators can delete posts."}, status=400)
+
+            try:
+                with transaction.atomic():
+                    post.delete()
+                return Response(status=204)
+            except:
+                return Response(data={"message": "Try later."}, status=500)
+
+        except DiscussionPost.DoesNotExist:
+            return Response(data={"message": "Try with a valid discussion post."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
 @api_view(['DELETE'])
 def delete_comment(request, event_id, post_id, comment_id):
 
