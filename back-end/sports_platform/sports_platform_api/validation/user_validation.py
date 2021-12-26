@@ -22,6 +22,15 @@ class User(serializers.Serializer):
    familyName_visibility = serializers.BooleanField(required=False)
    birthDate_visibility = serializers.BooleanField(required=False)
    gender_visibility = serializers.BooleanField(required=False)
+   latitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=90, min_value=-90, required=False)
+   longitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=180, min_value=-180, required=False)
+   location_visibility = serializers.BooleanField(required=False)
+
+   def validate(self, data):
+        if ("latitude" in data and "longitude" not in data) or ("latitude" not in data and "longitude" in data):
+           raise serializers.ValidationError(
+               {"location": "latitude and longitude must be given together."})
+        return data
 
 class Update(serializers.Serializer):
    email = serializers.EmailField(required=False)
@@ -30,6 +39,14 @@ class Update(serializers.Serializer):
    name = serializers.CharField(required=False,min_length=2, max_length = 30, validators = [english_dot])
    birthDate = serializers.DateField(required=False, validators = [date])
    gender =serializers.CharField(required=False, validators = [gender])
+   latitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=90, min_value=-90, required=False)
+   longitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=180, min_value=-180, required=False)
+
+   def validate(self, data):
+        if ("latitude" in data and "longitude" not in data) or ("latitude" not in data and "longitude" in data):
+           raise serializers.ValidationError(
+               {"location": "latitude and longitude must be given together."})
+        return data
 
 class Login(serializers.Serializer):
     identifier = serializers.CharField(min_length = 3, max_length = 15, validators = [english_dot_number], required= True)
@@ -51,7 +68,9 @@ class Set_Visibility(serializers.Serializer):
     familyName_visibility = serializers.BooleanField(required=False)
     birthDate_visibility = serializers.BooleanField(required=False)
     gender_visibility = serializers.BooleanField(required=False)
+    location_visibility = serializers.BooleanField(required=False)
 
 class Badge(serializers.Serializer):
     badge = serializers.CharField(min_length=3, max_length=100, validators=[
                                   english_dot_number], required=True)
+

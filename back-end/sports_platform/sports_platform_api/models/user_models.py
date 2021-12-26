@@ -98,6 +98,10 @@ class User(AbstractBaseUser):
     gender = models.CharField(max_length=40,blank=True, null=True)
     gender_visibility = models.BooleanField(default=True)
 
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    location_visibility = models.BooleanField(default=True)
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
