@@ -99,7 +99,6 @@ class DiscussionTest(TestCase):
         dt = utc_dt.astimezone()
 
         EventParticipants.objects.create(event=self.event_false_false, user=self.dog_user, accepted_on=dt)
-        #EventSpectators.objects.create(event=self.event_false_false, user=self.cat_user, requested_on=dt)
         EventSpectators.objects.create(event=self.event_true_false, user=self.dog_user, requested_on=dt)
 
         self.post1 = DiscussionPost.objects.create(event=self.event_true_true, author=self.cat_user, text="My First Post", dateCreated=dt)
