@@ -545,7 +545,7 @@ def delete_post_post(request, event_id, post_id):
                 return Response(data={"message": "Only participants and spectators can post posts."}, status=400)
             else:
                 return Response(status=201)
-        except Event.DoesNotExist:
+        except DiscussionPost.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
