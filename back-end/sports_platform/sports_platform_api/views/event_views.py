@@ -533,10 +533,11 @@ def delete_post_post(request, event_id, post_id):
 
         try:
             post = DiscussionPost.objects.get(post_id=post_id)
-            res = post.comment_post(validation.validated_data, user)
 
             if post.event.event_id != event_id:
                 return Response(data={"message": "This post does not belong to that event_id."}, status=400)
+
+            res = post.comment_post(validation.validated_data, user)
 
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
