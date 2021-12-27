@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sportsplatform.R
 import com.example.sportsplatform.data.models.responses.EventResponse
 import kotlinx.android.synthetic.main.item_layout.view.*
-import java.time.Instant
-import java.time.ZoneId
+import com.example.sportsplatform.util.convertDateFormat
 
-class EventSearchAdapter(private val itemList: List<EventResponse>) : RecyclerView.Adapter<EventSearchAdapter.MyViewHolder>() {
+
+class EventSearchAdapter(private val itemList: List<EventResponse>) :
+    RecyclerView.Adapter<EventSearchAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventName: TextView = itemView.event_name
@@ -21,8 +22,9 @@ class EventSearchAdapter(private val itemList: List<EventResponse>) : RecyclerVi
         val date: TextView = itemView.days
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -31,18 +33,8 @@ class EventSearchAdapter(private val itemList: List<EventResponse>) : RecyclerVi
         holder.eventImageView.setImageResource(R.drawable.football)
         holder.eventTextView.text = currentItem.description
         holder.eventName.text = currentItem.name
-        holder.date.text = getDateTime(currentItem.created_on)
+        holder.date.text = currentItem.created_on.convertDateFormat()
     }
 
     override fun getItemCount() = itemList.size
-
-    private fun getDateTime(s: String): String {
-        val datetime = Instant.ofEpochSecond(s.toLong())
-            .atZone(ZoneId.systemDefault())
-            .toLocalDateTime()
-
-        val str: String = datetime.toString()
-
-        return str.substring(0, 10)
-    }
 }
