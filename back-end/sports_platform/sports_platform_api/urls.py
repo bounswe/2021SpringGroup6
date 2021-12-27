@@ -31,4 +31,6 @@ urlpatterns = [
     path('events/<int:event_id>/discussion', post_post),
     path('events/<int:event_id>/discussion/<int:post_id>', delete_post_post),
     path('events/<int:event_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_comment),
+    path('users/searches', user_views.search_user)
+
 ]

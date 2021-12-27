@@ -98,6 +98,10 @@ class User(AbstractBaseUser):
     gender = models.CharField(max_length=40,blank=True, null=True)
     gender_visibility = models.BooleanField(default=True)
 
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    location_visibility = models.BooleanField(default=True)
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
@@ -480,7 +484,31 @@ class User(AbstractBaseUser):
             return 403
         except:
             return 500
+    
+    @staticmethod
+    def search_user(data, block_check, user):
+        filter_dict = User._create_filter_dict(data)
+        results = User.objects.filter(**filter_dict)
+        if not block_check:
+            return results
+        filtered_results = []
+        for user_res in results:
+            blocks = Block.objects.filter(blocker=user_res, blocked=user)
+            if not blocks.exists():
+                filtered_results.append(user_res)
+        return filtered_results
 
+    @staticmethod
+    def _create_filter_dict(data):
+        filters = {}
+        if 'name' in data:
+            filters['name__contains'] = data['name']
+        if 'familyName' in data:
+            filters['familyName__contains'] = data['familyName']
+        if 'identifier' in data:
+            filters['identifier__contains'] = data['identifier']
+        
+        return filters
 
 class SportSkillLevel(models.Model):
     class Meta:
