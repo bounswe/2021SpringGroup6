@@ -56,7 +56,7 @@ class DiscussionPost(models.Model):
 
         try:
             event = Event.objects.get(event_id=event_id)
-        except EventParticipants.DoesNotExist:
+        except Event.DoesNotExist:
             return 402
 
         if not event.canEveryonePostPosts:
