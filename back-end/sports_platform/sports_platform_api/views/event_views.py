@@ -460,7 +460,7 @@ def post_post(request, event_id):
             if res == 402:
                 return Response(data={"message": "Enter a valid event."}, status=400)
             else:
-                return Response(status=201)
+                return Response(data=res, status=201)
         except Exception as e:
             print(e)
             return Response(data={"message": 'Try later.'}, status=500)

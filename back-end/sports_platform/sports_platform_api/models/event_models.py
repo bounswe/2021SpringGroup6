@@ -81,13 +81,16 @@ class DiscussionPost(models.Model):
         try:
 
             if "sharedContent" in post_data.keys():
-                DiscussionPost.objects.create(
+                obj = DiscussionPost.objects.create(
                     event=event, author=user, dateCreated=dt, text=post_data['text'], sharedContent=post_data['sharedContent'])
             else:
-                DiscussionPost.objects.create(
+                obj = DiscussionPost.objects.create(
                     event=event, author=user, dateCreated=dt, text=post_data['text'])
 
-            return 201
+            post_dict = dict()
+            post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+            post_dict["@id"] = obj.post_id
+            return post_dict
         except Exception as e:
             print(e)
             return 500
