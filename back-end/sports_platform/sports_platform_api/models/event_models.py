@@ -70,10 +70,8 @@ class DiscussionPost(models.Model):
                         return 401
 
                 except Exception as e:
-                    print(e)
                     return 500
             except Exception as e:
-                print(e)
                 return 500
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
@@ -92,7 +90,6 @@ class DiscussionPost(models.Model):
             post_dict["@id"] = obj.post_id
             return post_dict
         except Exception as e:
-            print(e)
             return 500
 
     def comment_post(self, comment_data, user):
@@ -704,10 +701,8 @@ class Event(models.Model):
                     if user.user_id != self.organizer.user_id:
                         return 401
                 except Exception as e:
-                    print(e)
                     return 500
             except Exception as e:
-                print(e)
                 return 500
 
         try:
@@ -760,7 +755,6 @@ class Event(models.Model):
 
             return data
         except Exception as e:
-            print(e)
             return 500
 
 

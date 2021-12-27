@@ -462,7 +462,6 @@ def post_post(request, event_id):
             else:
                 return Response(data=res, status=201)
         except Exception as e:
-            print(e)
             return Response(data={"message": 'Try later.'}, status=500)
     
     if request.method == 'GET':
@@ -486,7 +485,6 @@ def post_post(request, event_id):
         except Event.DoesNotExist:
             return Response(data={"message": "Try with a valid event."}, status=400)
         except Exception as e:
-            print(e)
             return Response(data={"message": 'Try later.'}, status=500)
 
 
