@@ -16,7 +16,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventSearchFragment : Fragment(), KodeinAware{
+class EventSearchFragment : Fragment(), KodeinAware {
     private var _binding: FragmentSearchEventBinding? = null
     private val binding get() = _binding!!
 
@@ -33,6 +33,7 @@ class EventSearchFragment : Fragment(), KodeinAware{
         _binding = FragmentSearchEventBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(EventSearchViewModel::class.java)
+        viewModel.fillSearchEventList(arguments?.getString("event_search_filter"))
         return binding.root
     }
 
