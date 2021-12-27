@@ -25,4 +25,8 @@ class HomeViewModel(
             )
         }
     }
+
+    suspend fun userLoggingOut() = userRepository.logout(
+        "Token " + sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
+    )
 }

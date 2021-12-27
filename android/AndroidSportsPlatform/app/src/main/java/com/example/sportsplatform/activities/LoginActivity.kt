@@ -5,19 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityLoginBinding
-import com.example.sportsplatform.util.hide
-import com.example.sportsplatform.util.show
 import com.example.sportsplatform.viewmodels.AuthViewModel
-import com.example.sportsplatform.viewmodels.AuthViewModelFactory
-import kotlinx.android.synthetic.main.activity_login.*
+import com.example.sportsplatform.viewmodelfactories.AuthViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class LoginActivity : AppCompatActivity(), AuthListener, KodeinAware {
+class LoginActivity : AppCompatActivity(), KodeinAware {
 
     private lateinit var viewModel: AuthViewModel
     override val kodein by kodein()
@@ -31,7 +27,6 @@ class LoginActivity : AppCompatActivity(), AuthListener, KodeinAware {
         )
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         binding.viewmodel = viewModel
-        viewModel.authListener = this
 
         initObservers()
 
@@ -40,17 +35,5 @@ class LoginActivity : AppCompatActivity(), AuthListener, KodeinAware {
         viewModel.userLiveData.observe(this, Observer {
             //etLoginIdentifier.text = it
         })
-    }
-
-    override fun onStarted(){
-        progressBar.show()
-    }
-
-    override fun onSuccess() {
-        progressBar.hide()
-    }
-
-    override fun onFailure() {
-        progressBar.hide()
     }
 }

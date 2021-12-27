@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.sportsplatform.AuthListener
 import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.RegisterActivity
 import com.example.sportsplatform.data.repository.UserRepository
@@ -22,7 +21,6 @@ class AuthViewModel(
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
-    var authListener: AuthListener? = null
     val userLiveData = MutableLiveData<String>()
 
     var identifier: String? = null
@@ -39,9 +37,7 @@ class AuthViewModel(
             val userRequest = UserRequest(identifier!!, pass!!)
             val currResponse = repo.findUser(userRequest)
             currResponse.body()?.fetchUserId()
-            //view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
-
                 val userToken = currResponse.body()?.token
                 val user = currResponse.body()?.userId
                 userLiveData.postValue(userToken)
@@ -49,13 +45,12 @@ class AuthViewModel(
                 userToken?.let {
                     sharedPreferences.edit()?.putString(SHARED_PREFS_USER_TOKEN, it)?.apply()
                 }
-                //view.context.toast("Success")
                 Intent(view.context, MainActivity::class.java).also{
                     view.context.startActivity(it)
                 }
             } else {
-                view.context.toast(identifier!!)
-                view.context.toast(pass!!)
+                //view.context.toast(identifier!!)
+                //view.context.toast(pass!!)
             }
         }
     }

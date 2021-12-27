@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivitySearchOperationsBinding
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
-import com.example.sportsplatform.viewmodels.EventSearchViewModelFactory
-import com.example.sportsplatform.viewmodels.ProfileViewModel
-import com.example.sportsplatform.viewmodels.ProfileViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance

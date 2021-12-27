@@ -16,8 +16,7 @@ import com.example.sportsplatform.EventAdapter
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.viewmodels.SearchViewModel
-import com.example.sportsplatform.viewmodels.SearchViewModelFactory
-import kotlinx.android.synthetic.main.fragment_search.view.*
+import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance

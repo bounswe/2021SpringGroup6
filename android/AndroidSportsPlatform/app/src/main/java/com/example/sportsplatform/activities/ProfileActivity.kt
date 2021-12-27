@@ -6,12 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
 import com.example.sportsplatform.databinding.ActivityProfileBinding
-import com.example.sportsplatform.databinding.ActivityRegisterBinding
-import com.example.sportsplatform.databinding.ActivitySearchOperationsBinding
 import com.example.sportsplatform.viewmodels.ProfileViewModel
-import com.example.sportsplatform.viewmodels.ProfileViewModelFactory
-import com.example.sportsplatform.viewmodels.RegisterViewModel
-import com.example.sportsplatform.viewmodels.RegisterViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.ProfileViewModelFactory
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance

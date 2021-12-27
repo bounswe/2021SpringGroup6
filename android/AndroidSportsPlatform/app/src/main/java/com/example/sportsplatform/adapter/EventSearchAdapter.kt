@@ -1,4 +1,4 @@
-package com.example.sportsplatform
+package com.example.sportsplatform.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sportsplatform.R
 import com.example.sportsplatform.data.models.responses.EventResponse
 import kotlinx.android.synthetic.main.item_layout.view.*
 import com.example.sportsplatform.util.convertDateFormat
 
-class EventAdapter(private val itemList: List<EventResponse>) :
-    RecyclerView.Adapter<EventAdapter.MyViewHolder>() {
+
+class EventSearchAdapter(private val itemList: List<EventResponse>) :
+    RecyclerView.Adapter<EventSearchAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventName: TextView = itemView.event_name
@@ -28,7 +30,7 @@ class EventAdapter(private val itemList: List<EventResponse>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = itemList[position]
-        //holder.eventImageView.setImageResource(R.drawable.football)
+        holder.eventImageView.setImageResource(R.drawable.football)
         holder.eventTextView.text = currentItem.description
         holder.eventName.text = currentItem.name
         holder.date.text = currentItem.created_on.convertDateFormat()
