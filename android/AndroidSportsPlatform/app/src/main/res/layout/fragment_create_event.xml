@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="createEventViewModel"
+            type="com.example.sportsplatform.viewmodels.CreateEventViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -140,12 +147,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/etCreateEventAcceptWithoutApproval" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/etCreateEventLocation"
+                    android:id="@+id/twCreateEventLocationCoordinates"
                     style="@style/CreateEvent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_12"
                     android:hint="@string/selectEventLocation"
+                    android:text="@{createEventViewModel.eventCoordinates}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etCreateEventDuration" />
 
@@ -157,7 +165,7 @@
                     android:text="@string/createNewEvent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventLocation" />
+                    app:layout_constraintTop_toBottomOf="@+id/twCreateEventLocationCoordinates" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

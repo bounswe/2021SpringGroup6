@@ -1,6 +1,7 @@
 package com.example.sportsplatform.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.sportsplatform.R
@@ -12,8 +13,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.sportsplatform.databinding.ActivityMapsBinding
+import com.example.sportsplatform.util.Constants
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     companion object {
         fun openMaps(activity: AppCompatActivity) =
@@ -26,6 +28,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,6 +40,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        sharedPreferences = getSharedPreferences(Constants.CUSTOM_SHARED_PREFERENCES, MODE_PRIVATE)
     }
 
     /**
@@ -54,5 +60,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val bogaziciCoordinates = LatLng(41.084, 29.055)
         mMap.addMarker(MarkerOptions().position(bogaziciCoordinates).title("Marker in Bogazici Uni"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogaziciCoordinates))
+        mMap.setOnMapLongClickListener(this)
+    }
+
+    override fun onMapLongClick(p0: LatLng?) {
+        sharedPreferences.edit().putString(Constants.EVENT_LATITUDE, p0?.latitude?.toString()).apply()
+        sharedPreferences.edit().putString(Constants.EVENT_LONGITUDE, p0?.longitude?.toString()).apply()
+        finish()
     }
 }
