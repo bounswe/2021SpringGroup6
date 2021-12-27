@@ -14,28 +14,20 @@ import com.example.sportsplatform.util.toast
 
 class EventSearchViewModel(private val eventRepo: EventRepository) : ViewModel() {
 
-    val eventLiveData = MutableLiveData<EventFilterResponse>()
-    var event: String? = null
+    val eventsFiltered: MutableLiveData<EventFilterResponse?> = MutableLiveData()
+    val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
 
-    fun onSearchImageButtonClick(view: View) {
+    fun fillSearchEventList(view: View) {
         closeSoftKeyboard(view.context, view)
 
         Coroutines.main {
-            if(!event.isNullOrEmpty()){
-                val eventFilterRequest = EventFilterRequest (event!!)
-                view.context.toast(eventFilterRequest.toString())
-                val currResponse = eventRepo.findFilterEvents(eventFilterRequest)
-                view.context.toast(currResponse.toString())
-                if (currResponse.isSuccessful) {
-                    view.context.toast(currResponse.toString())
-                    Intent(view.context, EventListActivity::class.java).also{
-                        view.context.startActivity(it)
-                    }
-                }
-                else {
-                    view.context.toast("Fail")
-                }
-            }
+            eventsFiltered.postValue(
+                eventRepo.findFilterEvents(
+                    EventFilterRequest(
+                        nameContains = eventSearchKey.value.toString()
+                    )
+                ).body()
+            )
         }
     }
 }

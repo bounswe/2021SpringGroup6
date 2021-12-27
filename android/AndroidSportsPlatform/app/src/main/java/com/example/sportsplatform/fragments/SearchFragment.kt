@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportsplatform.EventAdapter
+import com.example.sportsplatform.adapter.EventSearchAdapter
 import com.example.sportsplatform.R
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.databinding.FragmentSearchBinding
+import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import org.kodein.di.Kodein
@@ -46,7 +48,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.searchBar?.addTextChangedListener(object : TextWatcher {
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -58,18 +60,6 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 viewModel.eventSearchKey.postValue(s)
             }
         })
-
-        viewModel.eventsFiltered.observe(
-            viewLifecycleOwner,
-            Observer {
-                binding.rvEventsFiltered.apply {
-                    layoutManager =
-                        LinearLayoutManager(context)
-                    adapter =
-                        it?.items?.let { filteredEventItems -> EventAdapter(filteredEventItems) }
-                }
-            }
-        )
 
         viewModel.searchOption.observe(
             viewLifecycleOwner,
@@ -84,6 +74,34 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 binding.searchViewModel = viewModel
             }
         )
+
+        binding.btnSearch.setOnClickListener{
+
+            if (viewModel.eventSearchKey.value.toString().isNotEmpty() ||
+                viewModel.eventSearchKey.value.toString().isNotBlank()
+            ) {
+                when (viewModel.searchOption.value) {
+                    0 -> {}
+
+                    1 -> {
+                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                        val arguments = Bundle()
+                        arguments.putString("event_search_filter", viewModel.eventSearchKey.value.toString())
+                        val fragmentToGo = EventSearchFragment()
+                        fragmentToGo.arguments = arguments
+                        if (savedInstanceState == null) {
+                            transaction.replace(R.id.mainContainer, fragmentToGo)
+                            transaction.addToBackStack(null)
+                            transaction.commitAllowingStateLoss()
+                        }
+                    }
+
+                    2 -> {}
+                }
+            } else {
+                viewModel.eventsFiltered.postValue(null)
+            }
+        }
     }
 
     private fun initializeSpinner() {

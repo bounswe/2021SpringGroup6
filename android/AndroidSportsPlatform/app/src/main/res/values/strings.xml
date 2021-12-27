@@ -42,4 +42,5 @@
     <string name="eventsAttending">Events Attending</string>
     <string name="eventsCreated">Events Created</string>
     <string name="usersSearched">Users Searched</string>
+    <string name="eventsSearched">Events Searched</string>
 </resources>
