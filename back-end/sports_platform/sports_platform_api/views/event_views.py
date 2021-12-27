@@ -479,7 +479,7 @@ def post_post(request, event_id):
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             if res == 401:
-                return Response(data={"message": "Only participants and spectators can see comments."}, status=400)
+                return Response(data={"message": "Only participants and spectators can see posts."}, status=400)
             else:
                 return Response(data=res, status=200)
         except Event.DoesNotExist:
