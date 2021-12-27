@@ -54,4 +54,6 @@
     <string name="createEventMaxSkillLevel">Enter event max skill level</string>
     <string name="createEventAcceptWithoutApproval">Accept without approval?</string>
     <string name="createEventDuration">Enter event duration</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="selectEventLocation">Select event location</string>
 </resources>

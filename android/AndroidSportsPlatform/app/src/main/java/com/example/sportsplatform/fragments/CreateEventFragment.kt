@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.sportsplatform.activities.MainActivity
+import com.example.sportsplatform.activities.MapsActivity
 import com.example.sportsplatform.databinding.FragmentCreateEventBinding
 import com.example.sportsplatform.viewmodels.CreateEventViewModel
 import com.example.sportsplatform.viewmodels.CreateEventViewModelFactory
@@ -21,7 +23,7 @@ class CreateEventFragment : Fragment(), KodeinAware {
     override lateinit var kodein: Kodein
 
     private lateinit var viewModel: CreateEventViewModel
-    private val factory : CreateEventViewModelFactory by instance()
+    private val factory: CreateEventViewModelFactory by instance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,5 +34,12 @@ class CreateEventFragment : Fragment(), KodeinAware {
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(CreateEventViewModel::class.java)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.etCreateEventLocation.setOnClickListener {
+            MapsActivity.openMaps(activity as MainActivity)
+        }
     }
 }
