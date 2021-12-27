@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/margin_12"
+                android:layout_marginTop="@dimen/margin_12">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/createEventTitle"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/createNewEvent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventName"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/createEventTitle" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventSport"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventSport"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventName" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventDescription"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventDescription"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventSport" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventStartDate"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventStartDate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventDescription" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventMinAttendeeCap"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventMinAttendeeCap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventStartDate" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventMaxAttendeeCap"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventMaxAttendeeCap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventMinAttendeeCap" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventMaxSpectatorCap"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventMaxSpectatorCap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventMaxAttendeeCap" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventMinSkillLevel"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventMinSkillLevel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventMaxSpectatorCap" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventMaxSkillLevel"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventMaxSkillLevel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventMinSkillLevel" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventAcceptWithoutApproval"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventAcceptWithoutApproval"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventMaxSkillLevel" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etCreateEventDuration"
+                    style="@style/CreateEvent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:hint="@string/createEventDuration"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCreateEventAcceptWithoutApproval" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
