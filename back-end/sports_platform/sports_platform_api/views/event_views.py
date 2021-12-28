@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event
+from ..models import Event, DiscussionPost, DiscussionComment
 from ..validation import event_validation
 from ..serializers.event_seralizer import EventSerializer
 
@@ -434,3 +434,152 @@ def get_badges(request, event_id):
                 return Response(status=201)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
+
+
+@api_view(['POST', 'GET'])
+def post_post(request, event_id):
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = event_validation.DiscussionPost(data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            res = DiscussionPost.create_post(validation.validated_data, user, event_id)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can post posts."}, status=400)
+            if res == 402:
+                return Response(data={"message": "Enter a valid event."}, status=400)
+            else:
+                return Response(data=res, status=201)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+    
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+
+            res = event.get_posts(user)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can see posts."}, status=400)
+            else:
+                return Response(data=res, status=200)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['DELETE','POST'])
+def delete_post_post(request, event_id, post_id):
+
+    if request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            post = DiscussionPost.objects.get(post_id = post_id)
+
+            if post.event.event_id != event_id:
+                return Response(data={"message": "This post does not belong to that event_id."}, status=400)
+
+            if user.user_id != post.event.organizer.user_id and user.user_id != post.author.user_id :
+                return Response(data={"message": "Only post authors and event creators can delete posts."}, status=400)
+
+            try:
+                with transaction.atomic():
+                    post.delete()
+                return Response(status=204)
+            except:
+                return Response(data={"message": "Try later."}, status=500)
+
+        except DiscussionPost.DoesNotExist:
+            return Response(data={"message": "Try with a valid discussion post."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+
+    if request.method == 'POST':
+
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = event_validation.DiscussionComment(data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            post = DiscussionPost.objects.get(post_id=post_id)
+
+            if post.event.event_id != event_id:
+                return Response(data={"message": "This post does not belong to that event_id."}, status=400)
+
+            res = post.comment_post(validation.validated_data, user)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            if res == 401:
+                return Response(data={"message": "Only participants and spectators can post posts."}, status=400)
+            else:
+                return Response(status=201)
+        except DiscussionPost.DoesNotExist:
+            return Response(data={"message": "Try with a valid event."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+    
+
+@api_view(['DELETE'])
+def delete_comment(request, event_id, post_id, comment_id):
+
+    if not request.user.is_authenticated:
+        return Response({"message": "User not logged in."},
+                        status=401)
+
+    user = request.user
+
+    try:
+        comment = DiscussionComment.objects.get(comment_id=comment_id)
+
+        if comment.post.event.event_id != event_id:
+            return Response(data={"message": "This comment does not belong to that event_id."}, status=400)
+
+        if comment.post.post_id != post_id:
+            return Response(data={"message": "This comment does not belong to that post_id."}, status=400)
+
+        if user.user_id != comment.post.event.organizer.user_id and user.user_id != comment.author.user_id:
+            return Response(data={"message": "Only comment authors and event creators can delete posts."}, status=400)
+
+        try:
+            with transaction.atomic():
+                comment.delete()
+            return Response(status=204)
+        except:
+            return Response(data={"message": "Try later."}, status=500)
+
+    except DiscussionComment.DoesNotExist:
+        return Response(data={"message": "Try with a valid discussion comment."}, status=400)
+    except Exception as e:
+        return Response(data={"message": 'Try later.'}, status=500)

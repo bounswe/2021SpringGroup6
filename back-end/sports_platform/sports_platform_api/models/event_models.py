@@ -40,6 +40,94 @@ class EventParticipationRequesters(models.Model):
     requested_on = models.DateTimeField()
 
 
+class DiscussionPost(models.Model):
+    class Meta:
+        db_table = 'discussion_post'
+
+    post_id = models.BigAutoField(primary_key=True)
+    author = models.ForeignKey('User', related_name='posts', on_delete=models.CASCADE)
+    sharedContent = models.TextField()
+    event = models.ForeignKey('Event', related_name='posts', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
+
+    @staticmethod
+    def create_post(post_data, user, event_id):
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+        except Event.DoesNotExist:
+            return 402
+
+        if not event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != event.organizer.user_id:
+                        return 401
+
+                except Exception as e:
+                    return 500
+            except Exception as e:
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            if "sharedContent" in post_data.keys():
+                obj = DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'], sharedContent=post_data['sharedContent'])
+            else:
+                obj = DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'])
+
+            post_dict = dict()
+            post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+            post_dict["@id"] = obj.post_id
+            return post_dict
+        except Exception as e:
+            return 500
+
+    def comment_post(self, comment_data, user):
+
+        if not self.event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=self.event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=self.event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != self.event.organizer.user_id:
+                        return 401
+
+                except:
+                    return 500
+            except:
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            DiscussionComment.objects.create(
+                post=self, author=user, text=comment_data['text'], dateCreated=dt)
+
+            return 201
+        except:
+            return 500
+class DiscussionComment(models.Model):
+    class Meta:
+        db_table = 'comment'
+
+    comment_id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey('DiscussionPost', related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey('User', related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
 class Event(models.Model):
     class Meta:
         db_table = 'event'
@@ -65,6 +153,10 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     acceptWithoutApproval = models.BooleanField()
+    # if false, only participants and spectators can see
+    canEveryoneSeePosts = models.BooleanField(default=True)
+    # if false, only participants and spectators can post
+    canEveryonePostPosts = models.BooleanField(default=True)
     duration = models.IntegerField()
 
     created_on = models.DateTimeField()
@@ -595,7 +687,77 @@ class Event(models.Model):
             return 402
         except:
             return 500
-    
+
+
+    def get_posts(self, user):
+
+        if not self.canEveryoneSeePosts:
+            try:
+                EventParticipants.objects.get(event=self, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=self, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != self.organizer.user_id:
+                        return 401
+                except Exception as e:
+                    return 500
+            except Exception as e:
+                return 500
+
+        try:
+            data = dict()
+
+            posts = self.posts.all().order_by('dateCreated')
+
+            posts_list = []
+
+            for post in posts:
+
+                post_dict = dict()
+                post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+                post_dict["@id"] = post.post_id
+                if post.sharedContent:
+                    post_dict["sharedContent"] = post.sharedContent
+                post_dict["author"] = {
+                    "@context" : "https://schema.org/Person",
+                    "@id" : post.author.user_id,
+                    "identifier": post.author.identifier
+                }
+                post_dict["text"] = post.text
+                post_dict["dateCreated"] = post.dateCreated
+                comments = post.comments.all().order_by('dateCreated')
+
+                comment_list = []
+                for comment in comments:
+                    comment_dict = dict()
+                    comment_dict["@context"] = "https://schema.org/Comment"
+                    comment_dict["@id"] = comment.comment_id
+                    comment_dict["author"] = {
+                        "@context": "https://schema.org/Person",
+                        "@id": comment.author.user_id,
+                        "identifier": comment.author.identifier
+                    }
+                    comment_dict["text"] = comment.text
+                    comment_dict["dateCreated"] = comment.dateCreated
+                    comment_list.append(comment_dict)
+
+                post_dict["comment"] = comment_list
+                posts_list.append(post_dict)
+
+            data["@context"] = "https://schema.org/SportsEvent"
+            data["@id"] = self.event_id
+            data["additionalProperty"] = {
+                "@type": "PropertyValue",
+                "name": "posts",
+                "value": posts_list
+            }
+
+            return data
+        except Exception as e:
+            return 500
+
+
     def update(self, data):
         participants = EventParticipants.objects.filter(event=self)
         if 'maximumAttendeeCapacity' in data:
