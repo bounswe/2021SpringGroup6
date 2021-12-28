@@ -1,8 +1,10 @@
 package com.example.sportsplatform.data.repository
 
 import com.example.sportsplatform.data.api.EventApi
+import com.example.sportsplatform.data.models.requests.CreateEventRequest
 import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.data.models.requests.EventRequest
+import com.example.sportsplatform.data.models.responses.CreateEventResponse
 import com.example.sportsplatform.data.models.responses.EventFilterResponse
 import com.example.sportsplatform.data.models.responses.EventResponse
 import retrofit2.Response
@@ -13,5 +15,8 @@ class EventRepository(private val api: EventApi) {
     }
     suspend fun findFilterEvents(eventFilterRequest: EventFilterRequest) : Response<EventFilterResponse> {
         return api.filterEvents(eventFilterRequest)
+    }
+    suspend fun createNewEvent(token: String, createEventRequest: CreateEventRequest) : Response<CreateEventResponse> {
+        return api.createEvent(token, createEventRequest)
     }
 }
