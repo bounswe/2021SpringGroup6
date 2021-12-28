@@ -81,6 +81,8 @@ class SearchEventTest(TestCase):
             "maximumAttendeeCapacity": 50,
             "minSkillLevel":3,
             "maxSkillLevel": 4,
+            "canEveryoneSeePosts": True,
+            "canEveryonePostPosts": True,
             "attendee": [],
             "audience" : [],
             "organizer": {
@@ -136,6 +138,8 @@ class SearchEventTest(TestCase):
             "maximumAttendeeCapacity": 50,
             "minSkillLevel":5,
             "maxSkillLevel": 5,
+            "canEveryoneSeePosts": True,
+            "canEveryonePostPosts": True,
             "attendee": [],
             "audience" : [],
             "organizer": {
