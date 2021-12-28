@@ -49,7 +49,7 @@ class AuthViewModel(
                     view.context.startActivity(it)
                 }
             } else {
-                //view.context.toast(identifier!!)
+                view.context.toast("Login Failed!")
                 //view.context.toast(pass!!)
             }
         }

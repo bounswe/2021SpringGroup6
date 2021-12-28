@@ -9,8 +9,14 @@
         <item name="tabMode">fixed</item>
     </style>
 
+    <style name="TitleStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/teal_700</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
     <style name="SubTitle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/teal_200</item>
         <item name="android:textSize">18sp</item>
     </style>
+
 </resources>

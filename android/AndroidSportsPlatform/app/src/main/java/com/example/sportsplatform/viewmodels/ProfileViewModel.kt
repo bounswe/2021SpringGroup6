@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.activities.ProfileActivity
-import com.example.sportsplatform.activities.SearchOperationsActivity
 import com.example.sportsplatform.data.repository.EventRepository
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.util.Coroutines
@@ -19,9 +18,7 @@ class ProfileViewModel(
         closeSoftKeyboard(view.context, view)
 
         Coroutines.main {
-            Intent(view.context, SearchOperationsActivity::class.java).also {
-                view.context.startActivity(it)
-            }
+
         }
     }
 
