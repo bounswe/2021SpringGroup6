@@ -28,13 +28,10 @@ urlpatterns = [
     path('events/<int:event_id>/badges', event_views.get_badges),
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
-<<<<<<< HEAD
     path('notifications',user_views.notification),
     path('notifications/<int:notification_id>',user_views.read_notification),
-=======
     path('events/<int:event_id>/discussion', post_post),
     path('events/<int:event_id>/discussion/<int:post_id>', delete_post_post),
     path('events/<int:event_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_comment),
->>>>>>> 149efa6a4f42be6ef2048ef49fec6c0019f40bc5
     path('users/searches', user_views.search_user)
 ]
