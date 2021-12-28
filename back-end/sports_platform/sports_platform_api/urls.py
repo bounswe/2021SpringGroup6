@@ -16,19 +16,25 @@ urlpatterns = [
     path('users/<int:user_id>/blocked', user_views.block_user),
     path('users/<user_id>/visible_attributes', user_views.set_visibility),
     path('events', event_views.create_event),
-    path('activitystream',activity_stream_views.get_activity_stream),
-    path('events/<int:event_id>',event_views.get_event),
+    path('activitystream', activity_stream_views.get_activity_stream),
+    path('events/<int:event_id>', event_views.get_event),
     path('events/<int:event_id>/spectators', event_views.attend_spectator),
     path('events/<int:event_id>/interesteds', event_views.add_interest),
     path('events/<int:event_id>/participants', event_views.accept_participant),
-    path('events/searches',event_views.search_event),
+    path('events/searches', event_views.search_event),
     path('users/<int:user_id>/participating', get_participating_events),
     path('users/<int:user_id>/spectating', get_spectating_events),
     path('users/<int:user_id>/interested', get_interested_events),
     path('events/<int:event_id>/badges', event_views.get_badges),
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
+<<<<<<< HEAD
     path('notifications',user_views.notification),
     path('notifications/<int:notification_id>',user_views.read_notification),
+=======
+    path('events/<int:event_id>/discussion', post_post),
+    path('events/<int:event_id>/discussion/<int:post_id>', delete_post_post),
+    path('events/<int:event_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_comment),
+>>>>>>> 149efa6a4f42be6ef2048ef49fec6c0019f40bc5
     path('users/searches', user_views.search_user)
 ]

@@ -52,6 +52,8 @@ class GetEventTest(TestCase):
             "maximumAttendeeCapacity": 50,
             "minSkillLevel":3,
             "maxSkillLevel": 5,
+            "canEveryoneSeePosts": True,
+            "canEveryonePostPosts": True,
             "attendee": [],
             "audience" : [],
             "organizer": {
