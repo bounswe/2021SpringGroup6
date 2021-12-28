@@ -3,6 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
+import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.ProfileActivity
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.data.models.Sport
@@ -50,7 +51,7 @@ class RegisterViewModel(private val userRepo: UserRepository) : ViewModel() {
             view.context.toast(currResponse.toString())
             if (currResponse.isSuccessful) {
 
-                Intent(view.context, ProfileActivity::class.java).also{
+                Intent(view.context, MainActivity::class.java).also{
                     view.context.startActivity(it)
                 }
 
