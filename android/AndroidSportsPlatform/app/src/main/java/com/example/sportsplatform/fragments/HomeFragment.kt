@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
+import com.example.sportsplatform.R
 
 class HomeFragment : Fragment(), KodeinAware {
 
@@ -29,7 +30,7 @@ class HomeFragment : Fragment(), KodeinAware {
     override lateinit var kodein: Kodein
 
     private lateinit var viewModel: HomeViewModel
-    private val factory : HomeViewModelFactory by instance()
+    private val factory: HomeViewModelFactory by instance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +47,22 @@ class HomeFragment : Fragment(), KodeinAware {
         binding.btnLogout.setOnClickListener {
             view?.context?.toast("Logout Button Pressed!")
             logOut()
-            startActivity(Intent(activity,LoginActivity::class.java))
+            startActivity(Intent(activity, LoginActivity::class.java))
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnCreateNewEvent.setOnClickListener {
+            val fragmentToGo = CreateEventFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.mainContainer, fragmentToGo)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
     private fun initializeRecyclerview() {

@@ -43,4 +43,17 @@
     <string name="eventsCreated">Events Created</string>
     <string name="usersSearched">Users Searched</string>
     <string name="eventsSearched">Events Searched</string>
+    <string name="createEventName">Enter event name</string>
+    <string name="createEventSport">Enter event sport</string>
+    <string name="createEventDescription">Enter event description</string>
+    <string name="createEventStartDate">Enter event start date</string>
+    <string name="createEventMinAttendeeCap">Enter event min attendee capacity</string>
+    <string name="createEventMaxAttendeeCap">Enter event max attendee capacity</string>
+    <string name="createEventMaxSpectatorCap">Enter event min spectator capacity</string>
+    <string name="createEventMinSkillLevel">Enter event min skill level</string>
+    <string name="createEventMaxSkillLevel">Enter event max skill level</string>
+    <string name="createEventAcceptWithoutApproval">Accept without approval?</string>
+    <string name="createEventDuration">Enter event duration</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="selectEventLocation">Select event location</string>
 </resources>

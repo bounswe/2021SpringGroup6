@@ -1,7 +1,9 @@
 package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
+import com.example.sportsplatform.data.models.requests.CreateEventRequest
 import com.example.sportsplatform.data.models.requests.EventFilterRequest
+import com.example.sportsplatform.data.models.responses.CreateEventResponse
 import com.example.sportsplatform.data.models.responses.EventFilterResponse
 import com.example.sportsplatform.data.models.responses.EventResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -10,10 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface EventApi {
 
@@ -25,6 +24,12 @@ interface EventApi {
     suspend fun filterEvents(
         @Body eventFilterRequest: EventFilterRequest
     ): Response<EventFilterResponse>
+
+    @POST("/events")
+    suspend fun createEvent(
+        @Header("Authorization") token: String,
+        @Body createEventRequest: CreateEventRequest
+    ): Response<CreateEventResponse>
 
     companion object{
         operator fun invoke() : EventApi {
