@@ -27,15 +27,3 @@ fun String?.convertDateFormatToDefault(): String {
 fun String?.initial(): String? {
     return this?.take(1)
 }
-
-fun String?.initial(): String? {
-    return this?.take(1)
-}
-
-fun String?.initial(): String? {
-    return this?.take(1)
-}
-
-fun String?.initial(): String? {
-    return this?.take(1)
-}

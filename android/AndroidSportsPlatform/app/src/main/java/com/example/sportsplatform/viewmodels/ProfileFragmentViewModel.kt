@@ -3,6 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.sportsplatform.data.models.responses.UserResponse
 import com.example.sportsplatform.data.models.responses.UserSearchResponse
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.util.Constants
@@ -12,7 +13,7 @@ class ProfileFragmentViewModel(
     private val userRepo: UserRepository,
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    val userInformation: MutableLiveData<UserSearchResponse> = MutableLiveData()
+    val userInformation: MutableLiveData<UserResponse> = MutableLiveData()
 
     fun getUser() {
         Coroutines.main {
