@@ -19,4 +19,9 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="CreateEvent" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/teal_200</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>
