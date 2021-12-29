@@ -29,6 +29,7 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from provider { ProfileViewModelFactory(instance(), instance()) }
         bind() from provider { EventSearchViewModelFactory(instance()) }
         bind() from provider { UserSearchViewModelFactory(instance()) }
+        bind() from provider { DetailedUserViewModelFactory(instance(), instance()) }
         bind() from provider { RegisterViewModelFactory(instance()) }
         bind() from provider { SearchViewModelFactory() }
         bind() from provider { HomeViewModelFactory(instance(), instance()) }
