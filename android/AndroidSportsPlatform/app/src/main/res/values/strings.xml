@@ -56,4 +56,7 @@
     <string name="createEventDuration">Enter event duration</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="selectEventLocation">Select event location</string>
+    <string name="familyName">Family name</string>
+    <string name="birthDate">Birth date</string>
+    <string name="updateProfile">Update Profile</string>
 </resources>
