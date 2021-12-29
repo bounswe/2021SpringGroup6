@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportsplatform.adapter.EventSearchAdapter
+import com.example.sportsplatform.adapter.EventsListAdapter
 import com.example.sportsplatform.databinding.FragmentSearchEventBinding
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
@@ -47,7 +47,7 @@ class EventSearchFragment : Fragment(), KodeinAware {
                     layoutManager =
                         LinearLayoutManager(context)
                     adapter =
-                        it?.items?.let { filteredEventItems -> EventSearchAdapter(filteredEventItems) }
+                        it?.items?.let { filteredEventItems -> EventsListAdapter(filteredEventItems) }
                 }
             }
         )
