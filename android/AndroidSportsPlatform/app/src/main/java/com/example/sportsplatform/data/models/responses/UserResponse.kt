@@ -1,24 +1,23 @@
 package com.example.sportsplatform.data.models.responses
 
-import com.example.sportsplatform.data.models.Location
-import com.example.sportsplatform.data.models.User
+import com.example.sportsplatform.data.models.AdditionalProperty
 
 data class UserResponse(
     val user_id: Int,
     val email: String,
-    val email_visibility: String,
+    val email_visibility: Boolean,
     val identifier: String,
-    val name: Int,
-    val name_visibility: String,
-    val familyName: Int,
-    val familyName_visibility: Int,
+    val name: String,
+    val name_visibility: Boolean,
+    val familyName: String,
+    val familyName_visibility: Boolean,
     val birthDate: String,
-    val birthDate_visibility: String,
-    val latitude: String,
-    val longitude: String,
-    val location_visibility: Location,
-    val context: User,
-    val id: List<User>,
-    val type: List<User>,
-    val knowsAbout: List<String>
+    val birthDate_visibility: Boolean,
+    val latitude: Float,
+    val longitude: Float,
+    val location_visibility: Boolean,
+    val context: String,
+    val id: Int,
+    val type: String,
+    val knowsAbout: List<AdditionalProperty>
 )

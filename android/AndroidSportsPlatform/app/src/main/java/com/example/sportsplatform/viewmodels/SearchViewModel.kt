@@ -5,11 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.R
 import com.example.sportsplatform.data.models.responses.EventFilterResponse
+import com.example.sportsplatform.data.models.responses.UserSearchResponse
 
 class SearchViewModel : ViewModel() {
 
     val eventsFiltered: MutableLiveData<EventFilterResponse?> = MutableLiveData()
     val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
+
+    val usersFiltered: MutableLiveData<UserSearchResponse?> = MutableLiveData()
+    val userSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
+
     var searchBarHint: MutableLiveData<String> = MutableLiveData()
     var searchOption: MutableLiveData<Int> = MutableLiveData(0)
 

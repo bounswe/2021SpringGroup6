@@ -58,6 +58,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewModel.eventSearchKey.postValue(s)
+                viewModel.userSearchKey.postValue(s)
             }
         })
 
@@ -78,10 +79,23 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         binding.btnSearch.setOnClickListener{
 
             if (viewModel.eventSearchKey.value.toString().isNotEmpty() ||
-                viewModel.eventSearchKey.value.toString().isNotBlank()
+                viewModel.eventSearchKey.value.toString().isNotBlank() ||
+                viewModel.userSearchKey.value.toString().isNotEmpty() ||
+                viewModel.userSearchKey.value.toString().isNotBlank()
             ) {
                 when (viewModel.searchOption.value) {
-                    0 -> {}
+                    0 -> {
+                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                        val arguments = Bundle()
+                        arguments.putString("user_search_filter", viewModel.userSearchKey.value.toString())
+                        val fragmentToGo = UserSearchFragment()
+                        fragmentToGo.arguments = arguments
+                        if (savedInstanceState == null) {
+                            transaction.replace(R.id.mainContainer, fragmentToGo)
+                            transaction.addToBackStack(null)
+                            transaction.commitAllowingStateLoss()
+                        }
+                    }
 
                     1 -> {
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -100,6 +114,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 }
             } else {
                 viewModel.eventsFiltered.postValue(null)
+                viewModel.usersFiltered.postValue(null)
             }
         }
     }
