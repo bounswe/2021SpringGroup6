@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.FragmentProfileBinding
 import com.example.sportsplatform.viewmodels.ProfileFragmentViewModel
@@ -31,7 +32,18 @@ class ProfileFragment : Fragment(), KodeinAware {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(ProfileFragmentViewModel::class.java)
+        viewModel.getUser()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.userInformation.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.profileViewModel = viewModel
+            }
+        )
     }
 
 }

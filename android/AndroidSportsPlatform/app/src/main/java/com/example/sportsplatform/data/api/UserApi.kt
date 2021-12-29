@@ -37,6 +37,7 @@ interface UserApi {
 
     @GET("users/{user_id}")
     suspend fun searchProfile(
+        @Header("Authorization") token: String,
         @Path("user_id") userId: Int
     ): Response<UserSearchResponse>
 
