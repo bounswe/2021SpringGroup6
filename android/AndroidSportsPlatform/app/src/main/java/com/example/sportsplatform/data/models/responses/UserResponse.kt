@@ -1,6 +1,7 @@
 package com.example.sportsplatform.data.models.responses
 
 import com.example.sportsplatform.data.models.AdditionalProperty
+import com.example.sportsplatform.util.initial
 
 data class UserResponse(
     val user_id: Int,
@@ -19,5 +20,9 @@ data class UserResponse(
     val context: String,
     val id: Int,
     val type: String,
+    val gender: String,
     val knowsAbout: List<AdditionalProperty>
-)
+
+){
+    fun fetchUserInitials() = name.initial() + familyName.initial()
+}
