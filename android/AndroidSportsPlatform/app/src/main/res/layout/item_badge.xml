@@ -10,28 +10,12 @@
         android:layout_marginVertical="@dimen/margin_12">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/twUserName"
+            android:id="@+id/twBadgeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Name" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/twUserEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/twUserIdentifier"
-            tools:text="Email" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/twUserIdentifier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/twUserName"
-            tools:text="@string/Identifier" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
