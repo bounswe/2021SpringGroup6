@@ -23,3 +23,7 @@ fun String?.convertDateFormatToDefault(): String {
     }
     return date?.let { simpleDateFormatter.format(it) } ?: ""
 }
+
+fun String?.initial(): String? {
+    return this?.take(1)
+}
