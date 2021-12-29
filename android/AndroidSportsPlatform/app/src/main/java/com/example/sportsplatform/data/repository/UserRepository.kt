@@ -26,8 +26,8 @@ class UserRepository(private val api: UserApi) {
         return api.searchUser(userSearchRequest)
     }
 
-    suspend fun searchUserProfile(userId : Int) : Response<UserSearchResponse> {
-        return api.searchProfile(userId)
+    suspend fun searchUserProfile(token: String, userId : Int) : Response<UserResponse> {
+        return api.searchProfile(token, userId)
     }
 
     suspend fun searchFollowingUserProfile(userId : Int) : Response<UserFollowingResponse> {

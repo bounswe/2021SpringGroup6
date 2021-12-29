@@ -34,5 +34,6 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from provider { SearchViewModelFactory() }
         bind() from provider { HomeViewModelFactory(instance(), instance()) }
         bind() from provider { CreateEventViewModelFactory(instance(), instance()) }
+        bind() from provider { ProfileFragmentViewModelFactory(instance(), instance()) }
     }
 }
