@@ -37,8 +37,6 @@
             android:name=".activities.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".activities.EventListActivity" />
-        <activity android:name=".activities.SearchOperationsActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.MainActivity" />

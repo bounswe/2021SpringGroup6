@@ -3,6 +3,7 @@ package com.example.sportsplatform.data.api
 import com.example.sportsplatform.data.models.*
 import com.example.sportsplatform.data.models.requests.UserRegisterRequest
 import com.example.sportsplatform.data.models.requests.UserRequest
+import com.example.sportsplatform.data.models.requests.UserSearchRequest
 import com.example.sportsplatform.data.models.responses.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -15,7 +16,7 @@ import retrofit2.http.*
 interface UserApi {
 
     @POST("users/login")
-    suspend fun searchUser(
+    suspend fun loginUser(
         @Body userRequest: UserRequest
     ): Response<TokenResponse>
 
@@ -23,6 +24,11 @@ interface UserApi {
     suspend fun logoutUser(
         @Header("Authorization") token: String
     ): Response<ResponseMessage>
+
+    @POST("users/searches")
+    suspend fun searchUser(
+        @Body userSearchRequest: UserSearchRequest
+    ): Response<UserSearchResponse>
 
     @POST("users")
     suspend fun registerUser(
