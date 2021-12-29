@@ -1,6 +1,7 @@
 package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
+import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.data.models.requests.UserRegisterRequest
 import com.example.sportsplatform.data.models.requests.UserRequest
 import com.example.sportsplatform.data.models.requests.UserSearchRequest
@@ -24,6 +25,18 @@ interface UserApi {
     suspend fun logoutUser(
         @Header("Authorization") token: String
     ): Response<ResponseMessage>
+
+    @POST("users/{user_id}/badges")
+    suspend fun addUserBadge(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+        @Body addBadgeRequest: AddBadgeRequest
+    ): Response<String>
+
+    @GET("users/{user_id}/badges")
+    suspend fun getUsersBadges(
+        @Path("user_id") userId: Int,
+    ): Response<GetBadgeResponse>
 
     @POST("users/searches")
     suspend fun searchUser(

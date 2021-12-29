@@ -16,7 +16,7 @@ class UserSearchViewModel(private val userRepo: UserRepository) : ViewModel() {
             usersSearched.postValue(
                 userRepo.userSearch(
                     UserSearchRequest(
-                        name = userSearchKey ?: ""
+                        identifier = userSearchKey ?: ""
                     )
                 ).body()
             )
