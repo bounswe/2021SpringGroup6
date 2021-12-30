@@ -63,7 +63,7 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
 
     override fun onEventsClickListener(eventResponse: EventResponse?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val fragmentToGo = EventDetailFragment()
+        val fragmentToGo = EventDetailFragment.newInstance(eventId = eventResponse?.event_id)
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()

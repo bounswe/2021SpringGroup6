@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
 import com.example.sportsplatform.viewmodelfactories.EventDetailViewModelFactory
@@ -31,6 +32,27 @@ class EventDetailFragment : Fragment(), KodeinAware {
         _binding = FragmentEventDetailBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(EventDetailViewModel::class.java)
+        viewModel.getEventInformation(arguments?.getInt(EVENT_ID) ?: 0)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.event.observe(
+            viewLifecycleOwner,
+            Observer {
+                val event = it
+            }
+        )
+    }
+
+    companion object {
+        private const val EVENT_ID = "event_id"
+        fun newInstance(eventId: Int?) = EventDetailFragment().apply {
+            arguments = Bundle().apply {
+                eventId?.let { putInt(EVENT_ID, it) }
+            }
+        }
     }
 }
