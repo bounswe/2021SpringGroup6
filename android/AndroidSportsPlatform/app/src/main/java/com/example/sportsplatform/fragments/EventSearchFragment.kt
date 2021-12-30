@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.R
 import com.example.sportsplatform.adapter.EventsListAdapter
-import com.example.sportsplatform.adapter.UsersParticipatingEventsClick
+import com.example.sportsplatform.adapter.EventsClickListener
 import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.databinding.FragmentSearchEventBinding
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
@@ -19,7 +19,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventSearchFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
+class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
     private var _binding: FragmentSearchEventBinding? = null
     private val binding get() = _binding!!
 
@@ -61,7 +61,7 @@ class EventSearchFragment : Fragment(), KodeinAware, UsersParticipatingEventsCli
         )
     }
 
-    override fun onUsersParticipatingEventsClicked(eventResponse: EventResponse) {
+    override fun onEventsClickListener(eventResponse: EventResponse?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val fragmentToGo = EventDetailFragment()
         transaction.replace(R.id.mainContainer, fragmentToGo)
