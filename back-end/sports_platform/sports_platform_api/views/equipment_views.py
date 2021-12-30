@@ -117,3 +117,24 @@ def post_equipment_post(request, equipment_id):
                 return Response(data=res, status=201)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
+
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            equipment = Equipment.objects.get(equipment_id=equipment_id)
+
+            res = equipment.get_posts()
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=res, status=200)
+        except Equipment.DoesNotExist:
+            return Response(data={"message": "Try with a valid equipment."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
