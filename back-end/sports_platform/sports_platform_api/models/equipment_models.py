@@ -48,3 +48,25 @@ class Equipment(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
 
     created_on = models.DateTimeField()
+
+    @staticmethod
+    def create_equipment(data, user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+
+        data['created_on'] = dt
+        data['creator'] = user
+        
+        try:
+            data['sport'] = Sport.objects.get(name=data['sport'])
+        except Sport.DoesNotExist:
+            return 102
+        try:
+
+            with transaction.atomic():
+                equipment = Equipment.objects.create(**data)
+            #ActivityStream.objects.create(type='Create', actor=data['organizer'], target=equipment, date=dt)
+            # https://schema.org/Product
+            return {"@id": equipment.equipment_id}
+        except Exception as e:
+            return 500
