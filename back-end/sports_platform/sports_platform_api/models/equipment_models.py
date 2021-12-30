@@ -48,6 +48,20 @@ class EquipmentDiscussionPost(models.Model):
         except Exception as e:
             return 500
 
+    def comment_post(self, comment_data, user):
+
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            EquipmentDiscussionComment.objects.create(
+                post=self, author=user, text=comment_data['text'], dateCreated=dt)
+            return 201
+        except:
+            return 500
+
+
 class EquipmentDiscussionComment(models.Model):
     class Meta:
         db_table = 'equipment_comment'
