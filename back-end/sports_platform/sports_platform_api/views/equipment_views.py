@@ -39,3 +39,21 @@ def create_equipment(request):
     except Exception as e:
         print(e)
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
+
+
+@api_view(['GET', 'DELETE'])
+def get_equipment(request, equipment_id):
+    if request.method == 'GET':
+        try:
+            equipment = Equipment.objects.get(pk=equipment_id)
+
+            equipment_information = equipment.get_equipment()
+
+            print(equipment_information)
+
+            return Response(data = equipment_information, status=200)
+        except Equipment.DoesNotExist:
+            return Response(data={"message": 'Equipment id does not exist'}, status=400)
+        except Exception:
+            return Response(data={'message': 'An error occured, please try again later.'}, status=500)
+
