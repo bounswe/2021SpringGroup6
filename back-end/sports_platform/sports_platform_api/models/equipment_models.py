@@ -190,3 +190,57 @@ class Equipment(models.Model):
             return result_dict
         except:
             return 500
+
+    def get_posts(self):
+
+        try:
+            data = dict()
+
+            posts = self.equipment_posts.all().order_by('dateCreated')
+
+            posts_list = []
+
+            for post in posts:
+
+                post_dict = dict()
+                post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+                post_dict["@id"] = post.post_id
+                if post.sharedContent:
+                    post_dict["sharedContent"] = post.sharedContent
+                post_dict["author"] = {
+                    "@context": "https://schema.org/Person",
+                    "@id": post.author.user_id,
+                    "identifier": post.author.identifier
+                }
+                post_dict["text"] = post.text
+                post_dict["dateCreated"] = post.dateCreated
+                comments = post.equipment_comments.all().order_by('dateCreated')
+
+                comment_list = []
+                for comment in comments:
+                    comment_dict = dict()
+                    comment_dict["@context"] = "https://schema.org/Comment"
+                    comment_dict["@id"] = comment.comment_id
+                    comment_dict["author"] = {
+                        "@context": "https://schema.org/Person",
+                        "@id": comment.author.user_id,
+                        "identifier": comment.author.identifier
+                    }
+                    comment_dict["text"] = comment.text
+                    comment_dict["dateCreated"] = comment.dateCreated
+                    comment_list.append(comment_dict)
+
+                post_dict["comment"] = comment_list
+                posts_list.append(post_dict)
+
+            data["@context"] = "https://schema.org/Product"
+            data["@id"] = self.equipment_id
+            data["additionalProperty"] = {
+                "@type": "PropertyValue",
+                "name": "posts",
+                "value": posts_list
+            }
+
+            return data
+        except Exception as e:
+            return 500
