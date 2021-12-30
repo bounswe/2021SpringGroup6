@@ -90,3 +90,30 @@ def search_equipment(request):
         return Response(equipments, status=200)
     except:
         return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['POST', 'GET'])
+def post_equipment_post(request, equipment_id):
+
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = equipment_validation.EquipmentDiscussionPost(data=request.data)
+
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            res = EquipmentDiscussionPost.create_post(
+                validation.validated_data, user, equipment_id)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+            else:
+                return Response(data=res, status=201)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
