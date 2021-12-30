@@ -25,4 +25,7 @@ class EventRepository(private val api: EventApi) {
     suspend fun participateAsSpectatorToEvent(token: String, eventId: Int?): Response<Unit> {
         return api.participateAsSpectatorToEvent(token, eventId)
     }
+    suspend fun deleteSpectatorRequest(token: String, eventId: Int?): Response<Unit> {
+        return api.deleteSpectatorRequest(token, eventId)
+    }
 }

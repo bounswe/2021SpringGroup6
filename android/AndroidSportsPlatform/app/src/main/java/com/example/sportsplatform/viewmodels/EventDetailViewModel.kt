@@ -30,6 +30,17 @@ class EventDetailViewModel(
     ) {
         Coroutines.main {
             val token = sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
+
+            val deleteSpectatorRequest = eventRepository.deleteSpectatorRequest(
+                "Token $token",
+                eventId.value
+            )
+
+            view.context.toast(
+                if (deleteSpectatorRequest.isSuccessful) "Delete spectator request is sent!"
+                else deleteSpectatorRequest.message()
+            )
+
             val sendInterestToEvent = eventRepository.sendInterestToEvent(
                 "Token $token",
                 eventId.value
