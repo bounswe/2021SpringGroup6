@@ -4,16 +4,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportsplatform.R
 import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.util.convertDateFormat
 import kotlinx.android.synthetic.main.item_event_layout.view.*
 
-class EventsListAdapter(private val itemList: List<EventResponse>?) :
+interface UsersParticipatingEventsClick {
+    fun onUsersParticipatingEventsClicked(eventResponse: EventResponse)
+}
+
+class EventsListAdapter(
+    private val itemList: List<EventResponse>?,
+    private val itemClickListener: UsersParticipatingEventsClick?
+) :
     RecyclerView.Adapter<EventsListAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val container: ConstraintLayout = itemView.clContainer
         val eventName: TextView = itemView.twName
         val eventDescription: TextView = itemView.twDescription
         val date: TextView = itemView.twStartDate
@@ -38,6 +47,9 @@ class EventsListAdapter(private val itemList: List<EventResponse>?) :
         holder.organizer.text = currentItem?.organizer?.identifier
         holder.duration.text = currentItem?.duration.toString()
         holder.sport.text = currentItem?.sport
+        holder.container.setOnClickListener {
+            currentItem?.let { item -> itemClickListener?.onUsersParticipatingEventsClicked(item) }
+        }
     }
 
     override fun getItemCount() = itemList?.size ?: 0
