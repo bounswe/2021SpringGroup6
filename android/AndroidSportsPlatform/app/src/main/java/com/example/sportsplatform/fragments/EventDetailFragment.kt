@@ -37,7 +37,7 @@ class EventDetailFragment : Fragment(), KodeinAware {
         _binding = FragmentEventDetailBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(EventDetailViewModel::class.java)
-        viewModel.getEventInformation(arguments?.getInt(EVENT_ID) ?: 0)
+        viewModel.eventId.postValue(arguments?.getInt(EVENT_ID) ?: 0)
 
         initializeRecyclerviews()
 
@@ -46,6 +46,13 @@ class EventDetailFragment : Fragment(), KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.eventId.observe(
+            viewLifecycleOwner,
+            Observer {
+                viewModel.getEventInformation(it)
+            }
+        )
 
         viewModel.event.observe(
             viewLifecycleOwner,

@@ -17,6 +17,7 @@ class EventDetailViewModel(
 ) : ViewModel() {
 
     var event: MutableLiveData<EventResponse> = MutableLiveData()
+    var eventId: MutableLiveData<Int> = MutableLiveData()
 
     fun getEventInformation(eventId: Int) {
         Coroutines.main {
@@ -25,14 +26,13 @@ class EventDetailViewModel(
     }
 
     fun sendInterestToEvent(
-        view: View,
-        eventId: Int
+        view: View
     ) {
         Coroutines.main {
             val token = sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
             val sendInterestToEvent = eventRepository.sendInterestToEvent(
                 "Token $token",
-                eventId
+                eventId.value
             )
 
             view.context.toast(
@@ -42,14 +42,13 @@ class EventDetailViewModel(
     }
 
     fun participateAsSpectatorToEvent(
-        view: View,
-        eventId: Int
+        view: View
     ) {
         Coroutines.main {
             val token = sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
             val participateAsSpectatorToEvent = eventRepository.participateAsSpectatorToEvent(
                 "Token $token",
-                eventId
+                eventId.value
             )
 
             view.context.toast(
