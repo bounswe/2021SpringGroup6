@@ -70,6 +70,27 @@ class Equipment(models.Model):
             return {"@id": equipment.equipment_id}
         except Exception as e:
             return 500
+
+    @staticmethod
+    def _create_filter_dict(data):
+        filters = {}
+        if 'creator' in data:
+            filters['creator'] = data['creator']
+
+        if 'nameContains' in data:
+            filters['name__contains'] = data['nameContains']
+
+        if 'latitudeBetweenStart' in data:
+            filters['latitude__range'] = (
+                data['latitudeBetweenStart'], data['latitudeBetweenEnd'])
+        if 'longitudeBetweenStart' in data:
+            filters['longitude__range'] = (
+                data['longitudeBetweenStart'], data['longitudeBetweenEnd'])
+        if 'sport' in data:
+            filters['sport'] = data['sport']
+
+        return filters
+
     def get_equipment(self):
 
         data_dict = dict()
@@ -103,3 +124,28 @@ class Equipment(models.Model):
         }
 
         return data_dict
+
+    @staticmethod
+    def search(filter):
+
+        filter_dict = Equipment._create_filter_dict(filter)
+
+        try:
+            results = Equipment.objects.filter(**filter_dict).order_by('-created_on')
+
+            result_dict = {
+                "@context": "https://www.w3.org/ns/activitystreams",
+                "type": "OrderedCollection",
+                "total_items": len(results)
+            }
+
+            result_eq = []
+
+            for res in results:
+                result_eq.append(res.get_equipment())
+
+            result_dict['items'] = result_eq
+
+            return result_dict
+        except:
+            return 500
