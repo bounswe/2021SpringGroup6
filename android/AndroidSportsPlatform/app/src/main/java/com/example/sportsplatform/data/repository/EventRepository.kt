@@ -19,4 +19,10 @@ class EventRepository(private val api: EventApi) {
     suspend fun createNewEvent(token: String, createEventRequest: CreateEventRequest) : Response<CreateEventResponse> {
         return api.createEvent(token, createEventRequest)
     }
+    suspend fun sendInterestToEvent(token: String, eventId: Int?): Response<Unit> {
+        return api.sendInterestToEvent(token, eventId)
+    }
+    suspend fun participateAsSpectatorToEvent(token: String, eventId: Int?): Response<Unit> {
+        return api.participateAsSpectatorToEvent(token, eventId)
+    }
 }

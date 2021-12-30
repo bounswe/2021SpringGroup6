@@ -31,6 +31,18 @@ interface EventApi {
         @Body createEventRequest: CreateEventRequest
     ): Response<CreateEventResponse>
 
+    @POST("/events/{event_id}/interesteds")
+    suspend fun sendInterestToEvent(
+        @Header("Authorization") token: String,
+        @Path("event_id") eventId: Int?
+    ): Response<Unit>
+
+    @POST("/events/{event_id}/spectators")
+    suspend fun participateAsSpectatorToEvent(
+        @Header("Authorization") token: String,
+        @Path("event_id") eventId: Int?
+    ): Response<Unit>
+
     companion object{
         operator fun invoke() : EventApi {
             val requestInterceptor = Interceptor { chain ->
