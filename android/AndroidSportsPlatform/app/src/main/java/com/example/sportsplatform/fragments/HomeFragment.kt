@@ -20,9 +20,9 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import com.example.sportsplatform.R
-import com.example.sportsplatform.adapter.EventsListAdapter
+import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
 import com.example.sportsplatform.adapter.UsersParticipatingEventsClick
-import com.example.sportsplatform.data.models.responses.EventResponse
+import com.example.sportsplatform.data.models.Value
 
 class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
 
@@ -73,7 +73,10 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
             Observer {
                 binding.rvEventsAttending.apply {
                     layoutManager = LinearLayoutManager(context)
-                    adapter = EventsListAdapter(it.items, this@HomeFragment)
+                    adapter = UsersParticipatingEventsAdapter(
+                        it.additionalProperty?.value,
+                        this@HomeFragment
+                    )
                 }
             }
         )
@@ -83,7 +86,7 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
         viewModel.userLoggingOut()
     }
 
-    override fun onUsersParticipatingEventsClicked(eventResponse: EventResponse) {
+    override fun onUsersParticipatingEventsClicked(eventResponse: Value?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val fragmentToGo = EventDetailFragment()
         transaction.replace(R.id.mainContainer, fragmentToGo)

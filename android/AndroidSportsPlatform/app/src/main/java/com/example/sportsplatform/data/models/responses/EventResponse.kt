@@ -1,6 +1,5 @@
 package com.example.sportsplatform.data.models.responses
 
-import com.example.sportsplatform.data.models.AdditionalProperty
 import com.example.sportsplatform.data.models.Location
 import com.example.sportsplatform.data.models.User
 
@@ -20,7 +19,6 @@ data class EventResponse(
     val location: Location,
     val organizer: User,
     val attendee: List<User>,
-    val audience: List<User>,
-    val additionalProperty: List<AdditionalProperty>
+    val audience: List<User>
 
 )

@@ -7,48 +7,44 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportsplatform.R
-import com.example.sportsplatform.data.models.responses.EventResponse
-import com.example.sportsplatform.util.convertDateFormat
-import kotlinx.android.synthetic.main.item_event_layout.view.*
+import com.example.sportsplatform.data.models.Value
+import com.example.sportsplatform.util.convertDateWithoutSecondsToDefault
+import kotlinx.android.synthetic.main.item_users_participating_events.view.*
 
-interface EventsClickListener {
-    fun onEventsClickListener(eventResponse: EventResponse?)
+interface UsersParticipatingEventsClick {
+    fun onUsersParticipatingEventsClicked(eventResponse: Value?)
 }
 
-class EventsListAdapter(
-    private val itemList: List<EventResponse>?,
-    private val itemClickListenerListener: EventsClickListener?
+class UsersParticipatingEventsAdapter(
+    private val itemList: List<Value>?,
+    private val itemClickListenerListener: UsersParticipatingEventsClick?
 ) :
-    RecyclerView.Adapter<EventsListAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<UsersParticipatingEventsAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val container: ConstraintLayout = itemView.clContainer
         val eventName: TextView = itemView.twName
-        val eventDescription: TextView = itemView.twDescription
+        val eventAddress: TextView = itemView.twAddress
         val date: TextView = itemView.twStartDate
         val maxAttendeeCap: TextView = itemView.twMaxAttendeeCapacity
-        val organizer: TextView = itemView.twOrganizer
-        val duration: TextView = itemView.twDuration
         val sport: TextView = itemView.twSport
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_event_layout, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_users_participating_events, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = itemList?.get(position)
         holder.eventName.text = currentItem?.name
-        holder.eventDescription.text = currentItem?.description
-        holder.date.text = currentItem?.created_on.convertDateFormat()
+        holder.eventAddress.text = currentItem?.location?.address
+        holder.date.text = currentItem?.startDate?.convertDateWithoutSecondsToDefault()
         holder.maxAttendeeCap.text = currentItem?.maximumAttendeeCapacity.toString()
-        holder.organizer.text = currentItem?.organizer?.identifier
-        holder.duration.text = currentItem?.duration.toString()
         holder.sport.text = currentItem?.sport
         holder.container.setOnClickListener {
-            currentItem?.let { item -> itemClickListenerListener?.onEventsClickListener(item) }
+            currentItem?.let { item -> itemClickListenerListener?.onUsersParticipatingEventsClicked(item) }
         }
     }
 
