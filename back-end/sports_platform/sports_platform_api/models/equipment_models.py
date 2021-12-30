@@ -70,3 +70,36 @@ class Equipment(models.Model):
             return {"@id": equipment.equipment_id}
         except Exception as e:
             return 500
+    def get_equipment(self):
+
+        data_dict = dict()
+
+        data_dict['@context'] = "https://schema.org/Product"
+        data_dict['@id'] = self.equipment_id
+        data_dict['sport'] = {"@type": "Thing", "name": self.sport.name }
+        data_dict['geo']= {
+            '@type': 'GeoCoordinates',
+            'latitude': float(self.latitude),
+            'longitude': float(self.longitude)
+        }
+        data_dict['description'] = self.description
+        data_dict['additionalProperty'] = [{
+                "@type": "PropertyValue",
+                "name": "created_on",
+                "value": self.created_on
+            }]
+
+        if self.sharedContent:
+            data_dict['additionalProperty'].append({
+                "@type": "PropertyValue",
+                "name": "sharedContent",
+                "value": self.sharedContent
+            })
+            
+        data_dict['creator'] = {
+            "@type": "Person", 
+            "@id": self.creator.user_id, 
+            "identifier": self.creator.identifier
+        }
+
+        return data_dict
