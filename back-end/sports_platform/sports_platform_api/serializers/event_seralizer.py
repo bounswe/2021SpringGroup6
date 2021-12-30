@@ -6,3 +6,8 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         exclude = ['latitude', 'longitude', 'city', 'district', 'country',
                   'minimumAttendeeCapacity', 'maxSpectatorCapacity', 'organizer', 'acceptWithoutApproval']
+
+class FullEventSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Event
+      exclude = ['acceptWithoutApproval']
