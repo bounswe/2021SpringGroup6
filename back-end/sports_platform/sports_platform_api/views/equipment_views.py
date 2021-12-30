@@ -170,3 +170,35 @@ def delete_equipment_post(request, equipment_id, post_id):
             return Response(data={"message": "Try with a valid discussion post."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
+
+    if request.method == 'POST':
+
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        validation = equipment_validation.EquipmentDiscussionComment(
+            data=request.data)
+        if not validation.is_valid():
+            return Response(data={"message": validation.errors}, status=400)
+
+        try:
+            post = EquipmentDiscussionPost.objects.get(post_id=post_id)
+
+            if post.equipment.equipment_id != equipment_id:
+                return Response(data={"message": "This post does not belong to that equipment_id."}, status=400)
+
+            res = post.comment_post(validation.validated_data, user)
+
+            if res == 500:
+                return Response(data={"message": "Try later."}, status=500)
+
+            else:
+                return Response(status=201)
+        except EquipmentDiscussionPost.DoesNotExist:
+            return Response(data={"message": "Try with a valid post."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
+
