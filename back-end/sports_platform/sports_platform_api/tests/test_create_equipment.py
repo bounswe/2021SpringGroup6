@@ -6,7 +6,7 @@ from .test_helper_functions import create_mock_user
 from ..models import Equipment, Sport
 
 
-class CreateEventTest(TestCase):
+class CreateEquipmentTest(TestCase):
 
     def setUp(self):
         self.client = Client()
