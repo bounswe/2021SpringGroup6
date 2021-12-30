@@ -21,6 +21,33 @@ class EquipmentDiscussionPost(models.Model):
         'Equipment', related_name='equipment_posts', on_delete=models.CASCADE)
     text = models.TextField()
     dateCreated = models.DateTimeField()
+
+    @staticmethod
+    def create_post(post_data, user, equipment_id):
+
+        try:
+            equipment = Equipment.objects.get(equipment_id=equipment_id)
+        except Equipment.DoesNotExist:
+            return 402
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            if "sharedContent" in post_data.keys():
+                obj = EquipmentDiscussionPost.objects.create(
+                    equipment=equipment, author=user, dateCreated=dt, text=post_data['text'], sharedContent=post_data['sharedContent'])
+            else:
+                obj = EquipmentDiscussionPost.objects.create(
+                    equipment=equipment, author=user, dateCreated=dt, text=post_data['text'])
+
+            post_dict = dict()
+            post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+            post_dict["@id"] = obj.post_id
+            return post_dict
+        except Exception as e:
+            return 500
+
 class EquipmentDiscussionComment(models.Model):
     class Meta:
         db_table = 'equipment_comment'
