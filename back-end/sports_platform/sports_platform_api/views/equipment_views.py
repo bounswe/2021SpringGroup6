@@ -75,3 +75,18 @@ def get_equipment(request, equipment_id):
             return Response(data={"message": "Try with a valid equipment."}, status=400)
         except Exception:
             return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['POST'])
+def search_equipment(request):
+    validation = equipment_validation.Search(data=request.data)
+
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    try:
+        validated_body = validation.validated_data
+        equipments = Equipment.search(validated_body)
+        return Response(equipments, status=200)
+    except:
+        return Response(data={"message": 'Try later.'}, status=500)
