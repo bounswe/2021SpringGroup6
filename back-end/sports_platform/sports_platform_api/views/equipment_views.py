@@ -138,3 +138,35 @@ def post_equipment_post(request, equipment_id):
             return Response(data={"message": "Try with a valid equipment."}, status=400)
         except Exception as e:
             return Response(data={"message": 'Try later.'}, status=500)
+
+
+@api_view(['DELETE', 'POST'])
+def delete_equipment_post(request, equipment_id, post_id):
+
+    if request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({"message": "User not logged in."},
+                            status=401)
+
+        user = request.user
+
+        try:
+            post = EquipmentDiscussionPost.objects.get(post_id=post_id)
+
+            if post.equipment.equipment_id != equipment_id:
+                return Response(data={"message": "This post does not belong to that equipment_id."}, status=400)
+
+            if user.user_id != post.equipment.creator.user_id and user.user_id != post.author.user_id:
+                return Response(data={"message": "Only post authors and equipment creators can delete posts."}, status=400)
+
+            try:
+                with transaction.atomic():
+                    post.delete()
+                return Response(status=204)
+            except:
+                return Response(data={"message": "Try later."}, status=500)
+
+        except EquipmentDiscussionPost.DoesNotExist:
+            return Response(data={"message": "Try with a valid discussion post."}, status=400)
+        except Exception as e:
+            return Response(data={"message": 'Try later.'}, status=500)
