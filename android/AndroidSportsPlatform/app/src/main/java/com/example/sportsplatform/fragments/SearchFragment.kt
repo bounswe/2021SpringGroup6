@@ -11,12 +11,8 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportsplatform.adapter.EventSearchAdapter
 import com.example.sportsplatform.R
-import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.databinding.FragmentSearchBinding
-import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import org.kodein.di.Kodein

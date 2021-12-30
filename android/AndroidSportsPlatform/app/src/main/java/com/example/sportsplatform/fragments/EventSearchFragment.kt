@@ -8,7 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportsplatform.adapter.EventSearchAdapter
+import com.example.sportsplatform.R
+import com.example.sportsplatform.adapter.EventsListAdapter
+import com.example.sportsplatform.adapter.UsersParticipatingEventsClick
+import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.databinding.FragmentSearchEventBinding
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
@@ -16,7 +19,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventSearchFragment : Fragment(), KodeinAware {
+class EventSearchFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
     private var _binding: FragmentSearchEventBinding? = null
     private val binding get() = _binding!!
 
@@ -47,9 +50,22 @@ class EventSearchFragment : Fragment(), KodeinAware {
                     layoutManager =
                         LinearLayoutManager(context)
                     adapter =
-                        it?.items?.let { filteredEventItems -> EventSearchAdapter(filteredEventItems) }
+                        it?.items?.let { filteredEventItems ->
+                            EventsListAdapter(
+                                filteredEventItems,
+                                this@EventSearchFragment
+                            )
+                        }
                 }
             }
         )
+    }
+
+    override fun onUsersParticipatingEventsClicked(eventResponse: EventResponse) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val fragmentToGo = EventDetailFragment()
+        transaction.replace(R.id.mainContainer, fragmentToGo)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.activities.LoginActivity
-import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
 import com.example.sportsplatform.databinding.FragmentHomeBinding
 import com.example.sportsplatform.util.toast
 import com.example.sportsplatform.viewmodels.HomeViewModel
@@ -21,8 +20,11 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import com.example.sportsplatform.R
+import com.example.sportsplatform.adapter.EventsListAdapter
+import com.example.sportsplatform.adapter.UsersParticipatingEventsClick
+import com.example.sportsplatform.data.models.responses.EventResponse
 
-class HomeFragment : Fragment(), KodeinAware {
+class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -71,7 +73,7 @@ class HomeFragment : Fragment(), KodeinAware {
             Observer {
                 binding.rvEventsAttending.apply {
                     layoutManager = LinearLayoutManager(context)
-                    adapter = UsersParticipatingEventsAdapter(it.items)
+                    adapter = EventsListAdapter(it.items, this@HomeFragment)
                 }
             }
         )
@@ -79,5 +81,13 @@ class HomeFragment : Fragment(), KodeinAware {
 
     private fun logOut() = lifecycleScope.launch {
         viewModel.userLoggingOut()
+    }
+
+    override fun onUsersParticipatingEventsClicked(eventResponse: EventResponse) {
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val fragmentToGo = EventDetailFragment()
+        transaction.replace(R.id.mainContainer, fragmentToGo)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

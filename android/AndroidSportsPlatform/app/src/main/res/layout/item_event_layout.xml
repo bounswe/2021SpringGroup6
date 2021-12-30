@@ -4,13 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_12"
-        android:layout_marginVertical="@dimen/margin_12">
+        android:layout_marginVertical="@dimen/margin_12"
+        android:background="@drawable/bg_rounded_corner"
+        android:paddingHorizontal="@dimen/margin_12"
+        android:paddingVertical="@dimen/margin_12">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twName"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -19,6 +24,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twDescription"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +33,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twStartDate"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +42,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twMaxAttendeeCapacity"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +51,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twOrganizer"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +60,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twDuration"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +69,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twSport"
+            style="@style/SearchedEventInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
