@@ -62,4 +62,10 @@
     <string name="familyName">Family name</string>
     <string name="birthDate">Birth date</string>
     <string name="updateProfile">Update Profile</string>
+    <string name="eventDetailScreenTitle">Event Information</string>
+    <string name="eventStartDate">Event start date</string>
+    <string name="eventAddress">Event address</string>
+    <string name="eventOrganizer">Event organizer</string>
+    <string name="eventAttendee">Event attendee</string>
+    <string name="eventAudience">Event audience</string>
 </resources>
