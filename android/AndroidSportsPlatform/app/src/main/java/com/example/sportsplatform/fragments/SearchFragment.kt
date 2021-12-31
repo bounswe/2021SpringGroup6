@@ -54,6 +54,8 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
         initializeSpinner()
 
+        initializeSpinnersForLevels()
+
         binding.searchViewModel = viewModel
 
         return binding.root
@@ -157,6 +159,18 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         binding.spinnerSport.adapter = arrayAdapter
     }
 
+    private fun initializeSpinnersForLevels() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.levels,
+            R.layout.item_spinner
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerMinLevel.adapter = adapter
+            binding.spinnerMaxLevel.adapter = adapter
+        }
+    }
+
     private fun navigateToEventSearchFragment() {
         val transaction =
             requireActivity().supportFragmentManager.beginTransaction()
@@ -171,7 +185,11 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 ) binding.etSearchCity.text.toString() else null,
                 country = if (binding.etSearchCountry.text.toString()
                         .isNotEmpty()
-                ) binding.etSearchCountry.text.toString() else null
+                ) binding.etSearchCountry.text.toString() else null,
+                skillLevels = listOf(
+                    binding.spinnerMinLevel.selectedItem.toString().toInt(),
+                    binding.spinnerMaxLevel.selectedItem.toString().toInt()
+                )
             ),
             viewModel.listOfEventSearchCoordinates
         )

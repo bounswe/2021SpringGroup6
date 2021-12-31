@@ -12,7 +12,8 @@ data class EventFilterRequest(
     val longitudeBetweenEnd: Double? = null,
     val sport: String? = null,
     val city: String? = null,
-    val country: String? = null
+    val country: String? = null,
+    val skillLevels: List<Int>? = null
     //val city: String,
     //val creator: String
 ) : Parcelable

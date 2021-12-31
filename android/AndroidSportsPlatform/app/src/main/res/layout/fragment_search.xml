@@ -66,6 +66,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twSelectMinLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_6"
+            android:paddingVertical="@dimen/margin_6"
+            android:text="@string/selectMinLevel"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerSport" />
+
+        <Spinner
+            android:id="@+id/spinnerMinLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_6"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twSelectMinLevel" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twSelectMaxLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/margin_6"
+            android:text="@string/selectMaxLevel"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/twSelectMinLevel" />
+
+        <Spinner
+            android:id="@+id/spinnerMaxLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_6"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twSelectMaxLevel" />
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearchCity"
             android:layout_width="match_parent"
@@ -73,11 +112,14 @@
             android:layout_marginTop="@dimen/margin_6"
             android:background="@null"
             android:hint="@string/enterCity"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
             android:paddingVertical="@dimen/margin_6"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerSport" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerMaxLevel" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearchCountry"
@@ -86,6 +128,9 @@
             android:layout_marginTop="@dimen/margin_6"
             android:background="@null"
             android:hint="@string/enterCountry"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
             android:paddingVertical="@dimen/margin_6"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintEnd_toEndOf="parent"

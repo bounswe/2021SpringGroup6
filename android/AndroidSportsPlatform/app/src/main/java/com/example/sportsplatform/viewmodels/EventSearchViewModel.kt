@@ -37,7 +37,8 @@ class EventSearchViewModel(private val eventRepo: EventRepository) : ViewModel()
                     longitudeBetweenEnd = eventSearchCoordinates?.get(0)?.longitude?.toString()
                         ?.take(9)?.toDouble(),
                     longitudeBetweenStart = eventSearchCoordinates?.get(1)?.longitude?.toString()
-                        ?.take(9)?.toDouble()
+                        ?.take(9)?.toDouble(),
+                    skillLevels = eventSearch?.skillLevels
                 )
             eventsFiltered.postValue(
                 eventRepo.findFilterEvents(

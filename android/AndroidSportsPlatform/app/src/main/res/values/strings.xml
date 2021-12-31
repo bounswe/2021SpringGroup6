@@ -74,6 +74,15 @@
     <string name="eventSportTitle">Sport: %1s</string>
     <string name="eventDurationTitle">Duration: %1s</string>
     <string name="eventMaxAttCapTitle">Max att. capacity: %1s</string>
+    <string-array name="levels">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="selectMinLevel">Select MIN level</string>
+    <string name="selectMaxLevel">Select MAX level</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="selectSport">Select sport</string>
