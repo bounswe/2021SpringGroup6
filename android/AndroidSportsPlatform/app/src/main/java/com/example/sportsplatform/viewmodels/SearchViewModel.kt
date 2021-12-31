@@ -16,7 +16,7 @@ class SearchViewModel(
     private val sportRepository: SportRepository
 ) : ViewModel() {
 
-    val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
+    val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData("")
 
     val usersFiltered: MutableLiveData<UserSearchResponse?> = MutableLiveData()
     val userSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
