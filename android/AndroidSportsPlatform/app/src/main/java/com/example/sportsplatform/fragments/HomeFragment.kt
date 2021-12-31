@@ -88,7 +88,7 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
 
     override fun onUsersParticipatingEventsClicked(eventResponse: Value?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val fragmentToGo = EventDetailFragment()
+        val fragmentToGo = EventDetailFragment.newInstance(eventId = eventResponse?.id)
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()

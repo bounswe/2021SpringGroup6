@@ -2,7 +2,6 @@ package com.example.sportsplatform.util
 
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.ZoneId
 import java.util.*
 
 const val DATE_FORMAT = "dd.MM.yyyy HH:mm"
@@ -29,13 +28,10 @@ fun String?.convertDateFormatToDefault(): String {
 
 fun String?.convertDateWithoutSecondsToDefault(): String {
     val instant: Instant = Instant.parse(this)
-    val localDateTime = instant.atZone(ZoneId.of("Europe/Istanbul")).toLocalDateTime()
     val simpleDateFormatter =
         SimpleDateFormat(SIMPLE_DATE_FORMAT_WITHOUT_SECONDS, Locale.getDefault())
     val dateFormatter = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-    val date = localDateTime?.toString()?.let {
-        simpleDateFormatter.parse(it)
-    }
+    val date = simpleDateFormatter.parse(instant.toString())
     return date?.let { dateFormatter.format(it) } ?: ""
 }
 
