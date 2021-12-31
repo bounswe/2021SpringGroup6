@@ -2,6 +2,7 @@ package com.example.sportsplatform.data.models.responses
 
 import com.example.sportsplatform.data.models.Location
 import com.example.sportsplatform.data.models.User
+import com.example.sportsplatform.util.convertDateWithoutSecondsToDefault
 
 data class EventResponse(
     val event_id: Int,
@@ -21,4 +22,9 @@ data class EventResponse(
     val attendee: List<User>,
     val audience: List<User>
 
-)
+) {
+    var convertedDate: String? = null
+    fun getFormattedDate() {
+        convertedDate = startDate.convertDateWithoutSecondsToDefault()
+    }
+}

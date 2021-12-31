@@ -62,6 +62,13 @@ class EventDetailFragment : Fragment(), KodeinAware {
                 binding.eventDetailViewModel = viewModel
             }
         )
+
+        viewModel.interestSent.observe(
+            viewLifecycleOwner,
+            Observer {
+                viewModel.eventId.value?.let { id -> viewModel.getEventInformation(id) }
+            }
+        )
     }
 
     private fun initializeRecyclerviews() {

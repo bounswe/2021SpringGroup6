@@ -18,10 +18,13 @@ class EventDetailViewModel(
 
     var event: MutableLiveData<EventResponse> = MutableLiveData()
     var eventId: MutableLiveData<Int> = MutableLiveData()
+    var interestSent: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getEventInformation(eventId: Int) {
         Coroutines.main {
-            event.postValue(eventRepository.findEvent(EventRequest(event_id = eventId)).body())
+            val eventInformation = eventRepository.findEvent(EventRequest(event_id = eventId)).body()
+            eventInformation?.getFormattedDate()
+            event.postValue(eventInformation)
         }
     }
 
@@ -49,6 +52,13 @@ class EventDetailViewModel(
             view.context.toast(
                 if (sendInterestToEvent.isSuccessful) "Interest sent!" else sendInterestToEvent.message()
             )
+            if (sendInterestToEvent.isSuccessful) {
+                view.context.toast("Interest sent!")
+                interestSent.postValue(true)
+            } else {
+                view.context.toast(sendInterestToEvent.message())
+                interestSent.postValue(false)
+            }
         }
     }
 

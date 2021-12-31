@@ -68,6 +68,6 @@
     <string name="eventOrganizer">Event organizer</string>
     <string name="eventAttendee">Event attendee</string>
     <string name="eventAudience">Event audience</string>
-    <string name="sendInterestAsAudience">Participate as audience</string>
-    <string name="sendInterestToEvent">Send interest to event</string>
+    <string name="sendInterestAsAudience">I am interested!</string>
+    <string name="sendInterestToEvent">Participate as spectator</string>
 </resources>
