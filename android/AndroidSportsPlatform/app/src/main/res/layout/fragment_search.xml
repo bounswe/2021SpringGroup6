@@ -56,17 +56,55 @@
             app:layout_constraintStart_toStartOf="@+id/searchBar"
             app:layout_constraintTop_toTopOf="@+id/searchBar" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/twSearchEventWithMap"
-            style="@style/TitleStyle"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etSearchSport"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_12"
+            android:background="@null"
             android:paddingVertical="@dimen/margin_6"
-            android:text="@string/searchEventWithMap"
+            android:layout_marginTop="@dimen/margin_6"
+            android:hint="@string/enterSport"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etSearchCity"
+            android:layout_width="match_parent"
+            android:paddingVertical="@dimen/margin_6"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_marginTop="@dimen/margin_6"
+            android:hint="@string/enterCity"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSearchSport" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etSearchCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/margin_6"
+            android:background="@null"
+            android:layout_marginTop="@dimen/margin_6"
+            android:hint="@string/enterCountry"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSearchCity" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twSearchEventWithMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_6"
+            android:paddingVertical="@dimen/margin_12"
+            android:hint="@string/searchEventWithMap"
+            android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSearchCountry" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"

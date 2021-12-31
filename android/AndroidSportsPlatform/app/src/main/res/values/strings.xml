@@ -71,4 +71,8 @@
     <string name="sendInterestAsAudience">I am interested!</string>
     <string name="sendInterestToEvent">Participate as spectator</string>
     <string name="searchEventWithMap">Search event with Map</string>
+    <string name="enterName">Enter name</string>
+    <string name="enterSport">Enter sport</string>
+    <string name="enterCity">Enter city</string>
+    <string name="enterCountry">Enter country</string>
 </resources>

@@ -5,8 +5,10 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.R
+import com.example.sportsplatform.util.fromJson
 import com.google.android.gms.maps.model.LatLng
 import com.example.sportsplatform.data.models.responses.UserSearchResponse
+import com.google.gson.Gson
 
 class SearchViewModel : ViewModel() {
 
@@ -20,6 +22,7 @@ class SearchViewModel : ViewModel() {
     var searchEventWithMapVisibility: MutableLiveData<Int> = MutableLiveData()
     var custSharedPreferences: SharedPreferences? = null
     var listOfEventSearchCoordinates: Array<LatLng>? = null
+    var coordinatesAsString: String = ""
 
     fun setSearchOption(view: View?, position: Int?) {
         searchBarHint.postValue(
@@ -35,5 +38,28 @@ class SearchViewModel : ViewModel() {
 
     fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {
         custSharedPreferences = customSharedPrefers
+    }
+
+    fun getEventSearchCoordinatesFromSharedPreferences() {
+        val serializedObject =
+            custSharedPreferences?.getString("listOfMarkerPositions", null)
+        listOfEventSearchCoordinates = serializedObject?.let {
+            Gson().fromJson<Array<LatLng>>(it)
+        }
+
+        getCoorinatesAsString()
+    }
+
+    private fun getCoorinatesAsString() {
+        listOfEventSearchCoordinates?.toMutableList()?.map {
+            coordinatesAsString += " ${it.latitude.toString().take(9)} / ${
+                it.longitude.toString().take(9)
+            } "
+        }
+    }
+
+    fun clearCoordinates() {
+        custSharedPreferences?.edit()?.putString("listOfMarkerPositions", null)?.apply()
+        coordinatesAsString = ""
     }
 }

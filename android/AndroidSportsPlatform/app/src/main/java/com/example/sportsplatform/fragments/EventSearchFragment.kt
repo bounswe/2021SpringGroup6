@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.R
 import com.example.sportsplatform.adapter.EventsListAdapter
 import com.example.sportsplatform.adapter.EventsClickListener
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.databinding.FragmentSearchEventBinding
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
@@ -67,7 +68,7 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
     private fun getBundleArguments() {
         arguments?.let {
             viewModel.setArguments(
-                it.getString(EVENT_SEARCH_KEY),
+                it.getParcelable(EVENT_SEARCH),
                 it.getString(EVENT_SEARCH_COORDINATES_WITH_MAP)
             )
         }
@@ -82,14 +83,14 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
     }
 
     companion object {
-        private const val EVENT_SEARCH_KEY = "event_search_key"
+        private const val EVENT_SEARCH = "event_search"
         private const val EVENT_SEARCH_COORDINATES_WITH_MAP = "event_search_coordinates_with_map"
         fun newInstance(
-            eventSearchKey: String?,
+            eventSearch: EventFilterRequest?,
             listOfCoordinates: Array<LatLng>?
         ) = EventSearchFragment().apply {
             arguments = Bundle().apply {
-                putString(EVENT_SEARCH_KEY, eventSearchKey)
+                putParcelable(EVENT_SEARCH, eventSearch)
                 val coordinatesJson = Gson().toJson(listOfCoordinates)
                 putString(EVENT_SEARCH_COORDINATES_WITH_MAP, coordinatesJson)
             }

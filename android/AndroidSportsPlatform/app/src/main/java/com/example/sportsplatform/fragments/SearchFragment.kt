@@ -15,16 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
 import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.MapsActivity
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.util.Constants
-import com.example.sportsplatform.util.fromJson
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
-import com.google.android.gms.maps.model.LatLng
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
-import com.google.gson.Gson
 
 class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListener {
 
@@ -51,7 +49,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 Context.MODE_PRIVATE
             )
         )
-        viewModel.custSharedPreferences?.edit()?.putString("listOfMarkerPositions", null)?.apply()
+        viewModel.clearCoordinates()
 
         initializeSpinner()
 
@@ -62,7 +60,8 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
     override fun onResume() {
         super.onResume()
-        viewModel.listOfEventSearchCoordinates = getEventSearchCoordinatesFromSharedPreferences()
+        viewModel.getEventSearchCoordinatesFromSharedPreferences()
+        binding.twSearchEventWithMap.text = viewModel.coordinatesAsString
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,6 +95,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         )
 
         binding.twSearchEventWithMap.setOnClickListener {
+            viewModel.clearCoordinates()
             MapsActivity.openMaps(activity as MainActivity, true)
         }
 
@@ -147,20 +147,25 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         val transaction =
             requireActivity().supportFragmentManager.beginTransaction()
         val fragmentToGo = EventSearchFragment.newInstance(
-            viewModel.eventSearchKey.value?.toString(),
+            EventFilterRequest(
+                nameContains = if (viewModel.eventSearchKey.value.toString()
+                        .isNotEmpty()
+                ) binding.searchBar.text.toString() else null,
+                sport = if (binding.etSearchSport.text.toString()
+                        .isNotEmpty()
+                ) binding.etSearchSport.text.toString() else null,
+                city = if (binding.etSearchCity.text.toString()
+                        .isNotEmpty()
+                ) binding.etSearchSport.text.toString() else null,
+                country = if (binding.etSearchCountry.text.toString()
+                        .isNotEmpty()
+                ) binding.etSearchSport.text.toString() else null
+            ),
             viewModel.listOfEventSearchCoordinates
         )
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()
-    }
-
-    private fun getEventSearchCoordinatesFromSharedPreferences(): Array<LatLng>? {
-        val serializedObject =
-            viewModel.custSharedPreferences?.getString("listOfMarkerPositions", null)
-        return serializedObject?.let {
-            Gson().fromJson<Array<LatLng>>(it)
-        }
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
