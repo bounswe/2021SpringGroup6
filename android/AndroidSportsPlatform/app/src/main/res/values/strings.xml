@@ -70,6 +70,10 @@
     <string name="eventAudience">Event audience</string>
     <string name="sendInterestAsAudience">I am interested!</string>
     <string name="sendInterestToEvent">Participate as spectator</string>
+    <string name="eventOrganizerTitle">Organizer: %1s</string>
+    <string name="eventSportTitle">Sport: %1s</string>
+    <string name="eventDurationTitle">Duration: %1s</string>
+    <string name="eventMaxAttCapTitle">Max att. capacity: %1s</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="enterSport">Enter sport</string>

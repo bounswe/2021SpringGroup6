@@ -31,6 +31,8 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
     private lateinit var viewModel: EventSearchViewModel
     private val factory: EventSearchViewModelFactory by instance()
 
+    private val eventsAdapter by lazy { EventsListAdapter(this) }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +41,11 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
         _binding = FragmentSearchEventBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(EventSearchViewModel::class.java)
+
         getBundleArguments()
+
+        initializeRecyclerview()
+
         viewModel.fillSearchEventList()
         return binding.root
     }
@@ -50,17 +56,7 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
         viewModel.eventsFiltered.observe(
             viewLifecycleOwner,
             Observer {
-                binding.rvEventsFiltered.apply {
-                    layoutManager =
-                        LinearLayoutManager(context)
-                    adapter =
-                        it?.items?.let { filteredEventItems ->
-                            EventsListAdapter(
-                                filteredEventItems,
-                                this@EventSearchFragment
-                            )
-                        }
-                }
+                eventsAdapter.items = it?.items?.toMutableList() ?: mutableListOf()
             }
         )
     }
@@ -71,6 +67,13 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
                 it.getParcelable(EVENT_SEARCH),
                 it.getString(EVENT_SEARCH_COORDINATES_WITH_MAP)
             )
+        }
+    }
+
+    private fun initializeRecyclerview() {
+        binding.rvEventsFiltered.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = eventsAdapter
         }
     }
 
