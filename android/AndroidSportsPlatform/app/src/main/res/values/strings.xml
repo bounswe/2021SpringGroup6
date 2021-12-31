@@ -70,4 +70,5 @@
     <string name="eventAudience">Event audience</string>
     <string name="sendInterestAsAudience">I am interested!</string>
     <string name="sendInterestToEvent">Participate as spectator</string>
+    <string name="searchEventWithMap">Search event with Map</string>
 </resources>

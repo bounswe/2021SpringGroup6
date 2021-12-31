@@ -1,5 +1,6 @@
 package com.example.sportsplatform.viewmodels
 
+import android.content.SharedPreferences
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,8 @@ class SearchViewModel : ViewModel() {
 
     var searchBarHint: MutableLiveData<String> = MutableLiveData()
     var searchOption: MutableLiveData<Int> = MutableLiveData(0)
+    var searchEventWithMapVisibility: MutableLiveData<Int> = MutableLiveData()
+    var custSharedPreferences: SharedPreferences? = null
 
     fun setSearchOption(view: View?, position: Int?) {
         searchBarHint.postValue(
@@ -27,5 +30,10 @@ class SearchViewModel : ViewModel() {
                 else -> ""
             }
         )
+        searchEventWithMapVisibility.postValue(if (position == 1) View.VISIBLE else View.GONE)
+    }
+
+    fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {
+        custSharedPreferences = customSharedPrefers
     }
 }
