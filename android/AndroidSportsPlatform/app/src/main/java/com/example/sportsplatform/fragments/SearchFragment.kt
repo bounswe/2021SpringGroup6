@@ -84,7 +84,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         viewModel.searchOption.observe(
             viewLifecycleOwner,
             Observer {
-                viewModel.setSearchOption(binding.spinner, it)
+                viewModel.setSearchOption(binding.spinnerSearchOptions, it)
             }
         )
 
@@ -92,6 +92,13 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
             viewLifecycleOwner,
             Observer {
                 binding.searchViewModel = viewModel
+            }
+        )
+
+        viewModel.sports.observe(
+            viewLifecycleOwner,
+            Observer {
+                initializeSpinnerForSports(it)
             }
         )
 
@@ -139,9 +146,15 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
             R.layout.item_spinner
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinner.adapter = adapter
+            binding.spinnerSearchOptions.adapter = adapter
         }
-        binding.spinner.onItemSelectedListener = this
+        binding.spinnerSearchOptions.onItemSelectedListener = this
+    }
+
+    private fun initializeSpinnerForSports(sports: Array<String>) {
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, sports)
+        binding.spinnerSport.adapter = arrayAdapter
     }
 
     private fun navigateToEventSearchFragment() {
@@ -152,15 +165,13 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 nameContains = if (viewModel.eventSearchKey.value.toString()
                         .isNotEmpty()
                 ) binding.searchBar.text.toString() else null,
-                sport = if (binding.etSearchSport.text.toString()
-                        .isNotEmpty()
-                ) binding.etSearchSport.text.toString() else null,
+                sport = binding.spinnerSport.selectedItem.toString(),
                 city = if (binding.etSearchCity.text.toString()
                         .isNotEmpty()
-                ) binding.etSearchSport.text.toString() else null,
+                ) binding.etSearchCity.text.toString() else null,
                 country = if (binding.etSearchCountry.text.toString()
                         .isNotEmpty()
-                ) binding.etSearchSport.text.toString() else null
+                ) binding.etSearchCountry.text.toString() else null
             ),
             viewModel.listOfEventSearchCoordinates
         )

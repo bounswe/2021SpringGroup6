@@ -27,6 +27,7 @@ class SearchViewModel(
     var custSharedPreferences: SharedPreferences? = null
     var listOfEventSearchCoordinates: Array<LatLng>? = null
     var coordinatesAsString: String = ""
+    var sports: MutableLiveData<Array<String>> = MutableLiveData()
 
     fun setSearchOption(view: View?, position: Int?) {
         searchBarHint.postValue(
@@ -42,7 +43,10 @@ class SearchViewModel(
 
     fun getSports() {
         Coroutines.main {
-            val sports = sportRepository.getSports()
+            val sportsNames = sportRepository.getSports().body()
+            var sportsNamesList = arrayOf<String>()
+            sportsNames?.map { it.name?.let { name -> sportsNamesList += name } }
+            sports.postValue(sportsNamesList)
         }
     }
 

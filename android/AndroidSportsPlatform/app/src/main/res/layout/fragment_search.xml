@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinnerSearchOptions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,14 +56,11 @@
             app:layout_constraintStart_toStartOf="@+id/searchBar"
             app:layout_constraintTop_toTopOf="@+id/searchBar" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/etSearchSport"
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/spinnerSport"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@null"
-            android:paddingVertical="@dimen/margin_6"
             android:layout_marginTop="@dimen/margin_6"
-            android:hint="@string/enterSport"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,24 +69,24 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearchCity"
             android:layout_width="match_parent"
-            android:paddingVertical="@dimen/margin_6"
             android:layout_height="wrap_content"
-            android:background="@null"
             android:layout_marginTop="@dimen/margin_6"
+            android:background="@null"
             android:hint="@string/enterCity"
+            android:paddingVertical="@dimen/margin_6"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etSearchSport" />
+            app:layout_constraintTop_toBottomOf="@+id/spinnerSport" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etSearchCountry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/margin_6"
-            android:background="@null"
             android:layout_marginTop="@dimen/margin_6"
+            android:background="@null"
             android:hint="@string/enterCountry"
+            android:paddingVertical="@dimen/margin_6"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,8 +97,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_6"
-            android:paddingVertical="@dimen/margin_12"
             android:hint="@string/searchEventWithMap"
+            android:paddingVertical="@dimen/margin_12"
             android:visibility="@{searchViewModel.searchEventWithMapVisibility}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etSearchCountry" />
