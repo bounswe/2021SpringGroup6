@@ -5,12 +5,16 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.R
+import com.example.sportsplatform.data.repository.SportRepository
+import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.fromJson
 import com.google.android.gms.maps.model.LatLng
 import com.example.sportsplatform.data.models.responses.UserSearchResponse
 import com.google.gson.Gson
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val sportRepository: SportRepository
+) : ViewModel() {
 
     val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
 
@@ -34,6 +38,12 @@ class SearchViewModel : ViewModel() {
             }
         )
         searchEventWithMapVisibility.postValue(if (position == 1) View.VISIBLE else View.GONE)
+    }
+
+    fun getSports() {
+        Coroutines.main {
+            val sports = sportRepository.getSports()
+        }
     }
 
     fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {

@@ -43,6 +43,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(SearchViewModel::class.java)
 
+        viewModel.getSports()
         viewModel.setCustomSharedPreferences(
             requireActivity().getSharedPreferences(
                 Constants.CUSTOM_SHARED_PREFERENCES,
