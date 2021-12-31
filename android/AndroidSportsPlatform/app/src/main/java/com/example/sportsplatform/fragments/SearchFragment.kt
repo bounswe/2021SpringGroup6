@@ -17,6 +17,7 @@ import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.MapsActivity
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.util.Constants
+import com.example.sportsplatform.util.fromJson
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import com.google.android.gms.maps.model.LatLng
@@ -43,6 +44,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(SearchViewModel::class.java)
+
         viewModel.setCustomSharedPreferences(
             requireActivity().getSharedPreferences(
                 Constants.CUSTOM_SHARED_PREFERENCES,
@@ -50,14 +52,17 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
             )
         )
         viewModel.custSharedPreferences?.edit()?.putString("listOfMarkerPositions", null)?.apply()
+
         initializeSpinner()
+
         binding.searchViewModel = viewModel
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        val listOfEventSearchCoordinates = getEventSearchCoordinatesFromSharedPreferences()
+        viewModel.listOfEventSearchCoordinates = getEventSearchCoordinatesFromSharedPreferences()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,35 +100,33 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         }
 
         binding.btnSearch.setOnClickListener {
-            if (viewModel.eventSearchKey.value.toString().isNotEmpty() ||
-                viewModel.eventSearchKey.value.toString().isNotBlank() ||
-                viewModel.userSearchKey.value.toString().isNotEmpty() ||
-                viewModel.userSearchKey.value.toString().isNotBlank()
-            ) {
-                when (viewModel.searchOption.value) {
-                    0 -> {
-                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        val arguments = Bundle()
-                        arguments.putString("user_search_filter", viewModel.userSearchKey.value.toString())
-                        val fragmentToGo = UserSearchFragment()
-                        fragmentToGo.arguments = arguments
-                        if (savedInstanceState == null) {
-                            transaction.replace(R.id.mainContainer, fragmentToGo)
-                            transaction.addToBackStack(null)
-                            transaction.commitAllowingStateLoss()
-                        }
-                    }
 
-                    1 -> {
-                        navigateToEventSearchFragment()
-                    }
-
-                    2 -> {
+            when (viewModel.searchOption.value) {
+                0 -> {
+                    val transaction =
+                        requireActivity().supportFragmentManager.beginTransaction()
+                    val arguments = Bundle()
+                    arguments.putString(
+                        "user_search_filter",
+                        viewModel.userSearchKey.value.toString()
+                    )
+                    val fragmentToGo = UserSearchFragment()
+                    fragmentToGo.arguments = arguments
+                    if (savedInstanceState == null) {
+                        transaction.replace(R.id.mainContainer, fragmentToGo)
+                        transaction.addToBackStack(null)
+                        transaction.commitAllowingStateLoss()
                     }
                 }
-            } else {
-                viewModel.eventsFiltered.postValue(null)
-                viewModel.usersFiltered.postValue(null)
+
+                1 -> {
+                    navigateToEventSearchFragment()
+                }
+
+                2 -> {
+
+                }
+
             }
         }
     }
@@ -143,24 +146,20 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
     private fun navigateToEventSearchFragment() {
         val transaction =
             requireActivity().supportFragmentManager.beginTransaction()
-        val arguments = Bundle()
-        arguments.putString(
-            "event_search_filter",
-            viewModel.eventSearchKey.value.toString()
+        val fragmentToGo = EventSearchFragment.newInstance(
+            viewModel.eventSearchKey.value?.toString(),
+            viewModel.listOfEventSearchCoordinates
         )
-        val fragmentToGo = EventSearchFragment()
-        fragmentToGo.arguments = arguments
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
-        transaction.commitAllowingStateLoss()
+        transaction.commit()
     }
 
     private fun getEventSearchCoordinatesFromSharedPreferences(): Array<LatLng>? {
         val serializedObject =
             viewModel.custSharedPreferences?.getString("listOfMarkerPositions", null)
         return serializedObject?.let {
-            val gson = Gson()
-            gson.fromJson(it, Array<LatLng>::class.java)
+            Gson().fromJson<Array<LatLng>>(it)
         }
     }
 

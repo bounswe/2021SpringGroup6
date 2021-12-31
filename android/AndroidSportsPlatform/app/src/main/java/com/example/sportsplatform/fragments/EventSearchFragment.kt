@@ -15,6 +15,8 @@ import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.databinding.FragmentSearchEventBinding
 import com.example.sportsplatform.viewmodelfactories.EventSearchViewModelFactory
 import com.example.sportsplatform.viewmodels.EventSearchViewModel
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -36,7 +38,8 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
         _binding = FragmentSearchEventBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(EventSearchViewModel::class.java)
-        viewModel.fillSearchEventList(arguments?.getString("event_search_filter"))
+        getBundleArguments()
+        viewModel.fillSearchEventList()
         return binding.root
     }
 
@@ -61,11 +64,35 @@ class EventSearchFragment : Fragment(), KodeinAware, EventsClickListener {
         )
     }
 
+    private fun getBundleArguments() {
+        arguments?.let {
+            viewModel.setArguments(
+                it.getString(EVENT_SEARCH_KEY),
+                it.getString(EVENT_SEARCH_COORDINATES_WITH_MAP)
+            )
+        }
+    }
+
     override fun onEventsClickListener(eventResponse: EventResponse?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val fragmentToGo = EventDetailFragment.newInstance(eventId = eventResponse?.event_id)
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    companion object {
+        private const val EVENT_SEARCH_KEY = "event_search_key"
+        private const val EVENT_SEARCH_COORDINATES_WITH_MAP = "event_search_coordinates_with_map"
+        fun newInstance(
+            eventSearchKey: String?,
+            listOfCoordinates: Array<LatLng>?
+        ) = EventSearchFragment().apply {
+            arguments = Bundle().apply {
+                putString(EVENT_SEARCH_KEY, eventSearchKey)
+                val coordinatesJson = Gson().toJson(listOfCoordinates)
+                putString(EVENT_SEARCH_COORDINATES_WITH_MAP, coordinatesJson)
+            }
+        }
     }
 }

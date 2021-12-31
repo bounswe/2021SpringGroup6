@@ -5,12 +5,11 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.R
-import com.example.sportsplatform.data.models.responses.EventFilterResponse
+import com.google.android.gms.maps.model.LatLng
 import com.example.sportsplatform.data.models.responses.UserSearchResponse
 
 class SearchViewModel : ViewModel() {
 
-    val eventsFiltered: MutableLiveData<EventFilterResponse?> = MutableLiveData()
     val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
 
     val usersFiltered: MutableLiveData<UserSearchResponse?> = MutableLiveData()
@@ -20,6 +19,7 @@ class SearchViewModel : ViewModel() {
     var searchOption: MutableLiveData<Int> = MutableLiveData(0)
     var searchEventWithMapVisibility: MutableLiveData<Int> = MutableLiveData()
     var custSharedPreferences: SharedPreferences? = null
+    var listOfEventSearchCoordinates: Array<LatLng>? = null
 
     fun setSearchOption(view: View?, position: Int?) {
         searchBarHint.postValue(
