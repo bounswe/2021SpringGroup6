@@ -15,6 +15,7 @@ import UseWindowSize from './PermanentComponents/WindowSizing';
 import gif from './images/squadgamegif.gif'
 
 
+
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const ProfileView = lazy(() => import('./pages/profile/ProfileView'));
@@ -29,6 +30,8 @@ const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
 const SearchFieldPage = lazy(() => import('./pages/SearchField/SearchField'));
 const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
+const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'))
+
 
 
 function App() {
@@ -127,6 +130,12 @@ function App() {
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchPage/></div>
+                </Suspense>}/>
+
+
+            <Route path="equipment/:id"  element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><EquipmentInformationFunctional/></div>
                 </Suspense>}/>
 
 
