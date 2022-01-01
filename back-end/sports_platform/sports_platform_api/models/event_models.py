@@ -619,7 +619,7 @@ class Event(models.Model):
                 event=self, user=requester, requested_on=dt)
             ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
 
-            if num_of_spectators > self.maxSpectatorCapacity:
+            if num_of_spectators >= self.maxSpectatorCapacity:
                 return 201
 
             return True
