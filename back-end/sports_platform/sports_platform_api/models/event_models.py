@@ -324,6 +324,9 @@ class Event(models.Model):
         try:
             requester = User.objects.get(user_id=user_id)
 
+            if self.startDate < dt:
+                return 408
+
             try:
                 EventSpectators.objects.get(event=self, user=requester)
                 return 405  # already participating
@@ -416,6 +419,10 @@ class Event(models.Model):
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
+
+        if self.startDate < dt:
+            return 408
+
         try:
             with transaction.atomic():
                 for user in accept_user_id_list:
@@ -587,6 +594,9 @@ class Event(models.Model):
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
+
+        if self.startDate < dt:
+            return 408
 
         try:
             num_of_spectators = len(self.spectator_users.all())
