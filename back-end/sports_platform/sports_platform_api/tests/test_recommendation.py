@@ -6,7 +6,7 @@ from ..models.user_models import Follow
 from ..helpers.geo import get_address
 from rest_framework.authtoken.models import Token
 
-class NotificationTest(TestCase):
+class RecommendationTest(TestCase):
     def setUp(self):
         self.client = Client()
         lion_info = {'identifier': 'lion',
