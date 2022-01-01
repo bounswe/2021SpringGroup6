@@ -1,6 +1,7 @@
 def filter_visibility(user_db_data, serialized_user):
     visibility_attributes_mapping = {'email_visibility': 'email', 'name_visibility': 'name', 'familyName_visibility': 'familyName',
-                                     'birthDate_visibility': 'birthDate', 'gender_visibility': 'gender', 'location_visibility': ['latitude', 'longitude']}
+                                     'birthDate_visibility': 'birthDate', 'gender_visibility': 'gender', 'location_visibility': ['latitude', 'longitude'],
+                                     'skill_level_visibility':'knowsAbout'}
 
     for visibility, attribute in visibility_attributes_mapping.items():
 

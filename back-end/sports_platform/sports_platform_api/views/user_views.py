@@ -457,6 +457,8 @@ def get_badges(request, user_id):
             user = User.objects.get(user_id=user_id)
 
             badges = user.get_badges()
+            if (not request.user.is_authenticated) and (request.user.user_id != user_id) and (not user.badge_visibility):
+                return Response(data={"message": "Badges cannot be seen."}, status=401)
 
             if badges == 500:
                 return Response(data={"message": "Try later."}, status=500)
