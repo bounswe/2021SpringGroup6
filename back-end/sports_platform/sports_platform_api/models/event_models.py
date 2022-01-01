@@ -7,12 +7,9 @@ from ..models.activity_stream_models import ActivityStream
 from ..models import Sport, User, SportSkillLevel
 from datetime import datetime, timezone
 from .badge_models import Badge, UserBadges, EventBadges
-<<<<<<< HEAD
 from ..models.user_models import Notification
-=======
 from functools import cmp_to_key
 
->>>>>>> fcbed6f55f8d76733216e9f4f5d15cf8278a7b1a
 
 class EventParticipants(models.Model):
     class Meta:
