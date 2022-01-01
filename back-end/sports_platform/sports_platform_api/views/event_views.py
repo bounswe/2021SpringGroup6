@@ -121,16 +121,18 @@ def attend_spectator(request, event_id):
 
             res = event.add_spectator(user.user_id)
 
-            if res == 401:
+            if res == 201:
+                return Response(data={"message": "Added as spectator but spectator capacity is full."}, status=201)
+            elif res == 401:
                 return Response(data={"message": "Try with a valid user."}, status=400)
             elif res == 402:
                 return Response(data={"message": "Already a spectator for the event."}, status=400)
-            elif res == 403:
-                return Response(data={"message": "Spectator capacity is full for this event."}, status=400)
             elif res == 404:
                 return Response(data={"message": "Registered as participant to this event, if being spectator is wanted, remove participating status."}, status=400)
             elif res == 404:
                 return Response(data={"message": "Showed interest to participate this event. If spectator status is wanted remove the interest."}, status=400)
+            elif res == 408:
+                return Response(data={"message": "Event start time is passed."}, status=400)
             elif res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             else:
@@ -221,6 +223,8 @@ def add_interest(request, event_id):
                 return Response(data={"message": "No skill level is entered for the sport."}, status=400)
             elif res == 407:
                 return Response(data={"message": "User skill level does not match the requirements for the event."}, status=400)
+            elif res == 408:
+                return Response(data={"message": "Event start time is passed."}, status=400)
             elif res == 500:
                 return Response(data={"message": "Try later."}, status=500)
             else:
@@ -308,6 +312,8 @@ def accept_participant(request, event_id):
 
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
+            elif res == 408:
+                return Response(data={"message": "Event start time is passed."}, status=400)
             if res == 401:
                 return Response(data={"message": "This event accepts participants without approval."}, status=400)
             else:
@@ -370,7 +376,7 @@ def search_event(request):
         return Response(data={"message": validation.errors}, status=400)
 
     validated_body = validation.validated_data
-    events = Event.search_event(validated_body)
+    events = Event.search_event(validated_body, request.user)
     response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'OrderedCollection',
                 'total_items':len(events),'items':[]}
     
