@@ -324,6 +324,9 @@ class Event(models.Model):
         try:
             requester = User.objects.get(user_id=user_id)
 
+            if self.startDate < dt:
+                return 408
+
             try:
                 EventSpectators.objects.get(event=self, user=requester)
                 return 405  # already participating
@@ -417,11 +420,16 @@ class Event(models.Model):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
 
+<<<<<<< HEAD
         limit_for_notification = int(self.maximumAttendeeCapacity*0.1)
         if num_remaining_places in [limit_for_notification, limit_for_notification+1, limit_for_notification-1]:
             interesteds = self.interested_users.all()
             for interested in interesteds:
                 Notification.objects.create(event_id=self, user_id=interested.user, date=dt,notification_type=f'{num_remaining_places} Spots Left')
+=======
+        if self.startDate < dt:
+            return 408
+>>>>>>> c93a2f7fac2d3bbcf5ae371dddf0afae6114ca07
 
         try:
             with transaction.atomic():
@@ -597,6 +605,9 @@ class Event(models.Model):
     def add_spectator(self, user_id):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
+
+        if self.startDate < dt:
+            return 408
 
         try:
             num_of_spectators = len(self.spectator_users.all())
