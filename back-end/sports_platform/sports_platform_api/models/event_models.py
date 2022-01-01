@@ -628,6 +628,10 @@ class Event(models.Model):
             ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
 
             if num_of_spectators >= self.maxSpectatorCapacity:
+                spectators = self.spectator_users.all()
+                for spectator in spectators:
+                    Notification.objects.create(event_id=self, user_id=spectator.user, date=dt,notification_type=f'Field Full')
+
                 return 201
 
             return True
