@@ -524,6 +524,31 @@ class User(AbstractBaseUser):
         return filters
         
     def get_notifications(self):
+        events =  self.participating_events.all()
+        utc_dt = datetime.datetime.now(datetime.timezone.utc)  
+        dt = utc_dt.astimezone()
+        seconds_3_hours = 3*60*60
+        day_hours = 8*seconds_3_hours
+        week_hours = 7*day_hours
+
+        hours_events = [event for event in events if (dt-event.startDate).seconds<=seconds_3_hours]
+        day_events = [event for event in events if (dt-event.startDate).seconds<=day_hours]
+        week_events = [event for event in events if (dt-event.startDate).seconds<=week_hours]
+        for event in hours_events:
+            try:
+                Notification.objects.create(event_id=event, user_id=self, date=event.startDate-datetime.timedelta(hours=3),notification_type='3 Hours Left')
+            except:# it is possible to enter here when the notification has been already added
+                continue
+        for event in day_events:
+            try:
+                Notification.objects.create(event_id=event, user_id=self, date=event.startDate-datetime.timedelta(hours=24),notification_type='1 Day Left')
+            except:
+                continue
+        for event in week_events:
+            try:
+                Notification.objects.create(event_id=event, user_id=self, date=event.startDate-datetime.timedelta(hours=24*7),notification_type='1 Week Left')
+            except:
+                continue
         notifications = Notification.objects.filter(user_id=self, read=False).order_by('date')
         return prepare_notifications(notifications)
 
