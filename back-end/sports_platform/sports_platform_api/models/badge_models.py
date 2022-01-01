@@ -1,4 +1,6 @@
 from django.db import models
+from .sport_models import Sport
+from datetime import datetime, timezone
 
 class Badge(models.Model):
     class Meta:
@@ -47,3 +49,12 @@ class EventBadges(models.Model):
     date = models.DateTimeField()
 
 
+class NewBadgeRequests(models.Model):
+
+    class Meta:
+        db_table = 'new_badges'
+
+    date = models.DateTimeField()
+    description = models.TextField()
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    sport = models.ForeignKey('Sport', blank=True, null=True, on_delete=models.CASCADE)
