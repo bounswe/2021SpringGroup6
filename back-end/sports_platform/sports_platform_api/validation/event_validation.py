@@ -66,6 +66,8 @@ class Search(serializers.Serializer):
         child=serializers.IntegerField(
             min_value=0, max_value=10), required=False
     )
+    sortBy = serializers.CharField(required=False)
+    order = serializers.CharField(required=False)
 
     def validate(self, data):
         if ((('latitudeBetweenStart' in data) and ('latitudeBetweenEnd' not in data)) or ('latitudeBetweenStart' not in data) and (('latitudeBetweenEnd' in data))):
