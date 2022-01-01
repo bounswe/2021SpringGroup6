@@ -176,7 +176,7 @@ class ParticipationTest(TestCase):
                                 'passed_event_spectator': {"message": "Event start time is passed."},
                                 'passed_event_participant': {"message": "Event start time is passed."},
                                 'already_spectator': {"message": "Already a spectator for the event."},
-                                'full_spectator': {"message": "Spectator capacity is full for this event."},
+                                'full_spectator': {"message": "Added as spectator but spectator capacity is full."},
                                 'spectator_for_participating': {"message": "Registered as participant to this event, if being spectator is wanted, remove participating status."},
                                 'wrong_event_id': {"message": "Try with a valid event."},
                                 'accept_reject_participants': {
@@ -274,8 +274,10 @@ class ParticipationTest(TestCase):
         response = self.client.post(
             path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data, self.response_bodies[test_type])
+        self.assertTrue(EventSpectators.objects.filter(
+            event=request_param, user=self.cat_user.user_id).exists())
 
     def test_spectator_for_participating(self):
         test_type = 'spectator_for_participating'

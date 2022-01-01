@@ -127,12 +127,12 @@ def attend_spectator(request, event_id):
 
             res = event.add_spectator(user.user_id)
 
-            if res == 401:
+            if res == 201:
+                return Response(data={"message": "Added as spectator but spectator capacity is full."}, status=201)
+            elif res == 401:
                 return Response(data={"message": "Try with a valid user."}, status=400)
             elif res == 402:
                 return Response(data={"message": "Already a spectator for the event."}, status=400)
-            elif res == 403:
-                return Response(data={"message": "Spectator capacity is full for this event."}, status=400)
             elif res == 404:
                 return Response(data={"message": "Registered as participant to this event, if being spectator is wanted, remove participating status."}, status=400)
             elif res == 404:
