@@ -600,8 +600,7 @@ class Event(models.Model):
 
         try:
             num_of_spectators = len(self.spectator_users.all())
-            if num_of_spectators >= self.maxSpectatorCapacity:
-                return 403  # Full Capacity
+            
             requester = User.objects.get(user_id=user_id)
 
             try:
@@ -619,6 +618,9 @@ class Event(models.Model):
             EventSpectators.objects.create(
                 event=self, user=requester, requested_on=dt)
             ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
+
+            if num_of_spectators > self.maxSpectatorCapacity:
+                return 201
 
             return True
         except User.DoesNotExist:  # User does not exist
