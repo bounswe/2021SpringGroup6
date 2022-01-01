@@ -9,7 +9,7 @@ class Badge(models.Model):
 
     name = models.CharField(primary_key=True, max_length=30)
     wikidata = models.CharField(max_length=30, blank=True)
-    sport = models.ForeignKey('Sport', blank=True, on_delete=models.CASCADE)
+    sport = models.ForeignKey('Sport', blank=True, null=True, on_delete=models.CASCADE)
 
     @staticmethod
     def get_badges():
