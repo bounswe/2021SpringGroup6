@@ -101,6 +101,11 @@ class User(AbstractBaseUser):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     location_visibility = models.BooleanField(default=True)
+    skill_level_visibility = models.BooleanField(default=True)
+    badge_visibility = models.BooleanField(default=True)
+    created_events_visibility = models.BooleanField(default=True)
+
+
 
     objects = UserManager()
 

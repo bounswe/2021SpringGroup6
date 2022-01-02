@@ -25,6 +25,9 @@ class User(serializers.Serializer):
    latitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=90, min_value=-90, required=False)
    longitude = serializers.DecimalField(max_digits=9, decimal_places=6, max_value=180, min_value=-180, required=False)
    location_visibility = serializers.BooleanField(required=False)
+   skill_level_visibility = serializers.BooleanField(required=False)
+   badge_visibility = serializers.BooleanField(required=False)
+   created_events_visibility = serializers.BooleanField(required=False)
 
    def validate(self, data):
         if ("latitude" in data and "longitude" not in data) or ("latitude" not in data and "longitude" in data):
@@ -69,6 +72,10 @@ class Set_Visibility(serializers.Serializer):
     birthDate_visibility = serializers.BooleanField(required=False)
     gender_visibility = serializers.BooleanField(required=False)
     location_visibility = serializers.BooleanField(required=False)
+    skill_level_visibility = serializers.BooleanField(required=False)
+    badge_visibility = serializers.BooleanField(required=False)
+    created_events_visibility = serializers.BooleanField(required=False)
+
 
 class Badge(serializers.Serializer):
     badge = serializers.CharField(min_length=3, max_length=100, validators=[
