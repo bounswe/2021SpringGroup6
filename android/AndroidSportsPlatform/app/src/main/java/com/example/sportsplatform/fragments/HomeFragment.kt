@@ -20,11 +20,14 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import com.example.sportsplatform.R
+import com.example.sportsplatform.adapter.EventsClickListener
+import com.example.sportsplatform.adapter.EventsListAdapter
 import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
 import com.example.sportsplatform.adapter.UsersParticipatingEventsClick
 import com.example.sportsplatform.data.models.Value
+import com.example.sportsplatform.data.models.responses.EventResponse
 
-class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
+class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick, EventsClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -33,6 +36,8 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
 
     private lateinit var viewModel: HomeViewModel
     private val factory: HomeViewModelFactory by instance()
+
+    private val eventsAdapter by lazy { EventsListAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +65,13 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.eventsCreated.observe(
+            viewLifecycleOwner,
+            Observer {
+                eventsAdapter.items = it.items.toMutableList()
+            }
+        )
+
         binding.btnCreateNewEvent.setOnClickListener {
             val fragmentToGo = CreateEventFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -82,6 +94,11 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
                 }
             }
         )
+
+        binding.rvEventsCreated.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = eventsAdapter
+        }
     }
 
     private fun logOut() = lifecycleScope.launch {
@@ -94,5 +111,9 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onEventsClickListener(eventResponse: EventResponse?) {
+
     }
 }
