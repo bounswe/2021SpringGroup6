@@ -26,28 +26,25 @@ import {
   } from 'reactstrap';
 
 function EventDiscussionPage(props) {
-    const {eventDiscussionInfo, isLoading} = props;
+    const {eventInfo, isLoading} = props;
     const localData = JSON.parse(localStorage.getItem('user'));
     console.log('BURDAAAA')
-    console.log(eventDiscussionInfo)
-
-    let buttonActive = (() => {
-        console.log(eventDiscussionInfo)
-        return true;
-    })();
-
+    console.log(eventInfo)
 
 
     function participate() {
-        postEventDiscussion(eventDiscussionInfo.event_id);
+        getEventDiscussion(eventInfo.event_id);
     }
 
     return (
         <>
         <div>
-        <CardSubtitle className="text-muted" tag="h5" style={{marginTop: '0'}} >
-                                    Sport: {eventDiscussionInfo}
-                                </CardSubtitle>
+            <Button
+                color="secondary"
+                onClick={participate}
+            >
+                Show event discussions
+            </Button>
         </div>
         </>
     )

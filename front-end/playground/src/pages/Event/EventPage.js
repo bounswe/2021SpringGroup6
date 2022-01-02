@@ -7,24 +7,16 @@ import {EventInformation} from './EventInformation/EventInformation';
 import {EventParticipationInfoPage} from './EventParticipationInfoPage/EventParticipationInfoPage';
 
 import {getEvent} from '../../services/Events';
-import {getEventDiscussion} from '../../services/Events';
 
 
 
 import {
-  Tabs, 
-  Tab, 
-  TabContainer, 
   TabContent, 
   TabPane, 
   Nav, 
   NavItem, 
   NavLink, 
-  Card, 
-  CardImg, 
-  CardBody, 
-  CardTitle, 
-  CardText,
+
 } from 'reactstrap';
 
 function EventPage(props) {
@@ -35,7 +27,6 @@ function EventPage(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   const {id: event_id} = useParams();
-  const {id: event_discussion_id} = useParams();
 
 
   const [eventInfo, setEventInfo] = useState(
@@ -44,27 +35,7 @@ function EventPage(props) {
         event_id: event_id,
       }
   );
-  const [eventDiscussionInfo, setDiscussionInfo] = useState(
-    // dummy data
-    {
-      event_discussion_id: event_discussion_id,
-    }
-);
 
-  useEffect(() => {
-      if (!eventDiscussionInfo.created_on) {
-        setIsLoading(true);
-        getEventDiscussion(event_discussion_id)
-        .then((response) => {
-            setDiscussionInfo(response);
-            setIsLoading(false);
-        })
-        .catch((error) => {
-            alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
-            window.location.href = '/'
-        });
-      }
-  }, []);
 
   useEffect(() => {
     if (!eventInfo.created_on) {
@@ -75,8 +46,8 @@ function EventPage(props) {
           setIsLoading(false);
       })
       .catch((error) => {
-          alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
-          window.location.href = '/'
+        alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
+        window.location.href = '/'
       });
     }
 }, []);
@@ -128,6 +99,9 @@ function EventPage(props) {
                     <TabPane tabId="Participation">
                         <EventParticipationInfoPage eventInfo={eventInfo} isLoading={isLoading} />
                     </TabPane>
+                    <TabPane tabId="Discussion">
+                        <EventDiscussionPage eventInfo={eventInfo} isLoading={isLoading}/>
+                    </TabPane>
 
                 </>
                 :
@@ -135,18 +109,7 @@ function EventPage(props) {
             }
         </TabContent>
 
-        <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}`}>
-            {eventDiscussionInfo.startDate ? 
-                <>
 
-                    <TabPane tabId="Discussion">
-                        <EventDiscussionPage eventDiscussionInfo={eventDiscussionInfo} isLoading={isLoading}/>
-                    </TabPane>
-                </>
-                :
-                <div> </div>
-            }
-        </TabContent>
     </div>
   );
 }

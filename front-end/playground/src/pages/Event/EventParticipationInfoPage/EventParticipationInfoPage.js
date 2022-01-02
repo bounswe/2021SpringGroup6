@@ -6,22 +6,10 @@ import { Map, Marker } from "pigeon-maps";
 import {postSpectatorDecleration, postParticipationRequest} from '../../../services/Events';
 
 import {
-  Tabs, 
-  Tab, 
-  TabContainer, 
-  TabContent, 
-  TabPane, 
-  Nav, 
-  NavItem, 
-  NavLink, 
   Card, 
-  CardImg,
-  CardHeader,
-  CardFooter,
   CardBody, 
   CardTitle,
   CardSubtitle, 
-  CardText,
 } from 'reactstrap';
 
 function EventParticipationInfoPage(props) {
