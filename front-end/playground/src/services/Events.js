@@ -78,3 +78,39 @@ export const postParticipationRequest = async (event_id) => {
       console.log(error)
     })
 }
+export const getEventDiscussion = async (event_discussion_id) => {
+
+  return axios({
+    method: 'GET',
+    url: `/events/${event_discussion_id}/discussion`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+export const postEventDiscussion = async (event_discussion_id) => {
+
+  return axios({
+    method: 'POST',
+    url: `/events/${event_discussion_id}/discussion`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
