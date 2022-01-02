@@ -44,7 +44,7 @@ class ParticipationTest(TestCase):
         event_data_1 = {
             "name": "Let's play soccer",
             "sport": "soccer",
-            "startDate": "2021-12-13T13:00:00",
+            "startDate": "2027-12-13T13:00:00",
             "latitude": 41.002697,
             "longitude": 39.716763,
             "minimumAttendeeCapacity": 1,
@@ -60,7 +60,7 @@ class ParticipationTest(TestCase):
         event_data_2 = {
             "name": "Basketball Time",
             "sport": "basketball",
-            "startDate": "2021-09-18T15:00:00",
+            "startDate": "2027-09-18T15:00:00",
             "latitude": 56.002697,
             "longitude": 34.716763,
             "minimumAttendeeCapacity": 1,
@@ -76,7 +76,7 @@ class ParticipationTest(TestCase):
         event_data_3 = {
             "name": "Soccer Time 2",
             "sport": "soccer",
-            "startDate": "2021-12-13T13:00:00",
+            "startDate": "2027-12-13T13:00:00",
             "latitude": 55.002697,
             "longitude": 55.716763,
             "minimumAttendeeCapacity": 1,
@@ -87,6 +87,22 @@ class ParticipationTest(TestCase):
             "acceptWithoutApproval": False,
             "organizer": self.lion_user,
             "duration": 45
+        }
+
+        event_data_4 = {
+            "name": "Let's play soccer",
+            "sport": "soccer",
+            "startDate": "2019-12-13T13:00:00",
+            "latitude": 41.002697,
+            "longitude": 39.716763,
+            "minimumAttendeeCapacity": 1,
+            "maximumAttendeeCapacity": 2,
+            "maxSpectatorCapacity": 2,
+            "minSkillLevel": 1,
+            "maxSkillLevel": 3,
+            "acceptWithoutApproval": False,
+            "organizer": self.lion_user,
+            "duration": 20
         }
 
         Sport.objects.create(name="soccer")
@@ -102,6 +118,7 @@ class ParticipationTest(TestCase):
         self.event_with_approval = Event.objects.get(event_id = Event.create_event(event_data_1)['@id'])
         self.event_without_approval = Event.objects.get(event_id=Event.create_event(event_data_2)['@id'])
         self.event_3 = Event.objects.get(event_id=Event.create_event(event_data_3)['@id'])
+        self.event_4 = Event.objects.get(event_id=Event.create_event(event_data_4)['@id'])
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
@@ -130,6 +147,9 @@ class ParticipationTest(TestCase):
                               'accept_reject_participants': self.event_with_approval.event_id,
                               'wrong_skill_level': self.event_without_approval.event_id,
                               'no_skill_level': self.event_without_approval.event_id,
+                              'passed_event_interest': self.event_4.event_id,
+                              'passed_event_spectator': self.event_4.event_id,
+                              'passed_event_participant': self.event_4.event_id,
                               }
 
         self.request_token = {'already_participating': self.dog_token,
@@ -146,11 +166,17 @@ class ParticipationTest(TestCase):
                               'accept_reject_participants': self.lion_token,
                               'wrong_skill_level': self.lion_token,
                               'no_skill_level': self.sheep_token,
+                              'passed_event_interest': self.lion_token,
+                              'passed_event_spectator': self.cat_token,
+                              'passed_event_participant': self.lion_token,
                               }
 
         self.response_bodies = {'already_participating': {"message": "Already participating the event."},
+                                'passed_event_interest': {"message": "Event start time is passed."},
+                                'passed_event_spectator': {"message": "Event start time is passed."},
+                                'passed_event_participant': {"message": "Event start time is passed."},
                                 'already_spectator': {"message": "Already a spectator for the event."},
-                                'full_spectator': {"message": "Spectator capacity is full for this event."},
+                                'full_spectator': {"message": "Added as spectator but spectator capacity is full."},
                                 'spectator_for_participating': {"message": "Registered as participant to this event, if being spectator is wanted, remove participating status."},
                                 'wrong_event_id': {"message": "Try with a valid event."},
                                 'accept_reject_participants': {
@@ -248,8 +274,10 @@ class ParticipationTest(TestCase):
         response = self.client.post(
             path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data, self.response_bodies[test_type])
+        self.assertTrue(EventSpectators.objects.filter(
+            event=request_param, user=self.cat_user.user_id).exists())
 
     def test_spectator_for_participating(self):
         test_type = 'spectator_for_participating'
@@ -406,6 +434,50 @@ class ParticipationTest(TestCase):
         token = self.request_token[test_type]
 
         path = "/events/" + str(request_param) + "/interesteds"
+
+        response = self.client.post(
+            path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, self.response_bodies[test_type])
+
+    def test_passed_event_interest(self):
+        test_type = 'passed_event_interest'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/interesteds"
+
+        response = self.client.post(
+            path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, self.response_bodies[test_type])
+
+    def test_passed_event_participant(self):
+        test_type = 'passed_event_participant'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/participants"
+
+        request_body = {
+            "accept_user_id_list": [self.sheep_user.user_id + 1, self.cat_user.user_id],
+            "reject_user_id_list": [45, self.sheep_user.user_id, 90, 132]
+        }
+
+        response = self.client.post(
+            path, request_body, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, self.response_bodies[test_type])
+
+    def test_passed_event_spectator(self):
+        test_type = 'passed_event_spectator'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/spectators"
 
         response = self.client.post(
             path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})

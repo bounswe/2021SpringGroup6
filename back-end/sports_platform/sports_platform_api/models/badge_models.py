@@ -1,4 +1,6 @@
 from django.db import models
+from .sport_models import Sport
+from datetime import datetime, timezone
 
 class Badge(models.Model):
     class Meta:
@@ -46,4 +48,33 @@ class EventBadges(models.Model):
     badge = models.ForeignKey('Badge', related_name='given_badges_by_events', on_delete=models.CASCADE)
     date = models.DateTimeField()
 
+
+class NewBadgeRequests(models.Model):
+
+    class Meta:
+        db_table = 'new_badges'
+
+    date = models.DateTimeField()
+    description = models.TextField()
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    sport = models.ForeignKey('Sport', blank=True, null=True, on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_new_request(data,user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            if "sport" in data.keys():
+                sport = Sport.objects.get(name=data['sport'])
+                NewBadgeRequests.objects.create(sport=sport, description=data['description'], date=dt, user=user)
+                return 201
+            else:
+                NewBadgeRequests.objects.create(description=data['description'], date=dt, user=user)
+                return 201
+
+        except Sport.DoesNotExist:
+            return 400
+        except Exception as e:
+            return 500
 

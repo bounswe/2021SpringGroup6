@@ -38,5 +38,5 @@ urlpatterns = [
     path('equipments/<int:equipment_id>/discussion/<int:post_id>', delete_equipment_post),
     path('equipments/<int:equipment_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_equipment_comment),
     path('equipments/searches', search_equipment),
-
+    path('recommendations',user_views.recommendation)
 ]
