@@ -2,11 +2,13 @@ import {React, useState, Fragment, useEffect} from 'react';
 import { useParams } from 'react-router-dom'
 import './EventPage.css';
 
-import {DiscussionPage} from './Discussion/DiscussionPage';
+import {EventDiscussionPage} from './Discussion/EventDiscussionPage';
 import {EventInformation} from './EventInformation/EventInformation';
 import {EventParticipationInfoPage} from './EventParticipationInfoPage/EventParticipationInfoPage';
 
 import {getEvent} from '../../services/Events';
+import {getEventDiscussion} from '../../services/Events';
+
 
 
 import {
@@ -33,6 +35,8 @@ function EventPage(props) {
   const [isLoading, setIsLoading] = useState(true);
 
   const {id: event_id} = useParams();
+  const {id: event_discussion_id} = useParams();
+
 
   const [eventInfo, setEventInfo] = useState(
       // dummy data
@@ -40,13 +44,19 @@ function EventPage(props) {
         event_id: event_id,
       }
   );
+  const [eventDiscussionInfo, setDiscussionInfo] = useState(
+    // dummy data
+    {
+      event_discussion_id: event_discussion_id,
+    }
+);
 
   useEffect(() => {
-      if (!eventInfo.created_on) {
+      if (!eventDiscussionInfo.created_on) {
         setIsLoading(true);
-        getEvent(event_id)
+        getEventDiscussion(event_discussion_id)
         .then((response) => {
-            setEventInfo(response);
+            setDiscussionInfo(response);
             setIsLoading(false);
         })
         .catch((error) => {
@@ -55,6 +65,22 @@ function EventPage(props) {
         });
       }
   }, []);
+
+  useEffect(() => {
+    if (!eventInfo.created_on) {
+      setIsLoading(true);
+      getEvent(event_id)
+      .then((response) => {
+          setEventInfo(response);
+          setIsLoading(false);
+      })
+      .catch((error) => {
+          alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
+          window.location.href = '/'
+      });
+    }
+}, []);
+
 
 
   return (
@@ -102,12 +128,23 @@ function EventPage(props) {
                     <TabPane tabId="Participation">
                         <EventParticipationInfoPage eventInfo={eventInfo} isLoading={isLoading} />
                     </TabPane>
-                    <TabPane tabId="Discussion">
-                        <DiscussionPage/>
-                    </TabPane>
+
                 </>
                 :
                 <div>Loading</div>
+            }
+        </TabContent>
+
+        <TabContent activeTab={tabName} className={`custom-tab-content-${tabName}`}>
+            {eventDiscussionInfo.startDate ? 
+                <>
+
+                    <TabPane tabId="Discussion">
+                        <EventDiscussionPage eventDiscussionInfo={eventDiscussionInfo} isLoading={isLoading}/>
+                    </TabPane>
+                </>
+                :
+                <div> </div>
             }
         </TabContent>
     </div>
