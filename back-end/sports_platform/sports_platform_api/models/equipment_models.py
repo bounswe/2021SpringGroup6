@@ -106,8 +106,6 @@ class Equipment(models.Model):
 
             with transaction.atomic():
                 equipment = Equipment.objects.create(**data)
-            #ActivityStream.objects.create(type='Create', actor=data['organizer'], target=equipment, date=dt)
-            # https://schema.org/Product
             return {"@id": equipment.equipment_id}
         except Exception as e:
             return 500

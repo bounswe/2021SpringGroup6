@@ -37,7 +37,6 @@ def create_equipment(request):
         return Response(data=response, status=201)
 
     except Exception as e:
-        print(e)
         return Response(data={"message": 'There is an internal error, try again later.'}, status=500)
 
 
@@ -48,8 +47,6 @@ def get_equipment(request, equipment_id):
             equipment = Equipment.objects.get(pk=equipment_id)
 
             equipment_information = equipment.get_equipment()
-
-            print(equipment_information)
 
             return Response(data = equipment_information, status=200)
         except Equipment.DoesNotExist:
