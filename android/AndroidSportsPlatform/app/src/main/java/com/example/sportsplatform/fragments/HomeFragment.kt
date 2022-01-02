@@ -42,7 +42,9 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+
         viewModel.fetchUsersParticipatingEvents()
+        viewModel.fetchEventsCreated()
 
         initializeRecyclerview()
 
