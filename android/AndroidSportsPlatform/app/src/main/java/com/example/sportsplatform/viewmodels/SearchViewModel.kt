@@ -19,7 +19,7 @@ class SearchViewModel(
     val eventSearchKey: MutableLiveData<CharSequence?> = MutableLiveData("")
 
     val usersFiltered: MutableLiveData<UserSearchResponse?> = MutableLiveData()
-    val userSearchKey: MutableLiveData<CharSequence?> = MutableLiveData()
+    val userSearchKey: MutableLiveData<CharSequence?> = MutableLiveData("")
 
     var searchBarHint: MutableLiveData<String> = MutableLiveData()
     var searchOption: MutableLiveData<Int> = MutableLiveData(0)

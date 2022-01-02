@@ -39,7 +39,7 @@ interface UserApi {
     ): Response<GetBadgeResponse>
 
     @POST("users/searches")
-    suspend fun searchUser(
+    suspend fun filterUsers(
         @Body userSearchRequest: UserSearchRequest
     ): Response<UserSearchResponse>
 
@@ -49,7 +49,7 @@ interface UserApi {
     ): Response<Void>
 
     @GET("users/{user_id}")
-    suspend fun searchProfile(
+    suspend fun searchUser(
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int
     ): Response<UserResponse>

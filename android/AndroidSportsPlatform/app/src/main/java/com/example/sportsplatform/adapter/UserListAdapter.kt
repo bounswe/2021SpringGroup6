@@ -4,24 +4,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.data.models.responses.UserResponse
 import com.example.sportsplatform.util.toast
+import kotlinx.android.synthetic.main.item_event_layout.view.*
 import kotlinx.android.synthetic.main.item_searched_user_layout.view.*
 
-class UserSearchAdapter(private val itemList: List<UserResponse>?) :
-    RecyclerView.Adapter<UserSearchAdapter.MyViewHolder>() {
+interface UsersClickListener {
+    fun onUsersClickListener(userResponse: UserResponse?)
+}
+
+class UserListAdapter(
+    private val itemClickListenerListener: UsersClickListener?
+) :
+    RecyclerView.Adapter<UserListAdapter.MyViewHolder>() {
+
+    var items = mutableListOf<UserResponse?>()
+        set(value) {
+            field.clear()
+            field.addAll(value)
+            notifyDataSetChanged()
+        }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val container: ConstraintLayout = itemView.clUserContainer
         val userName: TextView = itemView.twUserName
         val userIdentifier: TextView = itemView.twUserIdentifier
         val userEmail: TextView = itemView.twUserEmail
-
-        init {
-            itemView.setOnClickListener{
-                it.context.toast("Pressed!")
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -31,11 +42,14 @@ class UserSearchAdapter(private val itemList: List<UserResponse>?) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = itemList?.get(position)
+        val currentItem = items.get(position)
         holder.userName.text = currentItem?.name
         holder.userIdentifier.text = currentItem?.identifier
         holder.userEmail.text = currentItem?.email
+        holder.container.setOnClickListener {
+            currentItem?.let { item -> itemClickListenerListener?.onUsersClickListener(item) }
+        }
     }
 
-    override fun getItemCount(): Int = itemList?.size ?: 0
+    override fun getItemCount() = items.size
 }
