@@ -23,6 +23,7 @@ def sport_records():
     except:
         pass # error from external library so skip
 
+    Sport.objects.create(name="ultimate_frisbee")
 
 def add_badges():
     from sports_platform_api.data import badges
