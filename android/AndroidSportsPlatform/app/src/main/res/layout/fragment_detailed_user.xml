@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="detailedUserViewModel"
-            type="com.example.sportsplatform.viewmodels.DetailedUserViewModel" />
+            name="userDetailViewModel"
+            type="com.example.sportsplatform.viewmodels.UserDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,7 +131,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:ems="10"
-            android:hint="@{detailedUserViewModel.searchBarHint}"
+            android:hint="@{userDetailViewModel.searchBarHint}"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toTopOf="@+id/rvUserBadges"
             app:layout_constraintEnd_toEndOf="parent"

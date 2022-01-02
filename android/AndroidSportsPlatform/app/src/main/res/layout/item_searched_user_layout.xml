@@ -4,10 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clUserContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_12"
-        android:layout_marginVertical="@dimen/margin_12">
+        android:layout_marginVertical="@dimen/margin_12"
+        android:background="@drawable/bg_rounded_corner"
+        android:paddingHorizontal="@dimen/margin_12"
+        android:paddingVertical="@dimen/margin_12">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twUserName"

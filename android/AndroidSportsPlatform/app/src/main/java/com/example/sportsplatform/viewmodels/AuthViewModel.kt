@@ -35,7 +35,7 @@ class AuthViewModel(
 
         Coroutines.main {
             val userRequest = UserRequest(identifier!!, pass!!)
-            val currResponse = repo.findUser(userRequest)
+            val currResponse = repo.login(userRequest)
             currResponse.body()?.fetchUserId()
             if (currResponse.isSuccessful) {
                 val userToken = currResponse.body()?.token

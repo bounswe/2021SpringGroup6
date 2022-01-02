@@ -10,21 +10,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.adapter.UserBadgesAdapter
 import com.example.sportsplatform.databinding.FragmentDetailedUserBinding
-import com.example.sportsplatform.viewmodelfactories.DetailedUserViewModelFactory
-import com.example.sportsplatform.viewmodels.DetailedUserViewModel
+import com.example.sportsplatform.viewmodelfactories.UserDetailViewModelFactory
+import com.example.sportsplatform.viewmodels.UserDetailViewModel
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class DetailedUserFragment : Fragment(), KodeinAware {
+class UserDetailFragment : Fragment(), KodeinAware {
 
     private var _binding: FragmentDetailedUserBinding? = null
     private val binding get() = _binding!!
 
     override lateinit var kodein: Kodein
 
-    private lateinit var viewModel: DetailedUserViewModel
-    private val factory: DetailedUserViewModelFactory by instance()
+    private lateinit var viewModel: UserDetailViewModel
+    private val factoryDetail: UserDetailViewModelFactory by instance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,13 +33,15 @@ class DetailedUserFragment : Fragment(), KodeinAware {
     ): View {
         _binding = FragmentDetailedUserBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
-        viewModel = ViewModelProvider(this, factory).get(DetailedUserViewModel::class.java)
+        viewModel = ViewModelProvider(this, factoryDetail).get(UserDetailViewModel::class.java)
+        viewModel.userId.postValue(arguments?.getInt(USER_ID) ?: 0)
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        binding.detailedUserViewModel = viewModel
+        binding.userDetailViewModel = viewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,4 +59,14 @@ class DetailedUserFragment : Fragment(), KodeinAware {
             }
         )
     }
+
+    companion object {
+        private const val USER_ID = "user_id"
+        fun newInstance(userId: Int?) = UserDetailFragment().apply {
+            arguments = Bundle().apply {
+                userId?.let { putInt(USER_ID, it) }
+            }
+        }
+    }
+
 }

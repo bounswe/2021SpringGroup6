@@ -1,16 +1,13 @@
 package com.example.sportsplatform.data.repository
 
 import com.example.sportsplatform.data.api.UserApi
-import com.example.sportsplatform.data.models.requests.AddBadgeRequest
-import com.example.sportsplatform.data.models.requests.UserRegisterRequest
-import com.example.sportsplatform.data.models.requests.UserRequest
-import com.example.sportsplatform.data.models.requests.UserSearchRequest
+import com.example.sportsplatform.data.models.requests.*
 import com.example.sportsplatform.data.models.responses.*
 import retrofit2.Response
 
 class UserRepository(private val api: UserApi) {
 
-    suspend fun findUser(userRequest: UserRequest) : Response<TokenResponse> {
+    suspend fun login(userRequest: UserRequest) : Response<TokenResponse> {
         return api.loginUser(userRequest)
     }
 
@@ -22,12 +19,12 @@ class UserRepository(private val api: UserApi) {
         return api.registerUser(userRegisterRequest)
     }
 
-    suspend fun userSearch(userSearchRequest: UserSearchRequest) : Response<UserSearchResponse> {
-        return api.searchUser(userSearchRequest)
+    suspend fun findFilterUsers(userSearchRequest: UserSearchRequest) : Response<UserSearchResponse> {
+        return api.filterUsers(userSearchRequest)
     }
 
-    suspend fun searchUserProfile(token: String, userId : Int) : Response<UserResponse> {
-        return api.searchProfile(token, userId)
+    suspend fun findUser(token: String, userDetailRequest : UserDetailRequest) : Response<UserResponse> {
+        return api.searchUser(token, userDetailRequest.user_id)
     }
 
     suspend fun searchFollowingUserProfile(userId : Int) : Response<UserFollowingResponse> {

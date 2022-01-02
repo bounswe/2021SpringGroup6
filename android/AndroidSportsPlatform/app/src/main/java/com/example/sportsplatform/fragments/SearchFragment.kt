@@ -1,9 +1,11 @@
 package com.example.sportsplatform.fragments
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +18,12 @@ import com.example.sportsplatform.R
 import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.activities.MapsActivity
 import com.example.sportsplatform.data.models.requests.EventFilterRequest
+import com.example.sportsplatform.data.models.requests.UserSearchRequest
 import com.example.sportsplatform.databinding.FragmentSearchBinding
 import com.example.sportsplatform.util.Constants
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
+import kotlinx.android.synthetic.main.item_searched_user_layout.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -113,20 +117,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
             when (viewModel.searchOption.value) {
                 0 -> {
-                    val transaction =
-                        requireActivity().supportFragmentManager.beginTransaction()
-                    val arguments = Bundle()
-                    arguments.putString(
-                        "user_search_filter",
-                        viewModel.userSearchKey.value.toString()
-                    )
-                    val fragmentToGo = UserSearchFragment()
-                    fragmentToGo.arguments = arguments
-                    if (savedInstanceState == null) {
-                        transaction.replace(R.id.mainContainer, fragmentToGo)
-                        transaction.addToBackStack(null)
-                        transaction.commitAllowingStateLoss()
-                    }
+                    navigateToUserSearchFragment()
                 }
 
                 1 -> {
@@ -192,6 +183,21 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
                 )
             ),
             viewModel.listOfEventSearchCoordinates
+        )
+        transaction.replace(R.id.mainContainer, fragmentToGo)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun navigateToUserSearchFragment() {
+        val transaction =
+            requireActivity().supportFragmentManager.beginTransaction()
+        val fragmentToGo = UserSearchFragment.newInstance(
+            UserSearchRequest(
+                identifier = if (viewModel.userSearchKey.value.toString()
+                        .isNotEmpty()
+                ) binding.searchBar.text.toString() else null,
+            )
         )
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
