@@ -70,12 +70,15 @@ class EquipmentInformation extends React.Component {
             console.log(response.data)
             console.log(response.data["@id"])
             console.log(`Token ${user}`)
-            console.log(response.data.additionalProperty[1].value)
+            
             if(response.status === 200 || response.status === 201) {
                 this.setState({ name: response.data.name });
                 this.setState({ sporttype: response.data.sport.name });
                 this.setState({ description: response.data.description });
-                this.setState({ sharedContent: response.data.additionalProperty[1].value });
+                if(response.data.additionalProperty[1]) {
+                    this.setState({ sharedContent: response.data.additionalProperty[1].value });
+                }
+                
                 this.setState({ latitude: response.data.geo.latitude });
                 this.setState({ longitude: response.data.geo.longitude });
                 
@@ -186,7 +189,7 @@ class EquipmentInformation extends React.Component {
 
                             <p style = {{fontSize: 30}}><hr className='hrElements'/>Location of the equipment:</p>
 
-                            <Map height={300} defaultCenter={[41.084, 29.051]} defaultZoom={6}>
+                            <Map height={300} width={1450} defaultCenter={[41.084, 29.051]} defaultZoom={6}>
                                 <Marker 
                                     width={50}
                                     anchor={[this.state.latitude, this.state.longitude]} 

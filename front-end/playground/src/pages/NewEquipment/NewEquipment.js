@@ -82,15 +82,32 @@ class NewEquipment extends React.Component {
         if(res) {  
 
             const user = JSON.parse(localStorage.getItem('user')).token;
-            let info =       {
+
+
+            let info;
+
+            if(this.state.sharedContent === "") {
+                info =       {
                 
-                name : this.state.name,
-                sport : this.state.sporttype,
-                description : this.state.description,
-                sharedContent : this.state.sharedContent,
-                latitude : (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4),
-                longitude : (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
-            }       
+                    name : this.state.name,
+                    sport : this.state.sporttype,
+                    description : this.state.description,
+                    latitude : (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4),
+                    longitude : (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
+                }      
+            } else {
+                info =       {
+                
+                    name : this.state.name,
+                    sport : this.state.sporttype,
+                    description : this.state.description,
+                    sharedContent : this.state.sharedContent,
+                    latitude : (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4),
+                    longitude : (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
+                }      
+            }
+
+              
             
             console.log(info)
             console.log(`Token ${user}`)
