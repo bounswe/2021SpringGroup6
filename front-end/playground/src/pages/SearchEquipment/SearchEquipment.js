@@ -20,8 +20,6 @@ import axios from 'axios';
 import EquipmentInfo from "./EquipmentInfo";
 
 
-const baseURL = "/equipments/searches";
-
 
 
 class SearchEquipment extends React.Component {
@@ -38,14 +36,13 @@ class SearchEquipment extends React.Component {
             country: '', 
             useMap: false,
             region: '' ,
-            equipments: [],
-            hasSearched: false
+            equipments: []
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleMapChange = this.handleMapChange.bind(this);
         this.handleMapChange2 = this.handleMapChange2.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        
         this.selectCountry = this.selectCountry.bind(this);
         this.selectRegion = this.selectRegion.bind(this);
 
@@ -87,87 +84,16 @@ class SearchEquipment extends React.Component {
     }
 
 
-    handleSubmit(event) {
-        event.preventDefault();
-        let info = {}
-
-
-        if(this.state.identifier !== "") {
-            info.nameContains = this.state.identifier
-        }
-
-        if(this.state.sporttype !== "") {
-            info.sport = this.state.sporttype
-        }
-
-
-        if(this.state.useMap) {
-            if(this.state.anchor[0] < this.state.anchor2[0] && this.state.anchor[1] < this.state.anchor2[1]) {
-                info.latitudeBetweenStart = (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4)
-                info.latitudeBetweenEnd = (Math.round(this.state.anchor2[0] * 100) / 100).toFixed(4)
-                info.longitudeBetweenStart = (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
-                info.longitudeBetweenEnd = (Math.round(this.state.anchor2[1] * 100) / 100).toFixed(4)
-            } else {
-                alert('The positions of the markers used to draw rectangle are problematic. Check the description again please')
-                return
-            }
-        }
-
-        
-
-
-
-        const user = JSON.parse(localStorage.getItem('user')).token;
-
-        axios
-            .post(baseURL, info,  {headers:{'Authorization': `Token ${user}`}}).then((response) => {
-                
-                if(response.status === 200 || response.status === 201) {
-                    //console.log(response)
-                    console.log(response.data.items)
-                    this.setState({ equipments: response.data.items });
-                    this.setState({ hasSearched: true });
-                    /*this.props.history.push({
-                        pathname: '/search-results-page',
-                        state: { events: response.data.items }
-                    })*/
-                    //this.context.events = response.data.items
-                    alert('Search is successful')
-
-                    //window.location.href = '/search-results-page'
-                } else {
-                    alert(response.message)
-                    //alert('Not valid info for an event')
-                }
-            }
-            ).catch((error) => {
-                alert('There is an error. Try again later')
-            })
-
-    }
-
-
-
     render() {
 
-        
-        
-        const resultingEquipments = this.state.equipments.map(event =>  <EquipmentInfo name={event.name} description={event.description} id={event["@id"]} /> )
+
+        const resultingEquipments = this.state.equipments.map(event => <EquipmentInfo name={event.name} description={event.description} id={event.event_id} /> )
         let title = "";
-
-        if(this.state.hasSearched) {
-            if(resultingEquipments.length < 1) {
-                title = "No equipment found"
-            } else {
-                title = "Search Results"
-            }
+        if(resultingEquipments.length < 1) {
+            title = "No equipment found"
         } else {
-            title = ""
+            title = "Search Results"
         }
-
-        
-
-
         const { country, region } = this.state;
             
         const paperStyle={padding :30,width:480, margin:"20px auto"}
@@ -248,10 +174,9 @@ class SearchEquipment extends React.Component {
                                 
                             </Select>
 
+                            
 
-                            <br />
-                                                       
-                            <p style = {{alignContent: 'center', fontSize: 20}}><br /><br /><hr className='hrElements'/>Do you want to use location for the search?.</p>
+                            <p style = {{alignContent: 'center', fontSize: 20}}><br /><br /><br /><hr className='hrElements'/>You can use either map or country and city search for the location. Select which one to use please.</p>
 
 
                             <Select style={{width: 420}}
@@ -264,8 +189,8 @@ class SearchEquipment extends React.Component {
                                     this.setState({ useMap: value });
                                   }}      
                             >
-                                <MenuItem value={true}>Yes</MenuItem>
-                                <MenuItem value={false}>No</MenuItem>
+                                <MenuItem value={true}>Map</MenuItem>
+                                <MenuItem value={false}>Country and City</MenuItem>
                                
                                 
                             </Select>
@@ -308,8 +233,18 @@ class SearchEquipment extends React.Component {
 
                             <br />
 
+                            <CountryDropdown class = 'lowerInput' style = {{width: 420}} 
+                            value={country}
+                            onChange={this.selectCountry} />
 
                             
+
+                            <RegionDropdown class = 'lowerInput'  style = {{width: 420}}
+                            country={country}
+                            value={region}
+                            onChange={this.selectRegion} />
+
+                            <br />
                             
                             <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth>Search For Corresponding Equipments</Button>
                             <Typography >

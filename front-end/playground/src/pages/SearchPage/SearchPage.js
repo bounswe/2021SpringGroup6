@@ -41,8 +41,7 @@ class SearchPage extends React.Component {
             country: '', 
             useMap: false,
             region: '' ,
-            events: [],
-            hasSearched: false
+            events: []
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -184,7 +183,6 @@ class SearchPage extends React.Component {
                     //console.log(response)
                     console.log(response.data.items)
                     this.setState({ events: response.data.items });
-                    this.setState({ hasSearched: true });
                     /*this.props.history.push({
                         pathname: '/search-results-page',
                         state: { events: response.data.items }
@@ -236,20 +234,11 @@ class SearchPage extends React.Component {
 
         const resultingEvents = this.state.events.map(event => <EventInfo name={event.name} description={event.description} id={event.event_id} /> )
         let title = "";
-        if(this.state.hasSearched) {
-            if(resultingEvents.length < 1) {
-                title = "No event found"
-            } else {
-                title = "Search Results"
-            }
-    
-
+        if(resultingEvents.length < 1) {
+            title = "No event found"
         } else {
-            title = ""
+            title = "Search Results"
         }
-        
-
-
         const { country, region } = this.state;
             
         const paperStyle={padding :30,width:480, margin:"20px auto"}

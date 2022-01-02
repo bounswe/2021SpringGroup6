@@ -19,7 +19,7 @@ import axios from 'axios';
 import './NewEquipment.css';
 
 
-const baseURL = "/equipments";
+const baseURL = "/events";
 
 
 
@@ -32,13 +32,12 @@ class NewEquipment extends React.Component {
             name: "",
             sporttype: "none",
             description: "",
-            sharedContent: "",
             anchor: [41.084, 29.051]
         }
 
         
         this.handleMapChange = this.handleMapChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        
 
     }
 
@@ -62,66 +61,6 @@ class NewEquipment extends React.Component {
     }
 
 
-    checkInput() {
-
-        // Fill if needed
-        
-        return true;
-
-    }
-
-
-
-    handleSubmit(event) {
-        event.preventDefault();
-
-        const {user, setUser} =this.context;
-
-        let res = this.checkInput();
-
-        if(res) {  
-
-            const user = JSON.parse(localStorage.getItem('user')).token;
-            let info =       {
-                
-                name : this.state.name,
-                sport : this.state.sporttype,
-                description : this.state.description,
-                sharedContent : this.state.sharedContent,
-                latitude : (Math.round(this.state.anchor[0] * 100) / 100).toFixed(4),
-                longitude : (Math.round(this.state.anchor[1] * 100) / 100).toFixed(4)
-            }       
-            
-            console.log(info)
-            console.log(`Token ${user}`)
-                      
-            axios
-            .post(baseURL, info,  {headers:{'Authorization': `Token ${user}`}}).then((response) => {
-                console.log(response)
-                console.log(response.data)
-                console.log(response.data["@id"])
-                console.log(`Token ${user}`)
-                if(response.status === 200 || response.status === 201) {
-
-                    alert('The equipment is now opened.')
-                    window.location.href = '/equipment/' + response.data["@id"]
-                } else {
-                    alert(response.message.name[0])
-                    //alert('Not valid info for an event')
-                }
-            }
-            ).catch((error) => {
-                console.log(error)
-                alert('Incorrect input. Try again')
-            })
-            
-        }
-
-
-    }
-
-
-
     render() {
 
         const paperStyle={padding :30,width:480, margin:"20px auto"}
@@ -134,7 +73,7 @@ class NewEquipment extends React.Component {
                 
                 <h1 id="title"> <br />New Equipment Page</h1>
 
-                <form onSubmit={this.handleSubmit}>
+                <form >
                     <Grid>
                         <Paper elevation={10} style={paperStyle} >
 
@@ -218,21 +157,6 @@ class NewEquipment extends React.Component {
                                 onChange={event => {
                                     const { value } = event.target;
                                     this.setState({ description: value });
-                                  }}                                                      
-                            />
-
-
-
-                            <TextField style= {{width:420}} className="lowerInput"
-                                label='Shared Content (Optional)' 
-                                placeholder='Enter URL of the photo of the equipment'  
-                                multiline
-                                type="text" 
-                                name="sharedContent" 
-                                id="sharedContent"   
-                                onChange={event => {
-                                    const { value } = event.target;
-                                    this.setState({ sharedContent: value });
                                   }}                                                      
                             />
 
