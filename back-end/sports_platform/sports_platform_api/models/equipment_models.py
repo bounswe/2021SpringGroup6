@@ -79,7 +79,7 @@ class Equipment(models.Model):
         db_table = 'equipment'
 
     equipment_id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
     creator = models.ForeignKey('User', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
@@ -138,6 +138,7 @@ class Equipment(models.Model):
 
         data_dict['@context'] = "https://schema.org/Product"
         data_dict['@id'] = self.equipment_id
+        data_dict['name'] = self.name
         data_dict['sport'] = {"@type": "Thing", "name": self.sport.name }
         data_dict['geo']= {
             '@type': 'GeoCoordinates',
