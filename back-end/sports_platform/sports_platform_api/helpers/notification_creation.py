@@ -9,7 +9,7 @@ def _event_full(notification):
 
 def _event_accept(notification):
     return {
-            "description": f"You are accpeted for the event with name {notification.event_id.name}",
+            "description": f"You are accepted for the event with name {notification.event_id.name}",
             "notification_id": notification.id,
             "event_id": notification.event_id.event_id,
             "date": notification.date,

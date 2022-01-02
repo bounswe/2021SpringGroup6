@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ..models import Event, DiscussionPost, DiscussionComment, Notification
+from ..models import Event, DiscussionPost, DiscussionComment, EventBadges, Badge, Notification
 from ..validation import event_validation
 from ..serializers.event_seralizer import EventSerializer
 from datetime import datetime, timezone
@@ -395,7 +395,7 @@ def search_event(request):
     return Response(response, status=200)
 
 
-@api_view(['GET','POST'])
+@api_view(['GET','POST','DELETE'])
 def get_badges(request, event_id):
 
     if request.method == 'GET':
@@ -444,6 +444,45 @@ def get_badges(request, event_id):
                 return Response(data={"message": "Try later."}, status=500)
             else:
                 return Response(status=201)
+        except Event.DoesNotExist:
+            return Response(data={"message": "Event does not exist."}, status=400)
+        except Exception as e:
+            return Response(data={"message": "Try later."}, status=500)
+
+    elif request.method == 'DELETE':
+
+        current_user = request.user
+
+        if not current_user.is_authenticated:
+            return Response(data={"message": "Login required."}, status=401)
+
+        try:
+
+            event = Event.objects.get(event_id=event_id)
+
+            if event.organizer.user_id != current_user.user_id:
+                return Response(data={"message": "Only organizers can delete badges to event."}, status=403)
+
+            validation = event_validation.Badge(data=request.data)
+            if not validation.is_valid():
+                return Response(validation.errors, status=400)
+
+            badge = Badge.objects.get(name=validation.validated_data['badge'])
+
+
+            event_badge = EventBadges.objects.get(
+                event=event, badge=badge)
+
+            with transaction.atomic():
+                event_badge.delete()
+            return Response(status=204)
+
+        except Event.DoesNotExist:
+            return Response(data={"message": "Event does not exist."}, status=400)
+        except Badge.DoesNotExist:
+            return Response(data={"message": "Badge does not exist."}, status=400)
+        except EventBadges.DoesNotExist:
+            return Response(data={"message": "Badge does not exist for that event."}, status=400)
         except Exception as e:
             return Response(data={"message": "Try later."}, status=500)
 
