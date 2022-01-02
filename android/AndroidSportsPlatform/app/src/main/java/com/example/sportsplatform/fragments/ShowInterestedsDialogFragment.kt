@@ -32,7 +32,18 @@ class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
         _binding = FragmentShowInterestedsBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(ShowInterestedsViewModel::class.java)
+
+        getBundleArguments()
+
+        viewModel.getInterestedsOfEvent()
+
         return binding.root
+    }
+
+    private fun getBundleArguments() {
+        arguments?.let {
+            viewModel.eventId = it.getInt(EVENT_ID)
+        }
     }
 
     companion object {

@@ -7,6 +7,7 @@ import com.example.sportsplatform.data.models.requests.EventRequest
 import com.example.sportsplatform.data.models.responses.CreateEventResponse
 import com.example.sportsplatform.data.models.responses.EventFilterResponse
 import com.example.sportsplatform.data.models.responses.EventResponse
+import com.example.sportsplatform.data.models.responses.GetInterestedsOfEventResponse
 import retrofit2.Response
 
 class EventRepository(private val api: EventApi) {
@@ -27,5 +28,8 @@ class EventRepository(private val api: EventApi) {
     }
     suspend fun deleteSpectatorRequest(token: String, eventId: Int?): Response<Unit> {
         return api.deleteSpectatorRequest(token, eventId)
+    }
+    suspend fun getInterestedsOfEvent(eventId: Int?): Response<GetInterestedsOfEventResponse> {
+        return api.getInterestedsOfEvent(eventId)
     }
 }
