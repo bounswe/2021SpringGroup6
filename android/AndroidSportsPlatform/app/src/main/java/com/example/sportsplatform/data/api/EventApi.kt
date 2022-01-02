@@ -2,11 +2,9 @@ package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
 import com.example.sportsplatform.data.models.requests.CreateEventRequest
+import com.example.sportsplatform.data.models.requests.DecideParticipantsRequest
 import com.example.sportsplatform.data.models.requests.EventFilterRequest
-import com.example.sportsplatform.data.models.responses.CreateEventResponse
-import com.example.sportsplatform.data.models.responses.EventFilterResponse
-import com.example.sportsplatform.data.models.responses.EventResponse
-import com.example.sportsplatform.data.models.responses.GetInterestedsOfEventResponse
+import com.example.sportsplatform.data.models.responses.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -54,6 +52,13 @@ interface EventApi {
     suspend fun getInterestedsOfEvent(
         @Path("event_id") eventId: Int?
     ): Response<GetInterestedsOfEventResponse>
+
+    @POST("/events/{event_id}/participants")
+    suspend fun decideParticipants(
+        @Header("Authorization") token: String,
+        @Path("event_id") eventId: Int?,
+        @Body decideParticipantsRequest: DecideParticipantsRequest
+    ): Response<DecideParticipantsResponse>
 
     companion object{
         operator fun invoke() : EventApi {
