@@ -746,11 +746,12 @@ class Event(models.Model):
 
             for badge in event_badges:
                 item = dict()
+                item['name'] = badge.badge.name
                 if badge.badge.wikidata:
-                    item['@context'] = "https://www.wikidata.org/entity/" + badge.badge.wikidata
-                    item['name'] = badge.badge.name
-                else:
-                    item['name'] = badge.badge.name
+                    item['@context'] = "https://www.wikidata.org/entity/" + \
+                        badge.badge.wikidata
+                if badge.badge.sport:
+                    item['sport'] = badge.badge.sport.name
 
                 badges_list.append(item)
 

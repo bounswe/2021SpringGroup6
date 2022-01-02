@@ -28,6 +28,7 @@ urlpatterns = [
     path('events/<int:event_id>/badges', event_views.get_badges),
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
+    path('badges/<str:sport>', get_sport_badges),
     path('notifications',user_views.notification),
     path('notifications/<int:notification_id>',user_views.read_notification),
     path('events/<int:event_id>/discussion', post_post),

@@ -1,6 +1,7 @@
 from django.db import models
 from .sport_models import Sport
 from datetime import datetime, timezone
+from .sport_models import Sport
 
 class Badge(models.Model):
     class Meta:
@@ -8,6 +9,7 @@ class Badge(models.Model):
 
     name = models.CharField(primary_key=True, max_length=30)
     wikidata = models.CharField(max_length=30, blank=True)
+    sport = models.ForeignKey('Sport', blank=True, null=True, on_delete=models.CASCADE)
 
     @staticmethod
     def get_badges():
@@ -17,12 +19,12 @@ class Badge(models.Model):
             badges_res = []
             for badge in badges:
                 item = {}
+                item['name'] = badge.name
                 if badge.wikidata:
                     item['@context'] = "https://www.wikidata.org/entity/" + badge.wikidata
-                    item['name'] = badge.name
-                else:
-                    item['name'] = badge.name
-                
+                if badge.sport:
+                    item['sport'] = badge.sport.name
+                    
                 badges_res.append(item)
             
             return badges_res

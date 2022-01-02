@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from ..validation import badge_validation
 
-from ..models import Badge, NewBadgeRequests
+from ..models import Badge, NewBadgeRequests, Sport
 
 
 @api_view(['GET', 'POST'])
@@ -41,3 +41,33 @@ def get_badges(request):
                 return Response( status=201)
         except Exception as e:
             return Response(data={"message": 'Try Later.'}, status=500)
+
+
+@api_view(['GET'])
+def get_sport_badges(request, sport):
+
+    if request.method == 'GET':
+        
+        try:
+            sport = Sport.objects.get(name=sport)
+
+            badges = Badge.objects.filter(sport=sport) 
+
+            badges_res = []
+            for badge in badges:
+                item = {}
+                item['name'] = badge.name
+                if badge.wikidata:
+                    item['@context'] = "https://www.wikidata.org/entity/" + \
+                        badge.wikidata
+                if badge.sport:
+                    item['sport'] = badge.sport.name
+
+                badges_res.append(item)
+        
+            res = {"badges": badges_res}
+
+        except Sport.DoesNotExist:
+            return Response(data={"message": 'Enter valid sport.'}, status=400)
+
+        return Response(data=res, status=200)

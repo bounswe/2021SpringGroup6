@@ -433,6 +433,9 @@ class User(AbstractBaseUser):
                         }
                     }
 
+                if badge.badge.sport:
+                    item['sport'] = badge.badge.sport.name
+
                 user_given_badges_list.append(item)
 
             participating_events = self.participating_events.all()
