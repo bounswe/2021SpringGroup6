@@ -88,7 +88,8 @@ class BadgeTest(TestCase):
                               'get_event': self.event_with_approval.event_id,
                               'give_event': self.event_with_approval.event_id,
                               'already_given_event': self.event_with_approval.event_id,
-                              'already_given_user': self.cat_user.user_id
+                              'already_given_user': self.cat_user.user_id,
+                              'delete': self.event_with_approval.event_id
                               }
 
         self.request_token = {'give_other_user': self.cat_token,
@@ -97,6 +98,7 @@ class BadgeTest(TestCase):
                               'give_event': self.dog_token,
                               'already_given_user': self.dog_token,
                               'already_given_event': self.dog_token,
+                              'delete': self.dog_token,
                               }
 
         self.request_body = {
@@ -104,6 +106,7 @@ class BadgeTest(TestCase):
                             'give_event': {"badge": "competitive"},
                             'already_given_user': {"badge": "greed"},
                             'already_given_event': {"badge": "greed"},
+                            'delete': {"badge": "greed"},
                             }
 
         self.response_bodies = {'get_event': {
@@ -254,3 +257,18 @@ class BadgeTest(TestCase):
         self.assertEqual(response.data, self.response_bodies[test_type])
         self.assertEqual(response.status_code, 400)
         
+    def test_delete(self):
+        test_type = 'delete'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/badges"
+
+        request_body = self.request_body[test_type]
+
+        response = self.client.delete(
+            path, request_body,  content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(EventBadges.objects.filter(
+            event=self.event_with_approval, badge=self.greed_badge).exists())
