@@ -15,6 +15,7 @@ import UseWindowSize from './PermanentComponents/WindowSizing';
 import gif from './images/squadgamegif.gif'
 
 
+
 const PasswordReset = lazy(() => import('./pages/PasswordReset/PasswordReset'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const ProfileView = lazy(() => import('./pages/profile/ProfileView'));
@@ -23,8 +24,14 @@ const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
+const NewEquipment = lazy(() => import('./pages/NewEquipment/NewEquipment')); 
+const NewField = lazy(() => import('./pages/NewField/NewField'));  
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
+const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
+const SearchFieldPage = lazy(() => import('./pages/SearchField/SearchField'));
 const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
+const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'))
+
 
 
 function App() {
@@ -104,11 +111,45 @@ function App() {
                   <div className="default-body"><NewEvent/></div>
                 </Suspense>}/>
 
-            	    
+
+            <Route path="new-equipment" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><NewEquipment/></div>
+                </Suspense>}/>
+
+
+            <Route path="new-field" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><NewField/></div>
+                </Suspense>}/>
+
+
 	          <Route path="search-page" 
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchPage/></div>
+                </Suspense>}/>
+
+
+            <Route path="equipment/:id"  element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><EquipmentInformationFunctional/></div>
+                </Suspense>}/>
+
+
+            <Route path="search-equipment-page" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><SearchEquipmentPage/></div>
+                </Suspense>}/>
+
+
+            <Route path="search-field-page" 
+              element={
+                <Suspense fallback={<>...</>}>
+                  <div className="default-body"><SearchFieldPage/></div>
                 </Suspense>}/>
 
             <Route path="profile">

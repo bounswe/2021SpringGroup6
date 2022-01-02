@@ -31,6 +31,7 @@ import './NewEvent.css';
 const baseURL = "/events";
 
 
+
 class NewEvent extends React.Component {
 
 
@@ -52,7 +53,8 @@ class NewEvent extends React.Component {
             time: "",
             duration: -1,
             acceptNecessary: false,
-            anchor: [41.084, 29.051]
+            anchor: [41.084, 29.051],
+            badge: ""
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -134,6 +136,21 @@ class NewEvent extends React.Component {
                 console.log(response.data["@id"])
                 console.log(`Token ${user}`)
                 if(response.status === 200 || response.status === 201) {
+
+
+                    let baseURL2 = baseURL + '/' + response.data["@id"] + '/badges';
+
+                    let info2 = { badge : this.state.badge }
+
+                    axios.post(baseURL2, info2, {headers:{'Authorization': `Token ${user}`}}).then((response) => {
+                        if(response.status === 200 || response.status === 201) {
+
+                        }
+                    }).catch((error) => {
+                        
+                    })
+                    
+
                     alert('The event is now opened.')
                     window.location.href = '/event/' + response.data["@id"]
                 } else {
@@ -169,6 +186,69 @@ class NewEvent extends React.Component {
 
 
     render() {
+        let badgeOptions = <Select style={{width: 420}}
+                            labelId="badge"
+                            id="badge"
+                            
+                            label="Select Badge"
+                            onChange={event => { 
+                                const { value } = event.target;
+                                this.setState({ badge: value });
+                            }}      
+                        >
+                            <MenuItem value={'leadership'}>Leadership</MenuItem>
+                            <MenuItem value={'friendliness'}>Friendliness</MenuItem>
+                            <MenuItem value={'greed'}>Greed</MenuItem>
+                            <MenuItem value={'encouraging'}>Encouraging</MenuItem>
+                            <MenuItem value={'clumsiness'}>Clumsiness</MenuItem>
+                            <MenuItem value={'flamboyant'}>Flamboyant</MenuItem>
+                            <MenuItem value={'competitive'}>Competitive</MenuItem>
+                            <MenuItem value={'creativity'}>Creativity</MenuItem>
+                            <MenuItem value={'nature lover'}>Nature Lover</MenuItem>
+                            <MenuItem value={'kindness'}>Kindness</MenuItem>
+                            <MenuItem value={'football supporter'}>Football Supporter</MenuItem>
+                            <MenuItem value={'sixth man'}>Sixth Man</MenuItem>                                                                
+                        </Select>;
+        if (this.state.sporttype === 'soccer') {
+            badgeOptions = <Select style={{width: 420}}
+                            labelId="badge"
+                            id="badge"
+                            
+                            label="Select Badge"
+                            onChange={event => { 
+                                const { value } = event.target;
+                                this.setState({ badge: value });
+                            }}      
+                        >
+                            <MenuItem value={'flamboyant'}>Flamboyant</MenuItem>
+                            <MenuItem value={'competitive'}>Competitive</MenuItem>
+                            <MenuItem value={'creativity'}>Creativity</MenuItem>
+                            <MenuItem value={'nature lover'}>Nature Lover</MenuItem>
+                            <MenuItem value={'kindness'}>Kindness</MenuItem>
+                            <MenuItem value={'football supporter'}>Football Supporter</MenuItem>                                                             
+                        </Select>
+        }
+
+
+        if (this.state.sporttype === 'basketball') {
+            badgeOptions = <Select style={{width: 420}}
+                            labelId="badge"
+                            id="badge"
+                            
+                            label="Select Badge"
+                            onChange={event => { 
+                                const { value } = event.target;
+                                this.setState({ badge: value });
+                            }}      
+                        >
+                            <MenuItem value={'leadership'}>Leadership</MenuItem>
+                            <MenuItem value={'friendliness'}>Friendliness</MenuItem>
+                            <MenuItem value={'greed'}>Greed</MenuItem>
+                            <MenuItem value={'encouraging'}>Encouraging</MenuItem>
+                            <MenuItem value={'clumsiness'}>Clumsiness</MenuItem>
+                            <MenuItem value={'sixth man'}>Sixth Man</MenuItem>                                                                
+                        </Select>
+        }
 
         const paperStyle={padding :30,width:480, margin:"20px auto"}
         const btnstyle={margin:'8px 0'}
@@ -244,11 +324,19 @@ class NewEvent extends React.Component {
                                 <MenuItem value={'soccer'}>Soccer</MenuItem>                                                                               
                                 <MenuItem value={'table_tennis'}>Table_tennis</MenuItem>
                                 <MenuItem value={'tennis'}>Tennis</MenuItem>
+                                <MenuItem value={'ultimate-frisbee-game'}>Ultimate-Frisbee-Game</MenuItem>
                                 <MenuItem value={'volleyball'}>Volleyball</MenuItem>
                                 <MenuItem value={'watersports'}>Watersports</MenuItem>
                                 <MenuItem value={'weightlifting'}>Weightlifting</MenuItem>
                                                                 
                             </Select>
+
+
+                            <br/><br/>
+                            <p>Select Badge: (Optional)</p>
+                            
+                            {badgeOptions}
+                            
 
                             
                             <TextField className="lowerInput"

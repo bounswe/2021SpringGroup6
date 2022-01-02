@@ -1,0 +1,38 @@
+.lowerInput {
+    margin-top: 1rem !important;
+    float: left !important;
+    margin-right: 1rem !important;
+    margin-bottom: 1rem !important;
+    
+}
+
+#title {
+    margin-top: 1rem !important;
+    color:rgb(230, 56, 114) !important;
+    margin-bottom: 40 !important;
+    display: flex !important;
+    justify-content: center !important;
+
+}
+
+
+#title2 {
+    color:rgb(230, 56, 114) !important;
+    margin-bottom: 20 !important;
+    align-content: center !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+
+
+#identifier {
+    display: flex !important;
+    justify-content: center !important;
+    margin-left: 400 !important;
+    
+}
+
+
+.hrElements {
+    border: 1px solid red;
+}
