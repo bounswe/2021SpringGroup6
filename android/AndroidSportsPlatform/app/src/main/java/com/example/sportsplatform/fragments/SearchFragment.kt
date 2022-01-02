@@ -1,5 +1,6 @@
 package com.example.sportsplatform.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,7 +13,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.R
+import com.example.sportsplatform.activities.MainActivity
+import com.example.sportsplatform.activities.MapsActivity
+import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.databinding.FragmentSearchBinding
+import com.example.sportsplatform.util.Constants
 import com.example.sportsplatform.viewmodels.SearchViewModel
 import com.example.sportsplatform.viewmodelfactories.SearchViewModelFactory
 import org.kodein.di.Kodein
@@ -37,9 +42,29 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(SearchViewModel::class.java)
+
+        viewModel.getSports()
+        viewModel.setCustomSharedPreferences(
+            requireActivity().getSharedPreferences(
+                Constants.CUSTOM_SHARED_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
+        )
+        viewModel.clearCoordinates()
+
         initializeSpinner()
+
+        initializeSpinnersForLevels()
+
         binding.searchViewModel = viewModel
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getEventSearchCoordinatesFromSharedPreferences()
+        binding.twSearchEventWithMap.text = viewModel.coordinatesAsString
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,7 +86,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
         viewModel.searchOption.observe(
             viewLifecycleOwner,
             Observer {
-                viewModel.setSearchOption(binding.spinner, it)
+                viewModel.setSearchOption(binding.spinnerSearchOptions, it)
             }
         )
 
@@ -72,45 +97,46 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
             }
         )
 
-        binding.btnSearch.setOnClickListener{
+        viewModel.sports.observe(
+            viewLifecycleOwner,
+            Observer {
+                initializeSpinnerForSports(it)
+            }
+        )
 
-            if (viewModel.eventSearchKey.value.toString().isNotEmpty() ||
-                viewModel.eventSearchKey.value.toString().isNotBlank() ||
-                viewModel.userSearchKey.value.toString().isNotEmpty() ||
-                viewModel.userSearchKey.value.toString().isNotBlank()
-            ) {
-                when (viewModel.searchOption.value) {
-                    0 -> {
-                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        val arguments = Bundle()
-                        arguments.putString("user_search_filter", viewModel.userSearchKey.value.toString())
-                        val fragmentToGo = UserSearchFragment()
-                        fragmentToGo.arguments = arguments
-                        if (savedInstanceState == null) {
-                            transaction.replace(R.id.mainContainer, fragmentToGo)
-                            transaction.addToBackStack(null)
-                            transaction.commitAllowingStateLoss()
-                        }
+        binding.twSearchEventWithMap.setOnClickListener {
+            viewModel.clearCoordinates()
+            MapsActivity.openMaps(activity as MainActivity, true)
+        }
+
+        binding.btnSearch.setOnClickListener {
+
+            when (viewModel.searchOption.value) {
+                0 -> {
+                    val transaction =
+                        requireActivity().supportFragmentManager.beginTransaction()
+                    val arguments = Bundle()
+                    arguments.putString(
+                        "user_search_filter",
+                        viewModel.userSearchKey.value.toString()
+                    )
+                    val fragmentToGo = UserSearchFragment()
+                    fragmentToGo.arguments = arguments
+                    if (savedInstanceState == null) {
+                        transaction.replace(R.id.mainContainer, fragmentToGo)
+                        transaction.addToBackStack(null)
+                        transaction.commitAllowingStateLoss()
                     }
-
-                    1 -> {
-                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        val arguments = Bundle()
-                        arguments.putString("event_search_filter", viewModel.eventSearchKey.value.toString())
-                        val fragmentToGo = EventSearchFragment()
-                        fragmentToGo.arguments = arguments
-                        if (savedInstanceState == null) {
-                            transaction.replace(R.id.mainContainer, fragmentToGo)
-                            transaction.addToBackStack(null)
-                            transaction.commitAllowingStateLoss()
-                        }
-                    }
-
-                    2 -> {}
                 }
-            } else {
-                viewModel.eventsFiltered.postValue(null)
-                viewModel.usersFiltered.postValue(null)
+
+                1 -> {
+                    navigateToEventSearchFragment()
+                }
+
+                2 -> {
+
+                }
+
             }
         }
     }
@@ -122,9 +148,54 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
             R.layout.item_spinner
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinner.adapter = adapter
+            binding.spinnerSearchOptions.adapter = adapter
         }
-        binding.spinner.onItemSelectedListener = this
+        binding.spinnerSearchOptions.onItemSelectedListener = this
+    }
+
+    private fun initializeSpinnerForSports(sports: Array<String>) {
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, sports)
+        binding.spinnerSport.adapter = arrayAdapter
+    }
+
+    private fun initializeSpinnersForLevels() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.levels,
+            R.layout.item_spinner
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerMinLevel.adapter = adapter
+            binding.spinnerMaxLevel.adapter = adapter
+        }
+    }
+
+    private fun navigateToEventSearchFragment() {
+        val transaction =
+            requireActivity().supportFragmentManager.beginTransaction()
+        val fragmentToGo = EventSearchFragment.newInstance(
+            EventFilterRequest(
+                nameContains = if (viewModel.eventSearchKey.value.toString()
+                        .isNotEmpty()
+                ) binding.searchBar.text.toString() else null,
+                sport = binding.spinnerSport.selectedItem.toString(),
+                city = if (binding.etSearchCity.text.toString()
+                        .isNotEmpty()
+                ) binding.etSearchCity.text.toString() else null,
+                country = if (binding.etSearchCountry.text.toString()
+                        .isNotEmpty()
+                ) binding.etSearchCountry.text.toString() else null,
+                skillLevels = listOf(
+                    binding.spinnerMinLevel.selectedItem.toString().toInt(),
+                    binding.spinnerMaxLevel.selectedItem.toString().toInt()
+                )
+            ),
+            viewModel.listOfEventSearchCoordinates
+        )
+        transaction.replace(R.id.mainContainer, fragmentToGo)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {

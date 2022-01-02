@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.sportsplatform.R
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,13 +13,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.sportsplatform.databinding.ActivityMapsBinding
 import com.example.sportsplatform.util.Constants
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.gson.Gson
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     companion object {
-        fun openMaps(activity: AppCompatActivity) =
+        private const val IS_FOR_EVENT_SEARCH = "is_for_event_search"
+        fun openMaps(activity: AppCompatActivity, isForEventSearch: Boolean = false) =
             activity.apply {
                 val intent = Intent(this, MapsActivity::class.java)
+                intent.putExtra(IS_FOR_EVENT_SEARCH, isForEventSearch)
                 startActivity(intent)
             }
     }
@@ -29,6 +32,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
     private lateinit var binding: ActivityMapsBinding
 
     private lateinit var sharedPreferences: SharedPreferences
+
+    private var userAddedMarkerCount = 0
+    private var listOfMarkerPositions = mutableListOf<LatLng>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,14 +64,50 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
 
         // Add a marker in Bogazici Uni and move the camera
         val bogaziciCoordinates = LatLng(41.084, 29.055)
-        mMap.addMarker(MarkerOptions().position(bogaziciCoordinates).title("Marker in Bogazici Uni"))
+        mMap.addMarker(
+            MarkerOptions().position(bogaziciCoordinates).title("Marker in Bogazici Uni")
+        )
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogaziciCoordinates))
         mMap.setOnMapLongClickListener(this)
     }
 
     override fun onMapLongClick(p0: LatLng?) {
-        sharedPreferences.edit().putString(Constants.EVENT_LATITUDE, p0?.latitude?.toString()).apply()
-        sharedPreferences.edit().putString(Constants.EVENT_LONGITUDE, p0?.longitude?.toString()).apply()
-        finish()
+        if (getIsForSearchEvent()) {
+            if (userAddedMarkerCount < 1) {
+                addMarker(p0)
+            } else {
+                p0?.let { listOfMarkerPositions.add(it) }
+                putMarkerPositionsToSharedPreferences()
+                finish()
+            }
+        } else {
+            sharedPreferences.edit().putString(Constants.EVENT_LATITUDE, p0?.latitude?.toString())
+                .apply()
+            sharedPreferences.edit().putString(Constants.EVENT_LONGITUDE, p0?.longitude?.toString())
+                .apply()
+            finish()
+        }
+    }
+
+    private fun getIsForSearchEvent(): Boolean =
+        intent.getBooleanExtra(IS_FOR_EVENT_SEARCH, false)
+
+    private fun addMarker(p0: LatLng?) {
+        val markerOptions = p0?.let {
+            listOfMarkerPositions.add(it)
+            MarkerOptions().position(it)
+        }.also {
+            it?.icon(
+                BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            mMap.addMarker(it)
+            userAddedMarkerCount += 1
+        }
+    }
+
+    private fun putMarkerPositionsToSharedPreferences() {
+        val gson = Gson()
+        val json = gson.toJson(listOfMarkerPositions)
+        sharedPreferences.edit().putString("listOfMarkerPositions", json).apply()
     }
 }

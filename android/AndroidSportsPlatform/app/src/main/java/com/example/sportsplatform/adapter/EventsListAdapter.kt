@@ -16,10 +16,16 @@ interface EventsClickListener {
 }
 
 class EventsListAdapter(
-    private val itemList: List<EventResponse>?,
     private val itemClickListenerListener: EventsClickListener?
 ) :
     RecyclerView.Adapter<EventsListAdapter.MyViewHolder>() {
+
+    var items = mutableListOf<EventResponse?>()
+        set(value) {
+            field.clear()
+            field.addAll(value)
+            notifyDataSetChanged()
+        }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val container: ConstraintLayout = itemView.clContainer
@@ -39,18 +45,25 @@ class EventsListAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = itemList?.get(position)
-        holder.eventName.text = currentItem?.name
-        holder.eventDescription.text = currentItem?.description
-        holder.date.text = currentItem?.created_on.convertDateFormat()
-        holder.maxAttendeeCap.text = currentItem?.maximumAttendeeCapacity.toString()
-        holder.organizer.text = currentItem?.organizer?.identifier
-        holder.duration.text = currentItem?.duration.toString()
-        holder.sport.text = currentItem?.sport
-        holder.container.setOnClickListener {
-            currentItem?.let { item -> itemClickListenerListener?.onEventsClickListener(item) }
+        val currentItem = items[position]
+        with(holder.itemView.context) {
+            holder.eventName.text = currentItem?.name
+            holder.eventDescription.text = currentItem?.description
+            holder.date.text = currentItem?.created_on.convertDateFormat()
+            holder.maxAttendeeCap.text = this?.getString(
+                R.string.eventMaxAttCapTitle,
+                currentItem?.maximumAttendeeCapacity.toString()
+            )
+            holder.organizer.text =
+                this?.getString(R.string.eventOrganizerTitle, currentItem?.organizer?.identifier)
+            holder.duration.text =
+                this?.getString(R.string.eventDurationTitle, currentItem?.duration.toString())
+            holder.sport.text = this?.getString(R.string.eventSportTitle, currentItem?.sport)
+            holder.container.setOnClickListener {
+                currentItem?.let { item -> itemClickListenerListener?.onEventsClickListener(item) }
+            }
         }
     }
 
-    override fun getItemCount() = itemList?.size ?: 0
+    override fun getItemCount() = items.size
 }

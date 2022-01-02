@@ -16,8 +16,10 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twName"
             style="@style/SearchedEventInformation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twStartDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Name" />
@@ -25,8 +27,10 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twDescription"
             style="@style/SearchedEventInformation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twDuration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/twName"
             tools:text="Description" />
@@ -52,8 +56,10 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/twOrganizer"
             style="@style/SearchedEventInformation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twMaxAttendeeCapacity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/twDescription"
             tools:text="User" />
