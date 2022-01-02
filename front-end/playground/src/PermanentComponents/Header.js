@@ -31,12 +31,18 @@ function Header() {
                                 </Link> */}
                                 Home
                             </Link>
-                            <Link to="/new-event" className="header-link">Create Event</Link>
-                            <Link to="/search-page" className="header-link">Find an Event</Link>
-                            <NavDropdown title="Additional Features" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="">Equipments</NavDropdown.Item>
+                            <NavDropdown title="Events" id="basic-nav-dropdown">
+                            <NavDropdown.Item href="/new-event">New Event</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="">Badges</NavDropdown.Item>
+                            <NavDropdown.Item href="/search-page">Search Event</NavDropdown.Item>
+                            </NavDropdown>
+                            <NavDropdown title="Equipments" id="basic-nav-dropdown">
+                            <NavDropdown.Item href="/new-equipment">New Equipment</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item href="/search-equipment-page">Search Equipment</NavDropdown.Item>
+                            </NavDropdown>
+                            <NavDropdown title="Badges" id="basic-nav-dropdown">
+                            <NavDropdown.Item href="">Available Badges</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
