@@ -5,10 +5,12 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from sports_platform_api.models.user_models import Notification
+from sports_platform_api.models.event_models import Event
 from ..controllers import Guest
 from ..helpers import filter_visibility
 from ..models import User,Block
 from ..serializers.user_serializer import UserSerializer
+from ..serializers.event_seralizer import FullEventSerializer
 from ..validation import user_validation
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -563,3 +565,16 @@ def search_user(request):
     except:
         return Response(data={"message": "Try later."}, status=500)
     return Response(response, status=200)
+
+@api_view(['GET'])
+def recommendation(request):
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+    try:
+        notifications = Event.get_recommendations(current_user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    result = [FullEventSerializer(event).data for event in notifications]
+    return Response(result, status=200)

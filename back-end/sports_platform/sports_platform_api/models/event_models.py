@@ -4,10 +4,11 @@ from ..helpers import get_address,sort_by_distance
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from ..models.activity_stream_models import ActivityStream
-from ..models import Sport, User, SportSkillLevel
+from ..models import Sport, User, SportSkillLevel, Follow
 from datetime import datetime, timezone
-from .badge_models import Badge, UserBadges, EventBadges
+from .badge_models import Badge, EventBadges
 from ..models.user_models import Notification
+from ..helpers.geo import _get_distance
 from functools import cmp_to_key
 
 
@@ -296,6 +297,45 @@ class Event(models.Model):
         
         return filters
 
+    @staticmethod
+    def _sport_based_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        sports = [sport_skill.sport for sport_skill in SportSkillLevel.objects.filter(user=user)]
+        return Event.objects.filter(sport__in=sports, startDate__gte=dt)
+
+    @staticmethod
+    def _following_user_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        followings = [follower.following for follower in Follow.objects.filter(follower=user)]
+        return Event.objects.filter(organizer__in=followings, startDate__gte=dt)
+    
+    @staticmethod
+    def _location_based_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        events = Event.objects.filter(startDate__gte=dt)
+        to_sort = [(event, _get_distance((event.latitude, event.longitude), (user.latitude, user.longitude))) for event in events]
+        sorted_events = sorted(to_sort, key=lambda tup: tup[1])
+        recommendations = []
+        for pair in sorted_events:
+            if pair[1]<=5000: # we return events with a distance less than or equal to 5km
+                recommendations.append(pair[0])
+        return recommendations
+
+    @staticmethod
+    def get_recommendations(user):
+        result = []
+        sport_related_events = Event._sport_based_recommendations(user)
+        result.extend(sport_related_events)
+        following_events = Event._following_user_recommendations(user)
+        result.extend(following_events)
+        if user.latitude:
+            close_events = Event._location_based_recommendations(user)
+            result.extend(close_events)
+        return result
+    
     def _scheme_location(self):
         return {
             '@context': 'https://schema.org',
