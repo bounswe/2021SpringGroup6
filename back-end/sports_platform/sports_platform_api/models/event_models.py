@@ -714,7 +714,6 @@ class Event(models.Model):
 
             return data
         except Exception as e:
-            print(e)
             return 500
 
     def add_badge(self, badge):
