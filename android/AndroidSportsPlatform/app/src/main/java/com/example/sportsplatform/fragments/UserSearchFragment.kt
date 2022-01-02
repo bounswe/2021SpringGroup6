@@ -44,6 +44,7 @@ class UserSearchFragment : Fragment(), KodeinAware, UsersClickListener {
 
         initializeRecyclerview()
 
+        viewModel.fillSearchUserList()
         return binding.root
     }
 

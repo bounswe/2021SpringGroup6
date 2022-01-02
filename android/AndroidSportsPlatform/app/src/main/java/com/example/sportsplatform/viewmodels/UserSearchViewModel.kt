@@ -17,7 +17,7 @@ class UserSearchViewModel(private val userRepo: UserRepository) : ViewModel() {
         userSearch = userToSearch
     }
 
-    fun fillSearchUserList(userSearchKey: String?) {
+    fun fillSearchUserList() {
         Coroutines.main {
             val userSearchRequest =
                 UserSearchRequest(
