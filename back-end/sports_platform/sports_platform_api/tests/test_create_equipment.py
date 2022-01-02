@@ -34,6 +34,7 @@ class CreateEquipmentTest(TestCase):
         self.response = {
             "@context": "https://schema.org/Product",
             "@id": 1,
+            "name": "soccer ball",
             "sport": {
                 "@type": "Thing",
                 "name": "soccer"
