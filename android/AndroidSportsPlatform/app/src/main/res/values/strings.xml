@@ -9,6 +9,7 @@
     <string name="register">REGISTER</string>
     <string name="todo1">TODO</string>
     <string name="todo">TODO</string>
+    <string name="done">Done</string>
     <string name="e_mail">e-mail</string>
     <string name="home">HOME</string>
     <string name="profile">profile</string>
@@ -68,6 +69,8 @@
     <string name="eventOrganizer">Event organizer</string>
     <string name="eventAttendee">Event attendee</string>
     <string name="eventAudience">Event audience</string>
+    <string name="showInteresteds">Show interesteds</string>
+    <string name="interested">Interesteds</string>
     <string name="sendInterestAsAudience">I am interested!</string>
     <string name="sendInterestToEvent">Participate as spectator</string>
     <string name="eventOrganizerTitle">Organizer: %1s</string>

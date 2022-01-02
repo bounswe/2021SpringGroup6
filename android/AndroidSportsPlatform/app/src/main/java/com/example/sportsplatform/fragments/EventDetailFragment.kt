@@ -69,6 +69,13 @@ class EventDetailFragment : Fragment(), KodeinAware {
                 viewModel.eventId.value?.let { id -> viewModel.getEventInformation(id) }
             }
         )
+
+        binding.showInteresteds.setOnClickListener {
+            ShowInterestedsDialogFragment.newInstance(
+                requireActivity().supportFragmentManager,
+                arguments?.getInt(EVENT_ID) ?: 0
+            )
+        }
     }
 
     private fun initializeRecyclerviews() {

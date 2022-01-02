@@ -105,15 +105,19 @@ class HomeFragment : Fragment(), KodeinAware, UsersParticipatingEventsClick, Eve
         viewModel.userLoggingOut()
     }
 
-    override fun onUsersParticipatingEventsClicked(eventResponse: Value?) {
+    private fun navigateToEventDetail(eventId: Int?) {
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val fragmentToGo = EventDetailFragment.newInstance(eventId = eventResponse?.id)
+        val fragmentToGo = EventDetailFragment.newInstance(eventId = eventId)
         transaction.replace(R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
-    override fun onEventsClickListener(eventResponse: EventResponse?) {
+    override fun onUsersParticipatingEventsClicked(eventResponse: Value?) {
+        navigateToEventDetail(eventResponse?.id)
+    }
 
+    override fun onEventsClickListener(eventResponse: EventResponse?) {
+        navigateToEventDetail(eventResponse?.event_id)
     }
 }

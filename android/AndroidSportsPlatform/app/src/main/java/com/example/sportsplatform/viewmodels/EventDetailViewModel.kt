@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.models.requests.EventRequest
 import com.example.sportsplatform.data.models.responses.EventResponse
 import com.example.sportsplatform.data.repository.EventRepository
+import com.example.sportsplatform.util.Constants.SHARED_PREFS_USER_ID
 import com.example.sportsplatform.util.Constants.SHARED_PREFS_USER_TOKEN
 import com.example.sportsplatform.util.Coroutines
 import com.example.sportsplatform.util.toast
@@ -19,12 +20,21 @@ class EventDetailViewModel(
     var event: MutableLiveData<EventResponse> = MutableLiveData()
     var eventId: MutableLiveData<Int> = MutableLiveData()
     var interestSent: MutableLiveData<Boolean> = MutableLiveData()
+    var interestedsVisibility: MutableLiveData<Int> = MutableLiveData()
 
     fun getEventInformation(eventId: Int) {
         Coroutines.main {
-            val eventInformation = eventRepository.findEvent(EventRequest(event_id = eventId)).body()
+            val eventInformation =
+                eventRepository.findEvent(EventRequest(event_id = eventId)).body()
             eventInformation?.getFormattedDate()
             event.postValue(eventInformation)
+            interestedsVisibility.postValue(
+                if (eventInformation?.organizer?.id == sharedPreferences.getInt(
+                        SHARED_PREFS_USER_ID,
+                        0
+                    )
+                ) View.VISIBLE else View.GONE
+            )
         }
     }
 
