@@ -6,15 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.adapter.InterestedsDecisionClick
+import com.example.sportsplatform.adapter.InterestedsOfEventAdapter
+import com.example.sportsplatform.data.models.responses.Value
 import com.example.sportsplatform.databinding.FragmentShowInterestedsBinding
+import com.example.sportsplatform.util.toast
 import com.example.sportsplatform.viewmodelfactories.ShowInterestedsViewModelFactory
 import com.example.sportsplatform.viewmodels.ShowInterestedsViewModel
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
+class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware, InterestedsDecisionClick {
 
     private var _binding: FragmentShowInterestedsBinding? = null
     private val binding get() = _binding!!
@@ -23,6 +29,8 @@ class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
 
     private lateinit var viewModel: ShowInterestedsViewModel
     private val factory: ShowInterestedsViewModelFactory by instance()
+
+    private val interestedsAdapter by lazy { InterestedsOfEventAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +41,7 @@ class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(ShowInterestedsViewModel::class.java)
 
+        initializeRecyclerview()
         getBundleArguments()
 
         viewModel.getInterestedsOfEvent()
@@ -40,9 +49,32 @@ class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.interestedsOfEvent.observe(
+            viewLifecycleOwner,
+            Observer {
+                interestedsAdapter.items =
+                    it?.additionalProperty?.value?.toMutableList() ?: mutableListOf()
+            }
+        )
+
+        binding.btnDone.setOnClickListener {
+            dismiss()
+        }
+    }
+
     private fun getBundleArguments() {
         arguments?.let {
             viewModel.eventId = it.getInt(EVENT_ID)
+        }
+    }
+
+    private fun initializeRecyclerview() {
+        binding.rvInteresteds.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = interestedsAdapter
         }
     }
 
@@ -59,5 +91,13 @@ class ShowInterestedsDialogFragment : DialogFragment(), KodeinAware {
                 )
             }
         }
+    }
+
+    override fun onAcceptClick(user: Value?) {
+        requireContext().toast("User Accepted!")
+    }
+
+    override fun onDeclineClick(user: Value?) {
+        requireContext().toast("User Declined!")
     }
 }
