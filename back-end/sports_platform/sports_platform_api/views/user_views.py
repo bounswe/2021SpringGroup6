@@ -4,10 +4,13 @@ from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from sports_platform_api.models.user_models import Notification
+from sports_platform_api.models.event_models import Event
 from ..controllers import Guest
 from ..helpers import filter_visibility
 from ..models import User,Block
 from ..serializers.user_serializer import UserSerializer
+from ..serializers.event_seralizer import FullEventSerializer
 from ..validation import user_validation
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -457,6 +460,8 @@ def get_badges(request, user_id):
             user = User.objects.get(user_id=user_id)
 
             badges = user.get_badges()
+            if (not request.user.is_authenticated) and (request.user.user_id != user_id) and (not user.badge_visibility):
+                return Response(data={"message": "Badges cannot be seen."}, status=403)
 
             if badges == 500:
                 return Response(data={"message": "Try later."}, status=500)
@@ -498,7 +503,38 @@ def get_badges(request, user_id):
             else:
                 return Response(status=201)
         except Exception as e:
-            return Response(data={"message": "Try later."}, status=500)
+            return Response(data={"message": "Try later."}, status=500)    
+
+@api_view(['GET'])
+def notification(request):
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:  
+        notifications=current_user.get_notifications()
+    except Exception:
+            return Response(data={"message": "Try later."}, status=500)    
+    return Response(data=notifications, status=200)
+
+@api_view(['POST'])
+def read_notification(request, notification_id):
+    if not request.user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        if request.user.user_id != notification.user_id.user_id:
+            return Response(data={"message": "Not allowed to read notifications of another user."}, status=403)
+        notification.read = True
+        notification.save()
+        return Response(status=200)
+    except Notification.DoesNotExist:
+        return Response(data={"message": "Notification does not exist."}, status=400)
+    except Exception:
+        return Response(data={"message": "Try later."}, status=500)    
+            
 
 @api_view(['POST'])
 def search_user(request):
@@ -531,3 +567,16 @@ def search_user(request):
     except:
         return Response(data={"message": "Try later."}, status=500)
     return Response(response, status=200)
+
+@api_view(['GET'])
+def recommendation(request):
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+    try:
+        notifications = Event.get_recommendations(current_user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    result = [FullEventSerializer(event).data for event in notifications]
+    return Response(result, status=200)

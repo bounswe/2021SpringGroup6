@@ -29,8 +29,17 @@ urlpatterns = [
     path('users/<int:user_id>/badges', user_views.get_badges),
     path('badges', get_badges),
     path('badges/<str:sport>', get_sport_badges),
+    path('notifications',user_views.notification),
+    path('notifications/<int:notification_id>',user_views.read_notification),
     path('events/<int:event_id>/discussion', post_post),
     path('events/<int:event_id>/discussion/<int:post_id>', delete_post_post),
     path('events/<int:event_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_comment),
-    path('users/searches', user_views.search_user)
+    path('users/searches', user_views.search_user),
+    path('equipments', create_equipment),
+    path('equipments/<int:equipment_id>', get_equipment),
+    path('equipments/<int:equipment_id>/discussion', post_equipment_post),
+    path('equipments/<int:equipment_id>/discussion/<int:post_id>', delete_equipment_post),
+    path('equipments/<int:equipment_id>/discussion/<int:post_id>/comment/<int:comment_id>', delete_equipment_comment),
+    path('equipments/searches', search_equipment),
+    path('recommendations',user_views.recommendation)
 ]

@@ -9,3 +9,4 @@ from .sport_models import Sport
 from .event_models import *
 from .activity_stream_models import ActivityStream
 from .badge_models import *
+from .equipment_models import *
