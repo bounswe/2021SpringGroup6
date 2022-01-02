@@ -113,6 +113,8 @@ def post_equipment_post(request, equipment_id):
 
             if res == 500:
                 return Response(data={"message": "Try later."}, status=500)
+            if res == 402:
+                return Response(data={"message": "Try with a valid equipment."}, status=400)
             else:
                 return Response(data=res, status=201)
         except Exception as e:
