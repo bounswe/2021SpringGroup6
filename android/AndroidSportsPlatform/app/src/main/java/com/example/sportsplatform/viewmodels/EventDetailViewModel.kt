@@ -88,4 +88,10 @@ class EventDetailViewModel(
             )
         }
     }
+
+    fun getEventBadges() {
+        Coroutines.main {
+            val eventBadges = eventRepository.getEventBadges(eventId.value).body()
+        }
+    }
 }

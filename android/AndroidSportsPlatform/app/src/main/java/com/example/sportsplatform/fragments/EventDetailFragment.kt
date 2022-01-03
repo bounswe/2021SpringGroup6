@@ -53,6 +53,7 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
             viewLifecycleOwner,
             Observer {
                 viewModel.getEventInformation(it)
+                viewModel.getEventBadges()
             }
         )
 

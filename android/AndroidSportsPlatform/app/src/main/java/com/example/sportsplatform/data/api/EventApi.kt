@@ -17,7 +17,8 @@ interface EventApi {
 
     @GET("events/{event_id}")
     suspend fun searchEvent(
-        @Path("event_id") eventId: Int): Response<EventResponse>
+        @Path("event_id") eventId: Int
+    ): Response<EventResponse>
 
     @POST("events/searches")
     suspend fun filterEvents(
@@ -60,8 +61,13 @@ interface EventApi {
         @Body decideParticipantsRequest: DecideParticipantsRequest
     ): Response<DecideParticipantsResponse>
 
-    companion object{
-        operator fun invoke() : EventApi {
+    @GET("/events/{event_id}/badges")
+    suspend fun getEventBadges(
+        @Path("event_id") eventId: Int?,
+    ): Response<GetEventBadgesResponse?>
+
+    companion object {
+        operator fun invoke(): EventApi {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
