@@ -69,7 +69,7 @@ class CreateEventViewModel(
                     )
                 )
             } else {
-
+                view.context.toast("Event NOT created!")
             }
 
 

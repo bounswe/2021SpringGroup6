@@ -43,10 +43,11 @@
                     android:id="@+id/ivRemove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/ic_decline_circle"
                     android:tint="@color/teal_700"
+                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_decline_circle"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/eventNameTitle"
@@ -293,11 +294,11 @@
                     style="@style/EventDetailTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
-                    android:padding="@dimen/margin_6"
                     android:layout_marginTop="@dimen/margin_12"
                     android:background="@drawable/bg_rounded_corner_stroked"
+                    android:padding="@dimen/margin_6"
                     android:text="@string/showInteresteds"
+                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/eventOrganizer" />
 
@@ -316,9 +317,9 @@
                     style="@style/EventDetailTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_6"
                     android:background="@drawable/bg_rounded_corner_stroked"
                     android:onClick="@{eventDetailViewModel::sendInterestToEvent}"
+                    android:padding="@dimen/margin_6"
                     android:text="@string/sendInterestAsAudience"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/eventAttendeeTitle" />
@@ -347,10 +348,10 @@
                     android:id="@+id/sendInterestAsAudience"
                     style="@style/EventDetailTitle"
                     android:layout_width="wrap_content"
-                    android:padding="@dimen/margin_6"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_corner_stroked"
                     android:onClick="@{eventDetailViewModel::participateAsSpectatorToEvent}"
+                    android:padding="@dimen/margin_6"
                     android:text="@string/sendInterestToEvent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/eventAudienceTitle" />

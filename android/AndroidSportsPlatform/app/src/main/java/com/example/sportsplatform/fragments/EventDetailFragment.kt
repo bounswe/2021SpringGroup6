@@ -1,6 +1,7 @@
 package com.example.sportsplatform.fragments
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.activities.MainActivity
 import com.example.sportsplatform.adapter.EventBadgesAdapter
 import com.example.sportsplatform.adapter.UsersAdapter
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
@@ -86,6 +88,14 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener, Popu
             }
         )
 
+        viewModel.eventDeleted.observe(
+            viewLifecycleOwner,
+            Observer {
+                requireContext().toast("Event is deleted.")
+                startActivity(Intent(activity, MainActivity::class.java))
+            }
+        )
+
         binding.showInteresteds.setOnClickListener {
             ShowInterestedsDialogFragment.newInstance(
                 requireActivity().supportFragmentManager,
@@ -131,7 +141,7 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener, Popu
     }
 
     override fun onYesButtonClick() {
-        requireContext().toast("Event is deleted.")
+        viewModel.deleteEvent()
     }
 
     override fun onNoButtonClick() {

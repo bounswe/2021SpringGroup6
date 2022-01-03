@@ -23,6 +23,7 @@ class EventDetailViewModel(
     var interestSent: MutableLiveData<Boolean> = MutableLiveData()
     var interestedsVisibility: MutableLiveData<Int> = MutableLiveData()
     var eventBadges: MutableLiveData<GetEventBadgesResponse> = MutableLiveData()
+    var eventDeleted: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getEventInformation(eventId: Int) {
         Coroutines.main {
@@ -94,6 +95,20 @@ class EventDetailViewModel(
     fun getEventBadges() {
         Coroutines.main {
             eventBadges.postValue(eventRepository.getEventBadges(eventId.value).body())
+        }
+    }
+
+    fun deleteEvent() {
+        Coroutines.main {
+            val token = sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
+            val response = eventRepository.deleteEvent(
+                "Token $token",
+                eventId.value
+            )
+
+            if (response.isSuccessful) {
+                eventDeleted.postValue(true)
+            }
         }
     }
 }
