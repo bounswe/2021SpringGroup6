@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.sportsplatform.data.models.requests.UserUpdateRequest
 import com.example.sportsplatform.databinding.FragmentProfileBinding
+import com.example.sportsplatform.util.toast
 import com.example.sportsplatform.viewmodels.ProfileFragmentViewModel
 import com.example.sportsplatform.viewmodelfactories.ProfileFragmentViewModelFactory
 import org.kodein.di.Kodein
@@ -44,6 +46,23 @@ class ProfileFragment : Fragment(), KodeinAware {
                 binding.profileViewModel = viewModel
             }
         )
+
+        binding.btnUpdateProfile.setOnClickListener {
+
+            view?.context?.toast("Update Button Pressed!")
+
+            viewModel.updUser(
+                UserUpdateRequest(
+                    email = binding.etEmail.text.toString(),
+                    name = binding.etUserName.text.toString(),
+                    familyName = binding.etUserFamilyName.text.toString(),
+                    birthDate = binding.etBirthDate.text.toString(),
+                    gender = binding.etGender.text.toString(),
+                    sports = null
+                )
+            )
+        }
+
     }
 
 }

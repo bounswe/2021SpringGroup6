@@ -27,6 +27,14 @@ class UserRepository(private val api: UserApi) {
         return api.searchUser(token, userDetailRequest.user_id)
     }
 
+    suspend fun updateUserProfile(
+        token: String,
+        userId : Int,
+        userUpdateRequest: UserUpdateRequest
+    ) : Response<String> {
+        return api.updateUser(token, userId, userUpdateRequest)
+    }
+
     suspend fun searchFollowingUserProfile(userId : Int) : Response<UserFollowingResponse> {
         return api.searchFollowingProfile(userId)
     }
