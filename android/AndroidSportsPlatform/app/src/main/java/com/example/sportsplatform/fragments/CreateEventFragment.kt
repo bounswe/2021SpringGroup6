@@ -77,6 +77,7 @@ class CreateEventFragment : Fragment(), KodeinAware {
         }
         binding.btnCreateEvent.setOnClickListener {
             viewModel.createNewEvent(
+                it,
                 CreateEventRequest(
                     binding.etCreateEventName.text.toString(),
                     binding.spinnerSport.selectedItem.toString(),
