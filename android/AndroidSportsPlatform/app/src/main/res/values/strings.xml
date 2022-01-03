@@ -50,7 +50,7 @@
     <string name="createEventStartDate">Start date in format dd.MM.yyyy HH:mm</string>
     <string name="createEventMinAttendeeCap">Enter event min attendee capacity</string>
     <string name="createEventMaxAttendeeCap">Enter event max attendee capacity</string>
-    <string name="createEventMaxSpectatorCap">Enter event min spectator capacity</string>
+    <string name="createEventMaxSpectatorCap">Enter event max spectator capacity</string>
     <string name="createEventMinSkillLevel">Enter event min skill level</string>
     <string name="createEventMaxSkillLevel">Enter event max skill level</string>
     <string name="createEventAcceptWithoutApproval">Accept without approval?</string>

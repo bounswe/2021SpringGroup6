@@ -11,19 +11,27 @@ const val SIMPLE_DATE_FORMAT_WITHOUT_SECONDS = "yyyy-MM-dd'T'HH:mm"
 fun String?.convertDateFormat(): String {
     val simpleDateFormatter = SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT, Locale.getDefault())
     val dateFormatter = SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault())
-    val date = this?.let {
-        simpleDateFormatter.parse(it)
+    return try {
+        val date = this?.let {
+            simpleDateFormatter.parse(it)
+        }
+        date?.let { dateFormatter.format(it) } ?: ""
+    } catch (e: Exception) {
+        "01.01.2022 00:00"
     }
-    return date?.let { dateFormatter.format(it) } ?: ""
 }
 
 fun String?.convertDateFormatToDefault(): String {
     val simpleDateFormatter = SimpleDateFormat(SIMPLE_DATE_FORMAT, Locale.getDefault())
     val dateFormatter = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-    val date = this?.let {
-        dateFormatter.parse(it)
+    return try {
+        val date = this?.let {
+            dateFormatter.parse(it)
+        }
+        date?.let { simpleDateFormatter.format(it) } ?: ""
+    } catch (e: Exception) {
+        "01.01.2022 00:00"
     }
-    return date?.let { simpleDateFormatter.format(it) } ?: ""
 }
 
 fun String?.convertDateWithoutSecondsToDefault(): String {
@@ -31,8 +39,12 @@ fun String?.convertDateWithoutSecondsToDefault(): String {
     val simpleDateFormatter =
         SimpleDateFormat(SIMPLE_DATE_FORMAT_WITHOUT_SECONDS, Locale.getDefault())
     val dateFormatter = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-    val date = simpleDateFormatter.parse(instant.toString())
-    return date?.let { dateFormatter.format(it) } ?: ""
+    return try {
+        val date = simpleDateFormatter.parse(instant.toString())
+        date?.let { dateFormatter.format(it) } ?: ""
+    } catch (e: Exception) {
+        "01.01.2022 00:00"
+    }
 }
 
 fun String?.initial(): String? {
