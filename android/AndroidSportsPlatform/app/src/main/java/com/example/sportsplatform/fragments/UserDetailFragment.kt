@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.R
+import com.example.sportsplatform.adapter.EventsListAdapter
 import com.example.sportsplatform.adapter.UserBadgesAdapter
+import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
+import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.databinding.FragmentDetailedUserBinding
 import com.example.sportsplatform.viewmodelfactories.UserDetailViewModelFactory
 import com.example.sportsplatform.viewmodels.UserDetailViewModel
@@ -36,6 +40,12 @@ class UserDetailFragment : Fragment(), KodeinAware {
         viewModel = ViewModelProvider(this, factoryDetail).get(UserDetailViewModel::class.java)
         viewModel.userId.postValue(arguments?.getInt(USER_ID) ?: 0)
 
+        viewModel.getUserInformation(arguments?.getInt(USER_ID) ?: 0)
+
+        viewModel.fetchUsersBadgeList()
+
+        initializeRecyclerview()
+
         return binding.root
     }
 
@@ -47,6 +57,13 @@ class UserDetailFragment : Fragment(), KodeinAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.user.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.userDetailViewModel = viewModel
+            }
+        )
+
         viewModel.usersBadgeList.observe(
             viewLifecycleOwner,
             Observer {
@@ -54,7 +71,29 @@ class UserDetailFragment : Fragment(), KodeinAware {
                     layoutManager =
                         LinearLayoutManager(context)
                     adapter =
-                        it?.additionalProperty?.let { badgeItems -> UserBadgesAdapter(badgeItems) }
+                        UserBadgesAdapter(it?.additionalProperty)
+                }
+            }
+        )
+
+        binding.btnAddBadge.setOnClickListener {
+            viewModel.addUserBadge(
+                AddBadgeRequest(
+                    binding.etBadgeName.text.toString()
+                )
+            )
+        }
+    }
+
+    private fun initializeRecyclerview() {
+        viewModel.usersBadgeList.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.rvUserBadges.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = UserBadgesAdapter(
+                        it?.additionalProperty,
+                    )
                 }
             }
         )

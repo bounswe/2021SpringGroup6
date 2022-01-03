@@ -3,6 +3,7 @@ package com.example.sportsplatform.viewmodels
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.data.models.requests.UserDetailRequest
 import com.example.sportsplatform.data.models.responses.GetBadgeResponse
 import com.example.sportsplatform.data.models.responses.UserResponse
@@ -15,7 +16,8 @@ class UserDetailViewModel(
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
-    var user: MutableLiveData<UserResponse> = MutableLiveData()
+    val user: MutableLiveData<UserResponse> = MutableLiveData()
+
     var userId: MutableLiveData<Int> = MutableLiveData()
     val usersBadgeList: MutableLiveData<GetBadgeResponse> = MutableLiveData()
     val searchBarHint: String = ""
@@ -29,6 +31,7 @@ class UserDetailViewModel(
             user.postValue(userInformation)
         }
     }
+
     fun fetchUsersBadgeList() {
         Coroutines.main {
             usersBadgeList.postValue(
@@ -38,4 +41,19 @@ class UserDetailViewModel(
             )
         }
     }
+
+    fun addUserBadge(
+        addBadgeRequest: AddBadgeRequest
+    ) {
+        Coroutines.main {
+            val token = sharedPreferences.getString(Constants.SHARED_PREFS_USER_TOKEN, "")
+            val userId = sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0)
+            val addNewBadge = userRepo.addBadgeToUser(
+                "Token $token",
+                userId,
+                addBadgeRequest
+            )
+        }
+    }
+
 }
