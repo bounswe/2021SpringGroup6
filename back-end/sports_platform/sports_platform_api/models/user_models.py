@@ -499,7 +499,6 @@ class User(AbstractBaseUser):
 
             return data
         except Exception as e:
-            print(e)
             return 500
 
     def give_badge(self, user_id, badge):
