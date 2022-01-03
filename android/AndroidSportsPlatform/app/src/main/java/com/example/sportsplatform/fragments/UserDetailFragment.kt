@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sportsplatform.R
-import com.example.sportsplatform.adapter.EventsListAdapter
 import com.example.sportsplatform.adapter.UserBadgesAdapter
-import com.example.sportsplatform.adapter.UsersParticipatingEventsAdapter
+import com.example.sportsplatform.adapter.UserFollowingAdapter
 import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.databinding.FragmentDetailedUserBinding
 import com.example.sportsplatform.viewmodelfactories.UserDetailViewModelFactory
@@ -40,11 +39,13 @@ class UserDetailFragment : Fragment(), KodeinAware {
         viewModel = ViewModelProvider(this, factoryDetail).get(UserDetailViewModel::class.java)
         viewModel.userId.postValue(arguments?.getInt(USER_ID) ?: 0)
 
+        initializeRecyclerview()
+
         viewModel.getUserInformation(arguments?.getInt(USER_ID) ?: 0)
 
         viewModel.fetchUsersBadgeList(arguments?.getInt(USER_ID) ?: 0)
 
-        initializeRecyclerview()
+        viewModel.fetchUsersFollowingList(arguments?.getInt(USER_ID) ?: 0)
 
         return binding.root
     }
@@ -71,10 +72,24 @@ class UserDetailFragment : Fragment(), KodeinAware {
                     layoutManager =
                         LinearLayoutManager(context)
                     adapter =
-                        UserBadgesAdapter(it?.additionalProperty)
+                        UserBadgesAdapter(it?.additionalProperty?.get(1)?.value)
                 }
             }
         )
+
+        viewModel.addUserBadgeResponse.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.userDetailViewModel = viewModel
+            }
+        )
+
+        binding.btnFollowUser.setOnClickListener{
+            viewModel.followUser(
+                arguments?.getInt(USER_ID) ?: 0
+            )
+            Toast.makeText(this.context,"User is followed!" ,Toast.LENGTH_SHORT).show()
+        }
 
         binding.btnAddBadge.setOnClickListener {
             viewModel.addUserBadge(
@@ -82,6 +97,7 @@ class UserDetailFragment : Fragment(), KodeinAware {
                     binding.etBadgeName.text.toString()
                 ), arguments?.getInt(USER_ID) ?: 0
             )
+            Toast.makeText(this.context,"Badge is added!" ,Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -92,7 +108,18 @@ class UserDetailFragment : Fragment(), KodeinAware {
                 binding.rvUserBadges.apply {
                     layoutManager = LinearLayoutManager(context)
                     adapter = UserBadgesAdapter(
-                        it?.additionalProperty,
+                        it?.additionalProperty?.get(1)?.value,
+                    )
+                }
+            }
+        )
+        viewModel.usersFollowingList.observe(
+            viewLifecycleOwner,
+                    {
+                binding.rvFollowingUsers.apply{
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = UserFollowingAdapter(
+                        it?.items,
                     )
                 }
             }

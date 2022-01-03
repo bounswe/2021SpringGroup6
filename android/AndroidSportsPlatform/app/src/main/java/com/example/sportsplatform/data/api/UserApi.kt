@@ -29,7 +29,7 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
         @Body addBadgeRequest: AddBadgeRequest
-    ): Response<String>
+    ): Response<Void>
 
     @GET("users/{user_id}/badges")
     suspend fun getUsersBadges(
@@ -57,12 +57,20 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int,
         @Body userUpdateRequest: UserUpdateRequest
-    ): Response<String>
+    ): Response<Void>
 
     @GET("/users/{user_id}/following")
     suspend fun searchFollowingProfile(
+        @Header("Authorization") token: String,
         @Path("user_id") userId: Int
-    ): Response<UserFollowingResponse>
+    ): Response<GetFollowingUsersResponse>
+
+    @POST("/users/{user_id}/following")
+    suspend fun followProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") followedUserId: Int,
+        @Body userFollowingRequest: UserFollowingRequest
+    ): Response<Void>
 
     @GET("/users/{user_id}/participating")
     suspend fun getUsersParticipatingEvents(

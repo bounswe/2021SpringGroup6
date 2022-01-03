@@ -1,5 +1,7 @@
 package com.example.sportsplatform.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.example.sportsplatform.data.api.UserApi
 import com.example.sportsplatform.data.models.requests.*
 import com.example.sportsplatform.data.models.responses.*
@@ -31,23 +33,39 @@ class UserRepository(private val api: UserApi) {
         token: String,
         userId : Int,
         userUpdateRequest: UserUpdateRequest
-    ) : Response<String> {
+    ) : Response<Void> {
         return api.updateUser(token, userId, userUpdateRequest)
     }
 
-    suspend fun searchFollowingUserProfile(userId : Int) : Response<UserFollowingResponse> {
-        return api.searchFollowingProfile(userId)
+    suspend fun searchFollowingUserProfile(token: String, userId : Int) : Response<GetFollowingUsersResponse> {
+        return api.searchFollowingProfile(token, userId)
     }
 
     suspend fun getUsersParticipatingEvents(token: String, userId: Int): Response<UsersParticipatingEvents> {
         return api.getUsersParticipatingEvents(token, userId)
     }
 
-    suspend fun addBadgeToUser(token: String, userId : Int, addBadgeRequest: AddBadgeRequest): Response<String> {
-        return api.addUserBadge(token, userId, addBadgeRequest)
+    suspend fun addBadgeToUser(token: String, userId : Int, addBadgeRequest: AddBadgeRequest): Response<Void> {
+        val rr = api.addUserBadge(token, userId, addBadgeRequest)
+
+        Log.d(TAG, "apiRequest $addBadgeRequest")
+        Log.d(TAG, "apiReturn $rr")
+        Log.d(TAG, "token $token")
+        Log.d(TAG, "userId $userId")
+
+        return rr
     }
 
     suspend fun getUsersBadges(userId : Int): Response<GetBadgeResponse> {
-        return api.getUsersBadges(userId)
+        val tt = api.getUsersBadges(userId)
+
+        Log.d(TAG, "apiReturn $tt")
+        Log.d(TAG, "userId $userId")
+
+        return tt
+    }
+
+    suspend fun followUserProfile(token: String, userId: Int, userFollowingRequest: UserFollowingRequest): Response<Void> {
+        return api.followProfile(token, userId, userFollowingRequest)
     }
 }
