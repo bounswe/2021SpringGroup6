@@ -46,8 +46,8 @@ function DiscussionPage(props) {
                     return (
                         <div key={comment['@id']} className="d-flex flex-row">
                             <label htmlFor="">{i} -  </label>
-                            <p> {comment.author['@id']} / </p>
-                            <p>{comment.text} - </p>
+                            <p> {comment.author['identifier']} -   </p>
+                            <p>{comment.text}  </p>
                         </div>
                     )
                 })
@@ -63,7 +63,7 @@ function DiscussionPage(props) {
                 />
 
                 <button onClick={handleStore} className={'btn btn-success col-lg-12'}>
-                    STORE
+                    Comment
                 </button>
             </form>
         </>
