@@ -14,7 +14,7 @@ import com.example.sportsplatform.databinding.FragmentCreateEventBinding
 import com.example.sportsplatform.util.Constants.CUSTOM_SHARED_PREFERENCES
 import com.example.sportsplatform.util.convertDateFormatToDefault
 import com.example.sportsplatform.viewmodels.CreateEventViewModel
-import com.example.sportsplatform.viewmodels.CreateEventViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.CreateEventViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance

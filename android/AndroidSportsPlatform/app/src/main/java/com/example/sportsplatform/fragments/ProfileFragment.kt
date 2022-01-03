@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.FragmentProfileBinding
 import com.example.sportsplatform.viewmodels.ProfileFragmentViewModel
-import com.example.sportsplatform.viewmodels.ProfileFragmentViewModelFactory
+import com.example.sportsplatform.viewmodelfactories.ProfileFragmentViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
