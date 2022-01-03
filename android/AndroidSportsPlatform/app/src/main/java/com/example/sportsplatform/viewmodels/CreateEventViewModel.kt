@@ -21,6 +21,7 @@ class CreateEventViewModel(
     var eventLatitude: MutableLiveData<String> = MutableLiveData()
     var eventLongitude: MutableLiveData<String> = MutableLiveData()
     var sports: MutableLiveData<Array<String>> = MutableLiveData()
+    var eventCreatedSuccessful: MutableLiveData<Boolean> = MutableLiveData()
 
     fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {
         customSharedPreferences = customSharedPrefers
@@ -52,10 +53,17 @@ class CreateEventViewModel(
     ) {
         Coroutines.main {
             val token = sharedPreferences.getString(SHARED_PREFS_USER_TOKEN, "")
-            val createNewEvent = eventRepository.createNewEvent(
+            val createEventResponse = eventRepository.createNewEvent(
                 "Token $token",
                 createEventRequest
             )
+            if (createEventResponse.isSuccessful) {
+                eventCreatedSuccessful.postValue(true)
+            } else {
+                eventCreatedSuccessful.postValue(false)
+            }
+
+
         }
     }
 }

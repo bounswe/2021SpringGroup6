@@ -65,6 +65,15 @@ class CreateEventFragment : Fragment(), KodeinAware {
             }
         )
 
+        viewModel.eventCreatedSuccessful.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it) {
+                    navigateToAddEventBadge()
+                }
+            }
+        )
+
         binding.twCreateEventLocationCoordinates.setOnClickListener {
             MapsActivity.openMaps(activity as MainActivity)
         }
@@ -93,5 +102,13 @@ class CreateEventFragment : Fragment(), KodeinAware {
         val arrayAdapter =
             ArrayAdapter(requireContext(), R.layout.simple_spinner_dropdown_item, sports)
         binding.spinnerSport.adapter = arrayAdapter
+    }
+
+    private fun navigateToAddEventBadge() {
+        val fragmentToGo = AddEventBadgeFragment()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.replace(com.example.sportsplatform.R.id.mainContainer, fragmentToGo)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

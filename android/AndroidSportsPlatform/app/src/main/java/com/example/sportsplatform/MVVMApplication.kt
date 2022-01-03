@@ -41,5 +41,6 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from provider { ProfileFragmentViewModelFactory(instance(), instance()) }
         bind() from provider { EventDetailViewModelFactory(instance(), instance()) }
         bind() from provider { ShowInterestedsViewModelFactory(instance(), instance()) }
+        bind() from provider { AddEventBadgeViewModelFactory() }
     }
 }
