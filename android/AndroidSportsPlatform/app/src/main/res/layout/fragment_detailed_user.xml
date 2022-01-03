@@ -17,14 +17,14 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Identifier"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:text="@{userDetailViewModel.user.identifier}"
             android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.188"
+            app:layout_constraintHorizontal_bias="0.13"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.059" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnFollowUser"
@@ -34,27 +34,25 @@
             android:backgroundTint="@color/white"
             android:text="@string/followUser"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnAddBadge"
+            app:layout_constraintBottom_toTopOf="@+id/etBadgeName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.532"
+            app:layout_constraintHorizontal_bias="0.432"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.263" />
+            app:layout_constraintVertical_bias="0.242" />
 
         <Button
             android:id="@+id/btnAddBadge"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="125dp"
             android:layout_height="48dp"
-            android:layout_marginStart="68dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="28dp"
             android:backgroundTint="@color/white"
             android:text="@string/addUserBadge"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/rvUserBadges"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserAge"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@id/tvUserLocation" />
 
         <Button
             android:id="@+id/btnBlockUser"
@@ -69,58 +67,51 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rvUserBadges"
-            app:layout_constraintVertical_bias="0.263" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tvUserFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="28dp"
             android:layout_marginEnd="81dp"
-            android:text="@string/name"
+            android:text="@{userDetailViewModel.user.name}"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvUserLocation"
-            app:layout_constraintEnd_toStartOf="@+id/btnBlockUser"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <TextView
             android:id="@+id/tvUserLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="126dp"
-            android:layout_marginBottom="578dp"
-            android:text="@string/location"
+            android:layout_marginTop="28dp"
+            android:text="@{userDetailViewModel.user.birthDate}"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.235"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tvUserAge" />
 
         <TextView
             android:id="@+id/tvUserAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:text="@string/age"
+            android:layout_marginTop="188dp"
+            android:text="@{userDetailViewModel.user.email}"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/rvUserBadges"
-            app:layout_constraintEnd_toStartOf="@+id/btnAddBadge"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.232"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUserFullName"
-            app:layout_constraintVertical_bias="0.296" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUserBadges"
             android:layout_width="307dp"
             android:layout_height="261dp"
-            android:layout_marginTop="244dp"
+            android:layout_marginTop="348dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
