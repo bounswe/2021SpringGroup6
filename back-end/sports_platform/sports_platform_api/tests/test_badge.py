@@ -62,9 +62,10 @@ class BadgeTest(TestCase):
             "duration": 20
         }
 
-        Sport.objects.create(name="soccer")
+        s = Sport.objects.create(name="soccer")
         self.greed_badge = Badge.objects.create(name= "greed",wikidata= "Q12819497")
         self.competitive_badge = Badge.objects.create(name="competitive", wikidata="Q107289411")
+        self.sport_badge = Badge.objects.create(name="football supporter", sport=s)
 
         self.event_with_approval = Event.objects.get(
             event_id=Event.create_event(event_data_1)['@id'])
@@ -88,7 +89,9 @@ class BadgeTest(TestCase):
                               'get_event': self.event_with_approval.event_id,
                               'give_event': self.event_with_approval.event_id,
                               'already_given_event': self.event_with_approval.event_id,
-                              'already_given_user': self.cat_user.user_id
+                              'already_given_user': self.cat_user.user_id,
+                              'badge_sport': "soccer",
+                              'delete': self.event_with_approval.event_id
                               }
 
         self.request_token = {'give_other_user': self.cat_token,
@@ -97,6 +100,8 @@ class BadgeTest(TestCase):
                               'give_event': self.dog_token,
                               'already_given_user': self.dog_token,
                               'already_given_event': self.dog_token,
+                              'badge_sport': self.dog_token,
+                              'delete': self.dog_token,
                               }
 
         self.request_body = {
@@ -104,6 +109,7 @@ class BadgeTest(TestCase):
                             'give_event': {"badge": "competitive"},
                             'already_given_user': {"badge": "greed"},
                             'already_given_event': {"badge": "greed"},
+                            'delete': {"badge": "greed"},
                             }
 
         self.response_bodies = {'get_event': {
@@ -161,7 +167,13 @@ class BadgeTest(TestCase):
                                                     ]
                                                 },
                                 'already_given_event': {"message": "Already added this badge to event."},
-                                'already_given_user': {"message": "Already gave this badge to this user."}
+                                'already_given_user': {"message": "Already gave this badge to this user."},
+                                'badge_sport':{
+                                    'badges' : [{
+                                        "name": "football supporter",
+                                        "sport": "soccer"
+                                    }]
+                                }
 
         }
 
@@ -203,6 +215,19 @@ class BadgeTest(TestCase):
         token = self.request_token[test_type]
 
         path = "/events/" + str(request_param) + "/badges"
+
+        response = self.client.get(
+            path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, self.response_bodies[test_type])
+
+    def test_badge_sport(self):
+        test_type = 'badge_sport'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/badges/" + str(request_param) 
 
         response = self.client.get(
             path, content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
@@ -254,3 +279,18 @@ class BadgeTest(TestCase):
         self.assertEqual(response.data, self.response_bodies[test_type])
         self.assertEqual(response.status_code, 400)
         
+    def test_delete(self):
+        test_type = 'delete'
+        request_param = self.request_param[test_type]
+        token = self.request_token[test_type]
+
+        path = "/events/" + str(request_param) + "/badges"
+
+        request_body = self.request_body[test_type]
+
+        response = self.client.delete(
+            path, request_body,  content_type='application/json', **{'HTTP_AUTHORIZATION': f'Token {token}'})
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(EventBadges.objects.filter(
+            event=self.event_with_approval, badge=self.greed_badge).exists())

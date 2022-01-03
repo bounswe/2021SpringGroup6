@@ -21,6 +21,9 @@ class Event(serializers.Serializer):
     acceptWithoutApproval = serializers.BooleanField(required=True)
     duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807)
 
+    canEveryoneSeePosts = serializers.BooleanField(required=False)
+    canEveryonePostPosts = serializers.BooleanField(required=False)
+
     def validate(self, data):
 
         if data['minSkillLevel'] > data['maxSkillLevel']:
@@ -63,6 +66,8 @@ class Search(serializers.Serializer):
         child=serializers.IntegerField(
             min_value=0, max_value=10), required=False
     )
+    sortBy = serializers.CharField(required=False)
+    order = serializers.CharField(required=False)
 
     def validate(self, data):
         if ((('latitudeBetweenStart' in data) and ('latitudeBetweenEnd' not in data)) or ('latitudeBetweenStart' not in data) and (('latitudeBetweenEnd' in data))):
@@ -103,3 +108,13 @@ class Update(serializers.Serializer):
     minSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
     maxSkillLevel = serializers.IntegerField(min_value=1, max_value=5, required=False)
     duration = serializers.IntegerField(min_value=1, max_value=9223372036854775807,required=False)
+    canEveryoneSeePosts = serializers.BooleanField(required=False)
+    canEveryonePostPosts = serializers.BooleanField(required=False)
+
+
+class DiscussionPost(serializers.Serializer):
+    sharedContent = serializers.URLField(required = False)
+    text = serializers.CharField(required=True)
+
+class DiscussionComment(serializers.Serializer):
+    text = serializers.CharField(required=False)

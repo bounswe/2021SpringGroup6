@@ -4,11 +4,13 @@ from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from sports_platform_api.models.user_models import Notification
+from sports_platform_api.models.event_models import Event
 from ..controllers import Guest
 from ..helpers import filter_visibility
-from ..models import User
+from ..models import User,Block
 from ..serializers.user_serializer import UserSerializer
+from ..serializers.event_seralizer import FullEventSerializer
 from ..validation import user_validation
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -23,8 +25,6 @@ def get_user(request, user_id):
             return Response(data={'message': 'An error occured, please try again later.'}, status=500)
         
         serialized_user = UserSerializer(user).data
-        # drop last_login field that we  do not use
-        serialized_user.pop('last_login')
         # add activity stream data
         serialized_user['@context'] = 'https://schema.org/Person'
         serialized_user['@id'] = user.user_id
@@ -33,6 +33,12 @@ def get_user(request, user_id):
         
         if (request.user.is_authenticated) and (user_id == request.user.user_id):
             return Response(serialized_user,status=200)
+        elif request.user.is_authenticated:
+            blocks = Block.objects.filter(blocker=user, blocked=request.user)
+            if not blocks.exists():
+                return Response(serialized_user,status=200)
+            else:
+                return Response({"message": "This user cannot see requested user."},status=403)
         else:
             serialized_user = filter_visibility(user.__dict__, serialized_user)
             return Response(serialized_user,status=200)  
@@ -170,7 +176,6 @@ def follow_user(request, user_id):
                 return Response(status=200)
 
         except Exception as e:
-            print(e)
             return Response(data={"message": "Try later."}, status=500)
 
     elif request.method == 'DELETE':
@@ -455,6 +460,8 @@ def get_badges(request, user_id):
             user = User.objects.get(user_id=user_id)
 
             badges = user.get_badges()
+            if (not request.user.is_authenticated) and (request.user.user_id != user_id) and (not user.badge_visibility):
+                return Response(data={"message": "Badges cannot be seen."}, status=403)
 
             if badges == 500:
                 return Response(data={"message": "Try later."}, status=500)
@@ -496,4 +503,80 @@ def get_badges(request, user_id):
             else:
                 return Response(status=201)
         except Exception as e:
-            return Response(data={"message": "Try later."}, status=500)
+            return Response(data={"message": "Try later."}, status=500)    
+
+@api_view(['GET'])
+def notification(request):
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:  
+        notifications=current_user.get_notifications()
+    except Exception:
+            return Response(data={"message": "Try later."}, status=500)    
+    return Response(data=notifications, status=200)
+
+@api_view(['POST'])
+def read_notification(request, notification_id):
+    if not request.user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        if request.user.user_id != notification.user_id.user_id:
+            return Response(data={"message": "Not allowed to read notifications of another user."}, status=403)
+        notification.read = True
+        notification.save()
+        return Response(status=200)
+    except Notification.DoesNotExist:
+        return Response(data={"message": "Notification does not exist."}, status=400)
+    except Exception:
+        return Response(data={"message": "Try later."}, status=500)    
+            
+
+@api_view(['POST'])
+def search_user(request):
+    validation = user_validation.Search(data=request.data)
+
+    if not validation.is_valid():
+        return Response(data={"message": validation.errors}, status=400)
+
+    validated_body = validation.validated_data
+    block_check = False
+    user = None
+    if (request.user.is_authenticated):
+        block_check = True
+        user = request.user
+    try:
+        users = User.search_user(validated_body, block_check, user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    response = {'@context':"https://www.w3.org/ns/activitystreams", 'type':'Collection',
+    'total_items':len(users),'items':[]}
+    try:
+        for returned_user in users:
+            serialized_user = UserSerializer(returned_user).data
+            sports = returned_user.get_sport_skills()
+            serialized_user['@context'] = 'https://schema.org/Person'
+            serialized_user['@id'] = returned_user.user_id
+            serialized_user['@type'] = 'Person'
+            serialized_user['knowsAbout'] = sports
+            response['items'].append(serialized_user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    return Response(response, status=200)
+
+@api_view(['GET'])
+def recommendation(request):
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return Response(data={"message": "Login required."}, status=401)
+    try:
+        notifications = Event.get_recommendations(current_user)
+    except:
+        return Response(data={"message": "Try later."}, status=500)
+    result = [FullEventSerializer(event).data for event in notifications]
+    return Response(result, status=200)

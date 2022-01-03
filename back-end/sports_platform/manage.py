@@ -20,9 +20,9 @@ def sport_records():
                 Sport.objects.create(name=sport_name)
             except: # Already exists
                 pass
+        Sport.objects.create(name="ultimate_frisbee")
     except:
         pass # error from external library so skip
-
 
 def add_badges():
     from sports_platform_api.data import badges
@@ -31,9 +31,15 @@ def add_badges():
     for badge in badges:
         try:
             if 'wikidata' in badge:
-                Badge.objects.create(name=badge['name'], wikidata=badge['wikidata'])
+                if 'sport' in badge:
+                    Badge.objects.create(name=badge['name'], wikidata=badge['wikidata'], sport_id=badge['sport'])
+                else:
+                    Badge.objects.create(name=badge['name'], wikidata=badge['wikidata'])
             else:
-                Badge.objects.create(name=badge['name'])
+                if 'sport' in badge:
+                    Badge.objects.create(name=badge['name'], sport_id=badge['sport'])
+                else:
+                    Badge.objects.create(name=badge['name'])
         except: # Already exists
             pass
 
