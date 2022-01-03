@@ -6,27 +6,27 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportsplatform.R
-import com.example.sportsplatform.data.models.responses.ValueBadge
-import kotlinx.android.synthetic.main.item_badge.view.*
+import com.example.sportsplatform.data.models.Items
+import kotlinx.android.synthetic.main.item_following_users.view.*
 
-class UserBadgesAdapter(
-    private val itemList: List<ValueBadge>?
+class UserFollowingAdapter(
+    private val itemList: List<Items>?
 ) :
-    RecyclerView.Adapter<UserBadgesAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<UserFollowingAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val badgeName: TextView = itemView.twBadgeName
+        val userName: TextView = itemView.twFollowingUser
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_badge, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_following_users, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = itemList?.get(position)
-        holder.badgeName.text = currentItem?.name
+        holder.userName.text = currentItem?.objectX?.identifier ?: ""
     }
 
     override fun getItemCount() = itemList?.size ?: 0

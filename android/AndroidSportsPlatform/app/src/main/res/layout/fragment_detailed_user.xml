@@ -109,10 +109,21 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUserBadges"
-            android:layout_width="307dp"
+            android:layout_width="140dp"
             android:layout_height="261dp"
-            android:layout_marginTop="348dp"
+            android:layout_marginTop="356dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.121"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFollowingUsers"
+            android:layout_width="140dp"
+            android:layout_height="261dp"
+            android:layout_marginTop="356dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.87"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,7 +140,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/btnAddBadge"
             app:layout_constraintTop_toBottomOf="@+id/tvUserAge"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.888"
             tools:ignore="SpeakableTextPresentCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
