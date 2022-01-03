@@ -13,13 +13,16 @@ import com.example.sportsplatform.adapter.EventBadgesAdapter
 import com.example.sportsplatform.adapter.UsersAdapter
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
 import com.example.sportsplatform.util.DialogDismissListener
+import com.example.sportsplatform.util.Popup
+import com.example.sportsplatform.util.PopupCallback
+import com.example.sportsplatform.util.toast
 import com.example.sportsplatform.viewmodelfactories.EventDetailViewModelFactory
 import com.example.sportsplatform.viewmodels.EventDetailViewModel
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
+class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener, PopupCallback {
 
     private var _binding: FragmentEventDetailBinding? = null
     private val binding get() = _binding!!
@@ -90,6 +93,11 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
                 arguments?.getInt(EVENT_ID) ?: 0
             )
         }
+
+        binding.ivRemove.setOnClickListener {
+            val popup = Popup(requireContext(), this)
+            popup.show()
+        }
     }
 
     private fun initializeRecyclerviews() {
@@ -120,5 +128,13 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
                 eventId?.let { putInt(EVENT_ID, it) }
             }
         }
+    }
+
+    override fun onYesButtonClick() {
+        requireContext().toast("Event is deleted.")
+    }
+
+    override fun onNoButtonClick() {
+        requireContext().toast("Event is NOT deleted.")
     }
 }
