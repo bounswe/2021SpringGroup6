@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.databinding.FragmentAddEventBadgeBinding
 import com.example.sportsplatform.viewmodelfactories.AddEventBadgeViewModelFactory
@@ -30,6 +31,17 @@ class AddEventBadgeFragment : Fragment(), KodeinAware {
         _binding = FragmentAddEventBadgeBinding.inflate(inflater, container, false)
         kodein = (requireActivity().applicationContext as KodeinAware).kodein
         viewModel = ViewModelProvider(this, factory).get(AddEventBadgeViewModel::class.java)
+        viewModel.getBadges()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.badges.observe(
+            viewLifecycleOwner,
+            Observer {
+            }
+        )
     }
 }

@@ -1,11 +1,13 @@
 package com.example.sportsplatform
 
 import android.app.Application
+import com.example.sportsplatform.data.api.BadgeApi
 import com.example.sportsplatform.data.api.EventApi
 import com.example.sportsplatform.data.api.SportApi
 import com.example.sportsplatform.data.repository.EventRepository
 import com.example.sportsplatform.data.repository.UserRepository
 import com.example.sportsplatform.data.api.UserApi
+import com.example.sportsplatform.data.repository.BadgeRepository
 import com.example.sportsplatform.data.repository.SportRepository
 import com.example.sportsplatform.viewmodelfactories.*
 import com.example.sportsplatform.viewmodels.*
@@ -26,9 +28,11 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from singleton { UserApi() }
         bind() from singleton { EventApi() }
         bind() from singleton { SportApi() }
+        bind() from singleton { BadgeApi() }
         bind() from singleton { UserRepository(instance()) }
         bind() from singleton { EventRepository(instance()) }
         bind() from singleton { SportRepository(instance()) }
+        bind() from singleton { BadgeRepository(instance()) }
         bind() from provider { AuthViewModelFactory(instance(), instance()) }
         bind() from provider { ProfileViewModelFactory(instance(), instance()) }
         bind() from provider { EventSearchViewModelFactory(instance()) }
@@ -41,6 +45,6 @@ class MVVMApplication : Application(), KodeinAware {
         bind() from provider { ProfileFragmentViewModelFactory(instance(), instance()) }
         bind() from provider { EventDetailViewModelFactory(instance(), instance()) }
         bind() from provider { ShowInterestedsViewModelFactory(instance(), instance()) }
-        bind() from provider { AddEventBadgeViewModelFactory() }
+        bind() from provider { AddEventBadgeViewModelFactory(instance()) }
     }
 }
