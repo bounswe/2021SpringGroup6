@@ -1,10 +1,7 @@
 package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.*
-import com.example.sportsplatform.data.models.requests.AddBadgeRequest
-import com.example.sportsplatform.data.models.requests.UserRegisterRequest
-import com.example.sportsplatform.data.models.requests.UserRequest
-import com.example.sportsplatform.data.models.requests.UserSearchRequest
+import com.example.sportsplatform.data.models.requests.*
 import com.example.sportsplatform.data.models.responses.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -53,6 +50,13 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Path("user_id") userId: Int
     ): Response<UserResponse>
+
+    @PUT("users/{user_id}")
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+        @Body userUpdateRequest: UserUpdateRequest
+    ): Response<String>
 
     @GET("/users/{user_id}/following")
     suspend fun searchFollowingProfile(
