@@ -51,10 +51,10 @@
     <string name="createEventMinAttendeeCap">Enter event min attendee capacity</string>
     <string name="createEventMaxAttendeeCap">Enter event max attendee capacity</string>
     <string name="createEventMaxSpectatorCap">Enter event max spectator capacity</string>
-    <string name="createEventMinSkillLevel">Enter event min skill level</string>
-    <string name="createEventMaxSkillLevel">Enter event max skill level</string>
-    <string name="createEventAcceptWithoutApproval">Accept without approval?</string>
-    <string name="createEventDuration">Enter event duration</string>
+    <string name="createEventMinSkillLevel">Enter event min skill level(1 to 5)</string>
+    <string name="createEventMaxSkillLevel">Enter event max skill level(1 to 5)</string>
+    <string name="createEventAcceptWithoutApproval">Accept without approval?(true or false)</string>
+    <string name="createEventDuration">Enter event duration in mins</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="selectEventLocation">Select event location</string>
     <string name="blockUser">Block User</string>
@@ -69,8 +69,8 @@
     <string name="eventOrganizer">Event organizer</string>
     <string name="eventAttendee">Event attendee</string>
     <string name="eventAudience">Event audience</string>
-    <string name="showInteresteds">Show interesteds</string>
-    <string name="interested">Interesteds</string>
+    <string name="showInteresteds">Show interested users</string>
+    <string name="interested">Interested Users</string>
     <string name="sendInterestAsAudience">I am interested!</string>
     <string name="sendInterestToEvent">Participate as spectator</string>
     <string name="eventOrganizerTitle">Organizer: %1s</string>
@@ -88,6 +88,9 @@
     <string name="selectMaxLevel">Select MAX level</string>
     <string name="eventsBadges">Events badges</string>
     <string name="addEventBadges">Add badges to your events</string>
+    <string name="yes">Yes!</string>
+    <string name="no">No!</string>
+    <string name="popupTitle">Are you sure?</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="selectSport">Select sport</string>

@@ -45,4 +45,10 @@ class EventRepository(private val api: EventApi) {
     ): Response<GetEventBadgesResponse?> {
         return api.getEventBadges(eventId)
     }
+    suspend fun deleteEvent(
+        token: String,
+        eventId: Int?
+    ): Response<Unit?> {
+        return api.deleteEvent(token, eventId)
+    }
 }

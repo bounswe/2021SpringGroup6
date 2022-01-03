@@ -66,6 +66,13 @@ interface EventApi {
         @Path("event_id") eventId: Int?,
     ): Response<GetEventBadgesResponse?>
 
+    @DELETE("/events/{event_id}")
+    suspend fun deleteEvent(
+        @Header("Authorization") token: String,
+        @Path("event_id") eventId: Int?
+    ): Response<Unit?>
+
+
     companion object {
         operator fun invoke(): EventApi {
             val requestInterceptor = Interceptor { chain ->
