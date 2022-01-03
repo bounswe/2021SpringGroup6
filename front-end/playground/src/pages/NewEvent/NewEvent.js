@@ -205,9 +205,7 @@ class NewEvent extends React.Component {
                             <MenuItem value={'competitive'}>Competitive</MenuItem>
                             <MenuItem value={'creativity'}>Creativity</MenuItem>
                             <MenuItem value={'nature lover'}>Nature Lover</MenuItem>
-                            <MenuItem value={'kindness'}>Kindness</MenuItem>
-                            <MenuItem value={'football supporter'}>Football Supporter</MenuItem>
-                            <MenuItem value={'sixth man'}>Sixth Man</MenuItem>                                                                
+                            <MenuItem value={'kindness'}>Kindness</MenuItem>                                                              
                         </Select>;
         if (this.state.sporttype === 'soccer') {
             badgeOptions = <Select style={{width: 420}}
@@ -220,11 +218,7 @@ class NewEvent extends React.Component {
                                 this.setState({ badge: value });
                             }}      
                         >
-                            <MenuItem value={'flamboyant'}>Flamboyant</MenuItem>
-                            <MenuItem value={'competitive'}>Competitive</MenuItem>
-                            <MenuItem value={'creativity'}>Creativity</MenuItem>
-                            <MenuItem value={'nature lover'}>Nature Lover</MenuItem>
-                            <MenuItem value={'kindness'}>Kindness</MenuItem>
+                            <MenuItem value={'freekick master'}>Freekick Master</MenuItem>
                             <MenuItem value={'football supporter'}>Football Supporter</MenuItem>                                                             
                         </Select>
         }
@@ -241,11 +235,7 @@ class NewEvent extends React.Component {
                                 this.setState({ badge: value });
                             }}      
                         >
-                            <MenuItem value={'leadership'}>Leadership</MenuItem>
-                            <MenuItem value={'friendliness'}>Friendliness</MenuItem>
-                            <MenuItem value={'greed'}>Greed</MenuItem>
-                            <MenuItem value={'encouraging'}>Encouraging</MenuItem>
-                            <MenuItem value={'clumsiness'}>Clumsiness</MenuItem>
+                            <MenuItem value={'three pointer'}>Three Pointer</MenuItem>
                             <MenuItem value={'sixth man'}>Sixth Man</MenuItem>                                                                
                         </Select>
         }

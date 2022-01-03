@@ -13,6 +13,7 @@ import {UserContext} from './UserContext';
 import UseWindowSize from './PermanentComponents/WindowSizing';
 
 import gif from './images/squadgamegif.gif'
+import Notifications from "./pages/Notifications";
 
 
 
@@ -24,8 +25,8 @@ const Register = lazy(() => import('./pages/Register/Register'));
 const EventSettingsPage = lazy(() => import('./pages/Event/EventSettingsPage'));
 const EventPage = lazy(() => import('./pages/Event/EventPage'));
 const NewEvent = lazy(() => import('./pages/NewEvent/NewEvent'));
-const NewEquipment = lazy(() => import('./pages/NewEquipment/NewEquipment')); 
-const NewField = lazy(() => import('./pages/NewField/NewField'));  
+const NewEquipment = lazy(() => import('./pages/NewEquipment/NewEquipment'));
+const NewField = lazy(() => import('./pages/NewField/NewField'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
 const SearchFieldPage = lazy(() => import('./pages/SearchField/SearchField'));
@@ -35,10 +36,9 @@ const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInfor
 
 
 function App() {
-  console.log('hellooooo')
   // localStorage.setItem("user",localStorage.getItem('user') || JSON.stringify({identifier: ""}));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
-  const [window_width, window_height] = UseWindowSize();
+  // const [window_width, window_height] = UseWindowSize();
 
   function Framework() {
     return (
@@ -78,11 +78,11 @@ function App() {
   function HomePage() {
     return (
     <Fragment>
-      {user.token ? 
+      {user.token ?
           <ActivityStream token={user.token}/>
           :
-          <div id="deneme" 
-            style={{height: '100%', display: 'flex', flexDirection: 'column', 
+          <div id="deneme"
+            style={{height: '100%', display: 'flex', flexDirection: 'column',
               justifyContent: 'space-around' , alignItems: 'center'}}>
             <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
               <img src={gif} width="250" alt="logo" />
@@ -100,33 +100,33 @@ function App() {
     <UserContext.Provider value={{user, setUser}}>
       <Routes //location={(location.state && location.state.backgroundLocation) || location}
       >
-        {user.token ? 
+        {user.token ?
           <Route path="/" element={<Framework/>}>
-          
-            <Route index element={<HomePage/>} />            
-            	    
-	          <Route path="new-event" 
+
+            <Route index element={<HomePage/>} />
+
+	          <Route path="new-event"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><NewEvent/></div>
                 </Suspense>}/>
 
 
-            <Route path="new-equipment" 
+            <Route path="new-equipment"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><NewEquipment/></div>
                 </Suspense>}/>
 
 
-            <Route path="new-field" 
+            <Route path="new-field"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><NewField/></div>
                 </Suspense>}/>
 
 
-	          <Route path="search-page" 
+	          <Route path="search-page"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchPage/></div>
@@ -139,26 +139,26 @@ function App() {
                 </Suspense>}/>
 
 
-            <Route path="search-equipment-page" 
+            <Route path="search-equipment-page"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchEquipmentPage/></div>
                 </Suspense>}/>
 
 
-            <Route path="search-field-page" 
+            <Route path="search-field-page"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><SearchFieldPage/></div>
                 </Suspense>}/>
 
             <Route path="profile">
-                <Route index 
+                <Route index
                   element={
                     <Suspense fallback={<>...</>}>
                       <div className="default-body"><Profile/></div>
                     </Suspense>}/>
-                <Route path=":id" 
+                <Route path=":id"
                 element={
                   <Suspense fallback={<>...</>}>
                     <div className="default-body"><ProfileView/></div>
@@ -167,69 +167,78 @@ function App() {
             </Route>
 
             <Route path="event">
-              <Route index 
+              <Route index
                 element={
                   <Suspense fallback={<>...</>}>
                     <EventSettingsPage/>
                   </Suspense>}/>
-              
-              {/* <Route path="modal/:id" 
+
+              {/* <Route path="modal/:id"
                 element={
                   <Suspense fallback={<>...</>}>
                     <div>hello</div>
                   </Suspense>}/> */}
-              
-              <Route path=":id" 
+
+              <Route path=":id"
                 element={
                   <Suspense fallback={<>...</>}>
                     <EventPage/>
                   </Suspense>}/>
             </Route>
 
-            <Route path="modify-event/:id" 
+            <Route path="modify-event/:id"
               element={
                 <Suspense fallback={<>...</>}>
                   <div className="default-body"><ModifyEvent/></div>
                 </Suspense>}/>
 
-            <Route path="event-settings" 
+            <Route path="event-settings"
               element={
                 <Suspense fallback={<>...</>}>
                   <EventSettingsPage/>
                 </Suspense>}/>
-            
+
 
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit
                   routes for. */}
+            <Route path="notifications"
+                   element={
+                     <Suspense fallback={<>...</>}>
+                       <Notifications/>
+                     </Suspense>}/>
+
             <Route path="*" element={<Navigate replace to="/" />} />
           </Route>
 
         :
-          
+
           <Route path="/" element={<FrameworkLogin/>}>
-          
+
             <Route index element={<HomePage/>} />
 
-            <Route path="login" 
+            <Route path="login"
               element={
                 <Suspense fallback={<>...</>}>
                   <Login/>
                 </Suspense>}/>
 
-            <Route path="register" 
+            <Route path="register"
               element={
                 <Suspense fallback={<>...</>}>
                   <Register/>
                 </Suspense>}/>
 
-          
-                      
-            <Route path="forgot-password" 
+
+
+            <Route path="forgot-password"
               element={
                 <Suspense fallback={<>...</>}>
                   <PasswordReset/>
                 </Suspense>}/>
+
+
+
 
             {/* Using path="*"" means "match anything", so this route
                   acts like a catch-all for URLs that we don't have explicit

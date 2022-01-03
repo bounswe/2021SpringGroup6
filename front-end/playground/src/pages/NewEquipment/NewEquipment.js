@@ -62,6 +62,14 @@ class NewEquipment extends React.Component {
     }
 
 
+    checkInput() {
+
+        // Fill if needed
+        
+        return true;
+
+    }
+
 
 
     handleSubmit(event) {
