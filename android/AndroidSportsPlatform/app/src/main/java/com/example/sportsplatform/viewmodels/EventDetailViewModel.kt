@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.models.requests.EventRequest
 import com.example.sportsplatform.data.models.responses.EventResponse
+import com.example.sportsplatform.data.models.responses.GetEventBadgesResponse
 import com.example.sportsplatform.data.repository.EventRepository
 import com.example.sportsplatform.util.Constants.SHARED_PREFS_USER_ID
 import com.example.sportsplatform.util.Constants.SHARED_PREFS_USER_TOKEN
@@ -21,6 +22,7 @@ class EventDetailViewModel(
     var eventId: MutableLiveData<Int> = MutableLiveData()
     var interestSent: MutableLiveData<Boolean> = MutableLiveData()
     var interestedsVisibility: MutableLiveData<Int> = MutableLiveData()
+    var eventBadges: MutableLiveData<GetEventBadgesResponse> = MutableLiveData()
 
     fun getEventInformation(eventId: Int) {
         Coroutines.main {
@@ -91,7 +93,7 @@ class EventDetailViewModel(
 
     fun getEventBadges() {
         Coroutines.main {
-            val eventBadges = eventRepository.getEventBadges(eventId.value).body()
+            eventBadges.postValue(eventRepository.getEventBadges(eventId.value).body())
         }
     }
 }

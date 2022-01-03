@@ -8,18 +8,18 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sportsplatform.R
-import com.example.sportsplatform.data.models.responses.GetEventBadgesResponse
+import com.example.sportsplatform.data.models.responses.ValueForEventBadges
 import kotlinx.android.synthetic.main.item_event_badges_layout.view.*
 
 interface EventBadgesClickListener {
-    fun onEventBadgesClicked(badgeResponse: GetEventBadgesResponse?)
+    fun onEventBadgesClicked(badgeResponse: ValueForEventBadges?)
 }
 
 class EventBadgesAdapter(
-    private val itemClickListener: EventBadgesClickListener
+    private val itemClickListener: EventBadgesClickListener? = null
 ) : RecyclerView.Adapter<EventBadgesAdapter.MyViewHolder>() {
 
-    var items = mutableListOf<GetEventBadgesResponse?>()
+    var items = mutableListOf<ValueForEventBadges?>()
         set(value) {
             field.clear()
             field.addAll(value)
@@ -34,9 +34,9 @@ class EventBadgesAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = items[position]
-        holder.badgeName.text = currentItem?.additionalProperty?.name
+        holder.badgeName.text = currentItem?.name
         holder.container.setOnClickListener {
-            currentItem?.let { item -> itemClickListener.onEventBadgesClicked(item) }
+            currentItem?.let { item -> itemClickListener?.onEventBadgesClicked(item) }
             holder.ivCheck.visibility =
                 if (holder.ivCheck.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         }
