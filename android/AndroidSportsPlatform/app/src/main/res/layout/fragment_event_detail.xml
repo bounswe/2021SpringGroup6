@@ -274,7 +274,7 @@
                     android:background="@drawable/bg_rounded_corner"
                     android:paddingHorizontal="@dimen/margin_6"
                     android:paddingVertical="@dimen/margin_6"
-                    android:text="@{eventDetailViewModel.event.location.geo.latLngTogether}"
+                    android:text="@string/clickToSeeMap"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/eventAddress"
                     tools:text="Event address" />
