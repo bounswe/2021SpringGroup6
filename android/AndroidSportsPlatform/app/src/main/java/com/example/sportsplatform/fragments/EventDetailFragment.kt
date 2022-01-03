@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.adapter.EventBadgesAdapter
+import com.example.sportsplatform.adapter.EventBadgesClickListener
 import com.example.sportsplatform.adapter.UsersAdapter
+import com.example.sportsplatform.data.models.responses.GetEventBadgesResponse
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
 import com.example.sportsplatform.util.DialogDismissListener
 import com.example.sportsplatform.viewmodelfactories.EventDetailViewModelFactory
@@ -18,7 +21,8 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
+class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener,
+    EventBadgesClickListener {
 
     private var _binding: FragmentEventDetailBinding? = null
     private val binding get() = _binding!!
@@ -30,6 +34,7 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
 
     private val attendeeAdapter by lazy { UsersAdapter() }
     private val audienceAdapter by lazy { UsersAdapter() }
+    private val badgesAdapter by lazy { EventBadgesAdapter(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,10 +97,18 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = audienceAdapter
         }
+
+        binding.rvBadges.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = badgesAdapter
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         viewModel.eventId.postValue(arguments?.getInt(EVENT_ID) ?: 0)
+    }
+
+    override fun onEventBadgesClicked(badgeResponse: GetEventBadgesResponse?) {
     }
 
     companion object {

@@ -1,0 +1,52 @@
+package com.example.sportsplatform.adapter
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.example.sportsplatform.R
+import com.example.sportsplatform.data.models.responses.GetEventBadgesResponse
+import kotlinx.android.synthetic.main.item_event_badges_layout.view.*
+
+interface EventBadgesClickListener {
+    fun onEventBadgesClicked(badgeResponse: GetEventBadgesResponse?)
+}
+
+class EventBadgesAdapter(
+    private val itemClickListener: EventBadgesClickListener
+) : RecyclerView.Adapter<EventBadgesAdapter.MyViewHolder>() {
+
+    var items = mutableListOf<GetEventBadgesResponse?>()
+        set(value) {
+            field.clear()
+            field.addAll(value)
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_event_badges_layout, parent, false)
+        return MyViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val currentItem = items[position]
+        holder.badgeName.text = currentItem?.additionalProperty?.name
+        holder.container.setOnClickListener {
+            currentItem?.let { item -> itemClickListener.onEventBadgesClicked(item) }
+            holder.ivCheck.visibility =
+                if (holder.ivCheck.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val container: ConstraintLayout = itemView.clContainer
+        val badgeName: TextView = itemView.twBadgeName
+        val ivCheck: ImageView = itemView.ivCheck
+    }
+}

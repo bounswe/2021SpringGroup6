@@ -86,6 +86,7 @@
     </string-array>
     <string name="selectMinLevel">Select MIN level</string>
     <string name="selectMaxLevel">Select MAX level</string>
+    <string name="eventsBadges">Events badges</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="selectSport">Select sport</string>
