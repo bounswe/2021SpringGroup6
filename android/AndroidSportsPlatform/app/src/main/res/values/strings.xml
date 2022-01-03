@@ -88,6 +88,9 @@
     <string name="selectMaxLevel">Select MAX level</string>
     <string name="eventsBadges">Events badges</string>
     <string name="addEventBadges">Add badges to your events</string>
+    <string name="yes">Yes!</string>
+    <string name="no">No!</string>
+    <string name="popupTitle">Are you sure?</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="selectSport">Select sport</string>
