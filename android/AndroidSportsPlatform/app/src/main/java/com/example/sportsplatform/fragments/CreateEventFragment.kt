@@ -68,7 +68,7 @@ class CreateEventFragment : Fragment(), KodeinAware {
         viewModel.eventCreatedSuccessful.observe(
             viewLifecycleOwner,
             Observer {
-                navigateToAddEventBadge(it)
+                navigateToAddEventBadge(it.first, it.second)
             }
         )
 
@@ -102,8 +102,8 @@ class CreateEventFragment : Fragment(), KodeinAware {
         binding.spinnerSport.adapter = arrayAdapter
     }
 
-    private fun navigateToAddEventBadge(eventId: Int) {
-        val fragmentToGo = AddEventBadgeFragment.newInstance(eventId)
+    private fun navigateToAddEventBadge(eventId: Int, eventSport: String?) {
+        val fragmentToGo = AddEventBadgeFragment.newInstance(eventId, eventSport)
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.replace(com.example.sportsplatform.R.id.mainContainer, fragmentToGo)
         transaction.addToBackStack(null)

@@ -40,8 +40,8 @@ class AddEventBadgeFragment : Fragment(), KodeinAware, EventBadgesClickListener 
         viewModel = ViewModelProvider(this, factory).get(AddEventBadgeViewModel::class.java)
         initializeRecyclerview()
         binding.viewModel = viewModel
-        viewModel.getBadges()
         getBundleArguments()
+        viewModel.getBadges()
         return binding.root
     }
 
@@ -66,6 +66,7 @@ class AddEventBadgeFragment : Fragment(), KodeinAware, EventBadgesClickListener 
     private fun getBundleArguments() {
         arguments?.let {
             viewModel.eventId.postValue(it.getInt(EVENT_ID))
+            viewModel.eventSport.postValue(it.getString(EVENT_SPORT))
         }
     }
 
@@ -82,11 +83,14 @@ class AddEventBadgeFragment : Fragment(), KodeinAware, EventBadgesClickListener 
 
     companion object {
         private const val EVENT_ID = "event_id"
+        private const val EVENT_SPORT = "event_sport"
         fun newInstance(
-            eventId: Int
+            eventId: Int,
+            eventSport: String?
         ) = AddEventBadgeFragment().apply {
             arguments = Bundle().apply {
                 putInt(EVENT_ID, eventId)
+                putString(EVENT_SPORT, eventSport)
             }
         }
     }

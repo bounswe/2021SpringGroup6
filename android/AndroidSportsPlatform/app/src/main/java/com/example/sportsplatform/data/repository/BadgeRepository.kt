@@ -20,4 +20,9 @@ class BadgeRepository(private val api: BadgeApi) {
             request = request
         )
     }
+    suspend fun getSportBadges(
+        sport: String?
+    ): Response<BadgesResponse?> {
+        return api.getSportBadges(sport)
+    }
 }

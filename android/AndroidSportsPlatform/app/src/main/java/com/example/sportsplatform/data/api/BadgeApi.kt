@@ -22,6 +22,11 @@ interface BadgeApi {
         @Body request: AddBadgeToEventRequest
     ): Response<Void>
 
+    @GET("badges/{sport}")
+    suspend fun getSportBadges(
+        @Path("sport") sport: String?
+    ): Response<BadgesResponse?>
+
     companion object {
         operator fun invoke(): BadgeApi {
             val requestInterceptor = Interceptor { chain ->

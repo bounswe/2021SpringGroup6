@@ -20,11 +20,15 @@ class AddEventBadgeViewModel(
 
     var badges: MutableLiveData<MutableList<ValueForEventBadges?>> = MutableLiveData()
     var eventId: MutableLiveData<Int?> = MutableLiveData()
+    var eventSport: MutableLiveData<String?> = MutableLiveData()
     var addBadgeMessage: MutableLiveData<String> = MutableLiveData()
 
     fun getBadges() {
         Coroutines.main {
-            val allBadges = badgeRepository.getBadges().body()?.badges
+            val allBadges =
+                if (eventSport.value == "basketball" || eventSport.value == "soccer") badgeRepository.getSportBadges(
+                    eventSport.value
+                ).body()?.badges else badgeRepository.getBadges().body()?.badges
             badges.postValue(allBadges?.map { it.toValueBadge() }?.toMutableList())
         }
     }

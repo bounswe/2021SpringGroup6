@@ -1,6 +1,7 @@
 package com.example.sportsplatform.viewmodels
 
 import android.content.SharedPreferences
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.models.requests.CreateEventRequest
@@ -10,6 +11,7 @@ import com.example.sportsplatform.util.Constants.EVENT_LATITUDE
 import com.example.sportsplatform.util.Constants.EVENT_LONGITUDE
 import com.example.sportsplatform.util.Constants.SHARED_PREFS_USER_TOKEN
 import com.example.sportsplatform.util.Coroutines
+import com.example.sportsplatform.util.toast
 
 class CreateEventViewModel(
     private val eventRepository: EventRepository,
@@ -21,7 +23,7 @@ class CreateEventViewModel(
     var eventLatitude: MutableLiveData<String> = MutableLiveData()
     var eventLongitude: MutableLiveData<String> = MutableLiveData()
     var sports: MutableLiveData<Array<String>> = MutableLiveData()
-    var eventCreatedSuccessful: MutableLiveData<Int> = MutableLiveData()
+    var eventCreatedSuccessful: MutableLiveData<Pair<Int, String>> = MutableLiveData()
 
     fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {
         customSharedPreferences = customSharedPrefers
@@ -49,6 +51,7 @@ class CreateEventViewModel(
     }
 
     fun createNewEvent(
+        view: View,
         createEventRequest: CreateEventRequest
     ) {
         Coroutines.main {
@@ -58,7 +61,13 @@ class CreateEventViewModel(
                 createEventRequest
             )
             if (createEventResponse.isSuccessful) {
-                eventCreatedSuccessful.postValue(createEventResponse.body()?.id)
+                view.context.toast("Event created!")
+                eventCreatedSuccessful.postValue(
+                    Pair(
+                        createEventResponse.body()?.id ?: 0,
+                        createEventRequest.sport
+                    )
+                )
             } else {
 
             }
