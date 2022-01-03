@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Squad Game</string>
     <string name="title">Squad Game</string>
-    <string name="paragraph">Paragraph</string>
+    <string name="paragraph">Let the Game Begin!</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="Identifier">Identifier</string>
