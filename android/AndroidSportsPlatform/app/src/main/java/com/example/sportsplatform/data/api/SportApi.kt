@@ -1,6 +1,7 @@
 package com.example.sportsplatform.data.api
 
 import com.example.sportsplatform.data.models.responses.SportsResponse
+import com.example.sportsplatform.util.ErrorInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -28,8 +29,11 @@ interface SportApi {
                 return@Interceptor chain.proceed(request)
             }
 
+            val errorInterceptor = ErrorInterceptor()
+
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(errorInterceptor)
                 .build()
 
             return Retrofit.Builder()
