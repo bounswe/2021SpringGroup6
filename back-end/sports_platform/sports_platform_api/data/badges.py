@@ -56,5 +56,8 @@ badges = [
 {
     "name": "three pointer",
     "sport": "basketball"
+},
+{
+    "name": "event creator"
 }
 ]
