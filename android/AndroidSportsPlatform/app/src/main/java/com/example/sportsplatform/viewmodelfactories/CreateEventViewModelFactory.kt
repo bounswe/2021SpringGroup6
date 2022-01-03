@@ -4,14 +4,16 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsplatform.data.repository.EventRepository
+import com.example.sportsplatform.data.repository.SportRepository
 import com.example.sportsplatform.viewmodels.CreateEventViewModel
 
 class CreateEventViewModelFactory(
     private val eventRepository: EventRepository,
+    private val sportRepository: SportRepository,
     private val sharedPreferences: SharedPreferences
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return CreateEventViewModel(eventRepository, sharedPreferences) as T
+        return CreateEventViewModel(eventRepository, sportRepository, sharedPreferences) as T
     }
 }

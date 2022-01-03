@@ -40,4 +40,9 @@ class EventRepository(private val api: EventApi) {
     ): Response<DecideParticipantsResponse> {
         return api.decideParticipants(token, eventId, decideParticipantsRequest)
     }
+    suspend fun getEventBadges(
+        eventId: Int?,
+    ): Response<GetEventBadgesResponse?> {
+        return api.getEventBadges(eventId)
+    }
 }

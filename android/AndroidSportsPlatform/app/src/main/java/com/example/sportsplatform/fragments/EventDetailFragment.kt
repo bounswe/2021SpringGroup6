@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sportsplatform.adapter.EventBadgesAdapter
 import com.example.sportsplatform.adapter.UsersAdapter
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
 import com.example.sportsplatform.util.DialogDismissListener
@@ -30,6 +31,7 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
 
     private val attendeeAdapter by lazy { UsersAdapter() }
     private val audienceAdapter by lazy { UsersAdapter() }
+    private val badgesAdapter by lazy { EventBadgesAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,7 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
             viewLifecycleOwner,
             Observer {
                 viewModel.getEventInformation(it)
+                viewModel.getEventBadges()
             }
         )
 
@@ -69,6 +72,14 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
             viewLifecycleOwner,
             Observer {
                 viewModel.eventId.value?.let { id -> viewModel.getEventInformation(id) }
+            }
+        )
+
+        viewModel.eventBadges.observe(
+            viewLifecycleOwner,
+            Observer {
+                badgesAdapter.items =
+                    it?.additionalProperty?.value?.toMutableList() ?: mutableListOf()
             }
         )
 
@@ -90,6 +101,11 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
         binding.rvAudience.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = audienceAdapter
+        }
+
+        binding.rvBadges.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = badgesAdapter
         }
     }
 
