@@ -5,6 +5,7 @@ import com.example.sportsplatform.data.models.requests.CreateEventRequest
 import com.example.sportsplatform.data.models.requests.DecideParticipantsRequest
 import com.example.sportsplatform.data.models.requests.EventFilterRequest
 import com.example.sportsplatform.data.models.responses.*
+import com.example.sportsplatform.util.ErrorInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -88,8 +89,11 @@ interface EventApi {
                 return@Interceptor chain.proceed(request)
             }
 
+            val errorInterceptor = ErrorInterceptor()
+
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(errorInterceptor)
                 .build()
 
             return Retrofit.Builder()

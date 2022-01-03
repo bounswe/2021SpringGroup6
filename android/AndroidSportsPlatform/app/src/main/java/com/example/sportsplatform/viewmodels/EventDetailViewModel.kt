@@ -54,7 +54,7 @@ class EventDetailViewModel(
 
             view.context.toast(
                 if (deleteSpectatorRequest.isSuccessful) "Delete spectator request is sent!"
-                else deleteSpectatorRequest.message()
+                else deleteSpectatorRequest.raw().message()
             )
 
             val sendInterestToEvent = eventRepository.sendInterestToEvent(
@@ -63,13 +63,14 @@ class EventDetailViewModel(
             )
 
             view.context.toast(
-                if (sendInterestToEvent.isSuccessful) "Interest sent!" else sendInterestToEvent.message()
+                if (sendInterestToEvent.isSuccessful) "Interest sent!" else sendInterestToEvent.raw()
+                    .message()
             )
             if (sendInterestToEvent.isSuccessful) {
                 view.context.toast("Interest sent!")
                 interestSent.postValue(true)
             } else {
-                view.context.toast(sendInterestToEvent.message())
+                view.context.toast(sendInterestToEvent.raw().message())
                 interestSent.postValue(false)
             }
         }
@@ -87,7 +88,7 @@ class EventDetailViewModel(
 
             view.context.toast(
                 if (participateAsSpectatorToEvent.isSuccessful) "Participate as spectator sent!"
-                else participateAsSpectatorToEvent.message()
+                else participateAsSpectatorToEvent.raw().message()
             )
         }
     }
