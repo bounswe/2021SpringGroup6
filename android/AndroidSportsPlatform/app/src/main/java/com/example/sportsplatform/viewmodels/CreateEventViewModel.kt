@@ -21,7 +21,7 @@ class CreateEventViewModel(
     var eventLatitude: MutableLiveData<String> = MutableLiveData()
     var eventLongitude: MutableLiveData<String> = MutableLiveData()
     var sports: MutableLiveData<Array<String>> = MutableLiveData()
-    var eventCreatedSuccessful: MutableLiveData<Boolean> = MutableLiveData()
+    var eventCreatedSuccessful: MutableLiveData<Int> = MutableLiveData()
 
     fun setCustomSharedPreferences(customSharedPrefers: SharedPreferences) {
         customSharedPreferences = customSharedPrefers
@@ -58,9 +58,9 @@ class CreateEventViewModel(
                 createEventRequest
             )
             if (createEventResponse.isSuccessful) {
-                eventCreatedSuccessful.postValue(true)
+                eventCreatedSuccessful.postValue(createEventResponse.body()?.id)
             } else {
-                eventCreatedSuccessful.postValue(false)
+
             }
 
 

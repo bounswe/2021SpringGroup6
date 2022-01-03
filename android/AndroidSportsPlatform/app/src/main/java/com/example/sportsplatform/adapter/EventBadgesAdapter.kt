@@ -36,9 +36,10 @@ class EventBadgesAdapter(
         val currentItem = items[position]
         holder.badgeName.text = currentItem?.name
         holder.container.setOnClickListener {
-            currentItem?.let { item -> itemClickListener?.onEventBadgesClicked(item) }
-            holder.ivCheck.visibility =
-                if (holder.ivCheck.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+            itemClickListener?.let {
+                currentItem?.let { item -> it.onEventBadgesClicked(item) }
+                holder.ivCheck.visibility = View.VISIBLE
+            }
         }
     }
 

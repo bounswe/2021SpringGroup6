@@ -6,7 +6,7 @@
         android:id="@+id/clContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_12"
+        android:layout_marginVertical="@dimen/margin_6"
         android:background="@drawable/bg_rounded_corner_stroked"
         android:paddingVertical="@dimen/margin_12">
 
