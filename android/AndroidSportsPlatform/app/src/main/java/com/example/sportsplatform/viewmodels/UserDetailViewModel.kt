@@ -1,6 +1,9 @@
 package com.example.sportsplatform.viewmodels
 
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
+import android.nfc.Tag
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.models.requests.AddBadgeRequest
@@ -32,27 +35,28 @@ class UserDetailViewModel(
         }
     }
 
-    fun fetchUsersBadgeList() {
+    fun fetchUsersBadgeList(userId: Int) {
         Coroutines.main {
             usersBadgeList.postValue(
                 userRepo.getUsersBadges(
-                    sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0)
+                    userId
                 ).body()
             )
         }
     }
 
     fun addUserBadge(
-        addBadgeRequest: AddBadgeRequest
+        addBadgeRequest: AddBadgeRequest,
+        user_id: Int
     ) {
         Coroutines.main {
             val token = sharedPreferences.getString(Constants.SHARED_PREFS_USER_TOKEN, "")
-            val userId = sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0)
             val addNewBadge = userRepo.addBadgeToUser(
                 "Token $token",
-                userId,
+                user_id,
                 addBadgeRequest
             )
+            Log.d(TAG, addNewBadge.toString())
         }
     }
 

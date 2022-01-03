@@ -42,7 +42,7 @@ class UserDetailFragment : Fragment(), KodeinAware {
 
         viewModel.getUserInformation(arguments?.getInt(USER_ID) ?: 0)
 
-        viewModel.fetchUsersBadgeList()
+        viewModel.fetchUsersBadgeList(arguments?.getInt(USER_ID) ?: 0)
 
         initializeRecyclerview()
 
@@ -80,7 +80,7 @@ class UserDetailFragment : Fragment(), KodeinAware {
             viewModel.addUserBadge(
                 AddBadgeRequest(
                     binding.etBadgeName.text.toString()
-                )
+                ), arguments?.getInt(USER_ID) ?: 0
             )
         }
     }
