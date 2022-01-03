@@ -9,4 +9,9 @@ data class BadgesResponse(
 data class Badge(
     @SerializedName("@context") val context: String?,
     val name: String?
-)
+) {
+    fun toValueBadge() = ValueForEventBadges(
+        name = name,
+        context = null
+    )
+}

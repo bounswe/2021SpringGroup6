@@ -47,7 +47,7 @@
     <string name="createEventName">Enter event name</string>
     <string name="createEventSport">Enter event sport</string>
     <string name="createEventDescription">Enter event description</string>
-    <string name="createEventStartDate">Enter event start date</string>
+    <string name="createEventStartDate">Start date in format dd.MM.yyyy HH:mm</string>
     <string name="createEventMinAttendeeCap">Enter event min attendee capacity</string>
     <string name="createEventMaxAttendeeCap">Enter event max attendee capacity</string>
     <string name="createEventMaxSpectatorCap">Enter event min spectator capacity</string>
@@ -87,6 +87,7 @@
     <string name="selectMinLevel">Select MIN level</string>
     <string name="selectMaxLevel">Select MAX level</string>
     <string name="eventsBadges">Events badges</string>
+    <string name="addEventBadges">Add badges to your events</string>
     <string name="searchEventWithMap">Search event with Map</string>
     <string name="enterName">Enter name</string>
     <string name="selectSport">Select sport</string>
