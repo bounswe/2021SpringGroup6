@@ -73,8 +73,9 @@ class CreateEventFragment : Fragment(), KodeinAware {
         )
 
         binding.twCreateEventLocationCoordinates.setOnClickListener {
-            MapsActivity.openMaps(activity as MainActivity)
+            MapsActivity.openMaps(activity as MainActivity, "fromCreateEvent")
         }
+
         binding.btnCreateEvent.setOnClickListener {
             viewModel.createNewEvent(
                 it,
