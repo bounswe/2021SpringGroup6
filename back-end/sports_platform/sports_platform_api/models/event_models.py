@@ -138,7 +138,7 @@ class Event(models.Model):
     event_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
-    organizer = models.ForeignKey('User', on_delete=models.CASCADE)
+    organizer = models.ForeignKey('User',related_name='created_events', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
 
     startDate = models.DateTimeField()
