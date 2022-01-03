@@ -468,6 +468,20 @@ class User(AbstractBaseUser):
 
                     event_given_badge_list.append(item)
 
+            created_events = self.created_events.all().order_by('created_on')
+            if len(created_events) > 0:
+                item = dict()
+                item['name'] = "event creator"
+                item['additionalProperty'] = {
+                    "@type": "PropertyValue",
+                    "name": "event",
+                    "value": {
+                        "@context": "https://schema.org/SportsEvent",
+                        "@id": created_events[0].event_id
+                    }
+                }
+                event_given_badge_list.append(item)
+
             data["@context"] =  "https://schema.org/Person"
             data["@id"] = self.user_id
             data["additionalProperty"] = [
@@ -485,6 +499,7 @@ class User(AbstractBaseUser):
 
             return data
         except Exception as e:
+            print(e)
             return 500
 
     def give_badge(self, user_id, badge):
