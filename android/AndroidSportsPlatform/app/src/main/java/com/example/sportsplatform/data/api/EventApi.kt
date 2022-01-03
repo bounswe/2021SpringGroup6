@@ -44,7 +44,7 @@ interface EventApi {
         @Path("event_id") eventId: Int?
     ): Response<Unit>
 
-    @DELETE("/events/{event_id}/interesteds")
+    @DELETE("/events/{event_id}/spectators")
     suspend fun deleteSpectatorRequest(
         @Header("Authorization") token: String,
         @Path("event_id") eventId: Int?

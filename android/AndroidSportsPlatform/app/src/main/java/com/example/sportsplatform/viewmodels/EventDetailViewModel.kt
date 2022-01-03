@@ -52,20 +52,15 @@ class EventDetailViewModel(
                 eventId.value
             )
 
-            view.context.toast(
-                if (deleteSpectatorRequest.isSuccessful) "Delete spectator request is sent!"
-                else deleteSpectatorRequest.raw().message()
-            )
+            if (deleteSpectatorRequest.isSuccessful) {
+                view.context.toast("Delete spectator request is sent!")
+            }
 
             val sendInterestToEvent = eventRepository.sendInterestToEvent(
                 "Token $token",
                 eventId.value
             )
 
-            view.context.toast(
-                if (sendInterestToEvent.isSuccessful) "Interest sent!" else sendInterestToEvent.raw()
-                    .message()
-            )
             if (sendInterestToEvent.isSuccessful) {
                 view.context.toast("Interest sent!")
                 interestSent.postValue(true)
