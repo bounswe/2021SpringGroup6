@@ -280,6 +280,19 @@
                     tools:text="Event organizer" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/showInteresteds"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
+                    android:padding="@dimen/margin_6"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:background="@drawable/bg_rounded_corner_stroked"
+                    android:text="@string/showInteresteds"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventOrganizer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/eventAttendeeTitle"
                     style="@style/EventDetailTitle"
                     android:layout_width="wrap_content"
@@ -287,7 +300,7 @@
                     android:layout_marginTop="@dimen/margin_12"
                     android:text="@string/eventAttendee"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventOrganizer" />
+                    app:layout_constraintTop_toBottomOf="@+id/showInteresteds" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/sendInterestToEvent"
@@ -295,12 +308,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_6"
-                    android:layout_marginTop="@dimen/margin_12"
                     android:background="@drawable/bg_rounded_corner_stroked"
                     android:onClick="@{eventDetailViewModel::sendInterestToEvent}"
                     android:text="@string/sendInterestAsAudience"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventOrganizer" />
+                    app:layout_constraintTop_toTopOf="@+id/eventAttendeeTitle" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAttendee"

@@ -1,5 +1,6 @@
 package com.example.sportsplatform.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.adapter.UsersAdapter
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
+import com.example.sportsplatform.util.DialogDismissListener
 import com.example.sportsplatform.viewmodelfactories.EventDetailViewModelFactory
 import com.example.sportsplatform.viewmodels.EventDetailViewModel
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class EventDetailFragment : Fragment(), KodeinAware {
+class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener {
 
     private var _binding: FragmentEventDetailBinding? = null
     private val binding get() = _binding!!
@@ -69,6 +71,14 @@ class EventDetailFragment : Fragment(), KodeinAware {
                 viewModel.eventId.value?.let { id -> viewModel.getEventInformation(id) }
             }
         )
+
+        binding.showInteresteds.setOnClickListener {
+            ShowInterestedsDialogFragment.newInstance(
+                requireActivity().supportFragmentManager,
+                this,
+                arguments?.getInt(EVENT_ID) ?: 0
+            )
+        }
     }
 
     private fun initializeRecyclerviews() {
@@ -81,6 +91,10 @@ class EventDetailFragment : Fragment(), KodeinAware {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = audienceAdapter
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        viewModel.eventId.postValue(arguments?.getInt(EVENT_ID) ?: 0)
     }
 
     companion object {
