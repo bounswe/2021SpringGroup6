@@ -27,6 +27,7 @@ class UserDetailViewModel(
     var userId: MutableLiveData<Int> = MutableLiveData()
     val usersBadgeList: MutableLiveData<GetBadgeResponse> = MutableLiveData()
     val usersFollowingList: MutableLiveData<GetFollowingUsersResponse> = MutableLiveData()
+    val usersFollowedList: MutableLiveData<GetFollowingUsersResponse> = MutableLiveData()
     val searchBarHint: String = ""
 
     fun getUserInformation(userId: Int) {
@@ -57,16 +58,23 @@ class UserDetailViewModel(
     fun fetchUsersFollowingList(userId: Int) {
         Coroutines.main {
             val token = sharedPreferences.getString(Constants.SHARED_PREFS_USER_TOKEN, "")
-            val ff = userRepo.searchFollowingUserProfile(
+            val following = userRepo.searchFollowingUserProfile(
                 "Token $token",
                 userId
             ).body()
-            Log.d(TAG, "GetFollowers: $ff")
+            val followed = userRepo.searchFollowedUserProfile(
+                "Token $token",
+                sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0)
+            ).body()
             usersFollowingList.postValue(
-                ff
+                following
+            )
+            usersFollowedList.postValue(
+                followed
             )
         }
     }
+
     fun fetchUsersBadgeList(userId: Int) {
         Coroutines.main {
             val ee = userRepo.getUsersBadges(

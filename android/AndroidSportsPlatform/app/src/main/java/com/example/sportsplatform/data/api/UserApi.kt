@@ -65,6 +65,12 @@ interface UserApi {
         @Path("user_id") userId: Int
     ): Response<GetFollowingUsersResponse>
 
+    @GET("/users/{user_id}/follower")
+    suspend fun searchFollowedProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int
+    ): Response<GetFollowingUsersResponse>
+
     @POST("/users/{user_id}/following")
     suspend fun followProfile(
         @Header("Authorization") token: String,

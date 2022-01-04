@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.adapter.UserBadgesAdapter
+import com.example.sportsplatform.adapter.UserFollowedAdapter
 import com.example.sportsplatform.adapter.UserFollowingAdapter
 import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.databinding.FragmentDetailedUserBinding
@@ -119,6 +120,17 @@ class UserDetailFragment : Fragment(), KodeinAware {
                 binding.rvFollowingUsers.apply{
                     layoutManager = LinearLayoutManager(context)
                     adapter = UserFollowingAdapter(
+                        it?.items,
+                    )
+                }
+            }
+        )
+        viewModel.usersFollowedList.observe(
+            viewLifecycleOwner,
+            {
+                binding.rvFollowedUsers.apply{
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = UserFollowedAdapter(
                         it?.items,
                     )
                 }

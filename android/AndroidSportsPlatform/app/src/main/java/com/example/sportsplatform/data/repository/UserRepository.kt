@@ -41,6 +41,10 @@ class UserRepository(private val api: UserApi) {
         return api.searchFollowingProfile(token, userId)
     }
 
+    suspend fun searchFollowedUserProfile(token: String, userId : Int) : Response<GetFollowingUsersResponse> {
+        return api.searchFollowedProfile(token, userId)
+    }
+
     suspend fun getUsersParticipatingEvents(token: String, userId: Int): Response<UsersParticipatingEvents> {
         return api.getUsersParticipatingEvents(token, userId)
     }
