@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.data.models.requests.UserDetailRequest
 import com.example.sportsplatform.data.models.requests.UserFollowingRequest
+import com.example.sportsplatform.data.models.requests.UserUnFollowingRequest
 import com.example.sportsplatform.data.models.responses.GetBadgeResponse
 import com.example.sportsplatform.data.models.responses.GetFollowingUsersResponse
 import com.example.sportsplatform.data.models.responses.UserResponse
@@ -29,6 +30,8 @@ class UserDetailViewModel(
     val usersFollowingList: MutableLiveData<GetFollowingUsersResponse> = MutableLiveData()
     val usersFollowedList: MutableLiveData<GetFollowingUsersResponse> = MutableLiveData()
     val searchBarHint: String = ""
+    val unfollowingResponse: MutableLiveData<Int> = MutableLiveData()
+    val followingResponse: MutableLiveData<Int> = MutableLiveData()
 
     fun getUserInformation(userId: Int) {
         Coroutines.main {
@@ -51,7 +54,11 @@ class UserDetailViewModel(
                 userId,
                 UserFollowingRequest(intendedToFollowUserId)
             )
-            Log.d(TAG, "AddFollowers: $followUser")
+            if(followUser.code() == 400){
+                followingResponse.postValue(0)
+            }else{
+                followingResponse.postValue(1)
+            }
         }
     }
 
@@ -75,12 +82,30 @@ class UserDetailViewModel(
         }
     }
 
+    fun unfollowUser(
+        unfollowingUserId: Int
+    ){
+        Coroutines.main {
+            val token = sharedPreferences.getString(Constants.SHARED_PREFS_USER_TOKEN, "")
+            val userId = sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0)
+            val following = userRepo.unfollowUserProfile(
+                "Token $token",
+                userId,
+                UserUnFollowingRequest(unfollowingUserId)
+            )
+            if(following.code() == 400){
+                unfollowingResponse.postValue(0)
+            }else{
+                unfollowingResponse.postValue(1)
+            }
+        }
+    }
+
     fun fetchUsersBadgeList(userId: Int) {
         Coroutines.main {
             val ee = userRepo.getUsersBadges(
                         userId
                     ).body()
-            Log.d(TAG, ee.toString() + " getBadges")
             usersBadgeList.postValue(
                 ee
             )
@@ -98,7 +123,6 @@ class UserDetailViewModel(
                 user_id,
                 addBadgeRequest
             ).body()
-            Log.d(TAG, addNewBadge.toString())
         }
     }
 

@@ -65,6 +65,13 @@ interface UserApi {
         @Path("user_id") userId: Int
     ): Response<GetFollowingUsersResponse>
 
+    @HTTP(method = "DELETE", path = "/users/{user_id}/following", hasBody = true)
+    suspend fun unFollowingProfile(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+        @Body userUnFollowingRequest: UserUnFollowingRequest
+    ): Response<Void>
+
     @GET("/users/{user_id}/follower")
     suspend fun searchFollowedProfile(
         @Header("Authorization") token: String,
@@ -74,7 +81,7 @@ interface UserApi {
     @POST("/users/{user_id}/following")
     suspend fun followProfile(
         @Header("Authorization") token: String,
-        @Path("user_id") followedUserId: Int,
+        @Path("user_id") userId: Int,
         @Body userFollowingRequest: UserFollowingRequest
     ): Response<Void>
 

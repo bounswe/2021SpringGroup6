@@ -89,7 +89,29 @@ class UserDetailFragment : Fragment(), KodeinAware {
             viewModel.followUser(
                 arguments?.getInt(USER_ID) ?: 0
             )
-            Toast.makeText(this.context,"User is followed!" ,Toast.LENGTH_SHORT).show()
+            viewModel.followingResponse.observe(
+                viewLifecycleOwner,
+                {
+                    if(it==0)
+                        Toast.makeText(this.context,"Already Followed!" ,Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(this.context,"User is Followed!" ,Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+        binding.btnUnFollowUser.setOnClickListener{
+            viewModel.unfollowUser(
+                arguments?.getInt(USER_ID) ?: 0
+            )
+            viewModel.unfollowingResponse.observe(
+                viewLifecycleOwner,
+                {
+                    if(it==0)
+                        Toast.makeText(this.context,"Already Unfollowed!" ,Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(this.context,"User is Unfollowed!" ,Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         binding.btnAddBadge.setOnClickListener {
@@ -100,6 +122,8 @@ class UserDetailFragment : Fragment(), KodeinAware {
             )
             Toast.makeText(this.context,"Badge is added!" ,Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
     private fun initializeRecyclerview() {
