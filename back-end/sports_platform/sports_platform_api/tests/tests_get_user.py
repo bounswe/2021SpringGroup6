@@ -1,3 +1,4 @@
+import copy
 from django.test import Client, TestCase
 from rest_framework.authtoken.models import Token
 from ..models import User
@@ -17,13 +18,12 @@ class GetUserTest(TestCase):
         self.header = {'HTTP_AUTHORIZATION': f'Token {self.user_token}'}
 
         self.serialized_retrieved_user = UserSerializer(retrieved_user).data
-        self.serialized_retrieved_user.pop('last_login')
         self.serialized_retrieved_user['@context'] = 'https://schema.org/Person'
         self.serialized_retrieved_user['@id'] = self.serialized_retrieved_user['user_id']
         self.serialized_retrieved_user['@type'] = 'Person'
         self.serialized_retrieved_user['knowsAbout'] = []
 
-        self.other_user_data = self.serialized_retrieved_user
+        self.other_user_data = copy.deepcopy(self.serialized_retrieved_user)
         self.other_user_data.pop('email')
 
         self.path = f'/users/{self.serialized_retrieved_user["user_id"]}'
@@ -34,7 +34,7 @@ class GetUserTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()['message'],'User id does not exist')
 
-    def test_success__own(self):
+    def test_success_own(self):
         response = self.client.get(self.path, **self.header)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, self.serialized_retrieved_user)

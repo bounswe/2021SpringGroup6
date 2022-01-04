@@ -72,7 +72,7 @@ function SidebarComponent(props) {
                                 Event Settings <hr />
                             </Link>
                         </Nav.Item>
-                        
+
                         <Nav.Item>
                             <Link to="" className="sidebar-link" onClick={() => {
                                 setUser({identifier: ""});

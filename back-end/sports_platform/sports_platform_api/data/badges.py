@@ -41,10 +41,23 @@ badges = [
 },
 {
     "name": "football supporter",
-    "wikidata": "Q3504889"
+    "wikidata": "Q3504889",
+    "sport":"soccer"
+},
+    {
+    "name": "freekick master",
+    "sport": "soccer"
 },
 {
     "name": "sixth man",
-    "wikidata": "Q7533211"
+    "wikidata": "Q7533211",
+    "sport": "basketball"
+},
+{
+    "name": "three pointer",
+    "sport": "basketball"
+},
+{
+    "name": "event creator"
 }
 ]

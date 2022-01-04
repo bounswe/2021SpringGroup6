@@ -35,6 +35,7 @@ function Header() {
                             <NavDropdown.Item href="/new-event">New Event</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="/search-page">Search Event</NavDropdown.Item>
+
                             </NavDropdown>
                             <NavDropdown title="Equipments" id="basic-nav-dropdown">
                             <NavDropdown.Item href="/new-equipment">New Equipment</NavDropdown.Item>

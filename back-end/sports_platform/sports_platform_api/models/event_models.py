@@ -1,12 +1,15 @@
 from django.db import models, IntegrityError, transaction
 from requests.api import get
-from ..helpers import get_address
+from ..helpers import get_address,sort_by_distance
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from ..models.activity_stream_models import ActivityStream
-from ..models import Sport, User, SportSkillLevel
+from ..models import Sport, User, SportSkillLevel, Follow
 from datetime import datetime, timezone
-from .badge_models import Badge, UserBadges, EventBadges
+from .badge_models import Badge, EventBadges
+from ..models.user_models import Notification
+from ..helpers.geo import _get_distance
+from functools import cmp_to_key
 
 
 class EventParticipants(models.Model):
@@ -40,6 +43,94 @@ class EventParticipationRequesters(models.Model):
     requested_on = models.DateTimeField()
 
 
+class DiscussionPost(models.Model):
+    class Meta:
+        db_table = 'discussion_post'
+
+    post_id = models.BigAutoField(primary_key=True)
+    author = models.ForeignKey('User', related_name='posts', on_delete=models.CASCADE)
+    sharedContent = models.TextField()
+    event = models.ForeignKey('Event', related_name='posts', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
+
+    @staticmethod
+    def create_post(post_data, user, event_id):
+
+        try:
+            event = Event.objects.get(event_id=event_id)
+        except Event.DoesNotExist:
+            return 402
+
+        if not event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != event.organizer.user_id:
+                        return 401
+
+                except Exception as e:
+                    return 500
+            except Exception as e:
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            if "sharedContent" in post_data.keys():
+                obj = DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'], sharedContent=post_data['sharedContent'])
+            else:
+                obj = DiscussionPost.objects.create(
+                    event=event, author=user, dateCreated=dt, text=post_data['text'])
+
+            post_dict = dict()
+            post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+            post_dict["@id"] = obj.post_id
+            return post_dict
+        except Exception as e:
+            return 500
+
+    def comment_post(self, comment_data, user):
+
+        if not self.event.canEveryonePostPosts:
+            try:
+                EventParticipants.objects.get(event=self.event, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=self.event, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != self.event.organizer.user_id:
+                        return 401
+
+                except:
+                    return 500
+            except:
+                return 500
+
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        try:
+
+            DiscussionComment.objects.create(
+                post=self, author=user, text=comment_data['text'], dateCreated=dt)
+
+            return 201
+        except:
+            return 500
+class DiscussionComment(models.Model):
+    class Meta:
+        db_table = 'comment'
+
+    comment_id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey('DiscussionPost', related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey('User', related_name='comments', on_delete=models.CASCADE)
+    text = models.TextField()
+    dateCreated = models.DateTimeField()
 class Event(models.Model):
     class Meta:
         db_table = 'event'
@@ -47,7 +138,7 @@ class Event(models.Model):
     event_id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     sport = models.ForeignKey('Sport', on_delete=models.CASCADE)
-    organizer = models.ForeignKey('User', on_delete=models.CASCADE)
+    organizer = models.ForeignKey('User',related_name='created_events', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
 
     startDate = models.DateTimeField()
@@ -65,6 +156,10 @@ class Event(models.Model):
     maxSkillLevel = models.IntegerField()
 
     acceptWithoutApproval = models.BooleanField()
+    # if false, only participants and spectators can see
+    canEveryoneSeePosts = models.BooleanField(default=True)
+    # if false, only participants and spectators can post
+    canEveryonePostPosts = models.BooleanField(default=True)
     duration = models.IntegerField()
 
     created_on = models.DateTimeField()
@@ -119,17 +214,47 @@ class Event(models.Model):
             return {"@id": event.event_id}
         except Exception as e:
             return 500
-    
+
     @staticmethod
-    def search_event(data):
+    def get_results_sorting(data, filter_dict, user, or_filter=None):
+        if (data['sortBy'] == 'distance') and (user) and (user.latitude):
+            if or_filter:
+                results = Event.objects.filter(or_filter, **filter_dict)
+            else:
+                results = Event.objects.filter(**filter_dict)
+            to_sort = [(event, user) for event in results]
+            return sorted(to_sort, key=cmp_to_key(sort_by_distance),reverse=False if data['order']=='ascending' else True)
+        elif data['sortBy'] == 'startDate': order_by = 'startDate'
+        elif data['sortBy'] == 'skillLevel': order_by = 'minSkillLevel'  
+
+        if data['order'] == 'ascending':
+            if or_filter:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'{order_by}')
+            else:
+                results = Event.objects.filter(**filter_dict).order_by(f'{order_by}')
+        else:
+            if or_filter:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by(f'~{order_by}')
+            else:
+                results = Event.objects.filter(**filter_dict).order_by(f'~{order_by}')
+        return results
+
+    @staticmethod
+    def search_event(data, user=None):
         filter_dict = Event._create_filter_dict(data)
         if 'skillLevel' in data:
             or_filter = Q()
             for skill in data['skillLevel']:
                 or_filter |= Q(**{'minSkillLevel__lte':skill, 'maxSkillLevel__gte':skill })
-            results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
+            if 'sortBy' in data:
+                results = Event.get_results_sorting(data, filter_dict, user, or_filter)
+            else:
+                results = Event.objects.filter(or_filter, **filter_dict).order_by('-startDate')
         else:
-            results = Event.objects.filter(**filter_dict).order_by('-startDate')
+            if 'sortBy' in data:
+                results = Event.get_results_sorting(data, filter_dict, user)
+            else:
+                results = Event.objects.filter(**filter_dict).order_by('-startDate')
         return results
 
     
@@ -172,6 +297,45 @@ class Event(models.Model):
         
         return filters
 
+    @staticmethod
+    def _sport_based_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        sports = [sport_skill.sport for sport_skill in SportSkillLevel.objects.filter(user=user)]
+        return Event.objects.filter(sport__in=sports, startDate__gte=dt)
+
+    @staticmethod
+    def _following_user_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        followings = [follower.following for follower in Follow.objects.filter(follower=user)]
+        return Event.objects.filter(organizer__in=followings, startDate__gte=dt)
+    
+    @staticmethod
+    def _location_based_recommendations(user):
+        utc_dt = datetime.now(timezone.utc)  # UTC time
+        dt = utc_dt.astimezone()
+        events = Event.objects.filter(startDate__gte=dt)
+        to_sort = [(event, _get_distance((event.latitude, event.longitude), (user.latitude, user.longitude))) for event in events]
+        sorted_events = sorted(to_sort, key=lambda tup: tup[1])
+        recommendations = []
+        for pair in sorted_events:
+            if pair[1]<=5000: # we return events with a distance less than or equal to 5km
+                recommendations.append(pair[0])
+        return recommendations
+
+    @staticmethod
+    def get_recommendations(user):
+        result = []
+        sport_related_events = Event._sport_based_recommendations(user)
+        result.extend(sport_related_events)
+        following_events = Event._following_user_recommendations(user)
+        result.extend(following_events)
+        if user.latitude:
+            close_events = Event._location_based_recommendations(user)
+            result.extend(close_events)
+        return result
+    
     def _scheme_location(self):
         return {
             '@context': 'https://schema.org',
@@ -231,6 +395,9 @@ class Event(models.Model):
         dt = utc_dt.astimezone()
         try:
             requester = User.objects.get(user_id=user_id)
+
+            if self.startDate < dt:
+                return 408
 
             try:
                 EventSpectators.objects.get(event=self, user=requester)
@@ -314,7 +481,7 @@ class Event(models.Model):
 
         num_remaining_places = self.maximumAttendeeCapacity - \
             len(self.participant_users.all())
-
+        
         data_dict = dict()
         data_dict['@context'] = "https://www.w3.org/ns/activitystreams"
         data_dict['summary'] = f"{self.organizer.identifier} accepted and rejected users to '{self.name}' event"
@@ -324,10 +491,23 @@ class Event(models.Model):
 
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
+
+        limit_for_notification = int(self.maximumAttendeeCapacity*0.1)
+        if num_remaining_places in [limit_for_notification, limit_for_notification+1, limit_for_notification-1]:
+            interesteds = self.interested_users.all()
+            for interested in interesteds:
+                Notification.objects.create(event_id=self, user_id=interested.user, date=dt,notification_type=f'{num_remaining_places} Spots Left')
+        if self.startDate < dt:
+            return 408
+
         try:
             with transaction.atomic():
                 for user in accept_user_id_list:
                     if num_remaining_places <= 0:
+                        participants = self.participant_users.all()
+                        for participant in participants:
+                            Notification.objects.create(event_id=self, user_id=participant.user, date=dt,notification_type=f'Event Full')
+
                         break
 
                     try:
@@ -350,7 +530,7 @@ class Event(models.Model):
                     EventParticipants.objects.create(
                         event=self, user=request_object.user, accepted_on=dt)
                     ActivityStream.objects.create(type='Accept', actor=self.organizer, target=self, object=request_object.user, date=dt)
-
+                    Notification.objects.create(event_id=self, user_id=request_object.user, date=dt,notification_type='Event Acceptance')
                     request_object.delete()
 
                     acception = dict()
@@ -404,9 +584,8 @@ class Event(models.Model):
                         continue  # already a spectator
                     except EventSpectators.DoesNotExist:
                         pass
-
+                    Notification.objects.create(event_id=self, user_id=request_object.user, date=dt,notification_type='Event Rejection')
                     request_object.delete()
-
                     rejected = dict()
                     rejected['@context'] = "https://www.w3.org/ns/activitystreams"
                     rejected['summary'] = f"{self.organizer.identifier} rejected {request_object.user.identifier}'s request to join the event '{self.name}'."
@@ -496,10 +675,12 @@ class Event(models.Model):
         utc_dt = datetime.now(timezone.utc)  # UTC time
         dt = utc_dt.astimezone()
 
+        if self.startDate < dt:
+            return 408
+
         try:
             num_of_spectators = len(self.spectator_users.all())
-            if num_of_spectators >= self.maxSpectatorCapacity:
-                return 403  # Full Capacity
+            
             requester = User.objects.get(user_id=user_id)
 
             try:
@@ -517,6 +698,13 @@ class Event(models.Model):
             EventSpectators.objects.create(
                 event=self, user=requester, requested_on=dt)
             ActivityStream.objects.create(type='Spectator', actor=requester, target=self, date=dt)
+
+            if num_of_spectators >= self.maxSpectatorCapacity:
+                spectators = self.spectator_users.all()
+                for spectator in spectators:
+                    Notification.objects.create(event_id=self, user_id=spectator.user, date=dt,notification_type=f'Field Full')
+
+                return 201
 
             return True
         except User.DoesNotExist:  # User does not exist
@@ -558,11 +746,12 @@ class Event(models.Model):
 
             for badge in event_badges:
                 item = dict()
+                item['name'] = badge.badge.name
                 if badge.badge.wikidata:
-                    item['@context'] = "https://www.wikidata.org/entity/" + badge.badge.wikidata
-                    item['name'] = badge.badge.name
-                else:
-                    item['name'] = badge.badge.name
+                    item['@context'] = "https://www.wikidata.org/entity/" + \
+                        badge.badge.wikidata
+                if badge.badge.sport:
+                    item['sport'] = badge.badge.sport.name
 
                 badges_list.append(item)
 
@@ -595,7 +784,77 @@ class Event(models.Model):
             return 402
         except:
             return 500
-    
+
+
+    def get_posts(self, user):
+
+        if not self.canEveryoneSeePosts:
+            try:
+                EventParticipants.objects.get(event=self, user=user)
+            except EventParticipants.DoesNotExist:
+                try:
+                    EventSpectators.objects.get(event=self, user=user)
+                except EventSpectators.DoesNotExist:
+                    if user.user_id != self.organizer.user_id:
+                        return 401
+                except Exception as e:
+                    return 500
+            except Exception as e:
+                return 500
+
+        try:
+            data = dict()
+
+            posts = self.posts.all().order_by('dateCreated')
+
+            posts_list = []
+
+            for post in posts:
+
+                post_dict = dict()
+                post_dict["@context"] = "https://schema.org/SocialMediaPosting"
+                post_dict["@id"] = post.post_id
+                if post.sharedContent:
+                    post_dict["sharedContent"] = post.sharedContent
+                post_dict["author"] = {
+                    "@context" : "https://schema.org/Person",
+                    "@id" : post.author.user_id,
+                    "identifier": post.author.identifier
+                }
+                post_dict["text"] = post.text
+                post_dict["dateCreated"] = post.dateCreated
+                comments = post.comments.all().order_by('dateCreated')
+
+                comment_list = []
+                for comment in comments:
+                    comment_dict = dict()
+                    comment_dict["@context"] = "https://schema.org/Comment"
+                    comment_dict["@id"] = comment.comment_id
+                    comment_dict["author"] = {
+                        "@context": "https://schema.org/Person",
+                        "@id": comment.author.user_id,
+                        "identifier": comment.author.identifier
+                    }
+                    comment_dict["text"] = comment.text
+                    comment_dict["dateCreated"] = comment.dateCreated
+                    comment_list.append(comment_dict)
+
+                post_dict["comment"] = comment_list
+                posts_list.append(post_dict)
+
+            data["@context"] = "https://schema.org/SportsEvent"
+            data["@id"] = self.event_id
+            data["additionalProperty"] = {
+                "@type": "PropertyValue",
+                "name": "posts",
+                "value": posts_list
+            }
+
+            return data
+        except Exception as e:
+            return 500
+
+
     def update(self, data):
         participants = EventParticipants.objects.filter(event=self)
         if 'maximumAttendeeCapacity' in data:
@@ -622,4 +881,9 @@ class Event(models.Model):
             if len(spectators) > data['maxSpectatorCapacity']:
                 return 403 # there are more spectators already
         Event.objects.filter(pk=self.event_id).update(**data)
+        participants = self.participant_users.all()
+        utc_dt = datetime.now(timezone.utc)
+        dt = utc_dt.astimezone()
+        for participant in participants:
+            Notification.objects.create(event_id=self, user_id=participant.user, date=dt,notification_type=f'Event Update')
         return 200
