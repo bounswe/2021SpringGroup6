@@ -25,10 +25,6 @@ import {withRouter} from "react-router";
 import {createEquipmentDiscussion, getEquipmentDiscussions} from "../../services/Equipments";
 
 
-
-const baseURL = "/equipments/"
-
-
 const baseURL = "/equipments/"
 
 
@@ -36,7 +32,6 @@ class EquipmentInformation extends React.Component {
 
     constructor() {
         super()
-
         this.state = {
             identifier: "",
             sporttype: "",
@@ -51,7 +46,6 @@ class EquipmentInformation extends React.Component {
             sharedContent: "",
             comment: '',
             comments: [],
-
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -91,8 +85,6 @@ class EquipmentInformation extends React.Component {
                     //alert('Not valid info for an event')
                 }
             }
-
-
         ).catch((error) => {
             console.log(error)
             alert('Incorrect input. Try again')
@@ -124,7 +116,6 @@ class EquipmentInformation extends React.Component {
     }
 
     selectRegion(val) {
-
         //console.log(this.state)
         this.setState({region: val});
     }
@@ -155,7 +146,7 @@ class EquipmentInformation extends React.Component {
 
     render() {
 
-        
+
         //const resultingEquipments = this.state.equipments.map(event => <EquipmentInfo name={event.name} description={event.description} id={event.event_id} /> )
         let title = "";
 
@@ -182,73 +173,71 @@ class EquipmentInformation extends React.Component {
                 </div>
         }
 
-
-        let photo;
-
-        if(! this.state.sharedContent == "" ) {
-            photo = 
-            <div> 
-                <p style = {{fontSize: 30}}><hr className='hrElements'/>Image of the equipment:</p>
-
-                <Card>
-                    <Card.Body><img src={this.state.sharedContent} alt="Photo of the sport equipment"></img></Card.Body>
-                </Card>
-
-            </div>
-        }
-   
         return (
 
+            <div style={{marginLeft: 145, marginRight: 65}}>
 
-                
-                <h1 id="title">Equipment Information Page<br /></h1>
+
+                <h1 id="title">Equipment Information Page<br/></h1>
 
                 <form onSubmit={this.handleSubmit}>
-                    <Grid >
-                        
-
-                            <p style = {{fontSize: 30}}><hr className='hrElements' />Name:</p>
-
-                            <Card>
-                                <Card.Body>{this.state.name}</Card.Body>
-                            </Card>
-                           
-                            <p style = {{fontSize: 30}}><hr className='hrElements'/>Sport Type:</p>
-
-                            <Card>
-                                {/*From https://flexiple.com/javascript-capitalize-first-letter/ */}
-                                <Card.Body>{this.state.sporttype.charAt(0).toUpperCase() + this.state.sporttype.slice(1)}</Card.Body>
-                            </Card>
-                            
-
-                            <p style = {{fontSize: 30}}><hr className='hrElements'/>Description:</p>
-
-                            <Card>
-                                <Card.Body>{this.state.description}</Card.Body>
-                            </Card>
-
-                            <p style = {{fontSize: 30}}><hr className='hrElements'/>Location of the equipment:</p>
-
-                            <Map height={300} width={1450} defaultCenter={[41.084, 29.051]} defaultZoom={6}>
-                                <Marker 
-                                    width={50}
-                                    anchor={[this.state.latitude, this.state.longitude]} 
-                                     
-                                />
-                            </Map>
+                    <Grid>
 
 
-                            {photo}
+                        <p style={{fontSize: 30}}>
+                            <hr className='hrElements'/>
+                            Name:
+                        </p>
+
+                        <Card>
+                            <Card.Body>{this.state.name}</Card.Body>
+                        </Card>
+
+                        <p style={{fontSize: 30}}>
+                            <hr className='hrElements'/>
+                            Sport Type:
+                        </p>
+
+                        <Card>
+                            {/*From https://flexiple.com/javascript-capitalize-first-letter/ */}
+                            <Card.Body>{this.state.sporttype.charAt(0).toUpperCase() + this.state.sporttype.slice(1)}</Card.Body>
+                        </Card>
 
 
-                            <br/>
+                        <p style={{fontSize: 30}}>
+                            <hr className='hrElements'/>
+                            Description:
+                        </p>
 
-                            <Typography >
-                                <Link to="/" >
-                                    Return To Home Page
-                                </Link>
-                            </Typography>
-                                        
+                        <Card>
+                            <Card.Body>{this.state.description}</Card.Body>
+                        </Card>
+
+                        <p style={{fontSize: 30}}>
+                            <hr className='hrElements'/>
+                            Location of the equipment:
+                        </p>
+
+                        <Map height={300} width={1450} defaultCenter={[41.084, 29.051]} defaultZoom={6}>
+                            <Marker
+                                width={50}
+                                anchor={[this.state.latitude, this.state.longitude]}
+
+                            />
+                        </Map>
+
+
+                        {photo}
+
+
+                        <br/>
+
+                        <Typography>
+                            <Link to="/">
+                                Return To Home Page
+                            </Link>
+                        </Typography>
+
                     </Grid>
 
                 </form>
