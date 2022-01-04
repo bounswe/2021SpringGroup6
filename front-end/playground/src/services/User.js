@@ -2,8 +2,10 @@ import axios from 'axios';
 const localData = JSON.parse(localStorage.getItem('user')) || {};
 const token = `Token ${localData.token}`;
 
+
+
 export const getUserInfo = async (user_id) => {
-  
+
   return axios({
     method: 'GET',
     url: `/users/${user_id}`,
@@ -19,8 +21,27 @@ export const getUserInfo = async (user_id) => {
     })
 }
 
+
+export const getNotifications = async () => {
+
+  return axios({
+    method: 'GET',
+    url: `/notifications`,
+    headers: {
+      Authorization: token,
+    }
+  })
+      .then(response => {
+        return response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+}
+
+
 export const getOneUserInfo = async (user_id) => {
-  
+
   return axios({
     method: 'GET',
     url: `/users/${user_id}`,
