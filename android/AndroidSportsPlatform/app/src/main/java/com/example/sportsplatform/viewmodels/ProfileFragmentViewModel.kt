@@ -31,6 +31,15 @@ class ProfileFragmentViewModel(
         }
     }
 
+    fun dltUser() {
+        Coroutines.main {
+            userRepo.deleteUserProfile(
+                "Token " + sharedPreferences.getString(Constants.SHARED_PREFS_USER_TOKEN, ""),
+                UserDetailRequest(user_id = sharedPreferences.getInt(Constants.SHARED_PREFS_USER_ID, 0))
+            ).body()
+        }
+    }
+
     fun updUser(
         userUpdateRequest : UserUpdateRequest
     ){

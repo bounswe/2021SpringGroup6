@@ -52,6 +52,12 @@ interface UserApi {
         @Path("user_id") userId: Int
     ): Response<UserResponse>
 
+    @DELETE("users/{user_id}")
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int
+    ): Response<Void>
+
     @PUT("users/{user_id}")
     suspend fun updateUser(
         @Header("Authorization") token: String,

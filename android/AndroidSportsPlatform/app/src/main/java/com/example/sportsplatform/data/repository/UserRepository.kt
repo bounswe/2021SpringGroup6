@@ -29,6 +29,10 @@ class UserRepository(private val api: UserApi) {
         return api.searchUser(token, userDetailRequest.user_id)
     }
 
+    suspend fun deleteUserProfile(token: String, userDetailRequest : UserDetailRequest) : Response<Void> {
+        return api.deleteUser(token, userDetailRequest.user_id)
+    }
+
     suspend fun updateUserProfile(
         token: String,
         userId : Int,
