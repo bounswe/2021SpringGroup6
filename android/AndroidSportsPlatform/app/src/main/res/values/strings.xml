@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name">Squad Game</string>
+    <string name="title">Squad Game</string>
+    <string name="paragraph">Let the Game Begin!</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="Identifier">Identifier</string>
+    <string name="Pass">Password</string>
+    <string name="register">REGISTER</string>
+    <string name="todo1">TODO</string>
+    <string name="todo">TODO</string>
+    <string name="done">Done</string>
+    <string name="e_mail">e-mail</string>
+    <string name="home">HOME</string>
+    <string name="profile">profile</string>
+    <string name="menu">menu</string>
+    <string name="surname">surname</string>
+    <string name="password">password</string>
+    <string name="location">location</string>
+    <string name="age">age</string>
+    <string name="gender">gender</string>
+    <string name="name">name</string>
+    <string name="sports">sport</string>
+    <string name="searchButton">search</string>
+    <string name="event">event</string>
+    <string name="button">Button</string>
+    <string name="description">image</string>
+    <string name="birthDay">Birthday</string>
+    <string name="skill">skill level(1–5)</string>
+    <string name="tabBarHome">Home</string>
+    <string name="tabBarSearch">Search</string>
+    <string name="tabBarProfile">Profile</string>
+    <string name="selectSearchType">Select Search Type</string>
+    <string-array name="searchOptions">
+        <item>User</item>
+        <item>Event</item>
+        <item>Equipment</item>
+    </string-array>
+    <string name="searchUser">Search User</string>
+    <string name="searchEvent">Search Event</string>
+    <string name="searchEquipment">Search Equipment</string>
+    <string name="createNewEvent">Create New Event</string>
+    <string name="eventsAttending">Events Attending</string>
+    <string name="eventsCreated">Events Created</string>
+    <string name="usersSearched">Users Searched</string>
+    <string name="eventsSearched">Events Searched</string>
+    <string name="createEventName">Enter event name</string>
+    <string name="createEventSport">Enter event sport</string>
+    <string name="createEventDescription">Enter event description</string>
+    <string name="createEventStartDate">Start date in format dd.MM.yyyy HH:mm</string>
+    <string name="createEventMinAttendeeCap">Enter event min attendee capacity</string>
+    <string name="createEventMaxAttendeeCap">Enter event max attendee capacity</string>
+    <string name="createEventMaxSpectatorCap">Enter event max spectator capacity</string>
+    <string name="createEventMinSkillLevel">Enter event min skill level(1 to 5)</string>
+    <string name="createEventMaxSkillLevel">Enter event max skill level(1 to 5)</string>
+    <string name="createEventAcceptWithoutApproval">Accept without approval?(true or false)</string>
+    <string name="createEventDuration">Enter event duration in mins</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="selectEventLocation">Select event location</string>
+    <string name="blockUser">Block User</string>
+    <string name="addUserBadge">Add Badge</string>
+    <string name="followUser">Follow</string>
+    <string name="familyName">Family name</string>
+    <string name="birthDate">Birth date</string>
+    <string name="updateProfile">Update Profile</string>
+    <string name="eventDetailScreenTitle">Event Information</string>
+    <string name="eventStartDate">Event start date</string>
+    <string name="eventAddress">Event address</string>
+    <string name="clickToSeeMap">Click to see the location on map</string>
+    <string name="eventOrganizer">Event organizer</string>
+    <string name="eventAttendee">Event attendee</string>
+    <string name="eventAudience">Event audience</string>
+    <string name="showInteresteds">Show interested users</string>
+    <string name="interested">Interested Users</string>
+    <string name="sendInterestAsAudience">I am interested!</string>
+    <string name="sendInterestToEvent">Participate as spectator</string>
+    <string name="eventOrganizerTitle">Organizer: %1s</string>
+    <string name="eventSportTitle">Sport: %1s</string>
+    <string name="eventDurationTitle">Duration: %1s</string>
+    <string name="eventMaxAttCapTitle">Max att. capacity: %1s</string>
+    <string-array name="levels">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="selectMinLevel">Select MIN level</string>
+    <string name="selectMaxLevel">Select MAX level</string>
+    <string name="eventsBadges">Events badges</string>
+    <string name="addEventBadges">Add badges to your events</string>
+    <string name="yes">Yes!</string>
+    <string name="no">No!</string>
+    <string name="popupTitle">Are you sure?</string>
+    <string name="searchEventWithMap">Search event with Map</string>
+    <string name="enterName">Enter name</string>
+    <string name="selectSport">Select sport</string>
+    <string name="enterCity">Enter city</string>
+    <string name="enterCountry">Enter country</string>
+</resources>

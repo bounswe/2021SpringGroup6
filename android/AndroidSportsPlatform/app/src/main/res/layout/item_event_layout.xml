@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_12"
+        android:layout_marginVertical="@dimen/margin_12"
+        android:background="@drawable/bg_rounded_corner"
+        android:paddingHorizontal="@dimen/margin_12"
+        android:paddingVertical="@dimen/margin_12">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twName"
+            style="@style/SearchedEventInformation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twStartDate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twDescription"
+            style="@style/SearchedEventInformation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twDuration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twName"
+            tools:text="Description" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twStartDate"
+            style="@style/SearchedEventInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/twName"
+            tools:text="28.12.2021" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twMaxAttendeeCapacity"
+            style="@style/SearchedEventInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twDuration"
+            tools:text="10" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twOrganizer"
+            style="@style/SearchedEventInformation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_12"
+            app:layout_constraintEnd_toStartOf="@+id/twMaxAttendeeCapacity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twDescription"
+            tools:text="User" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twDuration"
+            style="@style/SearchedEventInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twStartDate"
+            tools:text="50" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twSport"
+            style="@style/SearchedEventInformation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twOrganizer"
+            tools:text="Sport" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

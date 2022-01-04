@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clUserContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_12"
+        android:layout_marginVertical="@dimen/margin_12"
+        android:background="@drawable/bg_rounded_corner"
+        android:paddingHorizontal="@dimen/margin_12"
+        android:paddingVertical="@dimen/margin_12">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twUserIdentifier"
+            tools:text="Email" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/twUserIdentifier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/twUserName"
+            tools:text="@string/Identifier" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

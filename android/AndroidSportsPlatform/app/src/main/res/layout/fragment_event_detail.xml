@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="eventDetailViewModel"
+            type="com.example.sportsplatform.viewmodels.EventDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/margin_12"
+        android:layout_marginTop="@dimen/margin_12">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventDetailScreenTitle"
+                    style="@style/TitleStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eventDetailScreenTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivRemove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_decline_circle"
+                    android:tint="@color/teal_700"
+                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventNameTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDetailScreenTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventName"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.name}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventNameTitle"
+                    tools:text="Event name" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventDescriptionTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventDescription"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventName" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventDescription"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.description}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDescriptionTitle"
+                    tools:text="Event description" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventStartDateTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/eventStartDate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDescription" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventStartDate"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.convertedDate}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventStartDateTitle"
+                    tools:text="Event start date" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMaxAttCapTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventMaxAttendeeCap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventStartDate" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMaxAttCap"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{String.valueOf(eventDetailViewModel.event.maximumAttendeeCapacity)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMaxAttCapTitle"
+                    tools:text="Event max att cap" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMinSkillLevelTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventMinSkillLevel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMaxAttCap" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMinSkillLevel"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{String.valueOf(eventDetailViewModel.event.minSkillLevel)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMinSkillLevelTitle"
+                    tools:text="Event min skill level" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMaxSkillLevelTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventMaxSkillLevel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMinSkillLevel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventMaxSkillLevel"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{String.valueOf(eventDetailViewModel.event.maxSkillLevel)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMaxSkillLevelTitle"
+                    tools:text="Event max skill level" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventDurationTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventDuration"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventMaxSkillLevel" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventDuration"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{String.valueOf(eventDetailViewModel.event.duration)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDurationTitle"
+                    tools:text="Event duration" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventSportTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/createEventSport"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventDuration" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventSport"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.sport}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventSportTitle"
+                    tools:text="Event sport" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventAddressTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/eventAddress"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventSport" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventAddress"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.location.address}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventAddressTitle"
+                    tools:text="Event address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventLatLng"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@string/clickToSeeMap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventAddress"
+                    tools:text="Event address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventOrganizerTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/eventOrganizer"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventLatLng" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventOrganizer"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@{eventDetailViewModel.event.organizer.identifier}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventOrganizerTitle"
+                    tools:text="Event organizer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/showInteresteds"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:background="@drawable/bg_rounded_corner_stroked"
+                    android:padding="@dimen/margin_6"
+                    android:text="@string/showInteresteds"
+                    android:visibility="@{eventDetailViewModel.interestedsVisibility}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventOrganizer" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventAttendeeTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/eventAttendee"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/showInteresteds" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sendInterestToEvent"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded_corner_stroked"
+                    android:onClick="@{eventDetailViewModel::sendInterestToEvent}"
+                    android:padding="@dimen/margin_6"
+                    android:text="@string/sendInterestAsAudience"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/eventAttendeeTitle" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAttendee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventAttendeeTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventAudienceTitle"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:text="@string/eventAudience"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvAttendee" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/sendInterestAsAudience"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded_corner_stroked"
+                    android:onClick="@{eventDetailViewModel::participateAsSpectatorToEvent}"
+                    android:padding="@dimen/margin_6"
+                    android:text="@string/sendInterestToEvent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/eventAudienceTitle" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAudience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventAudienceTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/twEventBadges"
+                    style="@style/EventDetailTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eventsBadges"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvAudience" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvBadges"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:layout_marginBottom="@dimen/margin_12"
+                    android:overScrollMode="never"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/twEventBadges" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
