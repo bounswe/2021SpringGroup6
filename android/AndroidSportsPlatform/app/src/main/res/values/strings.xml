@@ -66,6 +66,7 @@
     <string name="eventDetailScreenTitle">Event Information</string>
     <string name="eventStartDate">Event start date</string>
     <string name="eventAddress">Event address</string>
+    <string name="clickToSeeMap">Click to see the location on map</string>
     <string name="eventOrganizer">Event organizer</string>
     <string name="eventAttendee">Event attendee</string>
     <string name="eventAudience">Event audience</string>

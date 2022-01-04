@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.activities.MainActivity
+import com.example.sportsplatform.activities.MapsActivity
 import com.example.sportsplatform.adapter.EventBadgesAdapter
 import com.example.sportsplatform.adapter.UsersAdapter
 import com.example.sportsplatform.databinding.FragmentEventDetailBinding
@@ -107,6 +108,15 @@ class EventDetailFragment : Fragment(), KodeinAware, DialogDismissListener, Popu
         binding.ivRemove.setOnClickListener {
             val popup = Popup(requireContext(), this)
             popup.show()
+        }
+
+        binding.eventLatLng.setOnClickListener {
+            MapsActivity.openMaps(
+                activity as MainActivity,
+                "fromEventDetail",
+                viewModel.event.value?.location?.geo?.latitude,
+                viewModel.event.value?.location?.geo?.longitude
+            )
         }
     }
 

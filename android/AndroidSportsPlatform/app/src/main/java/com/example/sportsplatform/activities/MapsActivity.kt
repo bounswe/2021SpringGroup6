@@ -20,10 +20,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
 
     companion object {
         private const val IS_FOR_EVENT_SEARCH = "is_for_event_search"
-        fun openMaps(activity: AppCompatActivity, isForEventSearch: Boolean = false) =
+        private const val LATITUDE = "latitude"
+        private const val LONGITUDE = "longitude"
+        fun openMaps(
+            activity: AppCompatActivity,
+            isForEventSearch: String = "",
+            lat: Double? = null,
+            long: Double? = null
+        ) =
             activity.apply {
                 val intent = Intent(this, MapsActivity::class.java)
                 intent.putExtra(IS_FOR_EVENT_SEARCH, isForEventSearch)
+                intent.putExtra(LATITUDE, lat)
+                intent.putExtra(LONGITUDE, long)
                 startActivity(intent)
             }
     }
@@ -67,30 +76,46 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         mMap.addMarker(
             MarkerOptions().position(bogaziciCoordinates).title("Marker in Bogazici Uni")
         )
+
+        if (getIsForSearchEvent() == "fromEventDetail") {
+            val latLng = LatLng(
+                intent.getDoubleExtra(LATITUDE, 0.0), intent.getDoubleExtra(LONGITUDE, 0.0)
+            )
+            addMarker(latLng)
+        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(bogaziciCoordinates))
         mMap.setOnMapLongClickListener(this)
     }
 
     override fun onMapLongClick(p0: LatLng?) {
-        if (getIsForSearchEvent()) {
-            if (userAddedMarkerCount < 1) {
-                addMarker(p0)
-            } else {
-                p0?.let { listOfMarkerPositions.add(it) }
-                putMarkerPositionsToSharedPreferences()
+        when (getIsForSearchEvent()) {
+            "fromSearch" -> {
+                if (userAddedMarkerCount < 1) {
+                    addMarker(p0)
+                } else {
+                    p0?.let { listOfMarkerPositions.add(it) }
+                    putMarkerPositionsToSharedPreferences()
+                    finish()
+                }
+            }
+
+            "fromCreateEvent" -> {
+                sharedPreferences.edit()
+                    .putString(Constants.EVENT_LATITUDE, p0?.latitude?.toString())
+                    .apply()
+                sharedPreferences.edit()
+                    .putString(Constants.EVENT_LONGITUDE, p0?.longitude?.toString())
+                    .apply()
                 finish()
             }
-        } else {
-            sharedPreferences.edit().putString(Constants.EVENT_LATITUDE, p0?.latitude?.toString())
-                .apply()
-            sharedPreferences.edit().putString(Constants.EVENT_LONGITUDE, p0?.longitude?.toString())
-                .apply()
-            finish()
+
+            else -> {
+            }
         }
     }
 
-    private fun getIsForSearchEvent(): Boolean =
-        intent.getBooleanExtra(IS_FOR_EVENT_SEARCH, false)
+    private fun getIsForSearchEvent(): String? = intent.getStringExtra(IS_FOR_EVENT_SEARCH)
 
     private fun addMarker(p0: LatLng?) {
         val markerOptions = p0?.let {
@@ -99,7 +124,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         }.also {
             it?.icon(
                 BitmapDescriptorFactory
-                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+            )
             mMap.addMarker(it)
             userAddedMarkerCount += 1
         }

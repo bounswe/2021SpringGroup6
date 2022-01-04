@@ -266,6 +266,20 @@
                     tools:text="Event address" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/eventLatLng"
+                    style="@style/EventDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:background="@drawable/bg_rounded_corner"
+                    android:paddingHorizontal="@dimen/margin_6"
+                    android:paddingVertical="@dimen/margin_6"
+                    android:text="@string/clickToSeeMap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/eventAddress"
+                    tools:text="Event address" />
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/eventOrganizerTitle"
                     style="@style/EventDetailTitle"
                     android:layout_width="wrap_content"
@@ -273,7 +287,7 @@
                     android:layout_marginTop="@dimen/margin_12"
                     android:text="@string/eventOrganizer"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/eventAddress" />
+                    app:layout_constraintTop_toBottomOf="@+id/eventLatLng" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/eventOrganizer"

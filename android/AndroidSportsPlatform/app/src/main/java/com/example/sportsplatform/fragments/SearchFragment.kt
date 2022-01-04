@@ -110,7 +110,7 @@ class SearchFragment : Fragment(), KodeinAware, AdapterView.OnItemSelectedListen
 
         binding.twSearchEventWithMap.setOnClickListener {
             viewModel.clearCoordinates()
-            MapsActivity.openMaps(activity as MainActivity, true)
+            MapsActivity.openMaps(activity as MainActivity, "fromSearch")
         }
 
         binding.btnSearch.setOnClickListener {
