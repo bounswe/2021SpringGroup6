@@ -242,6 +242,7 @@ class SearchEquipment extends React.Component {
                                 <MenuItem value={'soccer'}>Soccer</MenuItem>                                                                               
                                 <MenuItem value={'table_tennis'}>Table_tennis</MenuItem>
                                 <MenuItem value={'tennis'}>Tennis</MenuItem>
+                                <MenuItem value={'ultimate_frisbee'}>Ultimate-Frisbee</MenuItem>
                                 <MenuItem value={'volleyball'}>Volleyball</MenuItem>
                                 <MenuItem value={'watersports'}>Watersports</MenuItem>
                                 <MenuItem value={'weightlifting'}>Weightlifting</MenuItem>
