@@ -41,6 +41,14 @@ class UserRepository(private val api: UserApi) {
         return api.searchFollowingProfile(token, userId)
     }
 
+    suspend fun unfollowUserProfile(token: String, userId : Int, userUnFollowingRequest: UserUnFollowingRequest) : Response<Void> {
+        val unfl = api.unFollowingProfile(token, userId, userUnFollowingRequest)
+
+        Log.d(TAG, "$unfl *****************")
+
+        return unfl
+    }
+
     suspend fun searchFollowedUserProfile(token: String, userId : Int) : Response<GetFollowingUsersResponse> {
         return api.searchFollowedProfile(token, userId)
     }

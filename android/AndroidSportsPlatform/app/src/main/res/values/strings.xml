@@ -60,6 +60,7 @@
     <string name="blockUser">Block User</string>
     <string name="addUserBadge">Add Badge</string>
     <string name="followUser">Follow</string>
+    <string name="unFollowUser">Unfollow</string>
     <string name="familyName">Family name</string>
     <string name="birthDate">Birth date</string>
     <string name="updateProfile">Update Profile</string>
