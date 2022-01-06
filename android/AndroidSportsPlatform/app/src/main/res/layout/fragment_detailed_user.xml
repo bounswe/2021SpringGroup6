@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="userDetailViewModel"
+            type="com.example.sportsplatform.viewmodels.UserDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:text="@{userDetailViewModel.user.identifier}"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.13"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnFollowUser"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/followUser"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnUnFollowUser"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="124dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/unFollowUser"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/etBadgeName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnFollowUser"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnAddBadge"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="125dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/addUserBadge"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvUserLocation" />
+
+        <Button
+            android:id="@+id/btnBlockUser"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="152dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/white"
+            android:text="@string/blockUser"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvUserBadges"
+            app:layout_constraintVertical_bias="0.203" />
+
+        <TextView
+            android:id="@+id/tvUserFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="81dp"
+            android:text="@{userDetailViewModel.user.name}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/tvUserLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@{userDetailViewModel.user.birthDate}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.235"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserAge" />
+
+        <TextView
+            android:id="@+id/tvUserAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="188dp"
+            android:text="@{userDetailViewModel.user.email}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.232"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFollowedUsers"
+            android:layout_width="114dp"
+            android:layout_height="182dp"
+            android:layout_marginTop="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUserBadges"
+            android:layout_width="110dp"
+            android:layout_height="182dp"
+            android:layout_marginTop="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.063"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFollowingUsers"
+            android:layout_width="109dp"
+            android:layout_height="187dp"
+            android:layout_marginTop="400dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.947"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etBadgeName"
+            android:layout_width="151dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:hint="@{userDetailViewModel.searchBarHint}"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/rvUserBadges"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/btnAddBadge"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserAge"
+            app:layout_constraintVertical_bias="0.576"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/twBadges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Badges"
+            app:layout_constraintBottom_toTopOf="@+id/rvUserBadges"
+            app:layout_constraintEnd_toStartOf="@+id/twFollowedUsers"
+            app:layout_constraintHorizontal_bias="0.39"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/twFollowedUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="56dp"
+            android:layout_marginBottom="16dp"
+            android:text="Followings"
+            app:layout_constraintBottom_toTopOf="@+id/rvFollowedUsers"
+            app:layout_constraintEnd_toStartOf="@+id/twFollowingUsers"
+            app:layout_constraintTop_toBottomOf="@+id/btnAddBadge"
+            app:layout_constraintVertical_bias="0.944" />
+
+        <TextView
+            android:id="@+id/twFollowingUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="52dp"
+            android:layout_marginBottom="16dp"
+            android:text="Followers"
+            app:layout_constraintBottom_toTopOf="@+id/rvFollowingUsers"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

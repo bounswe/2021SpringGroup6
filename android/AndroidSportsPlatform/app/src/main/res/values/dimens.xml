@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_6">6dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+
+    <dimen name="size_search_bar">50dp</dimen>
+    <dimen name="tab_bar_height">40dp</dimen>
+    <dimen name="sizeProfileScreenInitials">70dp</dimen>
+</resources>
