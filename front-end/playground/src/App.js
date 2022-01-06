@@ -161,7 +161,7 @@ function App() {
                 <Route path=":id"
                 element={
                   <Suspense fallback={<>...</>}>
-                    <div className="default-body"><ProfileView/></div>
+                    <ProfileView/>
                   </Suspense>}/>
 
             </Route>

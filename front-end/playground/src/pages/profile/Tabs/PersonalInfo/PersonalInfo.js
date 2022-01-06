@@ -60,7 +60,7 @@ function Profile_Info() {
     
     const [profileInfo, setProfileInfo] = useState(getUserInformation());
 
-    useEffect(() => {console.log("Profile info:"); console.log(profileInfo);}, [profileInfo, setProfileInfo])
+    // useEffect(() => {console.log("Profile info:"); console.log(profileInfo);}, [profileInfo, setProfileInfo])
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -130,8 +130,8 @@ function Profile_Info() {
                 permissions[key] = profileInfo[key]
             }
         }
-        console.log('keys');
-        console.log(permissions);
+        // console.log('keys');
+        // console.log(permissions);
         axios.put(`/users/${user.user_id}/visible_attributes`, permissions, {headers:{'Authorization': `Token ${user.token}`}})
         .then(function (response) {
             if(response.status === 200){

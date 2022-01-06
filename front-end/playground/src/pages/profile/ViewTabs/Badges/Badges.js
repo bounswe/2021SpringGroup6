@@ -4,6 +4,7 @@ import './Badges.css';
 import {UserContext} from '../../../../UserContext';
 import axios from 'axios';
 import SportNames from '../../../../PermanentComponents/SportNames.js';
+import {useParams} from 'react-router-dom'
 import {
   Tabs, 
   Tab, 
@@ -24,19 +25,19 @@ import {
   Badge
 } from 'reactstrap';
 
-import {getUserBadges, changeBadgeVisibility} from '../../../../services/User';
+import {getOtherUsersBadges, changeBadgeVisibility} from '../../../../services/User';
 
-function Badges_Tab() {
+function Badges_Tab(props) {
     const [eventBadges, setEventBadges] = useState([]);
     const [userBadges, setUserBadges] = useState([]);
-    const [badgeVisibility, setBadgeVisibility] = useState(true);
-    
+    const user_id = parseInt(useParams().id);
+
+    const {badgeVisibility} = props;
     
     useEffect(() => {
-        if (!(eventBadges.length > 0 || userBadges.length > 0)) {
-            getUserBadges()
+        if (badgeVisibility) {
+            getOtherUsersBadges(user_id)
             .then((response) => {
-                console.log(response.additionalProperty);
                 response.additionalProperty.forEach((badge_group) => {
                     if (badge_group.name === "event_badges") {
                         setEventBadges([...badge_group.value])
@@ -47,38 +48,14 @@ function Badges_Tab() {
             })
             .catch((error) => {
                 alert('Badges can not be loaded. You are redirecting to home page. Please try again later.');
+                console.log(error)
                 window.location.href = '/'
             });
         }
-    }, []);
-
-    useEffect(() => {console.log('eventBadges\n', eventBadges)}, [eventBadges])
+    }, [badgeVisibility]);
 
     return (
     <div className="pp-badges-container">
-        <div style={{marginBottom: '1rem', marginRight: '1rem'}}>
-            <ButtonGroup style={{float: 'right', marginBottom: '0.4rem'}}>
-                <Button
-                    active={badgeVisibility}
-                    outline
-                    color="secondary"
-                    onClick={() => {changeBadgeVisibility(true); setBadgeVisibility(true)}}
-                    size="sm"
-                >
-                    Show
-                </Button>
-                <Button
-                    active={!badgeVisibility}
-                    outline
-                    color="secondary"
-                    onClick={() => {changeBadgeVisibility(false); setBadgeVisibility(false)}}
-                    size="sm"
-                >
-                    Hide
-                </Button>
-            </ButtonGroup>
-            <div style={{color: 'white'}}>.</div>
-        </div>
         <Card style={{margin: '1rem'}} className="">
             <CardBody>
                 <CardTitle tag="h5">
@@ -94,7 +71,7 @@ function Badges_Tab() {
                             {/* <CardComponent event={event}/> */}
                         </>
                     )
-                }) : <div>You don't have any user badges.</div>
+                }) : <div>The user don't have any user badges.</div>
                 }
                 </div>
             </CardBody>
@@ -114,7 +91,7 @@ function Badges_Tab() {
                             {/* <CardComponent event={event}/> */}
                         </>
                     )
-                }) : <div>You don't have any event badges.</div>
+                }) : <div>The user don't have any event badges.</div>
                 }
                 </div>
             </CardBody>
