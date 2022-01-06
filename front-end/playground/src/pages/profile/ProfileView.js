@@ -70,6 +70,8 @@ function Profile() {
     
     const [profileInfo, setProfileInfo] = useState({});
 
+    useEffect(() => {console.log('stranger profileInfo'); console.log(profileInfo);}, [profileInfo]);
+
     useEffect(() => {
         if(profileInfo.identifier)
             return
@@ -170,7 +172,7 @@ function Profile() {
     {profileInfo.identifier &&
     <div style={{minWidth: '45%', padding: '4rem 0'}}>
         <div className="profile-title">
-            <span>Profile Settings</span>
+            <span>Profile Information</span>
             {/* <Button 
                 disabled={!validateEmail(profileInfo.email)}
                 onClick={() => {formSubmit()}}
@@ -202,7 +204,7 @@ function Profile() {
                 />
             </div>
 
-            <div className="lowerInput" style={{}}>
+            {profileInfo.email_visibility && profileInfo.email && <div className="lowerInput" style={{}}>
                 <Label for="Email">
                     Email
                 </Label>
@@ -220,9 +222,9 @@ function Profile() {
                     type="email"
                     
                 />
-            </div>
+            </div>}
 
-            <div className="lowerInput" style={{}}>
+            {profileInfo.name_visibility && profileInfo.name && <div className="lowerInput" style={{}}>
                 <Label for="Name">
                     Name
                 </Label>
@@ -238,9 +240,9 @@ function Profile() {
                     type=""
                     
                 />
-            </div>
+            </div>}
 
-            <div className="lowerInput" style={{}}>
+            {profileInfo.familyName_visibility && profileInfo.familyName && <div className="lowerInput" style={{}}>
                 <Label for="Surname">
                     Surname
                 </Label>
@@ -256,9 +258,9 @@ function Profile() {
                     type=""
                     
                 />
-            </div>
+            </div>}
 
-            <div className="lowerInput" style={{}}>
+            {profileInfo.birthDate_visibility && profileInfo.birthDate && <div className="lowerInput" style={{}}>
                 <Label for="BirthDate">
                     Birth Date
                 </Label>
@@ -274,11 +276,11 @@ function Profile() {
                     type="date"
                     
                 />
-            </div>
+            </div>}
 
-            <div className="lowerInput" style={{}}>
+            {profileInfo.gender_visibility && profileInfo.gender && <div className="lowerInput" style={{}}>
                 <Label for="Gender">
-                    {`Gender ${profileInfo.gender ? `: ${profileInfo.gender}` : ''}`}
+                    Gender
                 </Label>
                 <Input
                     disabled={true}
@@ -302,10 +304,10 @@ function Profile() {
                         female
                     </option>
                 </Input>
-            </div>
+            </div>}
         </Card>
 
-        <Card style={{minWidth: '30%', padding: '20px', marginTop: '20px'}}>
+        {profileInfo.skill_level_visibility && <Card style={{minWidth: '30%', padding: '20px', marginTop: '20px'}}>
             <Button
                 color="primary"
                 //onClick={function noRefCheck(){}}
@@ -356,7 +358,7 @@ function Profile() {
                     </div>)
                 })}
             </UncontrolledCollapse>
-        </Card>
+        </Card>}
     </div>}
     </>
     )
