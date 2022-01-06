@@ -94,6 +94,8 @@ function Profile() {
             if (profileInfo[key]){
                 if (key !== 'sports' || (key === 'sports' && profileInfo[key].length > 0))
                     toBeSent[key] = profileInfo[key]
+            } else if (key.includes('visibility')) {
+                toBeSent[key] = profileInfo[key]
             }
         }
         axios.put(`/users/${user.user_id}`, toBeSent, {headers:{'Authorization': `Token ${user.token}`}})
@@ -101,7 +103,7 @@ function Profile() {
             if(response.status === 200){
                 alert('Saved Successfully!');
                 setUser((prev) => ({...prev, profile: {...prev.profile, ...toBeSent, sports: toBeSent.sports || []}}));
-                
+
                 localStorage.setItem("user",
                     JSON.stringify(
                         {
