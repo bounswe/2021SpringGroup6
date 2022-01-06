@@ -4,7 +4,7 @@ import './Profile.css';
 import {UserContext} from '../../UserContext';
 import axios from 'axios';
 import SportNames from '../../PermanentComponents/SportNames.js';
-import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
+import { Button, Input, Label,  UncontrolledCollapse, ButtonGroup } from 'reactstrap';
 
 import {getUserInfo} from '../../services/User';
 
@@ -60,6 +60,8 @@ function Profile() {
     
     const [profileInfo, setProfileInfo] = useState(getUserInformation());
 
+    useEffect(() => {console.log("Profile info:"); console.log(profileInfo);}, [profileInfo, setProfileInfo])
+
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
@@ -98,10 +100,39 @@ function Profile() {
         .then(function (response) {
             if(response.status === 200){
                 alert('Saved Successfully!');
-                setUser((prev) => ({...prev, profile: {...toBeSent, sports: toBeSent.sports || []}}));
+                setUser((prev) => ({...prev, profile: {...prev.profile, ...toBeSent, sports: toBeSent.sports || []}}));
+                
                 localStorage.setItem("user",
-                    JSON.stringify({...JSON.parse(localStorage.getItem('user')), 
-                        profile: {...toBeSent}}));
+                    JSON.stringify(
+                        {
+                            ...JSON.parse(localStorage.getItem('user')), 
+                            profile: {
+                                ...JSON.parse(localStorage.getItem('user')).profile,
+                                ...toBeSent, 
+                                sports: toBeSent.sports || []
+                            }
+                        }
+                    ));
+            } else {
+                alert("Please try again.");
+            }
+        })
+        .catch(function (error) {
+            console.log('error\n', error);
+            alert("There is an error. Please try again.");
+        });
+
+        const permissions = {};
+        for (let key in profileInfo) {
+            if (key.includes('visibility')) {
+                permissions[key] = profileInfo[key]
+            }
+        }
+        console.log('keys');
+        console.log(permissions);
+        axios.put(`/users/${user.user_id}/visible_attributes`, permissions, {headers:{'Authorization': `Token ${user.token}`}})
+        .then(function (response) {
+            if(response.status === 200){
             } else{
                 alert("Please try again.");
             }
@@ -145,6 +176,26 @@ function Profile() {
                 <Label for="Email">
                     Email
                 </Label>
+                <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                    <Button
+                        active={profileInfo.email_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'email_visibility', value: true})}}
+                        size="sm"
+                    >
+                        Show
+                    </Button>
+                    <Button
+                        active={!profileInfo.email_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'email_visibility', value: false})}}
+                        size="sm"
+                    >
+                        Hide
+                    </Button>
+                </ButtonGroup>
                 <Input
                     valid={validateEmail(profileInfo.email)}
                     invalid={!validateEmail(profileInfo.email)}
@@ -164,6 +215,26 @@ function Profile() {
                 <Label for="Name">
                     Name
                 </Label>
+                <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                    <Button
+                        active={profileInfo.name_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'name_visibility', value: true})}}
+                        size="sm"
+                    >
+                        Show
+                    </Button>
+                    <Button
+                        active={!profileInfo.name_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'name_visibility', value: false})}}
+                        size="sm"
+                    >
+                        Hide
+                    </Button>
+                </ButtonGroup>
                 <Input
                     id="Name"
                     name="Name"
@@ -181,6 +252,26 @@ function Profile() {
                 <Label for="Surname">
                     Surname
                 </Label>
+                <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                    <Button
+                        active={profileInfo.familyName_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'familyName_visibility', value: true})}}
+                        size="sm"
+                    >
+                        Show
+                    </Button>
+                    <Button
+                        active={!profileInfo.familyName_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'familyName_visibility', value: false})}}
+                        size="sm"
+                    >
+                        Hide
+                    </Button>
+                </ButtonGroup>
                 <Input
                     id="Surname"
                     name="Surname"
@@ -198,6 +289,26 @@ function Profile() {
                 <Label for="BirthDate">
                     Birth Date
                 </Label>
+                <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                    <Button
+                        active={profileInfo.birthDate_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'birthDate_visibility', value: true})}}
+                        size="sm"
+                    >
+                        Show
+                    </Button>
+                    <Button
+                        active={!profileInfo.birthDate_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'birthDate_visibility', value: false})}}
+                        size="sm"
+                    >
+                        Hide
+                    </Button>
+                </ButtonGroup>
                 <Input
                     id="BirthDate"
                     name="BirthDate"
@@ -213,8 +324,28 @@ function Profile() {
 
             <div className="lowerInput" style={{}}>
                 <Label for="Gender">
-                    {`Gender ${profileInfo.gender ? `: ${profileInfo.gender}` : ''}`}
+                    Gender
                 </Label>
+                <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                    <Button
+                        active={profileInfo.gender_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'gender_visibility', value: true})}}
+                        size="sm"
+                    >
+                        Show
+                    </Button>
+                    <Button
+                        active={!profileInfo.gender_visibility}
+                        outline
+                        color="secondary"
+                        onClick={() => {handleChange({field: 'gender_visibility', value: false})}}
+                        size="sm"
+                    >
+                        Hide
+                    </Button>
+                </ButtonGroup>
                 <Input
                     id="Gender"
                     name="Gender"
@@ -240,6 +371,26 @@ function Profile() {
         </Card>
 
         <Card style={{minWidth: '30%', padding: '20px', marginTop: '20px'}}>
+            <ButtonGroup style={{float: 'right', marginBottom: '0.2rem'}}>
+                <Button
+                    active={profileInfo.skill_level_visibility}
+                    outline
+                    color="secondary"
+                    onClick={() => {handleChange({field: 'skill_level_visibility', value: true})}}
+                    size="sm"
+                >
+                    Show
+                </Button>
+                <Button
+                    active={!profileInfo.skill_level_visibility}
+                    outline
+                    color="secondary"
+                    onClick={() => {handleChange({field: 'skill_level_visibility', value: false})}}
+                    size="sm"
+                >
+                    Hide
+                </Button>
+            </ButtonGroup>
             <Button
                 color="primary"
                 //onClick={function noRefCheck(){}}

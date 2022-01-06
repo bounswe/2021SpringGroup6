@@ -155,7 +155,7 @@ function App() {
             <Route path="profile">
                 <Route index
                   element={
-                    <Suspense fallback={<>...</>}>
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                       <div className="default-body"><Profile/></div>
                     </Suspense>}/>
                 <Route path=":id"
