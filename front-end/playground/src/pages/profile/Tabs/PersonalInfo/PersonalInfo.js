@@ -31,7 +31,7 @@ function Profile_Info() {
                 delete profile["@type"];
                 return {...profile}
             } else{
-                console.log("Some error ocurred");
+                console.log("Some error occurred");
                 return {
                     email: '',
                     identifier: '',
@@ -44,7 +44,7 @@ function Profile_Info() {
             }
         })
         .catch(function (error) {
-            console.log("Some error ocurred");
+            console.log("Some error occurred");
             console.log(error);
             return {
                 email: '',

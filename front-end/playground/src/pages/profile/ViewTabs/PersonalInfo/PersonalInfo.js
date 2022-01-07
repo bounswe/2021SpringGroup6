@@ -11,18 +11,19 @@ import { Card } from 'react-bootstrap'
 import SportNames from '../../../../PermanentComponents/SportNames.js';
 import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
 
-import {getOneUserInfo, blockUser} from '../../../../services/User';
+import {getOneUserInfo, blockUser, followUser, unBlockUser, unFollowUser } from '../../../../services/User';
 
 function PersonalInfo(props) {
-    const {user: randomuseridname, setUser} = useContext(UserContext);
+    const {user, setUser} = useContext(UserContext);
     const user_id = parseInt(useParams().id);
 
     const {setBadgeVisibility, setCreatedEventVisibility} = props
 
-    if(user_id == randomuseridname.user_id)
+    if(user_id == user.user_id)
         window.location.href = '/profile'
     
     const [profileInfo, setProfileInfo] = useState({});
+    const [gotBlocked, setGotBlocked] = useState(false)
 
     useEffect(() => {
         if(profileInfo.identifier)
@@ -40,8 +41,8 @@ function PersonalInfo(props) {
                 setProfileInfo(profile);
                 setBadgeVisibility(response.data.badge_visibility);
                 setCreatedEventVisibility(response.data.created_events_visibility);
-            } else{
-                console.log("Some error ocurred");
+            } else {
+                console.log("Some error occurred");
                 setProfileInfo({
                     email: '',
                     identifier: '',
@@ -50,12 +51,14 @@ function PersonalInfo(props) {
                     birthDate : '',
                     gender : '',
                     sports: []
-                })
+                });
+                setGotBlocked(true);
             }
         })
         .catch(function (error) {
-            console.log("Some error ocurred");
+            console.log("Some error occurred");
             console.log(error);
+            setGotBlocked(true);
             setProfileInfo({
                     email: '',
                     identifier: '',
@@ -75,17 +78,66 @@ function PersonalInfo(props) {
         <div className="profile-title">
             <span>Profile Information</span>
             <div>
-                <Button 
-                    onClick={() => {}}
-                    style={{marginRight: '0.4rem'}}
-                >
-                    Follow
-                </Button>
-                <Button 
-                    onClick={() => {blockUser(user_id)}}
-                >
-                    Block
-                </Button>
+                {!user.blockeds.includes(user_id) && (user.followings.includes(user_id) ?
+                    <Button 
+                        style={{marginRight: '0.4rem'}}
+                        onClick={() => {
+                            unFollowUser(user_id)
+                            setUser(prev => {
+                                return {
+                                    ...prev,
+                                    followings: prev.followings.filter(id => id !== user_id)
+                                }
+                            })
+                            }}
+                    >
+                        Unfollow
+                    </Button>
+                    :
+                    <Button 
+                        style={{marginRight: '0.4rem'}}
+                        onClick={() => {
+                            followUser(user_id)
+                            setUser(prev => {
+                                return {
+                                    ...prev,
+                                    followings: [...prev.followings, user_id]
+                                }
+                            })
+                            }}
+                    >
+                        Follow
+                    </Button>
+                )}
+                {!user.followings.includes(user_id) && (user.blockeds.includes(user_id) ?
+                    <Button 
+                        onClick={() => {
+                            unBlockUser(user_id)
+                            setUser(prev => {
+                                return {
+                                    ...prev,
+                                    blockeds: prev.blockeds.filter(id => id !== user_id)
+                                }
+                            })
+                            }}
+                    >
+                        Unblock
+                    </Button>
+                    :
+                    <Button 
+                        onClick={() => {
+                            blockUser(user_id)
+                            setUser(prev => {
+                                return {
+                                    ...prev,
+                                    blockeds: [...prev.blockeds, user_id]
+                                }
+                            })
+                            }}
+                    >
+                        Block
+                    </Button>
+                )}
             </div>
         </div>
         <Card style={{minWidth: '30%', padding: '2rem 3rem'}}>
@@ -263,6 +315,7 @@ function PersonalInfo(props) {
             </UncontrolledCollapse>
         </Card>}
     </div>}
+    {gotBlocked && <div className="default-body" style={{marginTop: '5rem'}}>This user may have blocked you.</div>}
     </>
     )
 }

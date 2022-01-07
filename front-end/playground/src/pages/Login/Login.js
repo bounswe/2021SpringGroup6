@@ -3,7 +3,9 @@ import LoginComponent from "./LoginComponents";
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import {UserContext} from '../../UserContext';
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom';
+
+import {getFollowings, getFollowers, getBlockeds} from '../../services/User';
 
 function Login() {
  
@@ -43,6 +45,52 @@ function Login() {
                       context, id, type, 
                       profile: profile,
                     }));
+
+                    getFollowings()
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            followings: response.items.map(item => {
+                              return item.object['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
+                    getBlockeds()
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            blockeds: response.items.map(item => {
+                              return item.object['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
+                    getFollowers()
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            followers: response.items.map(item => {
+                              return item.actor['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
                 }
             })
             .catch(function (error) {
@@ -59,7 +107,7 @@ function Login() {
                 }));
             });
         } else{
-            console.log("Some error ocurred");
+            console.log("Some error occurred");
         }
     })
     .catch(function (error) {

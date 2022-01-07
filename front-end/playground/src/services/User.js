@@ -53,6 +53,7 @@ export const getOneUserInfo = async (user_id) => {
       return response
     })
     .catch(error => {
+      return error
       console.log(error)
     })
 }
@@ -254,6 +255,66 @@ export const blockUser = async (user_id) => {
   return axios({
     method: 'POST',
     url: `/users/${localData.user_id}/blocked`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      user_id: user_id
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const unBlockUser = async (user_id) => {
+
+  return axios({
+    method: 'DELETE',
+    url: `/users/${localData.user_id}/blocked`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      user_id: user_id
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const followUser = async (user_id) => {
+
+  return axios({
+    method: 'POST',
+    url: `/users/${localData.user_id}/following`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      user_id: user_id
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const unFollowUser = async (user_id) => {
+
+  return axios({
+    method: 'DELETE',
+    url: `/users/${localData.user_id}/following`,
     headers: {
       Authorization: token,
     },

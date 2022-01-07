@@ -36,7 +36,6 @@ function Badges_Tab() {
         if (!(eventBadges.length > 0 || userBadges.length > 0)) {
             getUserBadges()
             .then((response) => {
-                console.log(response.additionalProperty);
                 response.additionalProperty.forEach((badge_group) => {
                     if (badge_group.name === "event_badges") {
                         setEventBadges([...badge_group.value])
@@ -52,7 +51,7 @@ function Badges_Tab() {
         }
     }, []);
 
-    useEffect(() => {console.log('eventBadges\n', eventBadges)}, [eventBadges])
+    // useEffect(() => {console.log('eventBadges\n', eventBadges)}, [eventBadges])
 
     return (
     <div className="pp-badges-container">

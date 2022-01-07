@@ -118,9 +118,9 @@ function Follow_Block() {
                 {followers.length > 0 ? followers.map(user => {
                     return (
                         <>
-                            <Link to={`/profile/${user.object['@id']}`}  to="">
+                            <Link to={`/profile/${user.actor['@id']}`}>
                                 <Badge className="badge-pill" pill color="primary">
-                                    {user.object.identifier}
+                                    {user.actor.identifier}
                                 </Badge>
                             </Link>
                             {/* <CardComponent event={event}/> */}
