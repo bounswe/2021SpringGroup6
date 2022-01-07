@@ -20,6 +20,7 @@ import {
 // import {DiscussionPage} from './Discussion/DiscussionPage';
 import PersonalInfo from './Tabs/PersonalInfo/PersonalInfo';
 import Badges_Tab from './Tabs/Badges/Badges';
+import Follow_Block from './Tabs/Follow/Follow';
 
 function Profile(props) {
   const [tabName, setTabName] = useState('Personal-Info');
@@ -50,16 +51,16 @@ function Profile(props) {
                 Badges
                 </NavLink>
             </NavItem>
-            {/* <NavItem>
+            <NavItem>
                 <NavLink
-                active={tabName === 'Discussion'}
+                active={tabName === 'Follow/Block'}
                 onClick={() => {
-                    changeTab('Discussion')
+                    changeTab('Follow/Block')
                 }}
                 >
-                Discussion
+                Follow/Block
                 </NavLink>
-            </NavItem> */}
+            </NavItem>
         </Nav>
 
         {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
@@ -70,9 +71,9 @@ function Profile(props) {
             <TabPane tabId="Badges">
               <Badges_Tab/>
             </TabPane>
-            {/* <TabPane tabId="Discussion">
-              <DiscussionPage/>
-            </TabPane> */}
+            <TabPane tabId="Follow/Block">
+              <Follow_Block/>
+            </TabPane>
         </TabContent>
     </div>
   );

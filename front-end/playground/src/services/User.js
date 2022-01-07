@@ -191,3 +191,60 @@ export const changeCreatedEventsVisibility = async (visibility) => {
       console.log(error)
     })
 }
+
+export const getFollowings = async () => {
+
+  return axios({
+    method: 'GET',
+    url: `/users/${localData.user_id}/following`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const getFollowers = async () => {
+
+  return axios({
+    method: 'GET',
+    url: `/users/${localData.user_id}/follower`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const getBlockeds = async () => {
+
+  return axios({
+    method: 'GET',
+    url: `/users/${localData.user_id}/blocked`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}

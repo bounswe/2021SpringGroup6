@@ -159,17 +159,17 @@ function App() {
                       <Profile/>
                     </Suspense>}/>
                 <Route path=":id"
-                element={
-                  <Suspense fallback={<>...</>}>
-                    <ProfileView/>
-                  </Suspense>}/>
+                  element={
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                      <ProfileView/>
+                    </Suspense>}/>
 
             </Route>
 
             <Route path="event">
               <Route index
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventSettingsPage/>
                   </Suspense>}/>
 
@@ -181,7 +181,7 @@ function App() {
 
               <Route path=":id"
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventPage/>
                   </Suspense>}/>
             </Route>
@@ -194,7 +194,7 @@ function App() {
 
             <Route path="event-settings"
               element={
-                <Suspense fallback={<>...</>}>
+                <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                   <EventSettingsPage/>
                 </Suspense>}/>
 

@@ -56,7 +56,7 @@ function Badges_Tab() {
 
     return (
     <div className="pp-badges-container">
-        <div style={{marginBottom: '1rem', marginRight: '1rem'}}>
+        <div style={{marginBottom: '1rem', marginRight: '1rem', marginTop: '0.5rem'}}>
             <ButtonGroup style={{float: 'right', marginBottom: '0.4rem'}}>
                 <Button
                     active={badgeVisibility}
