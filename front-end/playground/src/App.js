@@ -30,8 +30,9 @@ const NewField = lazy(() => import('./pages/NewField/NewField'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
 const SearchFieldPage = lazy(() => import('./pages/SearchField/SearchField'));
-const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
-const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'))
+const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'));
+const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'));
+const Badges = lazy(() => import('./pages/Badges/Badges'));
 
 
 
@@ -202,16 +203,21 @@ function App() {
                   <EventSettingsPage/>
                 </Suspense>}/>
 
-
-            {/* Using path="*"" means "match anything", so this route
-                  acts like a catch-all for URLs that we don't have explicit
-                  routes for. */}
             <Route path="notifications"
                    element={
                      <Suspense fallback={<>...</>}>
                        <Notifications/>
                      </Suspense>}/>
+            
+            <Route path="badges"
+                   element={
+                     <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                       <Badges/>
+                     </Suspense>}/>
 
+            {/* Using path="*"" means "match anything", so this route
+                  acts like a catch-all for URLs that we don't have explicit
+                  routes for. */}
             <Route path="*" element={<Navigate replace to="/" />} />
           </Route>
 
