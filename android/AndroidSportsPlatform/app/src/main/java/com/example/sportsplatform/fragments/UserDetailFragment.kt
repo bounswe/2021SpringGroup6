@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsplatform.adapter.UserBadgesAdapter
+import com.example.sportsplatform.adapter.UserFollowedAdapter
 import com.example.sportsplatform.adapter.UserFollowingAdapter
 import com.example.sportsplatform.data.models.requests.AddBadgeRequest
 import com.example.sportsplatform.databinding.FragmentDetailedUserBinding
@@ -88,7 +89,29 @@ class UserDetailFragment : Fragment(), KodeinAware {
             viewModel.followUser(
                 arguments?.getInt(USER_ID) ?: 0
             )
-            Toast.makeText(this.context,"User is followed!" ,Toast.LENGTH_SHORT).show()
+            viewModel.followingResponse.observe(
+                viewLifecycleOwner,
+                {
+                    if(it==0)
+                        Toast.makeText(this.context,"Already Followed!" ,Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(this.context,"User is Followed!" ,Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+        binding.btnUnFollowUser.setOnClickListener{
+            viewModel.unfollowUser(
+                arguments?.getInt(USER_ID) ?: 0
+            )
+            viewModel.unfollowingResponse.observe(
+                viewLifecycleOwner,
+                {
+                    if(it==0)
+                        Toast.makeText(this.context,"Already Unfollowed!" ,Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(this.context,"User is Unfollowed!" ,Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         binding.btnAddBadge.setOnClickListener {
@@ -99,6 +122,8 @@ class UserDetailFragment : Fragment(), KodeinAware {
             )
             Toast.makeText(this.context,"Badge is added!" ,Toast.LENGTH_SHORT).show()
         }
+
+
     }
 
     private fun initializeRecyclerview() {
@@ -119,6 +144,17 @@ class UserDetailFragment : Fragment(), KodeinAware {
                 binding.rvFollowingUsers.apply{
                     layoutManager = LinearLayoutManager(context)
                     adapter = UserFollowingAdapter(
+                        it?.items,
+                    )
+                }
+            }
+        )
+        viewModel.usersFollowedList.observe(
+            viewLifecycleOwner,
+            {
+                binding.rvFollowedUsers.apply{
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = UserFollowedAdapter(
                         it?.items,
                     )
                 }

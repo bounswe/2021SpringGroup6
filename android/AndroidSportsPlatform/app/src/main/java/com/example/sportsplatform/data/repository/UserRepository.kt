@@ -29,6 +29,10 @@ class UserRepository(private val api: UserApi) {
         return api.searchUser(token, userDetailRequest.user_id)
     }
 
+    suspend fun deleteUserProfile(token: String, userDetailRequest : UserDetailRequest) : Response<Void> {
+        return api.deleteUser(token, userDetailRequest.user_id)
+    }
+
     suspend fun updateUserProfile(
         token: String,
         userId : Int,
@@ -39,6 +43,18 @@ class UserRepository(private val api: UserApi) {
 
     suspend fun searchFollowingUserProfile(token: String, userId : Int) : Response<GetFollowingUsersResponse> {
         return api.searchFollowingProfile(token, userId)
+    }
+
+    suspend fun unfollowUserProfile(token: String, userId : Int, userUnFollowingRequest: UserUnFollowingRequest) : Response<Void> {
+        val unfl = api.unFollowingProfile(token, userId, userUnFollowingRequest)
+
+        Log.d(TAG, "$unfl *****************")
+
+        return unfl
+    }
+
+    suspend fun searchFollowedUserProfile(token: String, userId : Int) : Response<GetFollowingUsersResponse> {
+        return api.searchFollowedProfile(token, userId)
     }
 
     suspend fun getUsersParticipatingEvents(token: String, userId: Int): Response<UsersParticipatingEvents> {

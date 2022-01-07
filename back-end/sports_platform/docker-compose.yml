@@ -3,11 +3,11 @@ version: '3.8'
 services:
   app:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8080"
     volumes:
       - ./:/usr/src/
     ports:
-      - 8000:8000
+      - 8080:8080
     env_file:
       - ./.env
   db:

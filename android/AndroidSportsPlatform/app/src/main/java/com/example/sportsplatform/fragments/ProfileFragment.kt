@@ -1,5 +1,6 @@
 package com.example.sportsplatform.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.sportsplatform.activities.LoginActivity
 import com.example.sportsplatform.data.models.requests.UserUpdateRequest
 import com.example.sportsplatform.databinding.FragmentProfileBinding
 import com.example.sportsplatform.util.toast
@@ -49,7 +51,7 @@ class ProfileFragment : Fragment(), KodeinAware {
 
         binding.btnUpdateProfile.setOnClickListener {
 
-            view?.context?.toast("Update Button Pressed!")
+            view?.context?.toast("User is Updated!")
 
             viewModel.updUser(
                 UserUpdateRequest(
@@ -63,6 +65,12 @@ class ProfileFragment : Fragment(), KodeinAware {
             )
         }
 
+        binding.btnDeleteProfile.setOnClickListener {
+            view?.context?.toast("User is Deleted!")
+            viewModel.dltUser()
+            Intent(view.context, LoginActivity::class.java).also{
+                view.context.startActivity(it)
+            }
+        }
     }
-
 }
