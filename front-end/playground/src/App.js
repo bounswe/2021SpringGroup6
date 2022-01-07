@@ -41,7 +41,6 @@ function App() {
   // const [window_width, window_height] = UseWindowSize();
 
   useEffect(() => {
-    console.log('user changed')
     localStorage.setItem("user", JSON.stringify(user));
   }, [user])
 

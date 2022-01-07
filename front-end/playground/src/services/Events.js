@@ -4,6 +4,8 @@ const localData = JSON.parse(localStorage.getItem('user')) || {};
 const token = `Token ${localData.token}`;
 
 export const createEvent = async (event_id, text = 'text') => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
@@ -23,6 +25,8 @@ export const createEvent = async (event_id, text = 'text') => {
         })
 }
 export const getEvents = async (eventId) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'GET',
@@ -40,6 +44,8 @@ export const getEvents = async (eventId) => {
 }
 
 export const getCreatedEvents = async () => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
@@ -60,6 +66,8 @@ export const getCreatedEvents = async () => {
 }
 
 export const getOtherUsersCreatedEvents = async (user_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
@@ -80,6 +88,8 @@ export const getOtherUsersCreatedEvents = async (user_id) => {
 }
 
 export const getEvent = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'GET',
@@ -97,7 +107,49 @@ export const getEvent = async (event_id) => {
         })
 }
 
+export const getEventParticipants = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'GET',
+        url: `/events/${event_id}/participants`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const getEventInteresteds = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'GET',
+        url: `/events/${event_id}/interesteds`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 export const postSpectatorDecleration = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
@@ -116,6 +168,8 @@ export const postSpectatorDecleration = async (event_id) => {
 }
 
 export const postParticipationRequest = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
@@ -124,6 +178,52 @@ export const postParticipationRequest = async (event_id) => {
             Authorization: token,
         },
         data: {}
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const acceptInterested = async (event_id, user_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'POST',
+        url: `/events/${event_id}/participants`,
+        headers: {
+            Authorization: token,
+        },
+        data: {
+            accept_user_id_list: [user_id],
+            reject_user_id_list: []
+        }
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const rejectInterested = async (event_id, user_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'POST',
+        url: `/events/${event_id}/participants`,
+        headers: {
+            Authorization: token,
+        },
+        data: {
+            accept_user_id_list: [],
+            reject_user_id_list: [user_id]
+        }
     })
         .then(response => {
             return response.data

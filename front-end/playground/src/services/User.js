@@ -5,6 +5,8 @@ const token = `Token ${localData.token}`;
 
 
 export const getUserInfo = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -23,6 +25,8 @@ export const getUserInfo = async (user_id) => {
 
 
 export const getNotifications = async () => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -41,6 +45,8 @@ export const getNotifications = async () => {
 
 
 export const getOneUserInfo = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -59,6 +65,8 @@ export const getOneUserInfo = async (user_id) => {
 }
 
 export const getUserInteresteds = async () => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -78,6 +86,8 @@ export const getUserInteresteds = async () => {
 }
 
 export const getUserAccepteds = async () => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -97,6 +107,8 @@ export const getUserAccepteds = async () => {
 }
 
 export const getUserSpectatings = async () => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -116,6 +128,8 @@ export const getUserSpectatings = async () => {
 }
 
 export const getUserBadges = async () => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -135,6 +149,8 @@ export const getUserBadges = async () => {
 }
 
 export const getOtherUsersBadges = async (id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
@@ -154,6 +170,8 @@ export const getOtherUsersBadges = async (id) => {
 }
 
 export const changeBadgeVisibility = async (visibility) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'PUT',
@@ -174,6 +192,8 @@ export const changeBadgeVisibility = async (visibility) => {
 }
 
 export const changeCreatedEventsVisibility = async (visibility) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'PUT',
@@ -193,13 +213,15 @@ export const changeCreatedEventsVisibility = async (visibility) => {
     })
 }
 
-export const getFollowings = async () => {
+export const getFollowings = async (user_id, param_token) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
-    url: `/users/${localData.user_id}/following`,
+    url: `/users/${localData.user_id || user_id}/following`,
     headers: {
-      Authorization: token,
+      Authorization: param_token ? `Token ${param_token}` : token,
     },
     data: {
     }
@@ -212,13 +234,15 @@ export const getFollowings = async () => {
     })
 }
 
-export const getFollowers = async () => {
+export const getFollowers = async (user_id, param_token) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
-    url: `/users/${localData.user_id}/follower`,
+    url: `/users/${localData.user_id || user_id}/follower`,
     headers: {
-      Authorization: token,
+      Authorization: param_token ? `Token ${param_token}` : token,
     },
     data: {
     }
@@ -231,13 +255,15 @@ export const getFollowers = async () => {
     })
 }
 
-export const getBlockeds = async () => {
+export const getBlockeds = async (user_id, param_token) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'GET',
-    url: `/users/${localData.user_id}/blocked`,
+    url: `/users/${localData.user_id || user_id}/blocked`,
     headers: {
-      Authorization: token,
+      Authorization: param_token ? `Token ${param_token}` : token,
     },
     data: {
     }
@@ -251,6 +277,8 @@ export const getBlockeds = async () => {
 }
 
 export const blockUser = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'POST',
@@ -271,6 +299,8 @@ export const blockUser = async (user_id) => {
 }
 
 export const unBlockUser = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'DELETE',
@@ -291,6 +321,8 @@ export const unBlockUser = async (user_id) => {
 }
 
 export const followUser = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'POST',
@@ -311,6 +343,8 @@ export const followUser = async (user_id) => {
 }
 
 export const unFollowUser = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
 
   return axios({
     method: 'DELETE',

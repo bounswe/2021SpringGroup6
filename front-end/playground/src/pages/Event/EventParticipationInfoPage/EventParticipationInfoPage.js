@@ -1,9 +1,15 @@
 import {React, useState, useEffect} from 'react';
 import './EventParticipationInfoPage.css';
-import {Button} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import { Map, Marker } from "pigeon-maps";
-import {postSpectatorDecleration, postParticipationRequest} from '../../../services/Events';
+import {
+    postSpectatorDecleration, 
+    postParticipationRequest, 
+    getEventInteresteds,
+    acceptInterested,
+    rejectInterested
+} from '../../../services/Events';
 
 import {
   Tabs, 
@@ -25,8 +31,29 @@ import {
 } from 'reactstrap';
 
 function EventParticipationInfoPage(props) {
-    const {eventInfo, isLoading} = props;
+    const {eventInfo, setEventInfo, isLoading} = props;
     const localData = JSON.parse(localStorage.getItem('user'));
+
+    const [interesteds, setInteresteds] = useState([]);
+    const [participationModal, setParticipationModal] = useState(false);
+    const [participationModalInfo, setParticipationModalInfo] = useState({})
+    
+    const isCreator = eventInfo.organizer.identifier === localData.identifier;
+    const acceptWithoutApproval = eventInfo.additionalProperty.filter(
+        item => item.name === "acceptWithoutApproval")[0].value;
+
+    useEffect(() => {
+        if (!acceptWithoutApproval) {
+            getEventInteresteds(eventInfo.event_id)
+            .then((response) => {
+                        setInteresteds(response.additionalProperty.value)
+                    })
+                    .catch((error) => {
+                        alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
+                        window.location.href = '/'
+                    });
+        }
+    }, [])
 
     let buttonActive = (() => {
         if (eventInfo.organizer.identifier === localData.identifier)
@@ -97,7 +124,11 @@ function EventParticipationInfoPage(props) {
                             </CardTitle>
                             {eventInfo.attendee.length > 0 ? eventInfo.attendee.map((person, i) => {
                                 return (
-                                    <Button outline>{person.identifier}</Button>
+                                    <Button outline>
+                                        <Link to={`/profile/${person['@id']}`} className="participation-link" >
+                                            {person.identifier}
+                                        </Link>
+                                    </Button>
                                 )
                             })
                             :
@@ -125,10 +156,97 @@ function EventParticipationInfoPage(props) {
                             }
                         </CardBody>
                     </Card>
+
+                    <Card style={{marginTop: '2rem'}}>
+                        <CardBody style={{}}>
+                            <CardTitle tag="h4">
+                                Interesteds 
+                                {isCreator && 
+                                    <div style={{fontSize: '1.2rem', fontWeight: 'normal'}}>
+                                        {' '}(You can respond interesteds. Click on their names)
+                                    </div>}
+                            </CardTitle>
+                            {interesteds.length > 0 ? interesteds.map((person, i) => {
+                                return (
+                                    isCreator ? 
+                                        <Button 
+                                            outline
+                                            onClick={() => {
+                                                setParticipationModalInfo({...person})
+                                                setParticipationModal(true);
+                                                }}
+                                        >
+                                            {person.identifier}
+                                        </Button>
+                                        :
+                                        <Button outline>
+                                            <Link to={`/profile/${person['@id']}`} className="participation-link" >
+                                                {person.identifier}
+                                            </Link>
+                                        </Button>
+                                    
+                                )
+                            })
+                            :
+                            <div>
+                                {acceptWithoutApproval ? 
+                                    'This event accepts participants without approval.' 
+                                    : 
+                                    'There is no interest yet.'}
+                            </div>
+                            }
+                        </CardBody>
+                    </Card>
                 </CardBody>
             </Card>
             )
         }
+        <Modal
+            toggle={() => {
+                setParticipationModal(false);
+            }}
+            isOpen={participationModal}
+            style={{marginTop: '20%'}}
+        >
+            <ModalHeader>
+                Participation Request
+            </ModalHeader>
+            <ModalBody>
+                <Link to={`/profile/${participationModalInfo['@id']}`} className="participation-request-link" >
+                    {participationModalInfo.identifier}
+                </Link>
+                <span>
+                    {' '}wants to join your event. What do you want?
+                </span>
+            </ModalBody>
+            <ModalFooter>
+                <Button 
+                    color="primary"
+                    onClick={() => {
+                            acceptInterested(eventInfo.event_id, participationModalInfo['@id']);
+                            setInteresteds(prev => prev.filter(item => item['@id'] !== participationModalInfo['@id']));
+                            setEventInfo(prev => ({
+                                ...prev,
+                                attendee: [...prev.attendee, {...participationModalInfo}],
+                                
+                            }));
+                            setParticipationModal(false);
+                        }}
+                >
+                    Accept
+                </Button>
+                <Button 
+                    color="danger"
+                    onClick={() => {
+                            rejectInterested(eventInfo.event_id, participationModalInfo['@id']);
+                            setInteresteds(prev => prev.filter(item => item['@id'] !== participationModalInfo['@id']));
+                            setParticipationModal(false);
+                        }}
+                >
+                    Reject
+                </Button>
+            </ModalFooter>
+        </Modal>
         </>
     )
 }

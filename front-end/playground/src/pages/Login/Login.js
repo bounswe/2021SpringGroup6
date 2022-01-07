@@ -31,13 +31,6 @@ function Login() {
                     profile.sports = knowsAbout.map((element) => ({
                         sport: element.name, 
                         skill_level: element.value})) || [];
-                    setUser({
-                      identifier: details.identifier,
-                      token: response.data.token,
-                      user_id: response.data.user_id,
-                      context, id, type, 
-                      profile: profile,
-                    });
                     localStorage.setItem("user",JSON.stringify({
                       identifier:details.identifier, 
                       token:response.data.token, 
@@ -45,8 +38,15 @@ function Login() {
                       context, id, type, 
                       profile: profile,
                     }));
+                    setUser({
+                      identifier: details.identifier,
+                      token: response.data.token,
+                      user_id: response.data.user_id,
+                      context, id, type, 
+                      profile: profile,
+                    });
 
-                    getFollowings()
+                    getFollowings(user_id, response.data.token)
                     .then((response) => {
                         setUser(prev => {
                           return {
@@ -61,7 +61,7 @@ function Login() {
                         
                     });
 
-                    getBlockeds()
+                    getBlockeds(user_id, response.data.token)
                     .then((response) => {
                         setUser(prev => {
                           return {
@@ -76,7 +76,7 @@ function Login() {
                         
                     });
 
-                    getFollowers()
+                    getFollowers(user_id, response.data.token)
                     .then((response) => {
                         setUser(prev => {
                           return {
