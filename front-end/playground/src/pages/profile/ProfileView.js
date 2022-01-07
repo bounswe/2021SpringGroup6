@@ -28,6 +28,7 @@ import {
 
 import PersonalInfo from './ViewTabs/PersonalInfo/PersonalInfo';
 import Badges_Tab from './ViewTabs/Badges/Badges';
+import UserEvents from './ViewTabs/Events/Events';
 
 import {getOneUserInfo} from '../../services/User';
 
@@ -37,7 +38,9 @@ function Profile() {
         setTabName(name)
     }
 
-    const [badgeVisibility, setBadgeVisibility] = useState(false)
+    const [badgeVisibility, setBadgeVisibility] = useState(false);
+    const [createdEventVisibility, setCreatedEventVisibility] = useState(false);
+    
 
     return (
     <div className="profile-page-container">
@@ -62,6 +65,16 @@ function Profile() {
                 Badges
                 </NavLink>
             </NavItem>
+            <NavItem>
+                <NavLink
+                active={tabName === 'Events'}
+                onClick={() => {
+                    changeTab('Events')
+                }}
+                >
+                Events
+                </NavLink>
+            </NavItem>
             {/* <NavItem>
                 <NavLink
                 active={tabName === 'Discussion'}
@@ -77,10 +90,16 @@ function Profile() {
         {/* pay attention to custom class. it makes the container a flexbox. if flexbox does not work for you, please contact with the author */}
         <TabContent activeTab={tabName} className={`custom-tab-content-pp-general custom-tab-content-${tabName}-settings`}>
             <TabPane tabId='Personal-Info'>
-              <PersonalInfo setBadgeVisibility={setBadgeVisibility} />
+              <PersonalInfo 
+                setBadgeVisibility={setBadgeVisibility} 
+                setCreatedEventVisibility={setCreatedEventVisibility}
+                />
             </TabPane>
             <TabPane tabId="Badges">
               <Badges_Tab badgeVisibility={badgeVisibility}/>
+            </TabPane>
+            <TabPane tabId="Events">
+              <UserEvents createdEventVisibility={createdEventVisibility} />
             </TabPane>
             {/* <TabPane tabId="Discussion">
               <DiscussionPage/>

@@ -4,7 +4,7 @@ import './Badges.css';
 import {UserContext} from '../../../../UserContext';
 import axios from 'axios';
 import SportNames from '../../../../PermanentComponents/SportNames.js';
-import {useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom';
 import {
   Tabs, 
   Tab, 

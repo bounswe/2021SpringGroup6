@@ -17,7 +17,7 @@ function PersonalInfo(props) {
     const {user: randomuseridname, setUser} = useContext(UserContext);
     const user_id = parseInt(useParams().id);
 
-    const {setBadgeVisibility} = props
+    const {setBadgeVisibility, setCreatedEventVisibility} = props
 
     if(user_id == randomuseridname.user_id)
         window.location.href = '/profile'
@@ -39,6 +39,7 @@ function PersonalInfo(props) {
                 delete profile["@type"];
                 setProfileInfo(profile);
                 setBadgeVisibility(response.data.badge_visibility);
+                setCreatedEventVisibility(response.data.created_events_visibility);
             } else{
                 console.log("Some error ocurred");
                 setProfileInfo({

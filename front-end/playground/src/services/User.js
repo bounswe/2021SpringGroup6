@@ -171,3 +171,23 @@ export const changeBadgeVisibility = async (visibility) => {
       console.log(error)
     })
 }
+
+export const changeCreatedEventsVisibility = async (visibility) => {
+
+  return axios({
+    method: 'PUT',
+    url: `/users/${localData.user_id}/visible_attributes`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      created_events_visibility: visibility ? true : false
+    }
+  })
+    .then(response => {
+      return response.data.status
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
