@@ -4,8 +4,11 @@ import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import { Map, Marker } from "pigeon-maps";
 import {
-    postSpectatorDecleration, 
-    postParticipationRequest, 
+    postSpectatorDecleration,
+    undoSpectatorDecleration,
+    postParticipationRequest,
+    undoParticipation,
+    undoInterest,
     getEventInteresteds,
     acceptInterested,
     rejectInterested
@@ -36,7 +39,12 @@ function EventParticipationInfoPage(props) {
 
     const [interesteds, setInteresteds] = useState([]);
     const [participationModal, setParticipationModal] = useState(false);
-    const [participationModalInfo, setParticipationModalInfo] = useState({})
+    const [participationModalInfo, setParticipationModalInfo] = useState({});
+
+    const [isParticipant, setIsParticipant] = useState(eventInfo.attendee.some(item => item['@id'] === localData.id));
+    const [isSpectator, setIsSpectator] = useState(eventInfo.audience.some(item => item['@id'] === localData.id));
+    const [isInterested, setIsInterested] = useState(false);
+        
     
     const isCreator = eventInfo.organizer.identifier === localData.identifier;
     const acceptWithoutApproval = eventInfo.additionalProperty.filter(
@@ -54,6 +62,10 @@ function EventParticipationInfoPage(props) {
                     });
         }
     }, [])
+
+    useEffect(() => {
+        setIsInterested(interesteds.some(item => item['@id'] === localData.id));
+    }, [interesteds])
 
     let buttonActive = (() => {
         if (eventInfo.organizer.identifier === localData.identifier)
@@ -73,10 +85,76 @@ function EventParticipationInfoPage(props) {
 
     function spectate() {
         postSpectatorDecleration(eventInfo.event_id);
+        setIsSpectator(true);
+        setEventInfo(prev => ({
+                ...prev,
+                audience: [...prev.audience, {
+                    "@context": "https://schema.org",
+                    "@type": "Person",
+                    "@id": localData.id,
+                    "identifier": localData.identifier
+                }]
+            }))
+    }
+
+    function undoSpectate() {
+        undoSpectatorDecleration(eventInfo.event_id);
+        setIsSpectator(false);
+        setEventInfo(prev => ({
+                ...prev,
+                audience: prev.audience.filter(audience => audience['@id'] !== localData.id)
+            }))
     }
 
     function participate() {
-        postParticipationRequest(eventInfo.event_id);
+        postParticipationRequest(eventInfo.event_id)
+        .then(response => {
+            if (response.status < 400) {
+                if (acceptWithoutApproval) {
+                    setIsParticipant(true);
+                    setEventInfo(prev => ({
+                        ...prev,
+                        attendee: [...prev.attendee, {
+                            "@context": "https://schema.org",
+                            "@type": "Person",
+                            "@id": localData.id,
+                            "identifier": localData.identifier
+                        }]
+                    }));
+                } else {
+                    setIsInterested(true);
+                    setInteresteds(prev => [...prev, {
+                        "@context": "https://schema.org",
+                        "@type": "Person",
+                        "@id": localData.id,
+                        "identifier": localData.identifier
+                    }])
+                }
+            } else {
+                alert('There is an error. Please check event time, skill requirements etc.')
+            }
+            
+        })
+        .catch(error => {
+            console.log('errornew', error);
+            alert("Error:", error);
+        })
+        
+    }
+
+    function undoParticipate() {
+        undoParticipation(eventInfo.event_id);
+        setIsParticipant(false);
+        setEventInfo(prev => ({
+            ...prev,
+            attendee: prev.attendee.filter(attendee => attendee['@id'] !== localData.id)
+        }));
+    }
+
+    function undoParticipationRequest() {
+        undoInterest(eventInfo.event_id);
+        setIsInterested(false);
+        setInteresteds(prev => prev.filter(interested => interested['@id'] !== localData.id));
     }
 
     return (
@@ -95,25 +173,49 @@ function EventParticipationInfoPage(props) {
                                     Sport: {eventInfo.sport}
                                 </CardSubtitle>
                             </div>
-                            {buttonActive ?
-                                <div>
-                                <Button
-                                    color="secondary"
-                                    onClick={spectate}
-                                    style={{marginRight: '1rem'}}
-                                >
-                                    Spectate the Event
-                                </Button>
-                                <Button
-                                    color="secondary"
-                                    onClick={participate}
-                                >
-                                    Send Participation Request
-                                </Button>
-                                </div>
-                                :
-                                null
-                            }
+                            {!isCreator && <div style={{marginLeft: '1rem'}}>
+                                {!(isParticipant || isInterested) && (isSpectator ? 
+                                    <Button
+                                        color="secondary"
+                                        onClick={undoSpectate}
+                                        style={{marginRight: '0.3rem'}}
+                                    >
+                                        Undo Spectating
+                                    </Button>
+                                    : 
+                                    <Button
+                                        color="secondary"
+                                        onClick={spectate}
+                                        style={{marginRight: '0.3rem'}}
+                                    >
+                                        Spectate the Event
+                                    </Button>
+                                )}
+                                
+                                {!isSpectator && (isParticipant ? 
+                                    <Button
+                                        color="secondary"
+                                        onClick={undoParticipate}
+                                    >
+                                        Undo Participation
+                                    </Button>
+                                    :
+                                    isInterested ?
+                                        <Button
+                                            color="secondary"
+                                            onClick={undoParticipationRequest}
+                                        >
+                                            Undo Participation Request
+                                        </Button>
+                                        :
+                                        <Button
+                                            color="secondary"
+                                            onClick={participate}
+                                        >
+                                            {acceptWithoutApproval ? 'Participate' :'Send Participation Request'}
+                                        </Button>
+                                )}
+                            </div>}
                         </div>
                     </CardTitle>
 
@@ -124,7 +226,7 @@ function EventParticipationInfoPage(props) {
                             </CardTitle>
                             {eventInfo.attendee.length > 0 ? eventInfo.attendee.map((person, i) => {
                                 return (
-                                    <Button outline>
+                                    <Button className="participation-list-button" outline>
                                         <Link to={`/profile/${person['@id']}`} className="participation-link" >
                                             {person.identifier}
                                         </Link>
@@ -144,7 +246,7 @@ function EventParticipationInfoPage(props) {
                             </CardTitle>
                             {eventInfo.audience.length > 0 ? eventInfo.audience.map((person, i) => {
                                 return (
-                                    <Button outline>
+                                    <Button className="participation-list-button" outline>
                                         <Link to={`/profile/${person['@id']}`} className="participation-link" >
                                             {person.identifier}
                                         </Link>
@@ -169,7 +271,7 @@ function EventParticipationInfoPage(props) {
                             {interesteds.length > 0 ? interesteds.map((person, i) => {
                                 return (
                                     isCreator ? 
-                                        <Button 
+                                        <Button className="participation-list-button" 
                                             outline
                                             onClick={() => {
                                                 setParticipationModalInfo({...person})
@@ -179,7 +281,7 @@ function EventParticipationInfoPage(props) {
                                             {person.identifier}
                                         </Button>
                                         :
-                                        <Button outline>
+                                        <Button className="participation-list-button" outline>
                                             <Link to={`/profile/${person['@id']}`} className="participation-link" >
                                                 {person.identifier}
                                             </Link>

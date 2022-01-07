@@ -167,12 +167,72 @@ export const postSpectatorDecleration = async (event_id) => {
         })
 }
 
+export const undoSpectatorDecleration = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'DELETE',
+        url: `/events/${event_id}/spectators`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 export const postParticipationRequest = async (event_id) => {
     const localData = JSON.parse(localStorage.getItem('user')) || {};
     const token = `Token ${localData.token}`;
 
     return axios({
         method: 'POST',
+        url: `/events/${event_id}/interesteds`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const undoParticipation = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'DELETE',
+        url: `/events/${event_id}/participants`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const undoInterest = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'DELETE',
         url: `/events/${event_id}/interesteds`,
         headers: {
             Authorization: token,
