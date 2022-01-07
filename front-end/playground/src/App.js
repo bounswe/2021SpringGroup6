@@ -40,6 +40,11 @@ function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   // const [window_width, window_height] = UseWindowSize();
 
+  useEffect(() => {
+    console.log('user changed')
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user])
+
   function Framework() {
     return (
     <Fragment>

@@ -8,7 +8,7 @@
 .badge-pill:hover {
     background-color: white !important;
     color: #ed1b76 !important;
-    cursor: context-menu;
+    cursor: pointer;
 }
 
 .pp-badges-category-container {

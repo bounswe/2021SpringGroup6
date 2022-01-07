@@ -11,7 +11,7 @@ import { Card } from 'react-bootstrap'
 import SportNames from '../../../../PermanentComponents/SportNames.js';
 import { Button, Input, Label,  UncontrolledCollapse } from 'reactstrap';
 
-import {getOneUserInfo} from '../../../../services/User';
+import {getOneUserInfo, blockUser} from '../../../../services/User';
 
 function PersonalInfo(props) {
     const {user: randomuseridname, setUser} = useContext(UserContext);
@@ -74,17 +74,19 @@ function PersonalInfo(props) {
     <div style={{minWidth: '45%', padding: '4rem 0', maxWidth: '600px', margin: 'auto'}}>
         <div className="profile-title">
             <span>Profile Information</span>
-            {/* <Button 
-                disabled={!validateEmail(profileInfo.email)}
-                onClick={() => {formSubmit()}}
-            >
-                Save Changes
-            </Button> */}
-            {/* <Button 
-                onClick={() => {}}
-            >
-                Block
-            </Button> */}
+            <div>
+                <Button 
+                    onClick={() => {}}
+                    style={{marginRight: '0.4rem'}}
+                >
+                    Follow
+                </Button>
+                <Button 
+                    onClick={() => {blockUser(user_id)}}
+                >
+                    Block
+                </Button>
+            </div>
         </div>
         <Card style={{minWidth: '30%', padding: '2rem 3rem'}}>
             <div style={{}}>

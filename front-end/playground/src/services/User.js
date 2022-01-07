@@ -248,3 +248,23 @@ export const getBlockeds = async () => {
       console.log(error)
     })
 }
+
+export const blockUser = async (user_id) => {
+
+  return axios({
+    method: 'POST',
+    url: `/users/${localData.user_id}/blocked`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      user_id: user_id
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}

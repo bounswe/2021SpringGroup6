@@ -1,4 +1,5 @@
 import {React, useState, useEffect, useContext} from 'react';
+import {Link} from 'react-router-dom'
 // import { Card } from 'react-bootstrap'
 import './Follow.css';
 import {
@@ -41,7 +42,7 @@ function Follow_Block() {
             });
         }
         if (!(blockedUsers.length > 0)) {
-            getFollowers()
+            getBlockeds()
             .then((response) => {
                 setBlockedUsers(response.items);
             })
@@ -51,7 +52,7 @@ function Follow_Block() {
             });
         }
         if (!(followers.length > 0)) {
-            getBlockeds()
+            getFollowers()
             .then((response) => {
                 setFollowers(response.items);
             })
@@ -70,12 +71,14 @@ function Follow_Block() {
                     Users You Are Following
                 </CardTitle>
                 <div className="pp-badges-category-container">
-                {blockedUsers.length > 0 ? blockedUsers.map(user => {
+                {followingUsers.length > 0 ? followingUsers.map(user => {
                     return (
                         <>
-                            <Badge className="badge-pill" pill color="primary">
-                                {user.name}
-                            </Badge>
+                            <Link to={`/profile/${user.object['@id']}`} >
+                                <Badge className="badge-pill" pill color="primary">
+                                    {user.object.identifier}
+                                </Badge>
+                            </Link>
                             {/* <CardComponent event={event}/> */}
                         </>
                     )
@@ -90,12 +93,14 @@ function Follow_Block() {
                     Users You Blocked
                 </CardTitle>
                 <div className="pp-badges-category-container">
-                {followingUsers.length > 0 ? followingUsers.map(user => {
+                {blockedUsers.length > 0 ? blockedUsers.map(user => {
                     return (
                         <>
-                            <Badge className="badge-pill" pill color="primary" >
-                                {user.name}
-                            </Badge>
+                            <Link to={`/profile/${user.object['@id']}`} >
+                                <Badge className="badge-pill" pill color="primary">
+                                    {user.object.identifier}
+                                </Badge>
+                            </Link>
                             {/* <CardComponent event={event}/> */}
                         </>
                     )
@@ -113,9 +118,11 @@ function Follow_Block() {
                 {followers.length > 0 ? followers.map(user => {
                     return (
                         <>
-                            <Badge className="badge-pill" pill color="primary" >
-                                {user.name}
-                            </Badge>
+                            <Link to={`/profile/${user.object['@id']}`}  to="">
+                                <Badge className="badge-pill" pill color="primary">
+                                    {user.object.identifier}
+                                </Badge>
+                            </Link>
                             {/* <CardComponent event={event}/> */}
                         </>
                     )
