@@ -1,8 +1,16 @@
 import {React, useState, useEffect} from 'react';
 import './EventInformation.css';
-import {Button} from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
+} from 'reactstrap';
+import {Link, useNavigate } from 'react-router-dom';
 import { Map, Marker } from "pigeon-maps";
+
+import {deleteEvent} from '../../../services/Events';
 
 import {
   Tabs, 
@@ -27,6 +35,9 @@ function EventInformation(props) {
     const {eventInfo, isLoading} = props;
     const localData = JSON.parse(localStorage.getItem('user'));
     const {latitude, longitude} = eventInfo.location.geo;
+
+    const [deletionModal, setDeletionModal] = useState(false);
+    const navigate = useNavigate();
 
     const isCreator = eventInfo.organizer.identifier === localData.identifier;
 
@@ -60,15 +71,22 @@ function EventInformation(props) {
                                     Sport: {eventInfo.sport}
                                 </CardSubtitle>
                             </div>
-                            {isCreator ?
+                            {isCreator &&
+                                <div>
                                 <Button
                                     color="secondary"
                                     onClick={() => {window.location.href=`/modify-event/${eventInfo.event_id}`}}
                                 >
                                     Modify Event
                                 </Button>
-                                :
-                                null
+                                <Button
+                                    color="danger"
+                                    style={{marginLeft: '0.3rem'}}
+                                    onClick={() => {setDeletionModal(true)}}
+                                >
+                                    Delete Event
+                                </Button>
+                                </div>
                             }
                         </div>
                     </CardTitle>
@@ -188,6 +206,42 @@ function EventInformation(props) {
             </Card>
             )
         }
+        <Modal
+            toggle={() => {
+                setDeletionModal(false);
+            }}
+            isOpen={deletionModal}
+            style={{marginTop: '20%'}}
+        >
+            <ModalHeader>
+                Delete Event
+            </ModalHeader>
+            <ModalBody>
+                Are you sure you want to delete this event?
+            </ModalBody>
+            <ModalFooter>
+                <Button
+                    color="danger"
+                    onClick={() => {
+                        deleteEvent(eventInfo.event_id).then(response => {
+                            if (response.status === 204) {
+                                navigate("/event-settings", { replace: true });
+                            }
+                        }).catch(error => {
+                            alert('Event could not be deleted. Try again later.');
+                        });
+                    }}
+                >
+                    Delete
+                </Button>
+                <Button 
+                    color="secondary"
+                    onClick={() => {setDeletionModal(false)}}
+                >
+                    Cancel
+                </Button>
+            </ModalFooter>
+        </Modal>
         </>
     )
 }

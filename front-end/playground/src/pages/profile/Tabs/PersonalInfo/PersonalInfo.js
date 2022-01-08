@@ -1,12 +1,18 @@
 import {React, useState, useEffect, useContext} from 'react';
-import { Card } from 'react-bootstrap'
+import { Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import './PersonalInfo.css';
 import {UserContext} from '../../../../UserContext';
 import axios from 'axios';
 import SportNames from '../../../../PermanentComponents/SportNames.js';
-import { Button, Input, Label,  UncontrolledCollapse, ButtonGroup } from 'reactstrap';
+import { Button, Input, Label,  UncontrolledCollapse, ButtonGroup ,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
+} from 'reactstrap';
 
-import {getUserInfo} from '../../../../services/User';
+import {getUserInfo, deleteUser} from '../../../../services/User';
 
 function Profile_Info() {
     const {user, setUser} = useContext(UserContext);
@@ -59,6 +65,9 @@ function Profile_Info() {
     }
     
     const [profileInfo, setProfileInfo] = useState(getUserInformation());
+
+    const [deletionModal, setDeletionModal] = useState(false);
+    const navigate = useNavigate();
 
     // useEffect(() => {console.log("Profile info:"); console.log(profileInfo);}, [profileInfo, setProfileInfo])
 
@@ -146,6 +155,7 @@ function Profile_Info() {
     }
 
     return (
+    <>
     <div style={{minWidth: '45%', padding: '4rem 0', maxWidth: '600px', margin: 'auto'}}>
         <div className="profile-title">
             <span>Profile Settings</span>
@@ -443,7 +453,55 @@ function Profile_Info() {
                 })}
             </UncontrolledCollapse>
         </Card>
+
+        <Card style={{minWidth: '30%', padding: '20px', marginTop: '20px'}}>
+            <Button
+                color="danger"
+                onClick={() => {setDeletionModal(true)}}
+            >
+                Delete Account
+            </Button>
+        </Card>
     </div>
+    <Modal
+        toggle={() => {
+            setDeletionModal(false);
+        }}
+        isOpen={deletionModal}
+        style={{marginTop: '20%'}}
+    >
+        <ModalHeader>
+            Delete Account
+        </ModalHeader>
+        <ModalBody>
+            Are you sure you want to delete your account?
+        </ModalBody>
+        <ModalFooter>
+            <Button
+                color="danger"
+                onClick={() => {
+                    deleteUser()
+                    .then(response => {
+                        if (response.status === 200) { 
+                            setUser({identifier: ""});
+                            navigate("/", { replace: true });
+                        }
+                    }).catch(error => {
+                        alert('Your account not be deleted. Try again later.');
+                    });
+                }}
+            >
+                Delete
+            </Button>
+            <Button 
+                color="secondary"
+                onClick={() => {setDeletionModal(false)}}
+            >
+                Cancel
+            </Button>
+        </ModalFooter>
+    </Modal>
+    </>
     )
 }
 

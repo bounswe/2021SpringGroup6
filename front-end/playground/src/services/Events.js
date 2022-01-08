@@ -107,6 +107,26 @@ export const getEvent = async (event_id) => {
         })
 }
 
+export const deleteEvent = async (event_id) => {
+    const localData = JSON.parse(localStorage.getItem('user')) || {};
+    const token = `Token ${localData.token}`;
+
+    return axios({
+        method: 'DELETE',
+        url: `/events/${event_id}`,
+        headers: {
+            Authorization: token,
+        },
+        data: {}
+    })
+        .then(response => {
+            return response
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 export const getEventParticipants = async (event_id) => {
     const localData = JSON.parse(localStorage.getItem('user')) || {};
     const token = `Token ${localData.token}`;

@@ -23,6 +23,25 @@ export const getUserInfo = async (user_id) => {
     })
 }
 
+export const deleteUser = async (user_id) => {
+  const localData = JSON.parse(localStorage.getItem('user')) || {};
+  const token = `Token ${localData.token}`;
+
+  return axios({
+    method: 'DELETE',
+    url: `/users/${localData.user_id}`,
+    headers: {
+      Authorization: token,
+    }
+  })
+    .then(response => {
+      return response
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
 
 export const getNotifications = async () => {
   const localData = JSON.parse(localStorage.getItem('user')) || {};
