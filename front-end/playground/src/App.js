@@ -40,6 +40,11 @@ function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   // const [window_width, window_height] = UseWindowSize();
 
+  useEffect(() => {
+    console.log('user changed')
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user])
+
   function Framework() {
     return (
     <Fragment>
@@ -155,21 +160,21 @@ function App() {
             <Route path="profile">
                 <Route index
                   element={
-                    <Suspense fallback={<>...</>}>
-                      <div className="default-body"><Profile/></div>
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                      <Profile/>
                     </Suspense>}/>
                 <Route path=":id"
-                element={
-                  <Suspense fallback={<>...</>}>
-                    <div className="default-body"><ProfileView/></div>
-                  </Suspense>}/>
+                  element={
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                      <ProfileView/>
+                    </Suspense>}/>
 
             </Route>
 
             <Route path="event">
               <Route index
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventSettingsPage/>
                   </Suspense>}/>
 
@@ -181,7 +186,7 @@ function App() {
 
               <Route path=":id"
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventPage/>
                   </Suspense>}/>
             </Route>
@@ -194,7 +199,7 @@ function App() {
 
             <Route path="event-settings"
               element={
-                <Suspense fallback={<>...</>}>
+                <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                   <EventSettingsPage/>
                 </Suspense>}/>
 

@@ -59,6 +59,26 @@ export const getCreatedEvents = async () => {
         })
 }
 
+export const getOtherUsersCreatedEvents = async (user_id) => {
+
+    return axios({
+        method: 'POST',
+        url: `/events/searches`,
+        headers: {
+            Authorization: token,
+        },
+        data: {
+            creator: user_id
+        }
+    })
+        .then(response => {
+            return response.data
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 export const getEvent = async (event_id) => {
 
     return axios({
