@@ -28,6 +28,8 @@ function EventInformation(props) {
     const localData = JSON.parse(localStorage.getItem('user'));
     const {latitude, longitude} = eventInfo.location.geo;
 
+    const isCreator = eventInfo.organizer.identifier === localData.identifier;
+
     let minimumAttendeeCapacity = null;
     for (let i = 0; i < eventInfo.additionalProperty.length; i++) {
         if (eventInfo.additionalProperty[i].name === 'minimumAttendeeCapacity') {
@@ -58,7 +60,7 @@ function EventInformation(props) {
                                     Sport: {eventInfo.sport}
                                 </CardSubtitle>
                             </div>
-                            {eventInfo.organizer.identifier === localData.identifier ?
+                            {isCreator ?
                                 <Button
                                     color="secondary"
                                     onClick={() => {window.location.href=`/modify-event/${eventInfo.event_id}`}}

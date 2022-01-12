@@ -43,11 +43,9 @@ function EventPage(props) {
 
     useEffect(() => {
         if (!eventInfo.created_on) {
-            setIsLoading(true);
             getEvent(event_id)
                 .then((response) => {
                     setEventInfo(response);
-                    setIsLoading(false);
                 })
                 .catch((error) => {
                     alert('Event can not be loaded. You are redirecting to home page. Please try again later.');
@@ -55,6 +53,12 @@ function EventPage(props) {
                 });
         }
     }, []);
+
+    useEffect(() => {
+        if (eventInfo.created_on) {
+            setIsLoading(false);
+        }
+    }, [eventInfo])
 
 
     return (
@@ -100,7 +104,11 @@ function EventPage(props) {
                             <EventInformation eventInfo={eventInfo} isLoading={isLoading}/>
                         </TabPane>
                         <TabPane tabId="Participation">
-                            <EventParticipationInfoPage eventInfo={eventInfo} isLoading={isLoading}/>
+                            <EventParticipationInfoPage 
+                                eventInfo={eventInfo} 
+                                setEventInfo={setEventInfo} 
+                                isLoading={isLoading}
+                            />
                         </TabPane>
                         <TabPane tabId="Discussion">
                             <DiscussionPage
