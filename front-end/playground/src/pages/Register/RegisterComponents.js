@@ -7,20 +7,23 @@ import Typography from '@mui/material/Typography';
 
 import './RegisterComponents.css'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 
 function RegisterComponents({Register, error}) {
 
     const [details, setDetails] = useState({email:"", password :"", identifier:"", name:"", surname:"", birthdate:"", gender:"" });
+    
+    const navigate = useNavigate();
 
     const submitHandler = e => {
         e.preventDefault();
 
         Register(details)
         
-        window.location.href = '/login'
+        // window.location.href = '/login'
+        navigate("/login", { replace: true });
     }
     const paperStyle={padding :30, width:480, margin:"3rem auto"}
     const btnstyle={margin:'8px 0'}

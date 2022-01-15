@@ -30,8 +30,9 @@ const NewField = lazy(() => import('./pages/NewField/NewField'));
 const SearchPage = lazy(() => import('./pages/SearchPage/SearchPage'));
 const SearchEquipmentPage = lazy(() => import('./pages/SearchEquipment/SearchEquipment'));
 const SearchFieldPage = lazy(() => import('./pages/SearchField/SearchField'));
-const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'))
-const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'))
+const ModifyEvent = lazy(() => import('./pages/Event/ModifyEvent/ModifyEvent'));
+const EquipmentInformationFunctional = lazy(() => import('./pages/EquipmentInformation/EquipmentInformationFunctional'));
+const Badges = lazy(() => import('./pages/Badges/Badges'));
 
 
 
@@ -39,6 +40,10 @@ function App() {
   // localStorage.setItem("user",localStorage.getItem('user') || JSON.stringify({identifier: ""}));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {identifier: ""});
   // const [window_width, window_height] = UseWindowSize();
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user])
 
   function Framework() {
     return (
@@ -155,21 +160,21 @@ function App() {
             <Route path="profile">
                 <Route index
                   element={
-                    <Suspense fallback={<>...</>}>
-                      <div className="default-body"><Profile/></div>
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                      <Profile/>
                     </Suspense>}/>
                 <Route path=":id"
-                element={
-                  <Suspense fallback={<>...</>}>
-                    <div className="default-body"><ProfileView/></div>
-                  </Suspense>}/>
+                  element={
+                    <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                      <ProfileView/>
+                    </Suspense>}/>
 
             </Route>
 
             <Route path="event">
               <Route index
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventSettingsPage/>
                   </Suspense>}/>
 
@@ -181,7 +186,7 @@ function App() {
 
               <Route path=":id"
                 element={
-                  <Suspense fallback={<>...</>}>
+                  <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                     <EventPage/>
                   </Suspense>}/>
             </Route>
@@ -194,20 +199,25 @@ function App() {
 
             <Route path="event-settings"
               element={
-                <Suspense fallback={<>...</>}>
+                <Suspense fallback={<div className="default-body"><div>...</div></div>}>
                   <EventSettingsPage/>
                 </Suspense>}/>
 
-
-            {/* Using path="*"" means "match anything", so this route
-                  acts like a catch-all for URLs that we don't have explicit
-                  routes for. */}
             <Route path="notifications"
                    element={
                      <Suspense fallback={<>...</>}>
                        <Notifications/>
                      </Suspense>}/>
+            
+            <Route path="badges"
+                   element={
+                     <Suspense fallback={<div className="default-body"><div>...</div></div>}>
+                       <Badges/>
+                     </Suspense>}/>
 
+            {/* Using path="*"" means "match anything", so this route
+                  acts like a catch-all for URLs that we don't have explicit
+                  routes for. */}
             <Route path="*" element={<Navigate replace to="/" />} />
           </Route>
 
