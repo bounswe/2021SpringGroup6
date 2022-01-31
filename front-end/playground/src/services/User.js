@@ -113,3 +113,81 @@ export const getUserSpectatings = async () => {
       console.log(error)
     })
 }
+
+export const getUserBadges = async () => {
+
+  return axios({
+    method: 'GET',
+    url: `/users/${localData.user_id}/badges`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const getOtherUsersBadges = async (id) => {
+
+  return axios({
+    method: 'GET',
+    url: `/users/${id}/badges`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+    }
+  })
+    .then(response => {
+      return response.data
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const changeBadgeVisibility = async (visibility) => {
+
+  return axios({
+    method: 'PUT',
+    url: `/users/${localData.user_id}/visible_attributes`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      badge_visibility: visibility ? true : false
+    }
+  })
+    .then(response => {
+      return response.data.status
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const changeCreatedEventsVisibility = async (visibility) => {
+
+  return axios({
+    method: 'PUT',
+    url: `/users/${localData.user_id}/visible_attributes`,
+    headers: {
+      Authorization: token,
+    },
+    data: {
+      created_events_visibility: visibility ? true : false
+    }
+  })
+    .then(response => {
+      return response.data.status
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
