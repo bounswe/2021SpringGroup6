@@ -6,3 +6,22 @@
 .participation-link:hover {
     color: inherit;
 }
+
+.participation-request-link {
+    background-color: #ed1b76;
+    color: white;
+    text-decoration: inherit;
+    border: 1px solid #ed1b76;
+    border-radius: 1rem;
+    padding: 0.2rem;
+    padding-bottom: 0.3rem;
+}
+
+.participation-request-link:hover {
+    color: #ed1b76;
+    background-color: white;
+}
+
+.participation-list-button {
+    margin-right: 0.7rem;
+}

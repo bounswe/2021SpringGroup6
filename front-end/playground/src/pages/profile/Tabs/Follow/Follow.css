@@ -1,0 +1,17 @@
+.badge-pill {
+    padding: 0.7em 1.3em;
+    font-size: 0.9em;
+    background-color: #ed1b76 !important;
+    margin: 0.5em;
+}
+
+.badge-pill:hover {
+    background-color: white !important;
+    color: #ed1b76 !important;
+    cursor: pointer;
+}
+
+.pp-badges-category-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

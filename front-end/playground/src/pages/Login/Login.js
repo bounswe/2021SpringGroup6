@@ -3,7 +3,9 @@ import LoginComponent from "./LoginComponents";
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import {UserContext} from '../../UserContext';
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom';
+
+import {getFollowings, getFollowers, getBlockeds} from '../../services/User';
 
 function Login() {
  
@@ -29,13 +31,6 @@ function Login() {
                     profile.sports = knowsAbout.map((element) => ({
                         sport: element.name, 
                         skill_level: element.value})) || [];
-                    setUser({
-                      identifier: details.identifier,
-                      token: response.data.token,
-                      user_id: response.data.user_id,
-                      context, id, type, 
-                      profile: profile,
-                    });
                     localStorage.setItem("user",JSON.stringify({
                       identifier:details.identifier, 
                       token:response.data.token, 
@@ -43,6 +38,59 @@ function Login() {
                       context, id, type, 
                       profile: profile,
                     }));
+                    setUser({
+                      identifier: details.identifier,
+                      token: response.data.token,
+                      user_id: response.data.user_id,
+                      context, id, type, 
+                      profile: profile,
+                    });
+
+                    getFollowings(user_id, response.data.token)
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            followings: response.items.map(item => {
+                              return item.object['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
+                    getBlockeds(user_id, response.data.token)
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            blockeds: response.items.map(item => {
+                              return item.object['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
+                    getFollowers(user_id, response.data.token)
+                    .then((response) => {
+                        setUser(prev => {
+                          return {
+                            ...prev,
+                            followers: response.items.map(item => {
+                              return item.actor['@id']
+                            })
+                          }
+                        });
+                    })
+                    .catch((error) => {
+                        
+                    });
+
                 }
             })
             .catch(function (error) {
@@ -59,7 +107,7 @@ function Login() {
                 }));
             });
         } else{
-            console.log("Some error ocurred");
+            console.log("Some error occurred");
         }
     })
     .catch(function (error) {
