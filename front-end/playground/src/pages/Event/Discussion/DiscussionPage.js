@@ -15,7 +15,7 @@ function DiscussionPage(props) {
 
     const getDiscussions = () => {
         getEvents(eventInfo.event_id).then((response) => {
-            console.log('comments', response.additionalProperty.value)
+            // console.log('comments', response.additionalProperty.value)
 
             if (response.additionalProperty && response.additionalProperty.value) {
                 setComments(response.additionalProperty.value)
@@ -42,7 +42,7 @@ function DiscussionPage(props) {
 
             {
                 comments.map((comment, i) => {
-                    console.log(comment)
+                    {/* console.log(comment) */}
                     return (
                         <div key={comment['@id']} className="d-flex flex-row">
                             <label htmlFor="">{i} -  </label>

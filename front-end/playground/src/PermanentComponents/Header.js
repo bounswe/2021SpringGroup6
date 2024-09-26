@@ -43,7 +43,7 @@ function Header() {
                             <NavDropdown.Item href="/search-equipment-page">Search Equipment</NavDropdown.Item>
                             </NavDropdown>
                             <NavDropdown title="Badges" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="">Available Badges</NavDropdown.Item>
+                            <NavDropdown.Item href="/badges">Available Badges</NavDropdown.Item>
                             </NavDropdown>
 
                             <Link to="notifications" className="header-link">

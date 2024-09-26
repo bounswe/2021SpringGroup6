@@ -25,7 +25,7 @@ function Register() {
             console.log(response)
 
         } else{
-            console.log("Some error ocurred");
+            console.log("Some error occurred");
         }
     })
     .catch(function (error) {
